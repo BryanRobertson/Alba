@@ -1,0 +1,6 @@
+
+#Ignore .csproj user settings
+*.csproj.user
+
+/Intermediate/*
+/Binaries/*
