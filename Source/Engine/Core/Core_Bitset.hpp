@@ -10,9 +10,19 @@
 #include "Core_API.hpp"
 #include <EASTL/bitset.h>
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_Bitset<N, WordType>
-//------------------------------------------------------------------------------------------------
-template <size_t N, typename WordType = EASTL_BITSET_WORD_TYPE_DEFAULT>
-using Core_Bitset = eastl::bitset<N, WordType>;
+namespace Alba
+{
+	namespace Core
+	{
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Core::Bitset<N, WordType>
+		//------------------------------------------------------------------------------------------------
+		template <size_t N, typename WordType = EASTL_BITSET_WORD_TYPE_DEFAULT>
+		using Bitset = eastl::bitset<N, WordType>;
+	}
 
+	namespace Test
+	{
+		static const Core::Bitset<32> TestBitSet;
+	}
+}

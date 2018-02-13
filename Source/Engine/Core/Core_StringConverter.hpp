@@ -5,82 +5,88 @@
 
 #include <cstdio>
 
-//-------------------------------------------------------------------------------------------------
-// Name	:	Core_StringConverter
-// Desc	:	Convert TValueType to a string
-//-------------------------------------------------------------------------------------------------
-template <typename TStringType, typename TValueType>
-class Core_StringConverter
+namespace Alba
 {
-	public:
-
-		typedef typename TStringType::value_type	CharType;
-
-		//=========================================================================================
-		// Public Static Methods
-		//=========================================================================================
-		static bool ToString(const TValueType& aValue, TStringType& outString)
+	namespace Core
+	{
+		//-------------------------------------------------------------------------------------------------
+		// Name	:	StringConverter
+		// Desc	:	Convert TValueType to a string
+		//-------------------------------------------------------------------------------------------------
+		template <typename TStringType, typename TValueType>
+		class StringConverter
 		{
-			return true;
-		}
+			public:
 
-		static bool ToString(uint8 aValue, TStringType& outString)
-		{
-			return WriteFormattedToString("%u", aValue, outString);
-		}
+				typedef typename TStringType::value_type	CharType;
 
-		static bool ToString(int8 aValue, TStringType& outString)
-		{
-			return WriteFormattedToString("%d", aValue, outString);
-		}
+				//=========================================================================================
+				// Public Static Methods
+				//=========================================================================================
+				static bool ToString(const TValueType& aValue, TStringType& outString)
+				{
+					return true;
+				}
 
-		static bool ToString(uint16 aValue, TStringType& outString)
-		{
-			return WriteFormattedToString("%u", aValue, outString);
-		}
+				static bool ToString(uint8 aValue, TStringType& outString)
+				{
+					return WriteFormattedToString("%u", aValue, outString);
+				}
 
-		static bool ToString(int16 aValue, TStringType& outString)
-		{
-			return WriteFormattedToString("%d", aValue, outString);
-		}
+				static bool ToString(int8 aValue, TStringType& outString)
+				{
+					return WriteFormattedToString("%d", aValue, outString);
+				}
 
-		static bool ToString(uint32 aValue, TStringType& outString)
-		{
-			return WriteFormattedToString("%u", aValue, outString);
-		}
+				static bool ToString(uint16 aValue, TStringType& outString)
+				{
+					return WriteFormattedToString("%u", aValue, outString);
+				}
 
-		static bool ToString(int32 aValue, TStringType& outString)
-		{
-			return WriteFormattedToString("%d", aValue, outString);
-		}
+				static bool ToString(int16 aValue, TStringType& outString)
+				{
+					return WriteFormattedToString("%d", aValue, outString);
+				}
 
-		static bool ToString(uint64 aValue, TStringType& outString)
-		{
-			return WriteFormattedToString("%ul", aValue, outString);
-		}
+				static bool ToString(uint32 aValue, TStringType& outString)
+				{
+					return WriteFormattedToString("%u", aValue, outString);
+				}
 
-		static bool ToString(int64 aValue, TStringType& outString)
-		{
-			return WriteFormattedToString("%dl", aValue, outString);
-		}
+				static bool ToString(int32 aValue, TStringType& outString)
+				{
+					return WriteFormattedToString("%d", aValue, outString);
+				}
 
-		template <typename TValueType>
-		static bool WriteFormattedToString(const CharType* aFormat, const TValueType& aValue, TStringType& outString)
-		{
-			const size_t capacity = outString.capacity();
-			const CharType* buffer = &outString[0];
+				static bool ToString(uint64 aValue, TStringType& outString)
+				{
+					return WriteFormattedToString("%ul", aValue, outString);
+				}
 
-			const int actualSize = std::snprintf(buffer, capacity, aFormat, aValue);
-			if (actualSize < 0)
-			{ 
-				return false;
-			}
+				static bool ToString(int64 aValue, TStringType& outString)
+				{
+					return WriteFormattedToString("%dl", aValue, outString);
+				}
 
-			if (actualSize > capacity)
-			{
-				outString.reserve(actualSize);
-			}
+				template <typename TValueType>
+				static bool WriteFormattedToString(const CharType* aFormat, const TValueType& aValue, TStringType& outString)
+				{
+					const size_t capacity = outString.capacity();
+					const CharType* buffer = &outString[0];
 
-			return std::snprintf(buffer, outString.capacity(), aFormat, aValue) == capacity;
-		}
-};
+					const int actualSize = std::snprintf(buffer, capacity, aFormat, aValue);
+					if (actualSize < 0)
+					{
+						return false;
+					}
+
+					if (actualSize > capacity)
+					{
+						outString.reserve(actualSize);
+					}
+
+					return std::snprintf(buffer, outString.capacity(), aFormat, aValue) == capacity;
+				}
+		};
+	}
+}

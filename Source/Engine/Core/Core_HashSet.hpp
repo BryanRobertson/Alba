@@ -10,8 +10,15 @@
 #include "Core_API.hpp"
 #include <EASTL/hash_set.h>
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_HashSet<T, Hash, Predicate, Allocator>
-//------------------------------------------------------------------------------------------------
-template <typename TValueType, typename THash = eastl::hash<TValueType>, TPredicate = eastl::equal_to<TValueType>, typename TAllocator = EASTLAllocatorDefault>
-using Core_HashSet = eastl::hash_set<TValueType, THash, TPredicate, TAllocator>;
+namespace Alba
+{
+	namespace Core
+	{
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Core::HashSet<T, Hash, Predicate, Allocator>
+		//------------------------------------------------------------------------------------------------
+		template <typename TValueType, typename THash = eastl::hash<TValueType>, TPredicate = eastl::equal_to<TValueType>, typename TAllocator = EASTLAllocatorDefault>
+		using HashSet = eastl::hash_set<TValueType, THash, TPredicate, TAllocator>;
+	}
+}
+

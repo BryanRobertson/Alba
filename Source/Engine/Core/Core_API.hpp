@@ -29,3 +29,16 @@
 #if !defined(ALBA_CORE_API)
 #   define ALBA_CORE_API 
 #endif
+
+namespace Alba
+{
+	namespace BasicTypes
+	{
+
+	}
+
+	namespace Core
+	{
+		using namespace Alba::BasicTypes;
+	}
+}

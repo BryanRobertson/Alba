@@ -10,8 +10,15 @@
 #include "Core_API.hpp"
 #include <EASTL/set.h>
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_Set<T, Hash, Predicate, Allocator>
-//------------------------------------------------------------------------------------------------
-template <typename TValueType, typename TCompare = eastl::less<TValueType>, typename TAllocator = EASTLAllocatorDefault>
-using Core_Set = eastl::set<TValueType, TCompare, TPredicate, TAllocator>;
+namespace Alba
+{
+	namespace Core
+	{
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Set<T, Hash, Predicate, Allocator>
+		//------------------------------------------------------------------------------------------------
+		template <typename TValueType, typename TCompare = eastl::less<TValueType>, typename TAllocator = EASTLAllocatorDefault>
+		using Set = eastl::set<TValueType, TCompare, TPredicate, TAllocator>;
+	}
+}
+

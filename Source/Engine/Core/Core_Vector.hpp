@@ -10,8 +10,15 @@
 #include "Core_API.hpp"
 #include <EASTL/vector.h>
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_Vector<T, Allocator>
-//------------------------------------------------------------------------------------------------
-template <typename TValueType, typename TAllocator = EASTLAllocatorDefault>
-using Core_Vector = eastl::vector<TValueType, TAllocator>;
+namespace Alba
+{
+	namespace Core
+	{
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Core::Vector<T, Allocator>
+		//------------------------------------------------------------------------------------------------
+		template <typename TValueType, typename TAllocator = EASTLAllocatorDefault>
+		using Vector = eastl::vector<TValueType, TAllocator>;
+	}
+}
+

@@ -2,6 +2,7 @@ using System.IO;
 using Sharpmake;
 
 [module: Sharpmake.Include("Alba.ProjectBase.sharpmake.cs")]
+[module: Sharpmake.Include("External.EASTL.sharpmake.cs")]
 
 namespace Alba
 {
@@ -20,7 +21,7 @@ namespace Alba
             base.ConfigureAll(conf, target);
 
 			conf.IncludePaths.Add(SourceRootPath);
-            //conf.IncludePaths.Add(Path.Combine(Alba.Settings.GetExternalLibraryPath("EASTL"), "include"));
+            conf.AddPublicDependency<External.EASTL.Project>(target);
 		}
 	}
 

@@ -11,15 +11,15 @@
 #include "Core_Memory.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Core_Memory::TAllocType allocType, const char* description, const char* file, uint32 line)
+void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::Core::uint32 line)
 {
-	return Core_Memory::Malloc(size, alignment, alignmentOffset, allocType, description, file, line);
+	return Alba::Core::Malloc(size, alignment, alignmentOffset, allocType, description, file, line);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentOffset, Core_Memory::TAllocType allocType, const char* description, const char* file, uint32 line)
+void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::Core::uint32 line)
 {
-	return Core_Memory::Malloc(size, alignment, alignmentOffset, allocType, description, file, line);
+	return Alba::Core::Malloc(size, alignment, alignmentOffset, allocType, description, file, line);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@ void ALBA_CDECL operator delete(void* ptr)
 {
 	if (ptr)
 	{
-		Core_Memory::Free(ptr);
+		Alba::Core::Free(ptr);
 	}	
 }
 
@@ -36,12 +36,12 @@ void ALBA_CDECL operator delete[](void* ptr)
 {
 	if (ptr)
 	{
-		Core_Memory::Free(ptr);
+		Alba::Core::Free(ptr);
 	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void ALBA_CDECL operator delete(void* ptr, size_t alignment, size_t alignmentOffset, Core_Memory::TAllocType allocType, const char* description, const char* file, uint32 line)
+void ALBA_CDECL operator delete(void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::Core::uint32 line)
 {
 	(void)allocType;
 	(void)alignment;
@@ -52,12 +52,12 @@ void ALBA_CDECL operator delete(void* ptr, size_t alignment, size_t alignmentOff
 
 	if (ptr)
 	{
-		Core_Memory::Free(ptr);
+		Alba::Core::Free(ptr);
 	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void ALBA_CDECL operator delete[](void* ptr, size_t alignment, size_t alignmentOffset, Core_Memory::TAllocType allocType, const char* description, const char* file, uint32 line)
+void ALBA_CDECL operator delete[](void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::Core::uint32 line)
 {
 	(void)allocType;
 	(void)alignment;
@@ -69,7 +69,7 @@ void ALBA_CDECL operator delete[](void* ptr, size_t alignment, size_t alignmentO
 
 	if (ptr)
 	{
-		Core_Memory::Free(ptr);
+		Alba::Core::Free(ptr);
 	}
 }
 
@@ -84,7 +84,7 @@ void* ALBA_CDECL operator new[](size_t size, const char* pName, int flags, unsig
 	(void)flags;
 	(void)debugFlags;
 
-	return Core_Memory::Malloc(size, 0, 0, Core::AllocType_EASTLContainer, pName, file, line);
+	return Alba::Core::Malloc(size, 0, 0, Alba::Core::AllocType_EASTLContainer, pName, file, line);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@ void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentO
 	(void)flags;
 	(void)debugFlags;
 
-	return Core_Memory::Malloc(size, alignment, alignmentOffset, Core::AllocType_EASTLContainer, pName, file, line);
+	return Alba::Core::Malloc(size, alignment, alignmentOffset, Alba::Core::AllocType_EASTLContainer, pName, file, line);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ void ALBA_CDECL operator delete[](void* ptr, size_t size, const char* pName, int
 
 	if (ptr)
 	{
-		Core_Memory::Free(ptr);
+		Alba::Core::Free(ptr);
 	}
 }
 
@@ -129,6 +129,6 @@ void ALBA_CDECL operator delete[](void* ptr, size_t size, size_t alignment, size
 
 	if (ptr)
 	{
-		Core_Memory::Free(ptr);
+		Alba::Core::Free(ptr);
 	}
 }

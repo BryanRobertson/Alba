@@ -10,8 +10,15 @@
 #include "Core_API.hpp"
 #include <EASTL/array.h>
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_Array<T, N>
-//------------------------------------------------------------------------------------------------
-template <typename TValueType, size_t N>
-using Core_Array = eastl::array<TValueType, N>;
+namespace Alba
+{
+	namespace Core
+	{
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Core::Array<T, N>
+		//------------------------------------------------------------------------------------------------
+		template <typename TValueType, size_t N>
+		using Array = eastl::array<TValueType, N>;
+	}
+}
+

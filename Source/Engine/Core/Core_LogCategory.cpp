@@ -1,23 +1,29 @@
 #include "Core_Precompile.hpp"
 #include "Core_LogCategory.hpp"
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-Core_LogCategory::Core_LogCategory(const Core_LogCategory::CategoryName&& aCategoryName)
-	: myName(std::move(aCategoryName))
-	, myLogLevel(Core_LogLevel::Info)
+namespace Alba
 {
+	namespace Core
+	{
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		LogCategory::LogCategory(const LogCategory::CategoryName&& aCategoryName)
+			: myName(std::move(aCategoryName))
+			, myLogLevel(LogLevel::Info)
+		{
 
-}
+		}
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-void Core_LogCategory::SetLogLevel(Core_LogLevel aLevel)
-{
-	// TODO: Something more precise than operator=
-	myLogLevel = aLevel;
-}
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		void LogCategory::SetLogLevel(LogLevel aLevel)
+		{
+			// TODO: Something more precise than operator=
+			myLogLevel = aLevel;
+		}
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-Core_LogLevel Core_LogCategory::GetLogLevel() const
-{
-	return myLogLevel;
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		LogLevel LogCategory::GetLogLevel() const
+		{
+			return myLogLevel;
+		}
+	}
 }

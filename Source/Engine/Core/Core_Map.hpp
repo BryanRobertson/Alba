@@ -10,9 +10,15 @@
 #include "Core_API.hpp"
 #include <EASTL/map.h>
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_Map<Key, Value, Hash, Predicate, Allocator>
-//------------------------------------------------------------------------------------------------
-template <typename TKeyType, typename TValueType, typename TCompare = eastl::less<TKeyType>, TPredicate = eastl::equal_to<TValueType>, typename TAllocator = EASTLAllocatorDefault>
-using Core_Map = eastl::map<TKeyType, TValueType, THash, TPredicate, TAllocator>;
+namespace Alba
+{
+	namespace Core
+	{
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Core::Map<Key, Value, Hash, Predicate, Allocator>
+		//------------------------------------------------------------------------------------------------
+		template <typename TKeyType, typename TValueType, typename TCompare = eastl::less<TKeyType>, TPredicate = eastl::equal_to<TValueType>, typename TAllocator = EASTLAllocatorDefault>
+		using Map = eastl::map<TKeyType, TValueType, THash, TPredicate, TAllocator>;
+	}
+}
 

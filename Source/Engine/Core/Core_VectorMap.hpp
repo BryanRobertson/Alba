@@ -10,8 +10,15 @@
 #include "Core_API.hpp"
 #include <EASTL/vector_map.h>
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_VectorMap<T, Allocator>
-//------------------------------------------------------------------------------------------------
-template <typename TKey, typename TValueType, typename TCompare = eastl:less<TKey>, typename TAllocator = EASTLAllocatorDefault>
-using Core_VectorMap = eastl::vector_map<TKey, TValueType, TCompare, TAllocator>;
+namespace Alba
+{
+	namespace Core
+	{
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Core::VectorMap<T, Allocator>
+		//------------------------------------------------------------------------------------------------
+		template <typename TKey, typename TValueType, typename TCompare = eastl:less<TKey>, typename TAllocator = EASTLAllocatorDefault>
+		using VectorMap = eastl::vector_map<TKey, TValueType, TCompare, TAllocator>;
+	}
+}
+

@@ -10,8 +10,15 @@
 #include "Core_API.hpp"
 #include <EASTL/shared_ptr.h>
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_WeakPtr<T>
-//------------------------------------------------------------------------------------------------
-template <typename TValueType>
-using Core_WeakPtr = eastl::weak_ptr<TValueType>;
+namespace Alba
+{
+	namespace Core
+	{
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Core::WeakPtr<T>
+		//------------------------------------------------------------------------------------------------
+		template <typename TValueType>
+		using WeakPtr = eastl::weak_ptr<TValueType>;
+	}
+}
+

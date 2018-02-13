@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------------------------------------
-// Name	:	Core_Time.hpp
+// Name	:	Time.hpp
 //-------------------------------------------------------------------------------------------------
 
 #pragma once
@@ -11,106 +11,112 @@
 #include <chrono>
 #pragma warning ( pop )
 
-//-------------------------------------------------------------------------------------------------
-// Use Core_Chrono instead of std::chrono, 
-// so it can be easily switched out for the EASTL version in future if need be
-//-------------------------------------------------------------------------------------------------
-namespace Core_Chrono			= std::chrono;
-namespace Core_ChronoLiterals	= std::chrono_literals;
-namespace Core_SI				= std;
-
-using Core_Atto					=  Core_SI::atto;
-using Core_Femto				=  Core_SI::femto;
-using Core_Pico					=  Core_SI::pico;
-using Core_Nano					=  Core_SI::nano;
-using Core_Micro				=  Core_SI::micro;
-using Core_Milli				=  Core_SI::milli;
-using Core_Centi				=  Core_SI::centi;
-using Core_Deci					=  Core_SI::deci;
-using Core_Deca					=  Core_SI::deca;
-using Core_Hecto				=  Core_SI::hecto;
-using Core_Kilo					=  Core_SI::kilo;
-using Core_Mega					=  Core_SI::mega;
-using Core_Giga					=  Core_SI::giga;
-using Core_Tera					=  Core_SI::tera;
-using Core_Peta					=  Core_SI::peta;
-using Core_Exa					=  Core_SI::exa;
-
-typedef Core_Chrono::time_point<Core_Chrono::high_resolution_clock>		Core_TimePoint;
-typedef Core_Chrono::duration<uint64, Core_Nano>						Core_TimeDuration;
-
-template <typename TStorageType>
-using Core_TimeSeconds = Core_Chrono::duration<TStorageType, Core_SI::ratio<1> >;
-
-//-------------------------------------------------------------------------------------------------
-// Name	:	Core_ChronoCast
-// Desc	:	Casting functions between different duration types
-//-------------------------------------------------------------------------------------------------
-template <typename To>
-struct Core_ChronoCast_Impl
+namespace Alba
 {
-	static To Cast(Core_TimeDuration aDuration)
+	namespace Core
 	{
-		return Core_Chrono::duration_cast<To>(aDuration);
-	}
-};
+		//-------------------------------------------------------------------------------------------------
+		// Use Core::Chrono instead of std::chrono, 
+		// so it can be easily switched out for the EASTL version in future if need be
+		//-------------------------------------------------------------------------------------------------
+		namespace Chrono			= std::chrono;
+		namespace ChronoLiterals	= std::chrono_literals;
+		namespace SI				= std;
 
-template <typename To>
-To Core_ChronoCast(Core_TimeDuration aDuration)
-{
-	return Core_ChronoCast_Impl<To>::Cast(aDuration);
-}
+		using Atto					=  SI::atto;
+		using Femto					=  SI::femto;
+		using Pico					=  SI::pico;
+		using Nano					=  SI::nano;
+		using Micro					=  SI::micro;
+		using Milli					=  SI::milli;
+		using Centi					=  SI::centi;
+		using Deci					=  SI::deci;
+		using Deca					=  SI::deca;
+		using Hecto					=  SI::hecto;
+		using Kilo					=  SI::kilo;
+		using Mega					=  SI::mega;
+		using Giga					=  SI::giga;
+		using Tera					=  SI::tera;
+		using Peta					=  SI::peta;
+		using Exa					=  SI::exa;
 
-//-------------------------------------------------------------------------------------------------
-// Name	:	Core_Time
-// Desc	:	Time related functions
-//			e.g. Getting current game time, getting current wall-clock time, etc
-//-------------------------------------------------------------------------------------------------
-class ALBA_CORE_API Core_Time final
-{
-	public:
+		typedef Chrono::time_point<Chrono::high_resolution_clock>		TimePoint;
+		typedef Chrono::duration<uint64, Nano>							TimeDuration;
 
-		//=========================================================================================
-		// Public Types
-		//=========================================================================================
-		typedef Core_Chrono::high_resolution_clock		clock_type;
+		template <typename TStorageType>
+		using TimeSeconds = Chrono::duration<TStorageType, SI::ratio<1> >;
 
-		//=========================================================================================
-		// Public Static Methods
-		//=========================================================================================
+		//-------------------------------------------------------------------------------------------------
+		// Name	:	Core::ChronoCast
+		// Desc	:	Casting functions between different duration types
+		//-------------------------------------------------------------------------------------------------
+		template <typename To>
+		struct ChronoCast_Impl
+		{
+			static To Cast(TimeDuration aDuration)
+			{
+				return Chrono::duration_cast<To>(aDuration);
+			}
+		};
+
+		template <typename To>
+		To ChronoCast(TimeDuration aDuration)
+		{
+			return ChronoCast_Impl<To>::Cast(aDuration);
+		}
+
+		//-------------------------------------------------------------------------------------------------
+		// Name	:	Core::Time
+		// Desc	:	Time related functions
+		//			e.g. Getting current game time, getting current wall-clock time, etc
+		//-------------------------------------------------------------------------------------------------
+		class ALBA_CORE_API Time final
+		{
+			public:
+
+				//=========================================================================================
+				// Public Types
+				//=========================================================================================
+				typedef Chrono::high_resolution_clock		clock_type;
+
+				//=========================================================================================
+				// Public Static Methods
+				//=========================================================================================
 		
-		//=========================================================================================
-		// Public Constructors
-		//=========================================================================================
-		Core_Time();
+				//=========================================================================================
+				// Public Constructors
+				//=========================================================================================
+				Time();
 
-		//=========================================================================================
-		// Public Methods
-		//=========================================================================================
-		void							Reset();
-		void							Update();
-		void							UpdatePaused();
+				//=========================================================================================
+				// Public Methods
+				//=========================================================================================
+				void						Reset();
+				void						Update();
+				void						UpdatePaused();
 
-		//-----------------------------------------------------------------------------------------
-		// Wall-clock time (i.e. the real time)
-		//-----------------------------------------------------------------------------------------
-		Core_TimePoint					GetWallClockTime() const					{ return mySystemTime;  }
-		Core_TimeDuration				GetWallClockDeltaTime() const				{ return mySystemTimeDelta; }
+				//-----------------------------------------------------------------------------------------
+				// Wall-clock time (i.e. the real time)
+				//-----------------------------------------------------------------------------------------
+				TimePoint					GetWallClockTime() const					{ return mySystemTime;  }
+				TimeDuration				GetWallClockDeltaTime() const				{ return mySystemTimeDelta; }
 
-		//-----------------------------------------------------------------------------------------
-		// Game time (stops when paused)
-		//-----------------------------------------------------------------------------------------
-		Core_TimePoint					GetGameTime() const							{ return myGameTime;	}
-		Core_TimeDuration				GetGameDeltaTime() const					{ return myGameTimeDelta; }
+				//-----------------------------------------------------------------------------------------
+				// Game time (stops when paused)
+				//-----------------------------------------------------------------------------------------
+				TimePoint					GetGameTime() const							{ return myGameTime;	}
+				TimeDuration				GetGameDeltaTime() const					{ return myGameTimeDelta; }
 
-	private:
+			private:
 
-		//=========================================================================================
-		// Private Data
-		//=========================================================================================
-		Core_TimePoint					mySystemTime;
-		Core_TimePoint					myGameTime;
+				//=========================================================================================
+				// Private Data
+				//=========================================================================================
+				TimePoint					mySystemTime;
+				TimePoint					myGameTime;
 
-		Core_TimeDuration				mySystemTimeDelta;
-		Core_TimeDuration				myGameTimeDelta;
-};
+				TimeDuration				mySystemTimeDelta;
+				TimeDuration				myGameTimeDelta;
+		};
+	}
+}

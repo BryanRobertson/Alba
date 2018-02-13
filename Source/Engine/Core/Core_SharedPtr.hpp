@@ -10,25 +10,32 @@
 #include "Core_API.hpp"
 #include <EASTL/shared_ptr.h>
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_SharedPtr<T>
-//------------------------------------------------------------------------------------------------
-template <typename TValueType>
-using Core_SharedPtr = eastl::shared_ptr<TValueType>;
+namespace Alba
+{
+	namespace Core
+	{
+		//------------------------------------------------------------------------------------------------
+		// Name	:	SharedPtr<T>
+		//------------------------------------------------------------------------------------------------
+		template <typename TValueType>
+		using SharedPtr = eastl::shared_ptr<TValueType>;
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_MakeShared
-//------------------------------------------------------------------------------------------------
-template <typename TValueType, typename ...TArgs>
-Core_SharedPtr<TValueType> Core_MakeShared(TArgs&& args)
-{
-	return eastl::make_shared<TValueType, TArgs>(eastl::forward<TArgs>(args)...);
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Core::MakeShared
+		//------------------------------------------------------------------------------------------------
+		template <typename TValueType, typename ...TArgs>
+		SharedPtr<TValueType> Core_MakeShared(TArgs&& args)
+		{
+			return eastl::make_shared<TValueType, TArgs>(eastl::forward<TArgs>(args)...);
+		}
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Core::AllocateShared
+		//------------------------------------------------------------------------------------------------
+		template <typename TValueType, typename TAllocator, typename... TArgs>
+		SharedPtr<TValueType> AllocateShared(const TAllocator& allocator, TArgs&&... args)
+		{
+			return eastl::allocate_shared<TValueType, TAllocator, eastl::forward<TArgs>(args)...);
+		}
+	}
 }
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_AllocateShared
-//------------------------------------------------------------------------------------------------
-template <typename TValueType, typename TAllocator, typename... TArgs>
-Core_SharedPtr<TValueType> Core_AllocateShared(const TAllocator& allocator, TArgs&&... args)
-{
-	return eastl::allocate_shared<TValueType, TAllocator, eastl::forward<TArgs>(args)...);
-}
+

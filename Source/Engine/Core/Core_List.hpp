@@ -10,8 +10,14 @@
 #include "Core_API.hpp"
 #include <EASTL/list.h>
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_List<T, Allocator>
-//------------------------------------------------------------------------------------------------
-template <typename TValueType, typename TAllocator = EASTLAllocatorDefault>
-using Core_List = eastl::list<TValueType, TAllocator>;
+namespace Alba
+{
+	namespace Core
+	{
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Core::List<T, Allocator>
+		//------------------------------------------------------------------------------------------------
+		template <typename TValueType, typename TAllocator = EASTLAllocatorDefault>
+		using List = eastl::list<TValueType, TAllocator>;
+	}
+}

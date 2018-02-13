@@ -11,34 +11,44 @@
 	//#include <debugapi.h>
 #endif
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-Core_LogManager::Core_LogManager()
+namespace Alba
 {
-
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-void Core_LogManager::LogMessage(const Core_LogCategory& aCategory, Core_LogLevel aLevel, const char* aMessage)
-{
-	if (aCategory.GetLogLevel() >= aLevel)
+	namespace Core
 	{
-		#if defined(ALBA_PLATFORM_WINDOWS)
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		LogManager::LogManager()
 		{
-			const auto now = std::chrono::system_clock::to_time_t(Core_Chrono::system_clock::now());
-			const auto nowLocalTime = *std::localtime(&now);
 
-			Core_FixedString<256>::CtorSprintf cs;
-			Core_FixedString<256> str
-			(
-				cs,
-				"%s: %s : %s\n", 
-				std::put_time(&nowLocalTime, "Y-m-d H:M:S"),
-				aCategory.GetName(),
-				aMessage
-			);
-
-			OutputDebugStringA(str.c_str());
 		}
-		#endif
-	}	
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		void LogManager::LogMessage(const LogCategory& aCategory, LogLevel aLevel, const char* aMessage)
+		{
+			if (aCategory.GetLogLevel() >= aLevel)
+			{
+				#if defined(ALBA_PLATFORM_WINDOWS)
+				{
+					/*
+					const auto now = std::chrono::system_clock::to_time_t(Core_Chrono::system_clock::now());
+					const auto nowLocalTime = *std::localtime(&now);
+
+		
+					Core_FixedString<256>::CtorSprintf cs;
+					Core_FixedString<256> str
+					(
+						cs,
+						"%s: %s : %s\n", 
+						std::put_time(&nowLocalTime, "Y-m-d H:M:S"),
+						aCategory.GetName(),
+						aMessage
+					);
+					*/
+
+					OutputDebugStringA(aMessage);
+				}
+				#endif
+			}	
+		}
+
+	}
 }

@@ -8,15 +8,22 @@
 #include "Core_Container.hpp"
 #include <EASTL/fixed_vector.h>
 
-//-------------------------------------------------------------------------------------------------
-// Name	:	Core_FixedVector
-// Desc	:	Fixed-size vector. If overflow is enabled, then the string is basically the same as Core_Vector
-//-------------------------------------------------------------------------------------------------
-template 
-<
-	typename TValueType,
-	size_t TCount, 
-	Core_OverflowBehavior TOverflowBehavior=Core_OverflowBehavior::Allowed,
-	typename TOverflowAllocator = EASTLAllocatorType
->
-using Core_FixedVector = eastl::fixed_vector<TValueType, TCount, TOverflowBehavior== Core_OverflowBehavior::Allowed, TOverflowAllocator>;
+namespace Alba
+{
+	namespace Core
+	{
+		//-------------------------------------------------------------------------------------------------
+		// Name	:	FixedVector
+		// Desc	:	Fixed-size vector. If overflow is enabled, then the vector is basically the same as Core::Vector
+		//-------------------------------------------------------------------------------------------------
+		template 
+		<
+			typename TValueType,
+			size_t TCount, 
+			Core_OverflowBehavior TOverflowBehavior=Core_OverflowBehavior::Allowed,
+			typename TOverflowAllocator = EASTLAllocatorType
+		>
+		using FixedVector = eastl::fixed_vector<TValueType, TCount, TOverflowBehavior==OverflowBehavior::Allowed, TOverflowAllocator>;
+	}
+}
+

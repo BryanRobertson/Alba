@@ -69,7 +69,9 @@ namespace Alba
 						conf.Defines.Add("ALBA_ARCHITECTURE_64BIT");
 					}
 				}
-			
+
+                conf.Options.Add(Options.Vc.Compiler.CppLanguageStandard.CPP11);
+                conf.Options.Add(Options.Vc.Compiler.Exceptions.EnableWithSEH);
                 conf.Options.Add(Options.Vc.General.TreatWarningsAsErrors.Enable);
                 conf.Options.Add(Options.Vc.General.WindowsTargetPlatformVersion.v10_0_15063_0);
 				conf.Options.Add(new Sharpmake.Options.Vc.Compiler.DisableSpecificWarnings("4577"));
@@ -175,7 +177,8 @@ namespace Alba
 			[Configure()]
 			public override void ConfigureAll(Configuration conf, Target target)
 			{
-				base.ConfigureAll(conf, target);
+                conf.SolutionFolder = "Alba/Engine";
+                base.ConfigureAll(conf, target);
 			}
 		}
 	}

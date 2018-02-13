@@ -10,8 +10,14 @@
 #include "Core_API.hpp"
 #include <EASTL/vector_set.h>
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_VectorSet<T, Allocator>
-//------------------------------------------------------------------------------------------------
-template <typename TValueType, typename TCompare = eastl:less<TValueType>, typename TAllocator = EASTLAllocatorDefault>
-using Core_VectorSet = eastl::vector_set<TValueType, TCompare, TAllocator>;
+namespace Alba
+{
+	namespace Core
+	{
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Core::VectorSet<T, Allocator>
+		//------------------------------------------------------------------------------------------------
+		template <typename TValueType, typename TCompare = eastl:less<TValueType>, typename TAllocator = EASTLAllocatorDefault>
+		using VectorSet = eastl::vector_set<TValueType, TCompare, TAllocator>;
+	}
+}

@@ -10,8 +10,14 @@
 #include "Core_API.hpp"
 #include <EASTL/queue.h>
 
-//------------------------------------------------------------------------------------------------
-// Name	:	Core_Queue<T, Allocator>
-//------------------------------------------------------------------------------------------------
-template <typename TValueType, typename TContainer = Core_Deque<TValueType> >
-using Core_Queue = eastl::queue<TValueType, TContainer>;
+namespace Alba
+{
+	namespace Core
+	{
+		//------------------------------------------------------------------------------------------------
+		// Name	:	Queue<T, Allocator>
+		//------------------------------------------------------------------------------------------------
+		template <typename TValueType, typename TContainer = Core_Deque<TValueType> >
+		using Queue = eastl::queue<TValueType, TContainer>;
+	}
+}

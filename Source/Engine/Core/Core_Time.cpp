@@ -1,45 +1,52 @@
 #include "Core_Precompile.hpp"
 #include "Core_Time.hpp"
 
-using namespace Core_ChronoLiterals;
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-Core_Time::Core_Time()
+namespace Alba
 {
-	Reset();
+	namespace Core
+	{
+		using namespace ChronoLiterals;
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		Time::Time()
+		{
+			Reset();
+		}
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		void Time::Reset()
+		{
+			mySystemTime = myGameTime = clock_type::now();
+		}
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		void Time::Update()
+		{
+			const TimePoint lastSystemTime = mySystemTime;
+			const TimePoint lastGameTime = myGameTime;
+
+			mySystemTime = clock_type::now();
+
+			auto timeDelta = mySystemTime - lastSystemTime;
+			myGameTime = lastGameTime + timeDelta;
+
+			mySystemTimeDelta = timeDelta;
+			myGameTimeDelta = timeDelta;
+		}
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////
+		void Time::UpdatePaused()
+		{
+			const TimePoint lastSystemTime = mySystemTime;
+			const TimePoint lastGameTime = myGameTime;
+
+			mySystemTime = clock_type::now();
+
+			auto timeDelta = mySystemTime - lastSystemTime;
+
+			mySystemTimeDelta = timeDelta;
+			myGameTimeDelta = 0ns;
+		}
+	}
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-void Core_Time::Reset()
-{
-	mySystemTime = myGameTime = clock_type::now();
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-void Core_Time::Update()
-{
-	const Core_TimePoint lastSystemTime = mySystemTime;
-	const Core_TimePoint lastGameTime	= myGameTime;
-
-	mySystemTime		= clock_type::now();
-
-	auto timeDelta		= mySystemTime - lastSystemTime;
-	myGameTime			= lastGameTime + timeDelta;
-
-	mySystemTimeDelta	= timeDelta;
-	myGameTimeDelta		= timeDelta;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-void Core_Time::UpdatePaused()
-{
-	const Core_TimePoint lastSystemTime = mySystemTime;
-	const Core_TimePoint lastGameTime = myGameTime;
-
-	mySystemTime = clock_type::now();
-
-	auto timeDelta = mySystemTime - lastSystemTime;
-
-	mySystemTimeDelta = timeDelta;
-	myGameTimeDelta = 0ns;
-}
