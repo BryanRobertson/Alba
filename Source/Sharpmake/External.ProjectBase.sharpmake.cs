@@ -65,6 +65,7 @@ namespace External
             conf.IntermediatePath       = Alba.Settings.GetIntermediatePath();
             conf.TargetPath             = Alba.Settings.GetTargetPath();
             conf.TargetLibraryPath      = Alba.Settings.GetLibraryTargetPath();
+            conf.TargetFileName         = "[project.Name]_[target.Platform]_[target.Optimization]";
 
             if (target.OutputType == OutputType.Dll)
             {

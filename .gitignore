@@ -9,4 +9,5 @@ Source/Sharpmake/obj/*
 Source/Sharpmake/output/*
 
 /Intermediate/*
+/Libraries/*
 /Binaries/*

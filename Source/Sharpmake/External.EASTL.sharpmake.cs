@@ -38,6 +38,10 @@ namespace External
                 conf.Defines.Add("CRT_SECURE_NO_WARNINGS");
                 conf.Defines.Add("SCL_SECURE_NO_WARNINGS");
                 conf.Defines.Add("EASTL_OPENSOURCE", "1");
+
+                conf.Options.Add(Options.Vc.Compiler.CppLanguageStandard.CPP11);
+                conf.Options.Add(Options.Vc.Compiler.Exceptions.EnableWithSEH);
+                conf.Options.Add(Options.Vc.General.TreatWarningsAsErrors.Enable);
             }
         }
     }
