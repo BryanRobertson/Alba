@@ -23,5 +23,25 @@ namespace Alba
         {
             return System.IO.Path.Combine(@"[project.SharpmakeCsPath]\..\External", relativePath);
         }
+
+        public static string GetIntermediatePath()
+        {
+            return @"[project.SharpmakeCsPath]\..\..\Intermediate";
+        }
+
+        public static string GetTargetPath()
+        {
+            return @"[project.SharpmakeCsPath]\..\..\Binaries";
+        }
+
+        public static string GetLibraryTargetPath()
+        {
+            return @"[project.SharpmakeCsPath]\..\..\Libraries";
+        }
+
+        public static string GetProjectPath()
+        {
+            return @"[project.SharpmakeCsPath]\generated";
+        }
     }
 }

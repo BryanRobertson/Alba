@@ -18,7 +18,9 @@ namespace Alba
 		public override void ConfigureAll(Configuration conf, Target target)
 		{
             base.ConfigureAll(conf, target);
+
 			conf.IncludePaths.Add(SourceRootPath);
+            //conf.IncludePaths.Add(Path.Combine(Alba.Settings.GetExternalLibraryPath("EASTL"), "include"));
 		}
 	}
 

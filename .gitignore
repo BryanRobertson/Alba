@@ -2,5 +2,11 @@
 #Ignore .csproj user settings
 *.csproj.user
 
+#Ignore Sharpmake temp dirs
+Source/Sharpmake/.vs/*
+Source/Sharpmake/generated/*
+Source/Sharpmake/obj/*
+Source/Sharpmake/output/*
+
 /Intermediate/*
 /Binaries/*

@@ -1,12 +1,9 @@
-using System.IO;
+﻿using System.IO;
 using Sharpmake;
 
-[module: Sharpmake.Include("Alba.ProjectBase.sharpmake.cs")]
-[module: Sharpmake.Include("Alba.Core.sharpmake.cs")]
-[module: Sharpmake.Include("Alba.Settings.sharpmake.cs")]
-[module: Sharpmake.Include("External.Solution.sharpmake.cs")]
+[module: Sharpmake.Include("External.EASTL.sharpmake.cs")]
 
-namespace Alba
+namespace External
 {
     [Sharpmake.Generate]
     public class Solution : Sharpmake.Solution
@@ -14,21 +11,21 @@ namespace Alba
         public Solution()
         {
             // The name of the solution.
-            Name = "Alba";
+            Name = "ExternalLibs";
 
             IsFileNameToLower = false;
 
             // As with the project, define which target this solution builds for.
             // It's usually the same thing.
             AddTargets
-		    (
-			    new Target
-			    (
+            (
+                new Target
+                (
                     GetDefaultPlatforms(),
                     GetDefaultDevEnvs(),
                     Optimization.Debug | Optimization.Release | Optimization.Retail
                 )
-		    );
+            );
         }
 
         public static Platform GetDefaultPlatforms()
@@ -48,16 +45,9 @@ namespace Alba
         public void ConfigureAll(Solution.Configuration conf, Target target)
         {
             conf.SolutionFileName = "[solution.Name]_[target.Platform]_[target.DevEnv]";
-		    conf.SolutionPath = @"[solution.SharpmakeCsPath]\generated";
+            conf.SolutionPath = @"[solution.SharpmakeCsPath]\generated";
 
-            conf.AddProject<Alba.CoreProject>(target);
-        }
-
-        [Main]
-        public static void SharpmakeMain(Arguments sharpmakeArgs)
-        {
-            sharpmakeArgs.Generate<External.Solution>();
-            sharpmakeArgs.Generate<Solution>();
+            conf.AddProject<External.EASTL.Project>(target);
         }
     }
 }

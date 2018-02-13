@@ -16,8 +16,8 @@ namespace Alba
 			public BaseProject()
                 : base(typeof(Target))
             {
-				
-			}
+                IsFileNameToLower = false;
+            }
 
             public static Platform GetDefaultPlatforms()
             {
@@ -32,16 +32,15 @@ namespace Alba
             [Configure()]
 			public virtual void ConfigureAll(Configuration conf, Target target)
 			{
-				// Project filename/path
+				// Project filename
 				conf.ProjectFileName = "[project.Name]_[target.Platform]_[target.DevEnv]";
-				conf.ProjectPath = @"[project.SharpmakeCsPath]\generated";
-				
-				// Intermediate path
-                conf.IntermediatePath = @"[project.SharpmakeCsPath]\..\..\Intermediate";
-                
-				// Target path
-				conf.TargetPath = @"[project.SharpmakeCsPath]\..\..\Binaries";
-                conf.TargetFileName = "[project.Name]_[target.Platform]_[target.Optimization]";
+
+                // Paths
+                conf.ProjectPath        = Alba.Settings.GetProjectPath();
+                conf.IntermediatePath   = Alba.Settings.GetIntermediatePath();
+                conf.TargetPath         = Alba.Settings.GetTargetPath();
+                conf.TargetLibraryPath  = Alba.Settings.GetLibraryTargetPath();
+                conf.TargetFileName     = "[project.Name]_[target.Platform]_[target.Optimization]";
 
                 // If not set, no precompile option will be used.
                 conf.PrecompHeader = "[project.Name]_Precompile.hpp";
