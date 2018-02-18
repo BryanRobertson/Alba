@@ -2,6 +2,10 @@
 #Ignore .csproj user settings
 *.csproj.user
 
+#Ignore .vcxproj files but not filters
+*.vcxproj
+!*.vcxproj.filters
+
 #Ignore Sharpmake temp dirs
 Source/Sharpmake/.vs/*
 Source/Sharpmake/generated/*

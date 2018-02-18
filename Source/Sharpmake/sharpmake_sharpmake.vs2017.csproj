@@ -37,10 +37,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Alba.Core.sharpmake.cs" />
-    <Compile Include="Alba.ProjectBase.sharpmake.cs" />
-    <Compile Include="Alba.Settings.sharpmake.cs" />
+    <Compile Include="Alba.Base.ExecutableProject.sharpmake.cs" />
+    <Compile Include="Alba.Engine.Core.sharpmake.cs" />
+    <Compile Include="Alba.Engine.Framework.sharpmake.cs" />
+    <Compile Include="Alba.Base.Project.sharpmake.cs" />
+    <Compile Include="Alba.Common.Settings.sharpmake.cs" />
     <Compile Include="Alba.Solution.sharpmake.cs" />
+    <Compile Include="Alba.Base.LibraryProject.sharpmake.cs" />
     <Compile Include="External.EASTL.sharpmake.cs" />
     <Compile Include="External.ProjectBase.sharpmake.cs" />
     <Compile Include="External.Solution.sharpmake.cs" />

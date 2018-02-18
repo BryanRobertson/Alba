@@ -1,9 +1,10 @@
 using System.IO;
 using Sharpmake;
 
-[module: Sharpmake.Include("Alba.ProjectBase.sharpmake.cs")]
-[module: Sharpmake.Include("Alba.Core.sharpmake.cs")]
-[module: Sharpmake.Include("Alba.Settings.sharpmake.cs")]
+[module: Sharpmake.Include("Alba.Base.Project.sharpmake.cs")]
+[module: Sharpmake.Include("Alba.Engine.Core.sharpmake.cs")]
+[module: Sharpmake.Include("Alba.Engine.Framework.sharpmake.cs")]
+[module: Sharpmake.Include("Alba.Common.Settings.sharpmake.cs")]
 [module: Sharpmake.Include("External.Solution.sharpmake.cs")]
 
 namespace Alba
@@ -50,7 +51,8 @@ namespace Alba
             conf.SolutionFileName = "[solution.Name]_[target.Platform]_[target.DevEnv]";
 		    conf.SolutionPath = @"[solution.SharpmakeCsPath]\generated";
 
-            conf.AddProject<Alba.CoreProject>(target);
+            conf.AddProject<Alba.Engine.CoreProject>(target);
+            conf.AddProject<Alba.Engine.FrameworkProject>(target);
         }
 
         [Main]
