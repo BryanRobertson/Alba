@@ -4,6 +4,8 @@ using Sharpmake;
 [module: Sharpmake.Include("Alba.Base.Project.sharpmake.cs")]
 [module: Sharpmake.Include("Alba.Engine.Core.sharpmake.cs")]
 [module: Sharpmake.Include("Alba.Engine.Framework.sharpmake.cs")]
+[module: Sharpmake.Include("Alba.Demo.Gravity.sharpmake.cs")]
+[module: Sharpmake.Include("Alba.Application.GravityDemoExe.sharpmake.cs")]
 [module: Sharpmake.Include("Alba.Common.Settings.sharpmake.cs")]
 [module: Sharpmake.Include("External.Solution.sharpmake.cs")]
 
@@ -42,17 +44,27 @@ namespace Alba
             return Alba.Settings.GetDefaultDevEnvs();
         }
 
-        // Configure for all 4 generated targets. Note that the type of the
-        // configuration object is of type Solution.Configuration this time.
-        // (Instead of Project.Configuration.)
         [Configure]
         public void ConfigureAll(Solution.Configuration conf, Target target)
         {
             conf.SolutionFileName = "[solution.Name]_[target.Platform]_[target.DevEnv]";
 		    conf.SolutionPath = @"[solution.SharpmakeCsPath]\generated";
 
+            //-------------------------------------------------------------------------------------
+            // Engine
+            //-------------------------------------------------------------------------------------
             conf.AddProject<Alba.Engine.CoreProject>(target);
             conf.AddProject<Alba.Engine.FrameworkProject>(target);
+
+            //-------------------------------------------------------------------------------------
+            // Demo
+            //-------------------------------------------------------------------------------------
+            conf.AddProject<Alba.Demo.GravityProject>(target);
+
+            //-------------------------------------------------------------------------------------
+            // Applications
+            //-------------------------------------------------------------------------------------
+            conf.AddProject<Alba.Application.GravityDemoExeProject>(target);
         }
 
         [Main]

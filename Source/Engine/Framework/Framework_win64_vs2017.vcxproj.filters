@@ -2,9 +2,11 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
+    <ClCompile Include="Framework_Precompile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.hpp" />
     <ClInclude Include="Framework_API.hpp" />
+    <ClInclude Include="Framework_Precompile.hpp" />
   </ItemGroup>
 </Project>

@@ -26,7 +26,7 @@ namespace Alba
 
         public static string GetIntermediatePath()
         {
-            return @"[project.SharpmakeCsPath]\..\..\Intermediate";
+            return @"[project.SharpmakeCsPath]\..\..\Intermediate\[project.Name]";
         }
 
         public static string GetTargetPath()
@@ -36,7 +36,7 @@ namespace Alba
 
         public static string GetLibraryTargetPath()
         {
-            return @"[project.SharpmakeCsPath]\..\..\Libraries";
+            return @"[project.SharpmakeCsPath]\..\..\Libraries\[project.Name]";
         }
 
         public static string GetProjectPath()
