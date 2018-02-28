@@ -4,7 +4,7 @@
 // Switch on string hash debugging in debug by default
 //-------------------------------------------------------------------------------------------------
 #ifndef ALBA_DEBUG_STRINGHASH
-	#ifdef ALBA_DEBUG_BUILD
+	#ifndef ALBA_RETAIL_BUILD
 		#define ALBA_DEBUG_STRINGHASH
 	#endif
 #endif

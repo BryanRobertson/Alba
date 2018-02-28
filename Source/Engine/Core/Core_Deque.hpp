@@ -17,14 +17,14 @@ namespace Alba
 		//------------------------------------------------------------------------------------------------
 		// Name	:	Core::Deque<T, Allocator>
 		//------------------------------------------------------------------------------------------------
-		template <typename TValueType, typename TAllocator = EASTLAllocatorDefault>
+		template <typename TValueType, typename TAllocator = EASTLAllocatorType>
 		using Deque = eastl::deque<TValueType, TAllocator>;
 
 		//------------------------------------------------------------------------------------------------
 		// Name	:	Core::Deque_Sized<T, Size, Allocator>
 		// Desc	:	Deque with internal subarray size specified
 		//------------------------------------------------------------------------------------------------
-		template <typename TValueType, unsigned int kSubarraySize, typename TAllocator = EASTLAllocatorDefault>
+		template <typename TValueType, unsigned int kSubarraySize, typename TAllocator = EASTLAllocatorType>
 		using Deque_Sized = eastl::deque<TValueType, TAllocator, kSubarraySize>;
 	}
 }

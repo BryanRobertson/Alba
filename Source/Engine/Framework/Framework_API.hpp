@@ -32,7 +32,6 @@ namespace Alba
 {
 	namespace BasicTypes
 	{
-
 	}
 
 	namespace Framework

@@ -6,7 +6,7 @@
 
 #if defined(ALBA_PLATFORM_WINDOWS)
 	#pragma warning( push, 3 )  
-		#include <windows.h>
+		#include <Windows.h>
 	#pragma warning( pop ) 
 	//#include <debugapi.h>
 #endif

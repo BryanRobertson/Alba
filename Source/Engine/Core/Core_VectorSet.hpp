@@ -17,7 +17,7 @@ namespace Alba
 		//------------------------------------------------------------------------------------------------
 		// Name	:	Core::VectorSet<T, Allocator>
 		//------------------------------------------------------------------------------------------------
-		template <typename TValueType, typename TCompare = eastl:less<TValueType>, typename TAllocator = EASTLAllocatorDefault>
+		template <typename TValueType, typename TCompare = eastl:less<TValueType>, typename TAllocator = EASTLAllocatorType>
 		using VectorSet = eastl::vector_set<TValueType, TCompare, TAllocator>;
 	}
 }

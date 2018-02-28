@@ -8,5 +8,6 @@
     <ClInclude Include="Framework.hpp" />
     <ClInclude Include="Framework_API.hpp" />
     <ClInclude Include="Framework_Precompile.hpp" />
+    <ClInclude Include="Framework_InitParams.hpp" />
   </ItemGroup>
 </Project>

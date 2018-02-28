@@ -17,7 +17,7 @@ namespace Alba
 		//------------------------------------------------------------------------------------------------
 		// Name	:	Core::HashSet<T, Hash, Predicate, Allocator>
 		//------------------------------------------------------------------------------------------------
-		template <typename TValueType, typename THash = eastl::hash<TValueType>, TPredicate = eastl::equal_to<TValueType>, typename TAllocator = EASTLAllocatorDefault>
+		template <typename TValueType, typename THash = eastl::hash<TValueType>, TPredicate = eastl::equal_to<TValueType>, typename TAllocator = EASTLAllocatorType>
 		using HashSet = eastl::hash_set<TValueType, THash, TPredicate, TAllocator>;
 	}
 }

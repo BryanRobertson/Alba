@@ -7,6 +7,8 @@
     <ClCompile Include="Core_Memory.cpp" />
     <ClCompile Include="Core_Precompile.cpp" />
     <ClCompile Include="Core_Time.cpp" />
+    <ClCompile Include="Core_CommandLineParameters.cpp" />
+    <ClCompile Include="Core_Mutex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
@@ -47,5 +49,11 @@
     <ClInclude Include="Core_VectorMap.hpp" />
     <ClInclude Include="Core_VectorSet.hpp" />
     <ClInclude Include="Core_WeakPtr.hpp" />
+    <ClInclude Include="Core_CommandLineParameters.hpp" />
+    <ClInclude Include="Core_Pair.hpp" />
+    <ClInclude Include="Core_Hash.hpp" />
+    <ClInclude Include="Core_AlignedStorage.hpp" />
+    <ClInclude Include="Core_Optional.hpp" />
+    <ClInclude Include="Core_Mutex.hpp" />
   </ItemGroup>
 </Project>

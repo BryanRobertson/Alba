@@ -35,7 +35,7 @@ namespace Alba
 
 	}
 
-	namespace Framework
+	namespace Gravity
 	{
 		using namespace Alba::BasicTypes;
 	}

@@ -17,7 +17,7 @@ namespace Alba
 		//------------------------------------------------------------------------------------------------
 		// Name	:	Core::VectorMap<T, Allocator>
 		//------------------------------------------------------------------------------------------------
-		template <typename TKey, typename TValueType, typename TCompare = eastl:less<TKey>, typename TAllocator = EASTLAllocatorDefault>
+		template <typename TKey, typename TValueType, typename TCompare = eastl:less<TKey>, typename TAllocator = EASTLAllocatorType>
 		using VectorMap = eastl::vector_map<TKey, TValueType, TCompare, TAllocator>;
 	}
 }

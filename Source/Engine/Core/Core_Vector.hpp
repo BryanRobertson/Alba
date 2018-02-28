@@ -17,7 +17,7 @@ namespace Alba
 		//------------------------------------------------------------------------------------------------
 		// Name	:	Core::Vector<T, Allocator>
 		//------------------------------------------------------------------------------------------------
-		template <typename TValueType, typename TAllocator = EASTLAllocatorDefault>
+		template <typename TValueType, typename TAllocator = EASTLAllocatorType>
 		using Vector = eastl::vector<TValueType, TAllocator>;
 	}
 }

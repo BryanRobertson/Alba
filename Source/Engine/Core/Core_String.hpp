@@ -15,10 +15,10 @@ namespace Alba
 		template <typename TCharType>
 		using BasicString = eastl::basic_string<TCharType>;
 
-		typedef BasicString<char>		Core_String;
-		typedef BasicString<wchar_t>	Core_WString;
-		typedef BasicString<char16_t>	Core_UTF16String;
-		typedef BasicString<char32_t>	Core_UTF32String;
+		typedef BasicString<char>		String;
+		typedef BasicString<wchar_t>	WString;
+		typedef BasicString<char16_t>	UTF16String;
+		typedef BasicString<char32_t>	UTF32String;
 	}
 }
 

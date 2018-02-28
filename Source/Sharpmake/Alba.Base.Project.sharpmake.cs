@@ -45,16 +45,20 @@ namespace Alba
                 // If not set, no precompile option will be used.
                 conf.PrecompHeader = "[project.Name]_Precompile.hpp";
 				conf.PrecompSource = "[project.Name]_Precompile.cpp";
-				
-				// Defines
-				if ( target.Optimization == Optimization.Debug )
-				{
-					conf.Defines.Add("ALBA_DEBUG_BUILD");
-				}
-				else if ( target.Optimization == Optimization.Release )
-				{
-					conf.Defines.Add("ALBA_RELEASE_BUILD");
-				}
+
+                // Defines
+                if (target.Optimization == Optimization.Debug)
+                {
+                    conf.Defines.Add("ALBA_DEBUG_BUILD");
+                }
+                else if (target.Optimization == Optimization.Release)
+                {
+                    conf.Defines.Add("ALBA_RELEASE_BUILD");
+                }
+                else if (target.Optimization == Optimization.Retail)
+                {
+                    conf.Defines.Add("ALBA_RETAIL_BUILD");
+                }
 				
 				if ( target.Platform == Platform.win32 || target.Platform == Platform.win64 )
 				{

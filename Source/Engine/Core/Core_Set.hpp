@@ -17,7 +17,7 @@ namespace Alba
 		//------------------------------------------------------------------------------------------------
 		// Name	:	Set<T, Hash, Predicate, Allocator>
 		//------------------------------------------------------------------------------------------------
-		template <typename TValueType, typename TCompare = eastl::less<TValueType>, typename TAllocator = EASTLAllocatorDefault>
+		template <typename TValueType, typename TCompare = eastl::less<TValueType>, typename TAllocator = EASTLAllocatorType>
 		using Set = eastl::set<TValueType, TCompare, TPredicate, TAllocator>;
 	}
 }

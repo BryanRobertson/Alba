@@ -17,7 +17,7 @@ namespace Alba
 		//------------------------------------------------------------------------------------------------
 		// Name	:	Core::Map<Key, Value, Hash, Predicate, Allocator>
 		//------------------------------------------------------------------------------------------------
-		template <typename TKeyType, typename TValueType, typename TCompare = eastl::less<TKeyType>, TPredicate = eastl::equal_to<TValueType>, typename TAllocator = EASTLAllocatorDefault>
+		template <typename TKeyType, typename TValueType, typename TCompare = eastl::less<TKeyType>, TPredicate = eastl::equal_to<TValueType>, typename TAllocator = EASTLAllocatorType>
 		using Map = eastl::map<TKeyType, TValueType, THash, TPredicate, TAllocator>;
 	}
 }
