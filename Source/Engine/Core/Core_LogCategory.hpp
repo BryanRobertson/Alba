@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core_API.hpp"
+#include "Core.hpp"
 #include "Core_FixedString.hpp"
 #include "Core_Thread.hpp"
 #include "Core_Container.hpp"
@@ -19,7 +19,7 @@ namespace Alba
 		// Name		: LogLevel
 		// Desc		: Log level
 		//-------------------------------------------------------------------------------------------------
-		enum class LogLevel : uint8
+		enum class LogLevel : uint64
 		{
 			Verbose,
 			Debug,
@@ -64,10 +64,9 @@ namespace Alba
 				//===============================================================================================
 				// Private Data
 				//===============================================================================================
-				Atomic<LogLevel>		myLogLevel;
-				CategoryName			myName;
+				LogLevel			myLogLevel;
+				CategoryName		myName;
 		};
-
 	}
 
 }

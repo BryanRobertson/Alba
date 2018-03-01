@@ -28,6 +28,7 @@ namespace External
         public virtual void ConfigureAll(Configuration conf, Target target)
         {
             conf.SolutionFolder = "External Libraries";
+            conf.Options.Add(Alba.Settings.WindowsTargetPlatformVersion);
         }
     }
 

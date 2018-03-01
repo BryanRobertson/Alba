@@ -2,28 +2,34 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Core_Any.cpp" />
+    <ClCompile Include="Core_CommandLineParameters.cpp" />
     <ClCompile Include="Core_LogCategory.cpp" />
     <ClCompile Include="Core_Logging.cpp" />
     <ClCompile Include="Core_Memory.cpp" />
     <ClCompile Include="Core_Precompile.cpp" />
+    <ClCompile Include="Core_StringHash.cpp" />
     <ClCompile Include="Core_Time.cpp" />
-    <ClCompile Include="Core_CommandLineParameters.cpp" />
-    <ClCompile Include="Core_Mutex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
     <ClInclude Include="Core_Algorithm.hpp" />
+    <ClInclude Include="Core_AlignedStorage.hpp" />
     <ClInclude Include="Core_Any.hpp" />
     <ClInclude Include="Core_API.hpp" />
     <ClInclude Include="Core_Array.hpp" />
+    <ClInclude Include="Core_Assert.hpp" />
     <ClInclude Include="Core_BasicTypes.hpp" />
     <ClInclude Include="Core_Bitset.hpp" />
+    <ClInclude Include="Core_CommandLineParameters.hpp" />
     <ClInclude Include="Core_Config.hpp" />
     <ClInclude Include="Core_Container.hpp" />
     <ClInclude Include="Core_Deque.hpp" />
     <ClInclude Include="Core_FixedString.hpp" />
     <ClInclude Include="Core_FixedSubstring.hpp" />
     <ClInclude Include="Core_FixedVector.hpp" />
+    <ClInclude Include="Core_Function.hpp" />
+    <ClInclude Include="Core_Hash.hpp" />
     <ClInclude Include="Core_HashMap.hpp" />
     <ClInclude Include="Core_HashSet.hpp" />
     <ClInclude Include="Core_List.hpp" />
@@ -32,28 +38,24 @@
     <ClInclude Include="Core_Map.hpp" />
     <ClInclude Include="Core_Memory.hpp" />
     <ClInclude Include="Core_Memory_Impl.hpp" />
+    <ClInclude Include="Core_Mutex.hpp" />
+    <ClInclude Include="Core_Optional.hpp" />
+    <ClInclude Include="Core_Pair.hpp" />
     <ClInclude Include="Core_Precompile.hpp" />
     <ClInclude Include="Core_Queue.hpp" />
     <ClInclude Include="Core_Set.hpp" />
     <ClInclude Include="Core_SharedPtr.hpp" />
     <ClInclude Include="Core_Stack.hpp" />
     <ClInclude Include="Core_String.hpp" />
-    <ClInclude Include="Core_StringConverter.hpp" />
     <ClInclude Include="Core_StringHash.hpp" />
     <ClInclude Include="Core_StringUtils.hpp" />
     <ClInclude Include="Core_Thread.hpp" />
-    <ClInclude Include="Core_ThreadEvent.hpp" />
     <ClInclude Include="Core_Time.hpp" />
     <ClInclude Include="Core_UniquePtr.hpp" />
+    <ClInclude Include="Core_Utils.hpp" />
     <ClInclude Include="Core_Vector.hpp" />
     <ClInclude Include="Core_VectorMap.hpp" />
     <ClInclude Include="Core_VectorSet.hpp" />
     <ClInclude Include="Core_WeakPtr.hpp" />
-    <ClInclude Include="Core_CommandLineParameters.hpp" />
-    <ClInclude Include="Core_Pair.hpp" />
-    <ClInclude Include="Core_Hash.hpp" />
-    <ClInclude Include="Core_AlignedStorage.hpp" />
-    <ClInclude Include="Core_Optional.hpp" />
-    <ClInclude Include="Core_Mutex.hpp" />
   </ItemGroup>
 </Project>

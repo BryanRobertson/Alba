@@ -4,6 +4,7 @@
 
 #Ignore .vcxproj files but not filters
 *.vcxproj
+*.vcxproj.user
 !*.vcxproj.filters
 
 #Ignore Sharpmake temp dirs

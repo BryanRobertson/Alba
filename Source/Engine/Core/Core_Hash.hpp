@@ -26,7 +26,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		constexpr uint32 FNV1a32Hash(const char* aString, uint32 aHashValue = theFNV1a32OffsetBasis)
 		{
-			return (aString && *aString != '/0')
+			return (aString && *aString != '\0')
 					? FNV1a32Hash(aString+1, (aHashValue ^ *aString) * theFNV1a32Prime)
 					: aHashValue;
 		}
@@ -37,7 +37,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		constexpr uint64 FNV1a64Hash(const char* aString, uint64 aHashValue = theFNV1a64OffsetBasis)
 		{
-			return (aString && *aString != '/0')
+			return (aString && *aString != '\0')
 					? FNV1a64Hash(aString+1, (aHashValue ^ *aString) * theFNV1a64Prime)
 					: aHashValue;
 		}

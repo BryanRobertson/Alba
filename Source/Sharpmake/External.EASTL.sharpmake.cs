@@ -10,10 +10,14 @@ namespace External
         [Sharpmake.Generate]
         class Project : External.LibraryProject
         {
+            private readonly string EASTLPath = Alba.Settings.GetExternalLibraryPath("EASTL");
+
             public Project()
             {
                 Name = "EASTL";
-                SourceRootPath = Path.Combine(Alba.Settings.GetExternalLibraryPath("EASTL"), "source");
+                     
+                SourceRootPath = Path.Combine(EASTLPath, "source");
+                AdditionalSourceRootPaths.Add(Path.Combine(EASTLPath, "include"));
             }
 
             public override string GetLibraryDefine()
@@ -26,8 +30,8 @@ namespace External
             {
                 base.ConfigureAll(conf, target);
 
-                conf.IncludePaths.Add(Path.Combine(Alba.Settings.GetExternalLibraryPath("EASTL"), "include"));
-                conf.IncludePaths.Add(Path.Combine(Alba.Settings.GetExternalLibraryPath("EASTL"), "test", "packages", "EABase", "include", "Common"));
+                conf.IncludePaths.Add(Path.Combine(EASTLPath, "include"));
+                conf.IncludePaths.Add(Path.Combine(EASTLPath, "test", "packages", "EABase", "include", "Common"));
 
                 if (target.Optimization == Optimization.Debug)
                 {

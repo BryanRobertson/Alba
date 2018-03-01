@@ -15,11 +15,16 @@ namespace Alba
 		template <typename TFirst, typename TSecond>
 		using Pair = eastl::pair<TFirst, TSecond>;
 
-		template <typename TFirst, typename TSecond>
-		constexpr auto MakePair(TFirst&& aFirst, TSecond&& aSecond) 
-			-> decltype( eastl::make_pair(std::forward(aFirst), std::forward(aSecond)) )
+		template <typename T1, typename T2>
+		auto MakePair(T1&& aFirst, T2&& aSecond)
 		{
-			return eastl::make_pair(std::forward(aFirst), std::forward(aSecond));
+			return eastl::make_pair(std::forward<T1>(aFirst), std::forward<T2>(aSecond));
+		}
+
+		template <typename T1, typename T2>
+		auto MakePair(const T1& aFirst, const T2& aSecond)
+		{
+			return eastl::make_pair(aFirst, aSecond);
 		}
 	}
 }

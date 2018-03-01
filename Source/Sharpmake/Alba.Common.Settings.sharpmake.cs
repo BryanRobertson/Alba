@@ -43,5 +43,13 @@ namespace Alba
         {
             return @"[project.SharpmakeCsPath]\generated";
         }
+
+        public static Options.Vc.General.WindowsTargetPlatformVersion WindowsTargetPlatformVersion
+        {
+            get
+            {
+                return Options.Vc.General.WindowsTargetPlatformVersion.v10_0_15063_0;
+            }
+        }
     }
 }

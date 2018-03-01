@@ -31,7 +31,6 @@ namespace Alba
 					/*
 					const auto now = std::chrono::system_clock::to_time_t(Core_Chrono::system_clock::now());
 					const auto nowLocalTime = *std::localtime(&now);
-
 		
 					Core_FixedString<256>::CtorSprintf cs;
 					Core_FixedString<256> str

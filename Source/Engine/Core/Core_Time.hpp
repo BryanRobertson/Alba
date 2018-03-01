@@ -40,6 +40,7 @@ namespace Alba
 		using Peta					=  SI::peta;
 		using Exa					=  SI::exa;
 
+		typedef Chrono::high_resolution_clock							HighResolutionClock;
 		typedef Chrono::time_point<Chrono::high_resolution_clock>		TimePoint;
 		typedef Chrono::duration<uint64, Nano>							TimeDuration;
 
@@ -53,14 +54,14 @@ namespace Alba
 		template <typename To>
 		struct ChronoCast_Impl
 		{
-			static To Cast(TimeDuration aDuration)
+			static constexpr To Cast(TimeDuration aDuration)
 			{
 				return Chrono::duration_cast<To>(aDuration);
 			}
 		};
 
 		template <typename To>
-		To ChronoCast(TimeDuration aDuration)
+		constexpr To ChronoCast(TimeDuration aDuration)
 		{
 			return ChronoCast_Impl<To>::Cast(aDuration);
 		}
@@ -77,7 +78,7 @@ namespace Alba
 				//=========================================================================================
 				// Public Types
 				//=========================================================================================
-				typedef Chrono::high_resolution_clock		clock_type;
+				typedef HighResolutionClock	ClockType;
 
 				//=========================================================================================
 				// Public Static Methods

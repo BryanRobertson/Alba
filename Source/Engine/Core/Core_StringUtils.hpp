@@ -1,58 +1,135 @@
 //-------------------------------------------------------------------------------------------------
-// Name	:	Core_StringFormatUtils.hpp
+// Name	:	Core_StringUtils.hpp
 // Desc	:	String formatting utility functions
 //-------------------------------------------------------------------------------------------------
 
 #pragma once
 
-#include "Core_API.hpp"
-#include "Core_BasicTypes.hpp"
+#include "Core.hpp"
+#include "Core_String.hpp"
+#include "Core_FixedString.hpp"
+#include "Core_Utils.hpp"
 
-namespace Core_StringUtils
+#include <cstdlib>
+
+namespace Alba
 {
-	/*
-	template <typename TStringType>
-	void FormatString(TStringType& outString, const TStringType::value_type* format)
+	namespace Core
 	{
-		if (format)
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		constexpr uint64 GetBestFixedStringSize(uint64 anInputSize)
 		{
-			outString = format;
+			return (NextLargestPowerOfTwo(anInputSize) - anInputSize) <= 512
+					? NextLargestPowerOfTwo(anInputSize)
+					: anInputSize;
 		}
-	}
 
-	template <typename TStringType, typename TArg, typename ...TArgs>
-	void FormatString(TStringType& outString, const TStringType::value_type* format, TArgs... args)
-	{
-		enum class ScanningState { Raw, Argument };
-		ScanningState scanningState = ScanningState::Raw;
-
-		// TODO: Something more efficient than this
-		const auto args_tuple = std::make_tuple<args>();
-
-		for (const TStringType::value_type* itr = format; format != '\0'; ++format)
+		//-----------------------------------------------------------------------------------------
+		// Name	:	FormatString
+		//-----------------------------------------------------------------------------------------
+		template <size_t TFixedStringSize, typename... TArgs>
+		FixedString<GetBestFixedStringSize(TFixedStringSize)> FormatString(const char* const format, TArgs&&... args)
 		{
-			if (scanningState == ScanningState::Raw && format == '{')
-			{
-				scanningState == ScanningStateArgument;
-			}
+			typedef FixedString<GetBestFixedStringSize(TFixedStringSize)> StringType;
+			return StringType( StringType::CtorSprintf(), format, std::forward(args)...);
 		}
-		//std::modf()
+
+		template <typename... TArgs>
+		String FormatString(const char* const format, TArgs&&... args)
+		{
+			return String(String::CtorSprintf(), format, std::format(args)...);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		// Name	:	StringConverter
+		//-----------------------------------------------------------------------------------------
+		template <typename TDataType>
+		class StringConverter
+		{
+			public:
+
+				//=================================================================================
+				// Public Static Methods
+				//=================================================================================
+				static bool From(const String& aString, TDataType& aOutData)
+				{
+					return Convert(aString, aOutData);
+				}
+
+			protected:
+
+				static bool Convert(const String& aString, int8 aOutData)
+				{
+					aOutData = static_cast<int8>(std::atoi(aString.c_str()));
+					return true;
+				}
+
+				static bool Convert(const String& aString, uint8 aOutData)
+				{
+					aOutData = static_cast<uint8>(std::atoi(aString.c_str()));
+					return true;
+				}
+
+				static bool Convert(const String& aString, int16 aOutData)
+				{
+					aOutData = static_cast<int16>(std::atoi(aString.c_str()));
+					return true;
+				}
+
+				static bool Convert(const String& aString, uint16 aOutData)
+				{
+					aOutData = static_cast<uint16>(std::atoi(aString.c_str()));
+					return true;
+				}
+
+				static bool Convert(const String& aString, int32 aOutData)
+				{
+					aOutData = static_cast<int32>(std::atoi(aString.c_str()));
+					return true;
+				}
+
+				static bool Convert(const String& aString, uint32 aOutData)
+				{
+					aOutData = static_cast<uint32>(std::atoi(aString.c_str()));
+					return true;
+				}
+
+				static bool Convert(const String& aString, int64 aOutData)
+				{
+					aOutData = static_cast<int64>(std::atoll(aString.c_str()));
+					return true;
+				}
+
+				static bool Convert(const String& aString, uint64 aOutData)
+				{
+					aOutData = static_cast<uint64>(std::atoll(aString.c_str()));
+					return true;
+				}
+
+				static bool Convert(const String& aString, bool aOutData)
+				{
+					uint value = 0;
+					if (Convert(aString, value))
+					{
+						aOutData = value != 0;
+						return true;
+					}
+
+					if (aString.comparei("true"))
+					{
+						aOutData = true;
+						return true;
+					}
+
+					if (aString.comparei("false"))
+					{
+						aOUtData = false;
+						return true;
+					}
+
+					return false;
+				}
+		};
 	}
-
-	template <typename TStringType, typename ...TArgs>
-	TStringType Format(const TStringType::value_type* format, TArgs... args)
-	{
-		static const uint padding = 16;
-
-		// Reserve approximate space for result...
-		// Actual result will obviously be bigger, but better than nothing
-		TStringType result;
-		result.reserve(std::strlen(format) + padding);
-
-		// Format the string
-		FormatString(result, format, args...);
-
-		return result;
-	}
-	*/
 }

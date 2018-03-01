@@ -16,7 +16,6 @@ namespace Alba
 		///////////////////////////////////////////////////////////////////////////////////////////////////
 		void LogCategory::SetLogLevel(LogLevel aLevel)
 		{
-			// TODO: Something more precise than operator=
 			myLogLevel = aLevel;
 		}
 

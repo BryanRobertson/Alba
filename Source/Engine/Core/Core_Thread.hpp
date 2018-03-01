@@ -7,6 +7,7 @@
 #pragma once
 
 #include <thread>
+#include <mutex>
 #include <atomic>
 
 namespace Alba
@@ -14,14 +15,14 @@ namespace Alba
 	namespace Core
 	{
 		//-------------------------------------------------------------------------------------------------
-		// Name	:	Core_ThisThread
+		// Name	:	Core::ThisThread
 		// Desc	:	Namespace alias for std::this_thread, so we can switch out STL threads for a compatible
 		//			implementation if necessary
 		//-------------------------------------------------------------------------------------------------
 		namespace ThisThread = std::this_thread;
 
 		//-------------------------------------------------------------------------------------------------
-		// Name	:	Core_Thread
+		// Name	:	Core::Thread
 		// Desc	:	Alias for std::thread, so we can switch out STL threads for a compatible
 		//			implementation if necessary
 		//-------------------------------------------------------------------------------------------------

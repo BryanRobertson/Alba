@@ -16,7 +16,7 @@ namespace Alba
 		///////////////////////////////////////////////////////////////////////////////////////////////////
 		void Time::Reset()
 		{
-			mySystemTime = myGameTime = clock_type::now();
+			mySystemTime = myGameTime = ClockType::now();
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ namespace Alba
 			const TimePoint lastSystemTime = mySystemTime;
 			const TimePoint lastGameTime = myGameTime;
 
-			mySystemTime = clock_type::now();
+			mySystemTime = ClockType::now();
 
 			auto timeDelta = mySystemTime - lastSystemTime;
 			myGameTime = lastGameTime + timeDelta;
@@ -40,7 +40,7 @@ namespace Alba
 			const TimePoint lastSystemTime = mySystemTime;
 			const TimePoint lastGameTime = myGameTime;
 
-			mySystemTime = clock_type::now();
+			mySystemTime = ClockType::now();
 
 			auto timeDelta = mySystemTime - lastSystemTime;
 

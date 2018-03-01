@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core_API.hpp"
+#include "Core.hpp"
 #include "Core_LogCategory.hpp"
 #include "Core_Time.hpp"
 

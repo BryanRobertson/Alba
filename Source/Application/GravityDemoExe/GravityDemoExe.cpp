@@ -1,6 +1,8 @@
 #include "GravityDemoExe_Precompile.hpp"
 #include "GravityDemoExe.hpp"
 
+#include "Core_CommandLineParameters.hpp"
+
 #if ALBA_PLATFORM_WINDOWS
 #include <Windows.h>
 
@@ -13,6 +15,8 @@
 		(void)hPrevInstance;
 		(void)lpCmdLine;
 		(void)nCmdShow;
+
+		Alba::Core::CommandLineParameters params(lpCmdLine);
 
 		return 0;
 	}
