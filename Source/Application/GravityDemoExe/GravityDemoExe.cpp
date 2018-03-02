@@ -18,6 +18,24 @@
 
 		Alba::Core::CommandLineParameters params(lpCmdLine);
 
+		int windowPosX = 0;
+		params.TryGetParamValue("windowPosX", windowPosX);
+
+		int windowPosY = 0;
+		params.TryGetParamValue("windowPosY", windowPosY);
+
+		int windowWidth = 0;
+		params.TryGetParamValue("windowWidth", windowWidth);
+
+		int windowHeight = 0;
+		params.TryGetParamValue("windowHeight", windowHeight);
+
+		Alba::Core::FixedString<32> windowTitle;
+		params.TryGetParamValue("windowTitle", windowTitle);
+
+		Alba::Core::String test;
+		params.TryGetParamValue("windowTitle", test);
+		
 		return 0;
 	}
 

@@ -51,6 +51,7 @@
     <ClInclude Include="Core_StringUtils.hpp" />
     <ClInclude Include="Core_Thread.hpp" />
     <ClInclude Include="Core_Time.hpp" />
+    <ClInclude Include="Core_TypeTraits.hpp" />
     <ClInclude Include="Core_UniquePtr.hpp" />
     <ClInclude Include="Core_Utils.hpp" />
     <ClInclude Include="Core_Vector.hpp" />

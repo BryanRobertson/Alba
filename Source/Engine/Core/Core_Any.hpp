@@ -63,7 +63,7 @@ namespace Alba
 				template <typename TDataType>
 				Any& operator= (TDataType&& aData)
 				{
-					myData = std::forward<TDataType>(aData);
+					myData = std::forward<std::decay<TDataType>::type>(aData);
 					return *this;
 				}
 
@@ -86,7 +86,13 @@ namespace Alba
 				template <typename TDataType>
 				void Set(TDataType&& aData)
 				{
-					myData = std::forward(aData);
+					myData = std::forward<std::decay<TDataType>::type>(aData);
+				}
+
+				template <typename TDataType>
+				void Set(const TDataType& aData)
+				{
+					myData = std::forward<std::decay<TDataType>::type>(aData);
 				}
 
 				//---------------------------------------------------------------------------------------------
@@ -120,7 +126,7 @@ namespace Alba
 				const typename std::decay<TDataType>::type& To() const
 				{
 					const std::decay<TDataType>::type* value = eastl::any_cast<const std::decay<TDataType>::type>(&myData);
-					ALBA_ASSERT(type, "Attempting to use To<T> on an Any that does not contain the specified type. Use Is<T> first");
+					ALBA_ASSERT(value, "Attempting to use To<T> on an Any that does not contain the specified type. Use Is<T> first");
 
 					return *value;
 				}
@@ -129,7 +135,7 @@ namespace Alba
 				typename std::decay<TDataType>::type& To()
 				{
 					std::decay<TDataType>::type* value = eastl::any_cast<std::decay<TDataType>::type>(&myData);
-					ALBA_ASSERT(type, "Attempting to use To<T> on an Any that does not contain the specified type. Use Is<T> first");
+					ALBA_ASSERT(value, "Attempting to use To<T> on an Any that does not contain the specified type. Use Is<T> first");
 
 					return *value;
 				}

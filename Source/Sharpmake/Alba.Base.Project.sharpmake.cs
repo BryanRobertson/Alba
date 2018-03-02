@@ -50,14 +50,23 @@ namespace Alba
                 if (target.Optimization == Optimization.Debug)
                 {
                     conf.Defines.Add("ALBA_DEBUG_BUILD");
+
+                    // Disable inlining entirely in debug builds
+                    conf.Options.Add(Options.Vc.Compiler.Inline.Default);
                 }
                 else if (target.Optimization == Optimization.Release)
                 {
                     conf.Defines.Add("ALBA_RELEASE_BUILD");
+
+                    // More inlining in release build
+                    conf.Options.Add(Options.Vc.Compiler.Inline.OnlyInline);
                 }
                 else if (target.Optimization == Optimization.Retail)
                 {
                     conf.Defines.Add("ALBA_RETAIL_BUILD");
+
+                    // Full inlining
+                    conf.Options.Add(Options.Vc.Compiler.Inline.AnySuitable);
                 }
 				
 				if ( target.Platform == Platform.win32 || target.Platform == Platform.win64 )

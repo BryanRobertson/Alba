@@ -52,79 +52,87 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static bool From(const String& aString, TDataType& aOutData)
+				template <typename TCharType, typename TAllocator>
+				static bool From(const BasicString<TCharType, TAllocator>& aString, TDataType& aOutData)
 				{
-					return Convert(aString, aOutData);
+					return Convert(aString.c_str(), aOutData);
 				}
 
 			protected:
 
-				static bool Convert(const String& aString, int8 aOutData)
+				template <typename TCharType, typename TAllocator>
+				static bool Convert(const char* aString, BasicString<TCharType, TAllocator>& aOutData)
 				{
-					aOutData = static_cast<int8>(std::atoi(aString.c_str()));
+					aOutData.assign(aString);
 					return true;
 				}
 
-				static bool Convert(const String& aString, uint8 aOutData)
+				static bool Convert(const char* aString, int8& aOutData)
 				{
-					aOutData = static_cast<uint8>(std::atoi(aString.c_str()));
+					aOutData = static_cast<int8>(std::atoi(aString));
 					return true;
 				}
 
-				static bool Convert(const String& aString, int16 aOutData)
+				static bool Convert(const char* aString, uint8& aOutData)
 				{
-					aOutData = static_cast<int16>(std::atoi(aString.c_str()));
+					aOutData = static_cast<uint8>(std::atoi(aString));
 					return true;
 				}
 
-				static bool Convert(const String& aString, uint16 aOutData)
+				static bool Convert(const char* aString, int16& aOutData)
 				{
-					aOutData = static_cast<uint16>(std::atoi(aString.c_str()));
+					aOutData = static_cast<int16>(std::atoi(aString));
 					return true;
 				}
 
-				static bool Convert(const String& aString, int32 aOutData)
+				static bool Convert(const char* aString, uint16& aOutData)
 				{
-					aOutData = static_cast<int32>(std::atoi(aString.c_str()));
+					aOutData = static_cast<uint16>(std::atoi(aString));
 					return true;
 				}
 
-				static bool Convert(const String& aString, uint32 aOutData)
+				static bool Convert(const char* aString, int32& aOutData)
 				{
-					aOutData = static_cast<uint32>(std::atoi(aString.c_str()));
+					aOutData = static_cast<int32>(std::atoi(aString));
 					return true;
 				}
 
-				static bool Convert(const String& aString, int64 aOutData)
+				static bool Convert(const char* aString, uint32& aOutData)
 				{
-					aOutData = static_cast<int64>(std::atoll(aString.c_str()));
+					aOutData = static_cast<uint32>(std::atoi(aString));
 					return true;
 				}
 
-				static bool Convert(const String& aString, uint64 aOutData)
+				static bool Convert(const char* aString, int64& aOutData)
 				{
-					aOutData = static_cast<uint64>(std::atoll(aString.c_str()));
+					aOutData = static_cast<int64>(std::atoll(aString));
 					return true;
 				}
 
-				static bool Convert(const String& aString, bool aOutData)
+				static bool Convert(const char* aString, uint64& aOutData)
+				{
+					aOutData = static_cast<uint64>(std::atoll(aString));
+					return true;
+				}
+
+				static bool Convert(const char* aString, bool& aOutData)
 				{
 					uint value = 0;
-					if (Convert(aString, value))
+					if (Convert(str, value))
 					{
 						aOutData = value != 0;
 						return true;
 					}
 
-					if (aString.comparei("true"))
+					if (std::stricmp(aString, "true") == 0)
 					{
 						aOutData = true;
 						return true;
 					}
 
-					if (aString.comparei("false"))
+					if (std::stricmp("false") == 0)
 					{
-						aOUtData = false;
+						aOutData = false;
 						return true;
 					}
 

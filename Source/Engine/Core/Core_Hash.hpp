@@ -9,6 +9,7 @@
 
 #include "Core_API.hpp"
 #include "Core_BasicTypes.hpp"
+#include <cctype>
 
 namespace Alba
 {
@@ -39,6 +40,30 @@ namespace Alba
 		{
 			return (aString && *aString != '\0')
 					? FNV1a64Hash(aString+1, (aHashValue ^ *aString) * theFNV1a64Prime)
+					: aHashValue;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		// Name	:	Fnv1a32HashNoCase
+		// Desc	:	Hash a string using the FNV1a32 hashing algorithm
+		//			automatically converts the string to lower case first
+		//-----------------------------------------------------------------------------------------
+		constexpr uint32 FNV1a32HashNoCase(const char* aString, uint32 aHashValue = theFNV1a32OffsetBasis)
+		{
+			return (aString && *aString != '\0')
+					? FNV1a32Hash(aString+1, (aHashValue ^ std::tolower(*aString)) * theFNV1a32Prime)
+					: aHashValue;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		// Name	:	FNV1a64HashNoCase
+		// Desc	:	Hash a string using the FNV1a64 hashing algorithm
+		//			automatically converts the string to lower case first
+		//-----------------------------------------------------------------------------------------
+		constexpr uint64 FNV1a64HashNoCase(const char* aString, uint64 aHashValue = theFNV1a64OffsetBasis)
+		{
+			return (aString && *aString != '\0')
+					? FNV1a64Hash(aString+1, (aHashValue ^ std::tolower(*aString)) * theFNV1a64Prime)
 					: aHashValue;
 		}
 	}

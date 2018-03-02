@@ -12,8 +12,8 @@ namespace Alba
 {
 	namespace Core
 	{
-		template <typename TCharType>
-		using BasicString = eastl::basic_string<TCharType>;
+		template <typename TCharType, typename TAllocator = EASTLAllocatorType>
+		using BasicString = eastl::basic_string<TCharType, TAllocator>;
 
 		typedef BasicString<char>		String;
 		typedef BasicString<wchar_t>	WString;
