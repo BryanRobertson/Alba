@@ -223,7 +223,10 @@ namespace Alba
 							const String& str = itr->second;
 							debugStr = str.c_str();
 
-							ALBA_ASSERT(str.compare(fixedStr.c_str()) || str.comparei(fixedStr.c_str()), "");
+							ALBA_ASSERT
+							(
+								str.compare(fixedStr.c_str()) == 0 || str.comparei(fixedStr.c_str()) == 0, ""
+							);
 						}
 
 						return debugStr;

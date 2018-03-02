@@ -125,17 +125,8 @@ namespace Alba
 				template <typename TDataType>
 				const typename std::decay<TDataType>::type& To() const
 				{
-					const std::decay<TDataType>::type* value = eastl::any_cast<const std::decay<TDataType>::type>(&myData);
-					ALBA_ASSERT(value, "Attempting to use To<T> on an Any that does not contain the specified type. Use Is<T> first");
-
-					return *value;
-				}
-
-				template <typename TDataType>
-				typename std::decay<TDataType>::type& To()
-				{
-					std::decay<TDataType>::type* value = eastl::any_cast<std::decay<TDataType>::type>(&myData);
-					ALBA_ASSERT(value, "Attempting to use To<T> on an Any that does not contain the specified type. Use Is<T> first");
+					const auto* value = eastl::any_cast<const std::decay<TDataType>::type>(&myData);
+					ALBA_ASSERT(value != nullptr, "Attempting to use To<T> on an Any that does not contain the specified type. Use Is<T> first");
 
 					return *value;
 				}

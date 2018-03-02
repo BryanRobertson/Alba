@@ -118,23 +118,33 @@ namespace Alba
 				static bool Convert(const char* aString, bool& aOutData)
 				{
 					uint value = 0;
-					if (Convert(str, value))
+					if (Convert(aString, value))
 					{
 						aOutData = value != 0;
 						return true;
 					}
 
-					if (std::stricmp(aString, "true") == 0)
+					auto locCaseInsensitiveCompare = [](char left, char right)
+					{
+						return std::tolower(left) == std::tolower(right);
+					};
+
+					const FixedString<8> fixedStr(aString);
+
+					static const FixedString<8> trueStr("true");
+					if (fixedStr.comparei(trueStr))
 					{
 						aOutData = true;
 						return true;
 					}
 
-					if (std::stricmp("false") == 0)
+					static const FixedString<8> falseStr("false");
+					if (fixedStr.comparei(falseStr))
 					{
 						aOutData = false;
 						return true;
 					}
+
 
 					return false;
 				}

@@ -16,7 +16,7 @@
 
 #if defined(ALBA_DEBUG_ASSERTS_ENABLED)
 	#define ALBA_ASSERT_FAILED(anAssertCond, ...)	ALBA_DEBUG_BREAK();
-	#define ALBA_ASSERT(anAssertCond, ...) do { if (anAssertCond) { ALBA_ASSERT_FAILED(anAssertCond, __VA_ARGS__); }  } while (0)
+	#define ALBA_ASSERT(anAssertCond, ...) do { if (!(anAssertCond)) { ALBA_ASSERT_FAILED(anAssertCond, __VA_ARGS__); }  } while (0)
 #else
 	#define ALBA_ASSERT_FAILED(anAssertCond, ...)	
 	#define ALBA_ASSERT(anAssertCond, ...)

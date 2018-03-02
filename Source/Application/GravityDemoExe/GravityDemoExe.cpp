@@ -33,8 +33,14 @@
 		Alba::Core::FixedString<32> windowTitle;
 		params.TryGetParamValue("windowTitle", windowTitle);
 
-		Alba::Core::String test;
-		params.TryGetParamValue("windowTitle", test);
+		Alba::Core::String stringTest;
+		params.TryGetParamValue("windowTitle", stringTest);
+
+		bool vsyncEnabled = false;
+		if (params.IsParamPresent("enableVsync"))
+		{
+			params.TryGetParamValue("enableVsync", vsyncEnabled);
+		}
 		
 		return 0;
 	}
