@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Core_API.hpp"
+#include "Core.hpp"
 #include <EASTL/list.h>
 
 namespace Alba

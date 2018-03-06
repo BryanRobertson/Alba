@@ -7,7 +7,9 @@
 
 #pragma once
 
-#include "Core_API.hpp"
+#include "Core.hpp"
+
+/*
 #include <EASTL/fixed_function.h>
 
 namespace Alba
@@ -26,3 +28,4 @@ namespace Alba
 		using Function = eastl::fixed_function<DefaultFixedFunctionSize::Value, Result, Arguments...>;
 	}
 }
+*/

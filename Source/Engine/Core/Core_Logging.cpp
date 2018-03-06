@@ -1,5 +1,6 @@
 #include "Core_Precompile.hpp"
 #include "Core_Logging.hpp"
+#include "Core_Memory.hpp"
 
 #include <ctime>
 #include <iomanip>
@@ -15,16 +16,52 @@ namespace Alba
 {
 	namespace Core
 	{
-		///////////////////////////////////////////////////////////////////////////////////////////////////
+		/*static*/ UniquePtr<LogManager> LogManager::ourInstance;
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ void LogManager::CreateInstance()
+		{
+			ourInstance.reset(ALBA_NEW(::Alba::Core::AllocationType::CoreDebug, "LogManager") LogManager());
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ void	LogManager::DestroyInstance()
+		{
+			ourInstance.reset();
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ LogManager& LogManager::GetInstance()
+		{
+			if (!ourInstance)
+			{
+				// Log manager invalid!
+				ALBA_DEBUG_BREAK();
+
+				// Return a static log manager for this case
+				// would prefer debug support code to be more robust
+				static LogManager aStaticInstance;
+				return aStaticInstance;
+			}
+
+			return *ourInstance;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		LogManager::LogManager()
 		{
 
 		}
 
-		///////////////////////////////////////////////////////////////////////////////////////////////////
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		void LogManager::LogMessage(const LogCategory& aCategory, LogLevel aLevel, const char* aMessage)
 		{
-			if (aCategory.GetLogLevel() >= aLevel)
+			if (aCategory.GetLogLevel() <= aLevel)
 			{
 				#if defined(ALBA_PLATFORM_WINDOWS)
 				{
@@ -43,11 +80,11 @@ namespace Alba
 					);
 					*/
 
-					OutputDebugStringA(aMessage);
+					::OutputDebugStringA(aMessage);
+					::OutputDebugStringA("\n");
 				}
 				#endif
 			}	
 		}
-
 	}
 }

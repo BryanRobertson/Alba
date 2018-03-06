@@ -1,10 +1,11 @@
+#pragma once
 
 //------------------------------------------------------------------------------------------------
 // Name	:	Core_Thread.hpp
 // Desc	:	Wrapper around std::thread
 //------------------------------------------------------------------------------------------------
 
-#pragma once
+#include "Core.hpp"
 
 #include <thread>
 #include <mutex>

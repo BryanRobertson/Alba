@@ -5,7 +5,7 @@
 // Desc	:	String types for the engine
 //-------------------------------------------------------------------------------------------------
 
-#include "Core_API.hpp"
+#include "Core.hpp"
 #include <EASTL/string.h>
 
 namespace Alba

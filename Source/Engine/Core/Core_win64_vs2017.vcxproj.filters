@@ -3,7 +3,9 @@
   <ItemGroup>
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Core_Any.cpp" />
+    <ClCompile Include="Core_Assert.cpp" />
     <ClCompile Include="Core_CommandLineParameters.cpp" />
+    <ClCompile Include="Core_EASTLSprintf.cpp" />
     <ClCompile Include="Core_LogCategory.cpp" />
     <ClCompile Include="Core_Logging.cpp" />
     <ClCompile Include="Core_Memory.cpp" />
@@ -25,6 +27,7 @@
     <ClInclude Include="Core_Config.hpp" />
     <ClInclude Include="Core_Container.hpp" />
     <ClInclude Include="Core_Deque.hpp" />
+    <ClInclude Include="Core_EASTLSprintf.hpp" />
     <ClInclude Include="Core_FixedString.hpp" />
     <ClInclude Include="Core_FixedSubstring.hpp" />
     <ClInclude Include="Core_FixedVector.hpp" />

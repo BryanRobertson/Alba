@@ -5,6 +5,9 @@
 #include "Core_Thread.hpp"
 #include "Core_Container.hpp"
 
+#define ALBA_DECLARE_LOG_CATEGORY(aCategoryName)		extern ::Alba::Core::LogCategory aCategoryName;
+#define ALBA_IMPLEMENT_LOG_CATEGORY(aCategoryName)		::Alba::Core::LogCategory aCategoryName(#aCategoryName);
+
 //-------------------------------------------------------------------------------------------------
 // Name      : Core_LogCategory.hpp
 // Desc      : Log categorisation for filtered log output
@@ -27,9 +30,6 @@ namespace Alba
 			Warn,
 			Error
 		};
-
-		#define CORE_DECLARE_LOG_CATEGORY(aCategoryName)		namespace LogCategory {	extern LogCategory aCategoryName;					}
-		#define CORE_IMPLEMENT_LOG_CATEGORY(aCategoryName)		namespace LogCategory {	LogCategory aCategoryName(#aCategoryName);			}
 
 		//-------------------------------------------------------------------------------------------------
 		// Name      : Core::LogCategory.hpp

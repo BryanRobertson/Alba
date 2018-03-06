@@ -4,7 +4,7 @@
 //-------------------------------------------------------------------------------------------------
 #pragma once
 
-#include "Core_API.hpp"
+#include "Core.hpp"
 #include <EASTL/fixed_substring.h>
 
 namespace Alba

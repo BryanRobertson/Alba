@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Core_API.hpp"
+#include "Core.hpp"
 #include "Core_BasicTypes.hpp"
 
 #pragma warning( push, 3 )  

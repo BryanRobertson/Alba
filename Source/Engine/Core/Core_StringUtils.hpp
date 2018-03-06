@@ -32,7 +32,7 @@ namespace Alba
 		FixedString<GetBestFixedStringSize(TFixedStringSize)> FormatString(const char* const format, TArgs&&... args)
 		{
 			typedef FixedString<GetBestFixedStringSize(TFixedStringSize)> StringType;
-			return StringType( StringType::CtorSprintf(), format, std::forward(args)...);
+			return StringType( StringType::CtorSprintf(), format, std::forward<TArgs>(args)...);
 		}
 
 		template <typename... TArgs>

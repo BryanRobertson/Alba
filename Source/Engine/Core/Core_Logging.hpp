@@ -1,8 +1,26 @@
 #pragma once
 
 #include "Core.hpp"
-#include "Core_LogCategory.hpp"
 #include "Core_Time.hpp"
+#include "Core_LogCategory.hpp"
+#include "Core_UniquePtr.hpp"
+#include "Core_StringUtils.hpp"
+
+#ifdef ALBA_DEBUG_LOGGING_ENABLED
+	#define ALBA_GET_LOG_MANAGER()	::Alba::Core::LogManager::GetInstance()
+
+	#define ALBA_LOG(aLogCategory, aLevel, aFormat, ...)								\
+	{																					\
+		ALBA_GET_LOG_MANAGER().LogMessage												\
+		(																				\
+			aLogCategory,																\
+			aLevel,																		\
+			::Alba::Core::FormatString<256>(aFormat, __VA_ARGS__).c_str()				\
+		);																				\
+	}
+#else
+	#define ALBA_LOG(aLogCategory, aLevel, aFormat, ...)
+#endif
 
 //-------------------------------------------------------------------------------------------------
 // Name      : Core_Logging.hpp
@@ -30,6 +48,20 @@ namespace Alba
 				// Public Methods
 				//=========================================================================================
 				void LogMessage(const LogCategory& aCategory, LogLevel aLevel, const char* aMessage);
+
+				//=========================================================================================
+				// Public Static Methods
+				//=========================================================================================
+				static void			CreateInstance();
+				static void			DestroyInstance();
+				static LogManager&	GetInstance();
+
+			private:
+
+				//=========================================================================================
+				// Private Static Darta
+				//=========================================================================================
+				static UniquePtr<LogManager> ourInstance;
 		};
 	}
 }

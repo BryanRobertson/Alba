@@ -10,14 +10,16 @@ namespace Alba
 {
 	namespace Framework
 	{
+		struct InitParams;
+
 		//-----------------------------------------------------------------------------------------
 		// Initialise Framework
 		//-----------------------------------------------------------------------------------------
-		extern uint32 Init();
+		ALBA_FRAMEWORK_API uint32 Init(InitParams& aParams);
 
 		//-----------------------------------------------------------------------------------------
 		// Shutdown Framework
 		//-----------------------------------------------------------------------------------------
-		extern uint32 Shutdown();
+		ALBA_FRAMEWORK_API uint32 Shutdown();
 	}
 }

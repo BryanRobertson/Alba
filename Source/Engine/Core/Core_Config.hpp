@@ -10,6 +10,15 @@
 #endif
 
 //-------------------------------------------------------------------------------------------------
+// Logging
+//-------------------------------------------------------------------------------------------------
+#if !defined(ALBA_RETAIL_BUILD)
+	#if !defined(ALBA_DEBUG_LOGGING_ENABLED)
+		#define ALBA_DEBUG_LOGGING_ENABLED	1
+	#endif
+#endif
+
+//-------------------------------------------------------------------------------------------------
 // Switch on string hash debugging in debug by default
 //-------------------------------------------------------------------------------------------------
 #if !defined(ALBA_DEBUG_STRINGHASH)
@@ -28,5 +37,6 @@
 //-------------------------------------------------------------------------------------------------
 #if defined(_MSC_VER)
 	#define ALBA_COMPILER_VISUALSTUDIO
+	#define ALBA_RESTRICT __restrict
 #endif
 

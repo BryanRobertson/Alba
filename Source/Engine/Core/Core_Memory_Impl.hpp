@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Core_Memory.hpp"
+#include "Core_BasicTypes.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::Core::uint32 line)
@@ -84,7 +85,7 @@ void* ALBA_CDECL operator new[](size_t size, const char* pName, int flags, unsig
 	(void)flags;
 	(void)debugFlags;
 
-	return Alba::Core::Malloc(size, 0, 0, Alba::Core::AllocType_EASTLContainer, pName, file, line);
+	return Alba::Core::Malloc(size, 0, 0, static_cast<Alba::BasicTypes::uint32>(::Alba::Core::AllocationType::EASTLContainer), pName, file, line);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +95,7 @@ void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentO
 	(void)flags;
 	(void)debugFlags;
 
-	return Alba::Core::Malloc(size, alignment, alignmentOffset, Alba::Core::AllocType_EASTLContainer, pName, file, line);
+	return Alba::Core::Malloc(size, alignment, alignmentOffset, static_cast<Alba::BasicTypes::uint32>(::Alba::Core::AllocationType::EASTLContainer), pName, file, line);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

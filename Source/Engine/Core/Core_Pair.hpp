@@ -6,6 +6,7 @@
 // Author    : Bryan Robertson
 // Date      : 2017/02/27
 //------------------------------------------------------------------------------------------------
+#include "Core.hpp"
 #include <EASTL/utility.h>
 
 namespace Alba

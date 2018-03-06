@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "Core_API.hpp"
+#include "Core.hpp"
 #include "Core_Container.hpp"
 #include <EASTL/fixed_string.h>
 

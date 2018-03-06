@@ -46,7 +46,13 @@ namespace Alba
                 conf.PrecompHeader = "[project.Name]_Precompile.hpp";
 				conf.PrecompSource = "[project.Name]_Precompile.cpp";
 
+                //---------------------------------------------------------------------------------
                 // Defines
+                //---------------------------------------------------------------------------------
+
+                // Disable EA's default implementation of sprintf
+                conf.Defines.Add("EASTL_EASTDC_VSNPRINTF=false");
+
                 if (target.Optimization == Optimization.Debug)
                 {
                     conf.Defines.Add("ALBA_DEBUG_BUILD");
@@ -85,12 +91,13 @@ namespace Alba
 					}
 				}
 
+                //---------------------------------------------------------------------------------
                 conf.Options.Add(Options.Vc.Compiler.CppLanguageStandard.CPP14);
                 conf.Options.Add(Options.Vc.Compiler.Exceptions.EnableWithSEH);
                 conf.Options.Add(Options.Vc.General.TreatWarningsAsErrors.Enable);
                 conf.Options.Add(Alba.Settings.WindowsTargetPlatformVersion);
                 conf.Options.Add(new Sharpmake.Options.Vc.Compiler.DisableSpecificWarnings("4577"));
-			}
+            }
 		}
 	}
 }

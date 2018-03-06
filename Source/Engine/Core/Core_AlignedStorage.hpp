@@ -6,6 +6,7 @@
 // Author    : Bryan Robertson
 // Date      : 2018/02/27
 //------------------------------------------------------------------------------------------------
+#include "Core.hpp"
 #include <EASTL/type_traits.h>
 
 namespace Alba

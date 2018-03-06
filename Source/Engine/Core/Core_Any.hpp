@@ -7,7 +7,7 @@
 // Date      : 2016/12/20
 //------------------------------------------------------------------------------------------------
 
-#include "Core_API.hpp"
+#include "Core.hpp"
 
 #include <EASTL/utility.h>
 #include <EASTL/type_traits.h>
