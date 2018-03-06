@@ -19,52 +19,15 @@ namespace Alba
 		// Use Core::Chrono instead of std::chrono, 
 		// so it can be easily switched out for the EASTL version in future if need be
 		//-------------------------------------------------------------------------------------------------
-		namespace Chrono			= std::chrono;
-		namespace ChronoLiterals	= std::chrono_literals;
-		namespace SI				= std;
-
-		using Atto					=  SI::atto;
-		using Femto					=  SI::femto;
-		using Pico					=  SI::pico;
-		using Nano					=  SI::nano;
-		using Micro					=  SI::micro;
-		using Milli					=  SI::milli;
-		using Centi					=  SI::centi;
-		using Deci					=  SI::deci;
-		using Deca					=  SI::deca;
-		using Hecto					=  SI::hecto;
-		using Kilo					=  SI::kilo;
-		using Mega					=  SI::mega;
-		using Giga					=  SI::giga;
-		using Tera					=  SI::tera;
-		using Peta					=  SI::peta;
-		using Exa					=  SI::exa;
-
-		typedef Chrono::high_resolution_clock							HighResolutionClock;
-		typedef Chrono::time_point<Chrono::high_resolution_clock>		TimePoint;
-		typedef Chrono::duration<uint64, Nano>							TimeDuration;
+		namespace chrono			= std::chrono;
+		namespace chrono_literals	= std::chrono_literals;
+		
+		typedef chrono::high_resolution_clock							HighResolutionClock;
+		typedef chrono::time_point<chrono::high_resolution_clock>		TimePoint;
+		typedef chrono::duration<uint64, std::nano>						TimeDuration;
 
 		template <typename TStorageType>
-		using TimeSeconds = Chrono::duration<TStorageType, SI::ratio<1> >;
-
-		//-------------------------------------------------------------------------------------------------
-		// Name	:	Core::ChronoCast
-		// Desc	:	Casting functions between different duration types
-		//-------------------------------------------------------------------------------------------------
-		template <typename To>
-		struct ChronoCast_Impl
-		{
-			static constexpr To Cast(TimeDuration aDuration)
-			{
-				return Chrono::duration_cast<To>(aDuration);
-			}
-		};
-
-		template <typename To>
-		constexpr To ChronoCast(TimeDuration aDuration)
-		{
-			return ChronoCast_Impl<To>::Cast(aDuration);
-		}
+		using TimeSeconds = chrono::duration<TStorageType, std::ratio<1> >;
 
 		//-------------------------------------------------------------------------------------------------
 		// Name	:	Core::Time

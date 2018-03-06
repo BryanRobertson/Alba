@@ -2,6 +2,10 @@
 #include "GravityDemoExe.hpp"
 
 #include "Core_CommandLineParameters.hpp"
+#include "Core_Logging.hpp"
+#include "Core_LogCategory.hpp"
+
+ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 
 #if ALBA_PLATFORM_WINDOWS
 #include <Windows.h>
@@ -15,6 +19,9 @@
 		(void)hPrevInstance;
 		(void)lpCmdLine;
 		(void)nCmdShow;
+
+		Alba::Core::LogManager::CreateInstance();
+		ALBA_LOG(GravityDemo, Alba::Core::LogLevel::Info, "Initialise application - commandLine: %s", lpCmdLine);
 
 		Alba::Core::CommandLineParameters params(lpCmdLine);
 
@@ -41,6 +48,8 @@
 		{
 			params.TryGetParamValue("enableVsync", vsyncEnabled);
 		}
+
+		Alba::Core::LogManager::DestroyInstance();
 		
 		return 0;
 	}

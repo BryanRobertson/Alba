@@ -5,8 +5,6 @@ namespace Alba
 {
 	namespace Core
 	{
-		using namespace ChronoLiterals;
-
 		///////////////////////////////////////////////////////////////////////////////////////////////////
 		Time::Time()
 		{
@@ -37,6 +35,8 @@ namespace Alba
 		///////////////////////////////////////////////////////////////////////////////////////////////////
 		void Time::UpdatePaused()
 		{
+			using namespace std::chrono_literals;
+
 			const TimePoint lastSystemTime = mySystemTime;
 			const TimePoint lastGameTime = myGameTime;
 

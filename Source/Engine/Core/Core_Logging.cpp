@@ -65,21 +65,21 @@ namespace Alba
 			{
 				#if defined(ALBA_PLATFORM_WINDOWS)
 				{
-					/*
-					const auto now = std::chrono::system_clock::to_time_t(Core_Chrono::system_clock::now());
-					const auto nowLocalTime = *std::localtime(&now);
-		
-					Core_FixedString<256>::CtorSprintf cs;
-					Core_FixedString<256> str
-					(
-						cs,
-						"%s: %s : %s\n", 
-						std::put_time(&nowLocalTime, "Y-m-d H:M:S"),
-						aCategory.GetName(),
-						aMessage
-					);
-					*/
+					SYSTEMTIME systemTime;
+					GetLocalTime(&systemTime);
 
+					typedef FixedString<16> StringType;
+					const StringType timeStr
+					(
+						StringType::CtorSprintf(),
+						"[%02d:%02d:%02d.%04d] - ",
+						static_cast<int>(systemTime.wHour), 
+						static_cast<int>(systemTime.wMinute), 
+						static_cast<int>(systemTime.wSecond), 
+						static_cast<int>(systemTime.wMilliseconds)
+					);
+
+					::OutputDebugString(timeStr.c_str());
 					::OutputDebugStringA(aMessage);
 					::OutputDebugStringA("\n");
 				}

@@ -92,6 +92,7 @@ namespace Alba
 				}
 
                 //---------------------------------------------------------------------------------
+                //conf.Options.Add(Options.Vc.Linker.IgnoreAllDefaultLibraries.Enable);
                 conf.Options.Add(Options.Vc.Compiler.CppLanguageStandard.CPP14);
                 conf.Options.Add(Options.Vc.Compiler.Exceptions.EnableWithSEH);
                 conf.Options.Add(Options.Vc.General.TreatWarningsAsErrors.Enable);

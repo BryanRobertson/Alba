@@ -1,6 +1,8 @@
 #include "Framework_Precompile.hpp"
 #include "Framework.hpp"
 #include "Core_Memory_Impl.hpp"
+#include "Core_Logging.hpp"
+#include "Core_LogCategory.hpp"
 
 namespace Alba
 {
@@ -9,8 +11,13 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		// Initialise Framework
 		//-----------------------------------------------------------------------------------------
-		uint32 Init(InitParams& aParams)
+		uint32 Init(InitParams& /*aParams*/)
 		{
+			//------------------------------------------------------------------------
+			// Initialise log manager
+			//------------------------------------------------------------------------
+			Alba::Core::LogManager::CreateInstance();
+
 			return 0;
 		}
 
@@ -19,6 +26,11 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		uint32 Shutdown()
 		{
+			//------------------------------------------------------------------------
+			// Destroy log manager
+			//------------------------------------------------------------------------
+			Alba::Core::LogManager::DestroyInstance();
+
 			return 0;
 		}
 	}
