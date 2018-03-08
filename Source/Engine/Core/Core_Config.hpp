@@ -38,5 +38,9 @@
 #if defined(_MSC_VER)
 	#define ALBA_COMPILER_VISUALSTUDIO
 	#define ALBA_RESTRICT __restrict
+
+	#if defined(_CPPRTTI)
+		#define	ALBA_RTTI_ENABLED 1
+	#endif
 #endif
 

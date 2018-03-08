@@ -2,7 +2,7 @@
 
 //------------------------------------------------------------------------------------------------
 // Name      : Core_Any.hpp
-// Desc      : Variant type
+// Desc      : Class that can store an object of any type
 // Author    : Bryan Robertson
 // Date      : 2016/12/20
 //------------------------------------------------------------------------------------------------
@@ -138,6 +138,18 @@ namespace Alba
 				//========================================================================================
 				eastl::any	myData;
 		};
+
+		template <typename T>
+		auto MakeAny(T&& aData)
+		{
+			return Any(std::forward<T>(aData));
+		}
+
+		template <typename T>
+		auto MakeAny(const T& aData)
+		{
+			return Any(aData);
+		}
 	}
 }
 

@@ -44,6 +44,7 @@
     <Compile Include="Alba.Engine.Framework.sharpmake.cs" />
     <Compile Include="Alba.Base.Project.sharpmake.cs" />
     <Compile Include="Alba.Common.Settings.sharpmake.cs" />
+    <Compile Include="Alba.Engine.Graphics.sharpmake.cs" />
     <Compile Include="Alba.Solution.sharpmake.cs" />
     <Compile Include="Alba.Base.LibraryProject.sharpmake.cs" />
     <Compile Include="External.EASTL.sharpmake.cs" />

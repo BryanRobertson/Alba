@@ -4,6 +4,7 @@
 #include "Core_CommandLineParameters.hpp"
 #include "Core_Logging.hpp"
 #include "Core_LogCategory.hpp"
+#include "Core_TypeTraits.hpp"
 
 ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 
@@ -50,7 +51,6 @@ ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 		}
 
 		Alba::Core::LogManager::DestroyInstance();
-		
 		return 0;
 	}
 

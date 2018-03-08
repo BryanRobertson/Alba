@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Sharpmake;
 
-[module: Sharpmake.Include("Alba.Base.Project.sharpmake.cs")]
+[module: Sharpmake.Include("Alba.Base.LibraryProject.sharpmake.cs")]
 [module: Sharpmake.Include("External.EASTL.sharpmake.cs")]
 
 namespace Alba
@@ -9,12 +9,12 @@ namespace Alba
     namespace Engine
     {
         [Sharpmake.Generate]
-        class FrameworkProject : Alba.Base.LibraryProject
+        class GraphicsProject : Alba.Base.LibraryProject
         {
-            public FrameworkProject()
+            public GraphicsProject()
             {
-                Name = "Framework";
-                SourceRootPath = @"[project.SharpmakeCsPath]\..\Engine\Framework";
+                Name = "Graphics";
+                SourceRootPath = @"[project.SharpmakeCsPath]\..\Engine\Graphics";
             }
 
             [Configure()]
@@ -27,7 +27,6 @@ namespace Alba
 
                 conf.IncludePaths.Add(SourceRootPath);
                 conf.AddPublicDependency<CoreProject>(target);
-                conf.AddPublicDependency<GraphicsProject>(target);
             }
         }
     }

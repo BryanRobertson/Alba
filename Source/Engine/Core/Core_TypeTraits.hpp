@@ -3,6 +3,7 @@
 #include "Core.hpp"
 #include "Core_String.hpp"
 #include "Core_FixedString.hpp"
+#include "Core_StringHash.hpp"
 #include <EASTL/type_traits.h>
 
 namespace Alba

@@ -12,6 +12,7 @@
     <ClCompile Include="Core_Precompile.cpp" />
     <ClCompile Include="Core_StringHash.cpp" />
     <ClCompile Include="Core_Time.cpp" />
+    <ClCompile Include="Core_TypeId.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
@@ -61,5 +62,7 @@
     <ClInclude Include="Core_VectorMap.hpp" />
     <ClInclude Include="Core_VectorSet.hpp" />
     <ClInclude Include="Core_WeakPtr.hpp" />
+    <ClInclude Include="Core_TypeId.hpp" />
+    <ClInclude Include="Core_AnyDictionary.hpp" />
   </ItemGroup>
 </Project>

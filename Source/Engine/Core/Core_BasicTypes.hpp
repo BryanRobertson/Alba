@@ -69,6 +69,7 @@ namespace Alba
 		// Characters
 		//------------------------------------------------------------------------------------------------
 		typedef char					char8_t;
+		typedef unsigned char			uchar8_t;
 	}
 
 	namespace Core
