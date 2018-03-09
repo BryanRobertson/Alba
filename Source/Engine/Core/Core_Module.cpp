@@ -5,11 +5,10 @@ namespace Alba
 {
 	namespace Core
 	{
-		Module* Module::ourInstance = nullptr;
-
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		Module::Module(const char* aName)
+			: myModuleName(aName)
 		{
 
 		}
