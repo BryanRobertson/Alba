@@ -43,9 +43,6 @@
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
     <ClInclude Include="Core_Algorithm.hpp" />
-    <ClInclude Include="Core_API.hpp" />
-    <ClInclude Include="Core_BasicTypes.hpp" />
-    <ClInclude Include="Core_Config.hpp" />
     <ClInclude Include="Core_Function.hpp" />
     <ClInclude Include="Core_Hash.hpp" />
     <ClInclude Include="Core_Precompile.hpp" />
@@ -178,6 +175,15 @@
     <ClInclude Include="Core_ModuleRepository.hpp">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Core_BasicTypes.hpp">
+      <Filter>Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Config.hpp">
+      <Filter>Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_API.hpp">
+      <Filter>Basic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">
@@ -206,6 +212,9 @@
     </Filter>
     <Filter Include="Modules">
       <UniqueIdentifier>{dafbc20e-8169-4be8-9c4e-b55326d099e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Basic">
+      <UniqueIdentifier>{e7b59211-e62d-46d1-a0fe-dd0b6e0bb8e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
