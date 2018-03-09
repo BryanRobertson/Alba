@@ -2,67 +2,210 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Core.cpp" />
-    <ClCompile Include="Core_Any.cpp" />
-    <ClCompile Include="Core_Assert.cpp" />
-    <ClCompile Include="Core_CommandLineParameters.cpp" />
-    <ClCompile Include="Core_EASTLSprintf.cpp" />
-    <ClCompile Include="Core_LogCategory.cpp" />
-    <ClCompile Include="Core_Logging.cpp" />
-    <ClCompile Include="Core_Memory.cpp" />
     <ClCompile Include="Core_Precompile.cpp" />
-    <ClCompile Include="Core_StringHash.cpp" />
-    <ClCompile Include="Core_Time.cpp" />
-    <ClCompile Include="Core_TypeId.cpp" />
+    <ClCompile Include="Core_EASTLSprintf.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_StringHash.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_Any.cpp">
+      <Filter>Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_TypeId.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_CommandLineParameters.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_Time.cpp">
+      <Filter>Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_Memory.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_Assert.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_LogCategory.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_Logging.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_Module.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_ModuleRepository.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
     <ClInclude Include="Core_Algorithm.hpp" />
-    <ClInclude Include="Core_AlignedStorage.hpp" />
-    <ClInclude Include="Core_Any.hpp" />
     <ClInclude Include="Core_API.hpp" />
-    <ClInclude Include="Core_Array.hpp" />
-    <ClInclude Include="Core_Assert.hpp" />
     <ClInclude Include="Core_BasicTypes.hpp" />
-    <ClInclude Include="Core_Bitset.hpp" />
-    <ClInclude Include="Core_CommandLineParameters.hpp" />
     <ClInclude Include="Core_Config.hpp" />
-    <ClInclude Include="Core_Container.hpp" />
-    <ClInclude Include="Core_Deque.hpp" />
-    <ClInclude Include="Core_EASTLSprintf.hpp" />
-    <ClInclude Include="Core_FixedString.hpp" />
-    <ClInclude Include="Core_FixedSubstring.hpp" />
-    <ClInclude Include="Core_FixedVector.hpp" />
     <ClInclude Include="Core_Function.hpp" />
     <ClInclude Include="Core_Hash.hpp" />
-    <ClInclude Include="Core_HashMap.hpp" />
-    <ClInclude Include="Core_HashSet.hpp" />
-    <ClInclude Include="Core_List.hpp" />
-    <ClInclude Include="Core_LogCategory.hpp" />
-    <ClInclude Include="Core_Logging.hpp" />
-    <ClInclude Include="Core_Map.hpp" />
-    <ClInclude Include="Core_Memory.hpp" />
-    <ClInclude Include="Core_Memory_Impl.hpp" />
-    <ClInclude Include="Core_Mutex.hpp" />
-    <ClInclude Include="Core_Optional.hpp" />
-    <ClInclude Include="Core_Pair.hpp" />
     <ClInclude Include="Core_Precompile.hpp" />
-    <ClInclude Include="Core_Queue.hpp" />
-    <ClInclude Include="Core_Set.hpp" />
-    <ClInclude Include="Core_SharedPtr.hpp" />
-    <ClInclude Include="Core_Stack.hpp" />
-    <ClInclude Include="Core_String.hpp" />
-    <ClInclude Include="Core_StringHash.hpp" />
-    <ClInclude Include="Core_StringUtils.hpp" />
-    <ClInclude Include="Core_Thread.hpp" />
-    <ClInclude Include="Core_Time.hpp" />
-    <ClInclude Include="Core_TypeTraits.hpp" />
-    <ClInclude Include="Core_UniquePtr.hpp" />
-    <ClInclude Include="Core_Utils.hpp" />
-    <ClInclude Include="Core_Vector.hpp" />
-    <ClInclude Include="Core_VectorMap.hpp" />
-    <ClInclude Include="Core_VectorSet.hpp" />
-    <ClInclude Include="Core_WeakPtr.hpp" />
-    <ClInclude Include="Core_TypeId.hpp" />
-    <ClInclude Include="Core_AnyDictionary.hpp" />
+    <ClInclude Include="Core_Vector.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_VectorMap.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_VectorSet.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_EASTLSprintf.hpp">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_FixedString.hpp">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_FixedSubstring.hpp">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_FixedVector.hpp">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Bitset.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Deque.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Stack.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_WeakPtr.hpp">
+      <Filter>Pointers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_UniquePtr.hpp">
+      <Filter>Pointers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_SharedPtr.hpp">
+      <Filter>Pointers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_HashSet.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_HashMap.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_List.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_String.hpp">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_StringHash.hpp">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_StringUtils.hpp">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Map.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Queue.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Pair.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Optional.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Any.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_AnyDictionary.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Set.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Thread.hpp">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Mutex.hpp">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Utils.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_TypeTraits.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_TypeId.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Array.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_CommandLineParameters.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Container.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Time.hpp">
+      <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Memory.hpp">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Memory_Impl.hpp">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Assert.hpp">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Logging.hpp">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_LogCategory.hpp">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_AlignedStorage.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Module.hpp">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_ModuleRepository.hpp">
+      <Filter>Modules</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Containers">
+      <UniqueIdentifier>{70845d49-a2c1-49c9-9e96-abfa2eb2f872}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="String">
+      <UniqueIdentifier>{168acba4-9398-4f20-b6f4-d653dc0b2c93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pointers">
+      <UniqueIdentifier>{59c1d66c-22b4-4a95-b23d-e97b4876aceb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Threading">
+      <UniqueIdentifier>{c553f30f-d633-432e-aa43-314bd8d9d560}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{b606975a-d791-44da-995e-2186c8bb198b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Time">
+      <UniqueIdentifier>{4a0f1f9f-54da-4b34-9dc8-6900ffdf9eed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{6d3e508d-b9e8-448b-be9c-27822c8611b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{16a7765a-bae3-4dfe-8cc6-c9370db3eae7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{dafbc20e-8169-4be8-9c4e-b55326d099e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

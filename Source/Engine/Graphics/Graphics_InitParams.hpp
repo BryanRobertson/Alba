@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Framework_API.hpp"
-#include "Core_BasicTypes.hpp"
+#include "Core.hpp"
+#include "Core_AnyDictionary.hpp"
+#include "Graphics_API.hpp"
 
 namespace Alba
 {
-	namespace Framework
+	namespace Graphics
 	{
 		//-----------------------------------------------------------------------------------------------
 		// Name	:	InitParams
@@ -13,11 +14,11 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------------
 		struct InitParams
 		{
-			uint		myWindowPosX	= 100;
-			uint		myWindowPosY	= 100;
-			uint		myWindowWidth	= 800;
-			uint		myWindowHeight	= 600;
-			bool		myIsFullscreen	= false;
+			int				myWindowWidth	= 800;
+			int				myWindowHeight	= 600;
+
+			// Platform specific data
+			Core::Any		myPlatformData;
 		};
 	}
 }

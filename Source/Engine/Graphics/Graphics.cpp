@@ -1,3 +1,10 @@
 #include "Graphics_Precompile.hpp"
-#include "Graphics_API.hpp"
+#include "Graphics.hpp"
 
+namespace Alba
+{
+	namespace Graphics
+	{
+
+	}
+}

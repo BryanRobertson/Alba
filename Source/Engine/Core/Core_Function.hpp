@@ -8,24 +8,13 @@
 #pragma once
 
 #include "Core.hpp"
-
-/*
-#include <EASTL/fixed_function.h>
+#include <EASTL/functional.h>
 
 namespace Alba
 {
 	namespace Core
 	{
-		template <int TSizeInBytes, typename Result, typename... Arguments>
-		using Function = eastl::fixed_function<TSizeInBytes, Result, Arguments...>;
-
-		enum class DefaultFixedFunctionSize : int
-		{
-			Value = 32
-		};
-
-		template <typename Result, typename... Arguments>
-		using Function = eastl::fixed_function<DefaultFixedFunctionSize::Value, Result, Arguments...>;
+		template <typename... TArgs>
+		using Function = eastl::function<TArgs...>;
 	}
 }
-*/

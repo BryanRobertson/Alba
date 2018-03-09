@@ -8,5 +8,7 @@
     <ClInclude Include="Graphics.hpp" />
     <ClInclude Include="Graphics_API.hpp" />
     <ClInclude Include="Graphics_Precompile.hpp" />
+    <ClInclude Include="Graphics_InitParams.hpp" />
+    <ClInclude Include="Graphics_PlatformData.hpp" />
   </ItemGroup>
 </Project>
