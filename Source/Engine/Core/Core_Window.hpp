@@ -25,6 +25,7 @@ namespace Alba
 			Pair<uint, uint> myPosition;
 			Pair<uint, uint> mySize;
 			FixedString<32>	 myTitle = "Alba";
+			bool			 myIsHidden = false;
 		};
 
 		//-----------------------------------------------------------------------------------------

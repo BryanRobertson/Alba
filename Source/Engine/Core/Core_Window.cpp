@@ -13,7 +13,7 @@ namespace Alba
 		static const char* theWindowClassName = "Alba::Core::WindowClass";
 		enum class WindowsReturnCode 
 		{ 
-			Success = 0 
+			Failed = 0 
 		};
 
 		//-----------------------------------------------------------------------------------------
@@ -29,8 +29,9 @@ namespace Alba
 			WindowImpl(Window& aWindow)
 				: myWindow(aWindow)
 				, myPlatformWindowHandle(nullptr)
+				, myIsQuitMessageReceived(false)
 			{
-
+				myEventHandler.Bind(this, &WindowImpl::DefaultWindowHandler);
 			}
 
 			//-----------------------------------------------------------------------------------------
@@ -44,15 +45,21 @@ namespace Alba
 				{
 					TranslateMessage(&msg);
 					DispatchMessage(&msg);
-
-					//Return false if a quit message is recieved
-					if (msg.message == WM_QUIT)
-					{
-						return false;
-					}
 				}
 
 				return true;
+			}
+
+			//-----------------------------------------------------------------------------------------
+			//-----------------------------------------------------------------------------------------
+			LRESULT DefaultWindowHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+			{
+				if (uMsg == WM_QUIT)
+				{
+					myIsQuitMessageReceived = true;
+				}
+
+				return DefWindowProc(hWnd, uMsg, wParam, lParam);
 			}
 
 			//-----------------------------------------------------------------------------------------
@@ -81,15 +88,18 @@ namespace Alba
 						//Get pointer from the lpCreateParams passed to CreateWindowEx
 						WindowImpl* instance = reinterpret_cast<WindowImpl*> (reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams);
 						SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(instance));
-
-						return DefWindowProc(hWnd, uMsg, wParam, lParam);
 					}
 					break;
 
 					case WM_GETMINMAXINFO:
 					{
 						// This gets called before WM_NCCREATE, so the window pointer isn't set up yet
-						return DefWindowProc(hWnd, uMsg, wParam, lParam);
+					}
+					break;
+
+					case WM_CLOSE:
+					{
+						PostQuitMessage(0);
 					}
 					break;
 				}
@@ -117,6 +127,7 @@ namespace Alba
 			FixedString<32>		myTitleText;
 
 			Window&				myWindow;
+			bool				myIsQuitMessageReceived = false;
 		};
 
 		//-----------------------------------------------------------------------------------------
@@ -156,7 +167,7 @@ namespace Alba
 			windowClass.cbSize				= sizeof(windowClass);
 			windowClass.style				= CS_OWNDC;
 			windowClass.hInstance			= hInstance;
-			windowClass.hCursor				= LoadCursor(0, IDC_ARROW);
+			windowClass.hCursor				= LoadCursor(nullptr, IDC_ARROW);
 			windowClass.lpszClassName		= theWindowClassName;
 			windowClass.hIcon				= LoadIcon(GetModuleHandle(nullptr), "IDI_ICON1");
 			windowClass.hIconSm				= LoadIcon(GetModuleHandle(nullptr), "IDI_ICON1");
@@ -164,17 +175,17 @@ namespace Alba
 
 			if (windowClass.hIcon == nullptr)
 			{
-				windowClass.hIcon = LoadIcon(hInstance, "IDI_WINLOGO");
+				windowClass.hIcon = LoadIcon(NULL, "IDI_APPLICATION");
 			}
 
 			if (windowClass.hIconSm == nullptr)
 			{
-				windowClass.hIconSm = LoadIcon(hInstance, "IDI_WINLOGO");
+				windowClass.hIcon = LoadIcon(NULL, "IDI_APPLICATION");
 			}
 
 			ALBA_LOG(WindowLogCategory, LogLevel::Info, "RegisterWindowClass(%s)", theWindowClassName);
 
-			if (RegisterClassEx(&windowClass) != int(WindowsReturnCode::Success))
+			if (RegisterClassEx(&windowClass) == int(WindowsReturnCode::Failed))
 			{
 				ALBA_LOG
 				(
@@ -200,7 +211,7 @@ namespace Alba
 				aParams.mySize.first, aParams.mySize.second
 			);
 
-			const DWORD dwStyle		= WS_OVERLAPPED | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU;
+			const DWORD dwStyle		= WS_OVERLAPPED | WS_BORDER | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU;
 			const DWORD dwExStyle	= WS_EX_WINDOWEDGE;
 
 			myImpl->myPlatformWindowHandle = CreateWindowEx
@@ -235,6 +246,15 @@ namespace Alba
 			}
 
 			myPlatformData.Set<HWND>(myImpl->myPlatformWindowHandle);
+
+			//----------------------------------------------------------------------
+			// Show window
+			//----------------------------------------------------------------------
+			if (!aParams.myIsHidden)
+			{
+				ShowWindow(myImpl->myPlatformWindowHandle, SW_SHOW);
+			}
+
 			return true;
 		}
 

@@ -8,13 +8,15 @@
 #pragma once
 
 #include "Core.hpp"
-#include <EASTL/functional.h>
+#include "Core_AlignedStorage.hpp"
+//#include <EASTL/fixed_function.h>
+#include <functional>
 
 namespace Alba
 {
 	namespace Core
 	{
-		template <typename... TArgs>
-		using Function = eastl::function<TArgs...>;
+		template <typename T>
+		using Function = std::function<T>;
 	}
 }
