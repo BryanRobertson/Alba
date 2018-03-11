@@ -9,14 +9,22 @@
 
 #include "Core.hpp"
 #include "Core_AlignedStorage.hpp"
-//#include <EASTL/fixed_function.h>
-#include <functional>
+#include <EASTL/fixed_function.h>
+//#include <functional>
 
 namespace Alba
 {
 	namespace Core
 	{
+		namespace FunctionInternal
+		{
+			struct DefaultBufferSize
+			{
+				static const int Value = 32;
+			};
+		}
+
 		template <typename T>
-		using Function = std::function<T>;
+		using Function = eastl::fixed_function<FunctionInternal::DefaultBufferSize::Value, T>;
 	}
 }

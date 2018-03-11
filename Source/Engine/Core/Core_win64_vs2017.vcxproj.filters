@@ -39,9 +39,11 @@
     <ClCompile Include="Core_Window.cpp">
       <Filter>Window</Filter>
     </ClCompile>
-    <ClCompile Include="Core_AnyDictionary.cpp" />
     <ClCompile Include="Core_Platform.cpp">
       <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_AnyDictionary.cpp">
+      <Filter>Containers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
