@@ -25,6 +25,8 @@ namespace Alba
 			Unknown				= 0,
 			EASTLContainer		= 1,
 			CoreDebug			= 2,
+			Module				= 3,
+			Window				= 4,
 			
 			Count
 		};

@@ -16,7 +16,7 @@ namespace Alba
 		// Initialise logging. This should be the first call made
 		// so that the logging can 
 		//-----------------------------------------------------------------------------------------
-		//ALBA_FRAMEWORK_API uint32 InitLog();
+		ALBA_FRAMEWORK_API uint32 InitLog();
 
 		//-----------------------------------------------------------------------------------------
 		// Initialise Framework
@@ -31,6 +31,6 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		// Shutdown logging
 		//-----------------------------------------------------------------------------------------
-		//ALBA_FRAMEWORK_API uint32 ShutdownLog();
+		ALBA_FRAMEWORK_API uint32 ShutdownLog();
 	}
 }

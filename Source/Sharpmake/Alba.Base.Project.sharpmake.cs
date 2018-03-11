@@ -42,6 +42,9 @@ namespace Alba
                 conf.TargetLibraryPath  = Alba.Settings.GetLibraryTargetPath();
                 conf.TargetFileName     = "[project.Name]_[target.Platform]_[target.Optimization]";
 
+                // Don't generate filters
+                conf.SkipFilterGeneration = true;
+
                 // If not set, no precompile option will be used.
                 conf.PrecompHeader = "[project.Name]_Precompile.hpp";
 				conf.PrecompSource = "[project.Name]_Precompile.cpp";

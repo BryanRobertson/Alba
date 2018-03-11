@@ -5,12 +5,7 @@
 #include <ctime>
 #include <iomanip>
 
-#if defined(ALBA_PLATFORM_WINDOWS)
-	#pragma warning( push, 3 )  
-		#include <Windows.h>
-	#pragma warning( pop ) 
-	//#include <debugapi.h>
-#endif
+#include "Core_PlatformHeader.hpp"
 
 namespace Alba
 {

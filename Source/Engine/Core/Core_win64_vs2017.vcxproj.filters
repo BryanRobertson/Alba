@@ -33,11 +33,15 @@
     <ClCompile Include="Core_Logging.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Core_Module.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Core_ModuleRepository.cpp">
       <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_Window.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_AnyDictionary.cpp" />
+    <ClCompile Include="Core_Platform.cpp">
+      <Filter>Platform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +188,18 @@
     <ClInclude Include="Core_API.hpp">
       <Filter>Basic</Filter>
     </ClInclude>
+    <ClInclude Include="Core_Window.hpp">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_WindowEventHandler.hpp">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_PlatformHeader.hpp">
+      <Filter>Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Platform.hpp">
+      <Filter>Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">
@@ -215,6 +231,12 @@
     </Filter>
     <Filter Include="Basic">
       <UniqueIdentifier>{e7b59211-e62d-46d1-a0fe-dd0b6e0bb8e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{7b507238-bb55-4aa8-930c-ac706a2e0aeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{e16b68bf-fea4-493f-bfab-ab2b79d2067d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

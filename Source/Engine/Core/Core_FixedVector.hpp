@@ -20,7 +20,7 @@ namespace Alba
 		<
 			typename TValueType,
 			size_t TCount, 
-			Core_OverflowBehavior TOverflowBehavior=Core_OverflowBehavior::Allowed,
+			OverflowBehavior TOverflowBehavior=OverflowBehavior::Allowed,
 			typename TOverflowAllocator = EASTLAllocatorType
 		>
 		using FixedVector = eastl::fixed_vector<TValueType, TCount, TOverflowBehavior==OverflowBehavior::Allowed, TOverflowAllocator>;

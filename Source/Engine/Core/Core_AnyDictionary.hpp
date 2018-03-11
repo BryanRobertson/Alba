@@ -39,11 +39,11 @@ namespace Alba
 
 					if (itr != myData.end())
 					{
-						itr.second = aTypedValue;
+						itr->second = aTypedValue;
 					}
 					else
 					{
-						myData.insert(MakePair(typeId, MakeAny(aTypedValue));
+						myData.insert(MakePair(typeId, MakeAny(aTypedValue)));
 					}
 				}
 
@@ -55,11 +55,11 @@ namespace Alba
 
 					if (itr != myData.end())
 					{
-						itr.second = std::move(aTypedValue);
+						itr->second = std::move(aTypedValue);
 					}
 					else
 					{
-						myData.insert(MakePair(typeId, MakeAny(std::move(aTypedValue)) );
+						myData.insert(MakePair(typeId, MakeAny(std::move(aTypedValue))));
 					}
 				}
 

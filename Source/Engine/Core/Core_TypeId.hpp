@@ -29,6 +29,26 @@ namespace Alba
 					return anOther.myValue != myValue;
 				}
 
+				bool operator< (const TypeId& anOther) const
+				{
+					return myValue < anOther.myValue;
+				}
+
+				bool operator<= (const TypeId& anOther) const
+				{
+					return myValue <= anOther.myValue;
+				}
+
+				bool operator> (const TypeId& anOther) const
+				{
+					return myValue > anOther.myValue;
+				}
+
+				bool operator>= (const TypeId& anOther) const
+				{
+					return myValue >= anOther.myValue;
+				}
+
 				intptr_t GetValue() const
 				{
 					return myValue;

@@ -5,11 +5,13 @@
 #include "Core_Logging.hpp"
 #include "Core_LogCategory.hpp"
 #include "Core_TypeTraits.hpp"
+#include "Core_PlatformHeader.hpp"
+#include "Core_Window.hpp"
+#include "Core_UniquePtr.hpp"
 
 ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 
 #if ALBA_PLATFORM_WINDOWS
-#include <Windows.h>
 
 	//-------------------------------------------------------------------------------------------------
 	// WinMain
@@ -20,6 +22,8 @@ ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 		(void)hPrevInstance;
 		(void)lpCmdLine;
 		(void)nCmdShow;
+
+		using Alba::Core::UniquePtr;
 
 		Alba::Core::LogManager::CreateInstance();
 		ALBA_LOG(GravityDemo, Alba::Core::LogLevel::Info, "Initialise application - commandLine: %s", lpCmdLine);
@@ -50,6 +54,23 @@ ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 			params.TryGetParamValue("enableVsync", vsyncEnabled);
 		}
 
+		// Create window
+		Alba::Core::WindowParams windowParams;
+		windowParams.myPosition = Alba::Core::MakePair(windowPosX, windowPosY);
+		windowParams.mySize = Alba::Core::MakePair(windowWidth, windowHeight);
+
+		UniquePtr<Alba::Core::Window> window = Alba::Core::Window::Create();
+		window->Init(windowParams);
+
+		// Update
+		while (window->Update())
+		{
+
+		}
+
+		window.reset();
+
+		//
 		Alba::Core::LogManager::DestroyInstance();
 		return 0;
 	}

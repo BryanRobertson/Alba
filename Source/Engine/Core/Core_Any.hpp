@@ -34,16 +34,14 @@ namespace Alba
 				
 				template <typename TDataType>
 				explicit Any(const TDataType& aData)
-					: myData(aData)
 				{
-
+					Set(aData);
 				}
 
 				template <typename TDataType>
 				explicit Any(TDataType&& aData)
-					: myData(aData)
 				{
-
+					Set(std::forward<TDataType>(aData));
 				}
 
 				//=============================================================================================
@@ -63,7 +61,14 @@ namespace Alba
 				template <typename TDataType>
 				Any& operator= (TDataType&& aData)
 				{
-					myData = std::forward<std::decay<TDataType>::type>(aData);
+					Set(std::forward<TDataType>(aData));
+					return *this;
+				}
+
+				template <typename TDataType>
+				Any& operator= (const TDataType& aData)
+				{
+					Set(aData);
 					return *this;
 				}
 
@@ -86,13 +91,13 @@ namespace Alba
 				template <typename TDataType>
 				void Set(TDataType&& aData)
 				{
-					myData = std::forward<std::decay<TDataType>::type>(aData);
+					myData = std::forward<std::decay_t<TDataType> >(aData);
 				}
 
 				template <typename TDataType>
 				void Set(const TDataType& aData)
 				{
-					myData = std::forward<std::decay<TDataType>::type>(aData);
+					myData = std::move(TDataType(aData));
 				}
 
 				//---------------------------------------------------------------------------------------------
