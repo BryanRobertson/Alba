@@ -75,6 +75,8 @@ namespace Alba
 					);
 
 					::OutputDebugString(timeStr.c_str());
+					::OutputDebugString(aCategory.GetName().c_str());
+					::OutputDebugString(" - ");
 					::OutputDebugStringA(aMessage);
 					::OutputDebugStringA("\n");
 				}

@@ -3,11 +3,13 @@
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Framework_Precompile.cpp" />
+    <ClCompile Include="Framework_Module.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.hpp" />
     <ClInclude Include="Framework_API.hpp" />
     <ClInclude Include="Framework_InitParams.hpp" />
     <ClInclude Include="Framework_Precompile.hpp" />
+    <ClInclude Include="Framework_Module.hpp" />
   </ItemGroup>
 </Project>

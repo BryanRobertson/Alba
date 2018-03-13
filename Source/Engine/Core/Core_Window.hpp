@@ -22,7 +22,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		struct WindowParams
 		{
-			Pair<uint, uint> myPosition;
+			Pair<int, int>	 myPosition;
 			Pair<uint, uint> mySize;
 			FixedString<32>	 myTitle = "Alba";
 			bool			 myIsHidden = false;

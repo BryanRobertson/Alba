@@ -33,6 +33,38 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
+		CommandLineParameters::CommandLineParameters(const CommandLineParameters& anOther)
+			: myParams(anOther.myParams)
+		{
+
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		CommandLineParameters::CommandLineParameters(CommandLineParameters&& anOther)
+			: myParams(std::move(anOther.myParams))
+		{
+
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		CommandLineParameters& CommandLineParameters::operator=(const CommandLineParameters& anOther)
+		{
+			myParams = anOther.myParams;
+			return *this;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		CommandLineParameters& CommandLineParameters::operator=(CommandLineParameters&& anOther)
+		{
+			myParams = std::move(anOther.myParams);
+			return *this;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		void CommandLineParameters::Init(int argc, char* argv[])
 		{
 			FixedString<128> commandLineStr;

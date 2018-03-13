@@ -38,6 +38,9 @@ namespace Alba
 				explicit CommandLineParameters(int argc, char* argv[]);
 				explicit CommandLineParameters(const char* aCommandLineString);
 
+				CommandLineParameters(const CommandLineParameters& anOther);
+				CommandLineParameters(CommandLineParameters&& anOther);
+
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
@@ -89,6 +92,12 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				void AddParam(const char* aParamName, const char* aParamValue = nullptr);
 				void AddParam(NoCaseStringHash32 aParamNameId, const FixedString<32>& aParamValue = FixedString<32>());
+
+				//---------------------------------------------------------------------------------
+				// Operator overloads
+				//---------------------------------------------------------------------------------
+				CommandLineParameters& operator=(const CommandLineParameters& anOther);
+				CommandLineParameters& operator=(CommandLineParameters&& anOther);
 
 			private:
 

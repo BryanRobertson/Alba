@@ -9,6 +9,7 @@
 #include "Core_String.hpp"
 #include "Core_UniquePtr.hpp"
 #include "Core_ModuleRepository.hpp"
+#include "Core_AnyDictionary.hpp"
 
 namespace Alba
 {
@@ -28,7 +29,7 @@ namespace Alba
 		// Name	:	Module<TDerived>
 		//-----------------------------------------------------------------------------------------
 		template <typename TDerived>
-		class Module : public TDerived
+		class Module
 		{
 			public:
 
@@ -45,54 +46,42 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				static void	Register()
 				{
-					ourInstance = ALBA_NEW(AllocationType::Module, "Module");
+					ALBA_LOG_INFO(ModuleLog, "RegisterModule( \"%s\" )", GetName().c_str());
 
-					ModuleInfo info;
+					ourInstance.reset(ALBA_NEW(AllocationType::Module, "Module") TDerived());
+
+					ModuleRepository::ModuleInfo info;
 					info.myUnregisterFunc = &TDerived::Unregister;
 					info.myLoadFunc = &TDerived::Load;
 					info.myUnloadFunc = &TDerived::Unload;
 
 					const StringHash32 nameId(GetName());
 
-					ModuleRepository::GetInstance().RegisterModule(nameId, std::move(info));
-					ourInstance.myState = ModuleState::Registered;
+					ModuleRepository::Get().RegisterModule(nameId, std::move(info));
+					ourInstance->myState = ModuleState::Registered;
 
-					static_cast<TDerived*>(this)->OnRegister();
+					static_cast<TDerived*>(ourInstance.get())->OnRegister();
 				}
 
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------
 				static void	Unregister()
 				{
+					ALBA_LOG_INFO(ModuleLog, "UnregisterModule( \"%s\" )", GetName().c_str());
+
 					const StringHash32 nameId(GetName());
 
-					ModuleRepository::GetInstance().UnregisterModule(nameId);
-					static_cast<TDerived*>(this)->OnUnregister();
+					ModuleRepository::Get().UnregisterModule(nameId);
+					static_cast<TDerived*>(ourInstance.get())->OnUnregister();
 
-					ourInstance.Reset();
+					ourInstance.reset();
 				}
 
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------
-				static bool Load()
+				static TDerived& Get()
 				{
-					ALBA_ASSERT(ourInstance != nullptr, "Trying to load unregistered module!");
-					return static_cast<TDerived*>(this)->OnLoad();
-				}
-
-				//---------------------------------------------------------------------------------
-				//---------------------------------------------------------------------------------
-				static bool Unload()
-				{
-					ALBA_ASSERT(ourInstance != nullptr, "Trying to unload unregistered module");
-					return static_cast<TDerived*>(this)->OnUnload();
-				}
-
-				//---------------------------------------------------------------------------------
-				//---------------------------------------------------------------------------------
-				static Module& GetInstance()
-				{
-					return *outInstance;
+					return *ourInstance;
 				}
 
 				//=================================================================================
@@ -100,7 +89,8 @@ namespace Alba
 				//=================================================================================
 				static const ModuleName& GetName()
 				{
-					return static_cast<TDerived*>().GetModuleName();
+					static const ModuleName moduleName(TDerived::GetModuleName());
+					return moduleName;
 				}
 
 				//---------------------------------------------------------------------------------
@@ -125,9 +115,42 @@ namespace Alba
 				static UniquePtr<TDerived> ourInstance;
 
 				//=================================================================================
+				// Private Static Methods
+				//=================================================================================
+
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
+				static bool Load(const AnyDictionary& someParams)
+				{
+					ALBA_LOG_INFO(ModuleLog, "LoadModule( \"%s\" )", GetName().c_str());
+
+					ALBA_ASSERT(ourInstance != nullptr, "Trying to load unregistered module!");
+					const bool result = static_cast<TDerived*>(ourInstance.get())->OnLoad(someParams);
+
+					if (result)
+					{
+						ourInstance->myState = ModuleState::Loaded;
+					}
+
+					return result;
+				}
+
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
+				static void Unload()
+				{
+					ALBA_LOG_INFO(ModuleLog, "UnloadModule( \"%s\" )", GetName().c_str());
+
+					ALBA_ASSERT(ourInstance != nullptr, "Trying to unload unregistered module");
+					static_cast<TDerived*>(ourInstance.get())->OnUnload();
+
+					ourInstance->myState = ModuleState::Registered;
+				}
+
+				//=================================================================================
 				// Private Data
 				//=================================================================================
-				ModuleState		myState;
+				ModuleState	 myState = ModuleState::None;
 		};
 
 		template <typename TDerived>

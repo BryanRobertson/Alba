@@ -64,7 +64,7 @@ namespace Alba
 				}
 
 				template <typename TDataType>
-				bool Has(const TDataType& aTypedValue)
+				bool Has() const
 				{
 					const TypeId typeId = GetTypeId<TDataType>();
 					return myData.find(typeId) != myData.end();
@@ -88,6 +88,17 @@ namespace Alba
 
 					ALBA_ASSERT(itr != myData.end(), "Get<TDataType> failed - use Has<TDataType>() first!");
 					return itr->second.To<TDataType>();
+				}
+
+				template <typename TDataType>
+				const TDataType* GetPtr() const
+				{
+					if (Has<TDataType>())
+					{
+						return &Get<TDataType>();
+					}
+
+					return nullptr;
 				}
 
 			private:

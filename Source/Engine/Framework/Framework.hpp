@@ -5,16 +5,20 @@
 //-------------------------------------------------------------------------------------------------
 #include "Core.hpp"
 #include "Framework_API.hpp"
+#include "Core_LogCategory.hpp"
 
 namespace Alba
 {
+	namespace Core { class Window;  }
+
 	namespace Framework
 	{
 		struct InitParams;
 
+		ALBA_DECLARE_LOG_CATEGORY(FrameworkLog);
+
 		//-----------------------------------------------------------------------------------------
-		// Initialise logging. This should be the first call made
-		// so that the logging can 
+		// Initialise Log
 		//-----------------------------------------------------------------------------------------
 		ALBA_FRAMEWORK_API uint32 InitLog();
 
@@ -23,6 +27,11 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		ALBA_FRAMEWORK_API uint32 Init(InitParams& aParams);
 
+		//-----------------------------------------------------------------------------------------
+		// Update
+		//-----------------------------------------------------------------------------------------
+		ALBA_FRAMEWORK_API bool Update();
+		
 		//-----------------------------------------------------------------------------------------
 		// Shutdown Framework
 		//-----------------------------------------------------------------------------------------

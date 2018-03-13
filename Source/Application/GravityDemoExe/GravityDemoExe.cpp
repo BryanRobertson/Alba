@@ -8,6 +8,9 @@
 #include "Core_PlatformHeader.hpp"
 #include "Core_Window.hpp"
 #include "Core_UniquePtr.hpp"
+#include "Core_ModuleRepository.hpp"
+#include "Framework.hpp"
+#include "Framework_InitParams.hpp"
 
 ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 
@@ -16,62 +19,68 @@ ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 	//-------------------------------------------------------------------------------------------------
 	// WinMain
 	//-------------------------------------------------------------------------------------------------
-	int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
+	int CALLBACK WinMain(_In_ HINSTANCE /*hInstance*/, _In_ HINSTANCE /*hPrevInstance*/, _In_ LPSTR lpCmdLine, _In_ int /*nCmdShow*/)
 	{
-		(void)hInstance;
-		(void)hPrevInstance;
-		(void)lpCmdLine;
-		(void)nCmdShow;
-
 		using Alba::Core::UniquePtr;
+		using Alba::Core::StringHash32;
+		
+		using namespace Alba::BasicTypes;
 
-		Alba::Core::LogManager::CreateInstance();
-		ALBA_LOG(GravityDemo, Alba::Core::LogLevel::Info, "Initialise application - commandLine: %s", lpCmdLine);
+		//--------------------------------------------------------------------------
+		// Initialise logging
+		//--------------------------------------------------------------------------
+		Alba::Framework::InitLog();
+		ALBA_LOG_INFO(GravityDemo, "Initialise application - commandLine: %s", lpCmdLine);
 
-		Alba::Core::CommandLineParameters params(lpCmdLine);
+		//--------------------------------------------------------------------------
+		// Initialise framework
+		//--------------------------------------------------------------------------
+		Alba::Framework::InitParams initParams;
 
-		int windowPosX = 0;
-		params.TryGetParamValue("windowPosX", windowPosX);
+		initParams.myCommandLine.Init(lpCmdLine);
+		initParams.myCommandLine.TryGetParamValue("windowPosX", initParams.myWindowPosX);
+		initParams.myCommandLine.TryGetParamValue("windowPosY", initParams.myWindowPosY);
+		initParams.myCommandLine.TryGetParamValue("windowWidth", initParams.myWindowWidth);
+		initParams.myCommandLine.TryGetParamValue("windowHeight", initParams.myWindowHeight);
 
-		int windowPosY = 0;
-		params.TryGetParamValue("windowPosY", windowPosY);
-
-		int windowWidth = 0;
-		params.TryGetParamValue("windowWidth", windowWidth);
-
-		int windowHeight = 0;
-		params.TryGetParamValue("windowHeight", windowHeight);
-
-		Alba::Core::FixedString<32> windowTitle;
-		params.TryGetParamValue("windowTitle", windowTitle);
-
-		Alba::Core::String stringTest;
-		params.TryGetParamValue("windowTitle", stringTest);
-
-		bool vsyncEnabled = false;
-		if (params.IsParamPresent("enableVsync"))
+		//----------------------------------------------------------------------
+		// Init
+		//----------------------------------------------------------------------
+		if (const uint32 result = Alba::Framework::Init(initParams) != 0)
 		{
-			params.TryGetParamValue("enableVsync", vsyncEnabled);
+			ALBA_LOG_ERROR(GravityDemo, "Error initialising application: %u", result);
+			return result;
 		}
 
-		// Create window
-		Alba::Core::WindowParams windowParams;
-		windowParams.myPosition = Alba::Core::MakePair(windowPosX, windowPosY);
-		windowParams.mySize = Alba::Core::MakePair(windowWidth, windowHeight);
+		Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
+		
+		//----------------------------------------------------------------------
+		// Load modules
+		//----------------------------------------------------------------------
+		{
+			Alba::Core::AnyDictionary loadParams;
+			loadParams.Set<Alba::Framework::InitParams>(initParams);
 
-		UniquePtr<Alba::Core::Window> window = Alba::Core::Window::Create();
-		window->Init(windowParams);
+			if (!moduleRepository.LoadModule(StringHash32("Alba.FrameworkModule"), loadParams))
+			{
+				return 1;
+			}
+		}
 
+		//--------------------------------------------------------------------------
 		// Update
-		while (window->Update())
+		//--------------------------------------------------------------------------
+		while (Alba::Framework::Update())
 		{
 
 		}
 
-		window.reset();
+		//--------------------------------------------------------------------------
+		// Shutdown
+		//--------------------------------------------------------------------------
+		Alba::Framework::Shutdown();
+		Alba::Framework::ShutdownLog();
 
-		//
-		Alba::Core::LogManager::DestroyInstance();
 		return 0;
 	}
 

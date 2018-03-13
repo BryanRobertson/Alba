@@ -205,9 +205,6 @@
     <ClInclude Include="Core_Variant.hpp">
       <Filter>Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Core_JSON.hpp">
-      <Filter>Containers</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">

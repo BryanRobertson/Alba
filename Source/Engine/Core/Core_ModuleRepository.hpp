@@ -4,6 +4,8 @@
 #include "Core_UniquePtr.hpp"
 #include "Core_StringHash.hpp"
 #include "Core_VectorMap.hpp"
+#include "Core_AnyDictionary.hpp"
+#include "Core_LogCategory.hpp"
 
 namespace Alba
 {
@@ -11,6 +13,8 @@ namespace Alba
 	{
 		template <typename TDerived>
 		class Module;
+
+		ALBA_DECLARE_LOG_CATEGORY(ModuleLog);
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	ModuleRepository
@@ -34,12 +38,14 @@ namespace Alba
 				//=================================================================================
 				static void					Create();
 				static void					Destroy();
-				static ModuleRepository&	GetInstance();
+				static ModuleRepository&	Get();
 
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				void  UnloadAndUnregisterAll();
+				bool		LoadModule(StringHash32 aModuleNameId, const AnyDictionary& someParams = AnyDictionary());
+				void		UnloadModule(StringHash32 aModuleNameId);
+				void		UnloadAndUnregisterAll();
 
 			private:
 
@@ -54,8 +60,8 @@ namespace Alba
 				struct ModuleInfo
 				{
 					typedef void(*UnregisterFunc)();
-					typedef bool(*LoadFunc)();
-					typedef bool(*UnloadFunc)();
+					typedef bool(*LoadFunc)(const AnyDictionary& someParams);
+					typedef void(*UnloadFunc)();
 
 					UnregisterFunc myUnregisterFunc = nullptr;
 					LoadFunc	   myLoadFunc		= nullptr;
@@ -65,12 +71,16 @@ namespace Alba
 				typedef VectorMap<StringHash32, ModuleInfo> Modules;
 
 				//=================================================================================
+				// Private Constructors
+				//=================================================================================
+				ModuleRepository(const ModuleRepository&) {}
+				ModuleRepository(ModuleRepository&&) {}
+
+				//=================================================================================
 				// Private Methods
 				//=================================================================================
 				void		RegisterModule(StringHash32 aModuleNameId, ModuleInfo&& aModule);
 				void		UnregisterModule(StringHash32 aModuleNameId);
-				bool		LoadModule(StringHash32 aModuleNameId);
-				bool		UnloadModule(StringHash32 aModuleNameId);
 
 				//=================================================================================
 				// Private Data

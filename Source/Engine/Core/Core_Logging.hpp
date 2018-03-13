@@ -18,8 +18,22 @@
 			::Alba::Core::FormatString<256>(aFormat, __VA_ARGS__).c_str()				\
 		);																				\
 	}
+
+	#define ALBA_LOG_VERBOSE(aLogCategory, aFormat, ...)	ALBA_LOG(aLogCategory, ::Alba::Core::LogLevel::Verbose, aFormat, __VA_ARGS__)
+	#define ALBA_LOG_DEBUG(aLogCategory, aFormat, ...)		ALBA_LOG(aLogCategory, ::Alba::Core::LogLevel::Debug, aFormat, __VA_ARGS__)
+	#define ALBA_LOG_INFO(aLogCategory, aFormat, ...)		ALBA_LOG(aLogCategory, ::Alba::Core::LogLevel::Info, aFormat, __VA_ARGS__)
+	#define ALBA_LOG_WARNING(aLogCategory, aFormat, ...)	ALBA_LOG(aLogCategory, ::Alba::Core::LogLevel::Warning, aFormat, __VA_ARGS__)
+	#define ALBA_LOG_ERROR(aLogCategory, aFormat, ...)		ALBA_LOG(aLogCategory, ::Alba::Core::LogLevel::Error, aFormat, __VA_ARGS__)
+
 #else
+
 	#define ALBA_LOG(aLogCategory, aLevel, aFormat, ...)
+	#define ALBA_LOG_VERBOSE(aLogCategory, aFormat, ...)
+	#define ALBA_LOG_DEBUG(aLogCategory, aFormat, ...)
+	#define ALBA_LOG_INFO(aLogCategory, aFormat, ...)
+	#define ALBA_LOG_WARNING(aLogCategory, aFormat, ...)
+	#define ALBA_LOG_ERROR(aLogCategory, aFormat, ...)
+
 #endif
 
 //-------------------------------------------------------------------------------------------------

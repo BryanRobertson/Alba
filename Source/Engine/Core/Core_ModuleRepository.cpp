@@ -1,11 +1,14 @@
 #include "Core_Precompile.hpp"
 #include "Core_ModuleRepository.hpp"
 #include "Core_FixedVector.hpp"
+#include "Core_AnyDictionary.hpp"
 
 namespace Alba
 {
 	namespace Core
 	{
+		ALBA_IMPLEMENT_LOG_CATEGORY(ModuleLog);
+
 		UniquePtr<ModuleRepository> ModuleRepository::ourInstance;
 
 		//-----------------------------------------------------------------------------------------
@@ -39,7 +42,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ ModuleRepository& ModuleRepository::GetInstance()
+		/*static*/ ModuleRepository& ModuleRepository::Get()
 		{
 			return *ourInstance;
 		}
@@ -77,12 +80,12 @@ namespace Alba
 
 		//------------------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------------------
-		bool ModuleRepository::LoadModule(StringHash32 aModuleNameId)
+		bool ModuleRepository::LoadModule(StringHash32 aModuleNameId, const AnyDictionary& someParams)
 		{
 			auto itr = myModules.find(aModuleNameId);
 			if (itr != myModules.end())
 			{
-				return itr->second.myLoadFunc();
+				return itr->second.myLoadFunc(someParams);
 			}
 			
 			return false;
@@ -90,15 +93,13 @@ namespace Alba
 
 		//------------------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------------------
-		bool ModuleRepository::UnloadModule(StringHash32 aModuleNameId)
+		void ModuleRepository::UnloadModule(StringHash32 aModuleNameId)
 		{
 			auto itr = myModules.find(aModuleNameId);
 			if (itr != myModules.end())
 			{
-				return itr->second.myUnloadFunc();
+				itr->second.myUnloadFunc();
 			}
-
-			return false;
 		}
 	}
 }

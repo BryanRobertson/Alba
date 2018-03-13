@@ -2,6 +2,7 @@
 
 #include "Framework_API.hpp"
 #include "Core_BasicTypes.hpp"
+#include "Core_CommandLineParameters.hpp"
 
 namespace Alba
 {
@@ -13,11 +14,15 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------------
 		struct InitParams
 		{
-			uint		myWindowPosX	= 100;
-			uint		myWindowPosY	= 100;
-			uint		myWindowWidth	= 800;
-			uint		myWindowHeight	= 600;
-			bool		myIsFullscreen	= false;
+			typedef Alba::Core::CommandLineParameters CommandLineParameters;
+
+			int		myWindowPosX	= 100;
+			int		myWindowPosY	= 100;
+			uint	myWindowWidth	= 800;
+			uint	myWindowHeight	= 600;
+			bool	myIsFullscreen	= false;
+
+			CommandLineParameters myCommandLine;
 		};
 	}
 }
