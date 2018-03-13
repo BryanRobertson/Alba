@@ -61,7 +61,7 @@ ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 			Alba::Core::AnyDictionary loadParams;
 			loadParams.Set<Alba::Framework::InitParams>(initParams);
 
-			if (!moduleRepository.LoadModule(StringHash32("Alba.FrameworkModule"), loadParams))
+			if (!moduleRepository.LoadModule(StringHash32("Alba.Framework"), loadParams))
 			{
 				return 1;
 			}

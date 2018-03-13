@@ -47,7 +47,7 @@ namespace Alba
 					DispatchMessage(&msg);
 				}
 
-				return true;
+				return !myIsQuitMessageReceived;
 			}
 
 			//-----------------------------------------------------------------------------------------
