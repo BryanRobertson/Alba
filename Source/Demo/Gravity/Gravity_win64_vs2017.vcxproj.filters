@@ -3,10 +3,12 @@
   <ItemGroup>
     <ClCompile Include="Gravity.cpp" />
     <ClCompile Include="Gravity_Precompile.cpp" />
+    <ClCompile Include="Gravity_Module.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Gravity.hpp" />
     <ClInclude Include="Gravity_API.hpp" />
     <ClInclude Include="Gravity_Precompile.hpp" />
+    <ClInclude Include="Gravity_Module.hpp" />
   </ItemGroup>
 </Project>

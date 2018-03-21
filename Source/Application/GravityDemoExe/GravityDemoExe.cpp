@@ -15,6 +15,8 @@
 #include "Framework.hpp"
 #include "Framework_GameApplication.hpp"
 
+#include "Gravity_Module.hpp"
+
 ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 
 #if ALBA_PLATFORM_WINDOWS
@@ -58,6 +60,7 @@ ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 
 		Alba::Core::RegisterModules();
 		Alba::Framework::RegisterModules();
+		Alba::Gravity::RegisterModules();
 
 		//----------------------------------------------------------------------
 		// Load modules
@@ -78,6 +81,8 @@ ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 		commandLine.TryGetParamValue("windowHeight", initParams.myWindowHeight);
 
 		UniquePtr<Alba::Framework::GameApplication> application = Alba::Framework::GameApplication::Create();
+		application->Init(std::move(initParams));
+
 		const uint32 returnCode = application->Run();
 
 		//--------------------------------------------------------------------------

@@ -54,9 +54,20 @@ namespace Alba
 			//-----------------------------------------------------------------------------------------
 			LRESULT DefaultWindowHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
-				if (uMsg == WM_QUIT)
+				switch (uMsg)
 				{
-					myIsQuitMessageReceived = true;
+					case WM_CLOSE:
+					{
+						PostQuitMessage(0);
+					}
+					break;
+
+					case WM_DESTROY:
+					case WM_QUIT:
+					{
+						myIsQuitMessageReceived = true;
+					}
+					break;
 				}
 
 				return DefWindowProc(hWnd, uMsg, wParam, lParam);
