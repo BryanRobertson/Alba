@@ -59,7 +59,7 @@ namespace External
 		{
             base.ConfigureAll(conf, target);
 
-            conf.ProjectFileName = "[project.Name]_[target.Platform]_[target.DevEnv]";
+            conf.ProjectFileName = "[project.Name]";
             conf.Name = @"[target.Optimization] [target.OutputType]";
 
             conf.ProjectPath            = Alba.Settings.GetProjectPath();

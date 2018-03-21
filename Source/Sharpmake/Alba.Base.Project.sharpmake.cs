@@ -33,7 +33,7 @@ namespace Alba
 			public virtual void ConfigureAll(Configuration conf, Target target)
 			{
 				// Project filename
-				conf.ProjectFileName = "[project.Name]_[target.Platform]_[target.DevEnv]";
+				conf.ProjectFileName = "[project.Name]";
 
                 // Paths
                 conf.ProjectPath        = Alba.Settings.GetProjectPath();
