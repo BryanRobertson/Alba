@@ -14,5 +14,10 @@ Source/Sharpmake/obj/*
 Source/Sharpmake/output/*
 
 /Intermediate/*
+!/Intermediate/.gitkeep
+
 /Libraries/*
+!/Libraries/.gitkeep
+
 /Binaries/*
+!/Binaries/.gitkeep
