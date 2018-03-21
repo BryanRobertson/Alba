@@ -4,8 +4,10 @@
 // Includes
 //-------------------------------------------------------------------------------------------------
 #include "Core.hpp"
-#include "Framework_API.hpp"
 #include "Core_LogCategory.hpp"
+#include "Core_String.hpp"
+
+#include "Framework_API.hpp"
 
 namespace Alba
 {
@@ -13,9 +15,16 @@ namespace Alba
 
 	namespace Framework
 	{
-		struct InitParams;
-
 		ALBA_DECLARE_LOG_CATEGORY(FrameworkLog);
+
+		//-----------------------------------------------------------------------------------------------
+		// Name	:	InitParams
+		// Desc:	Initialisation parameters for the framework
+		//-----------------------------------------------------------------------------------------------
+		struct FrameworkInitParams
+		{
+			Core::String myCommandLineString;
+		};
 
 		//-----------------------------------------------------------------------------------------
 		// Initialise Log
@@ -23,15 +32,15 @@ namespace Alba
 		ALBA_FRAMEWORK_API uint32 InitLog();
 
 		//-----------------------------------------------------------------------------------------
-		// Initialise Framework
+		// Init Framework
 		//-----------------------------------------------------------------------------------------
-		ALBA_FRAMEWORK_API uint32 Init(InitParams& aParams);
+		ALBA_FRAMEWORK_API uint32 Init(FrameworkInitParams& aParams);
 
 		//-----------------------------------------------------------------------------------------
-		// Update
+		// Register Modules Framework
 		//-----------------------------------------------------------------------------------------
-		ALBA_FRAMEWORK_API bool Update();
-		
+		ALBA_FRAMEWORK_API uint32 RegisterModules();
+
 		//-----------------------------------------------------------------------------------------
 		// Shutdown Framework
 		//-----------------------------------------------------------------------------------------

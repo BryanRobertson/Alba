@@ -10,6 +10,7 @@
 #include "Core_UniquePtr.hpp"
 #include "Core_ModuleRepository.hpp"
 #include "Core_AnyDictionary.hpp"
+#include "Core_Logging.hpp"
 
 namespace Alba
 {
@@ -55,7 +56,7 @@ namespace Alba
 					info.myLoadFunc = &TDerived::Load;
 					info.myUnloadFunc = &TDerived::Unload;
 
-					const StringHash32 nameId(GetName());
+					const NoCaseStringHash32 nameId(GetName());
 
 					ModuleRepository::Get().RegisterModule(nameId, std::move(info));
 					ourInstance->myState = ModuleState::Registered;
@@ -69,7 +70,7 @@ namespace Alba
 				{
 					ALBA_LOG_INFO(ModuleLog, "UnregisterModule( \"%s\" )", GetName().c_str());
 
-					const StringHash32 nameId(GetName());
+					const NoCaseStringHash32 nameId(GetName());
 
 					ModuleRepository::Get().UnregisterModule(nameId);
 					static_cast<TDerived*>(ourInstance.get())->OnUnregister();

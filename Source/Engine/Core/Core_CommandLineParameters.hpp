@@ -57,17 +57,17 @@ namespace Alba
 				// Desc	:	Return true if the specified named argument exists
 				//			(This will also return true for binary switches --dosomething)
 				//---------------------------------------------------------------------------------
-				bool IsParamPresent(const char* aParamName);
+				bool IsParamPresent(const char* aParamName) const;
 
 				//---------------------------------------------------------------------------------
 				// Name	:	TryGetParamValue
 				// Desc	:	Try to get named parameter value from the commandline
 				//---------------------------------------------------------------------------------
 				template <typename TDataType>
-				bool TryGetParamValue(const char* aParamName, TDataType& anOutValue)
+				bool TryGetParamValue(const char* aParamName, TDataType& anOutValue) const
 				{
 					const NoCaseStringHash32 paramNameId(aParamName);
-					if (ParamData* paramData = GetParamDataMutable(paramNameId) )
+					if (const ParamData* paramData = GetParamData(paramNameId) )
 					{
 						return paramData->GetData(anOutValue);
 					}
@@ -76,9 +76,9 @@ namespace Alba
 				}
 
 				template <typename TDataType>
-				bool TryGetParamValue(NoCaseStringHash32 aParamNameId, TDataType& anOutValue)
+				bool TryGetParamValue(NoCaseStringHash32 aParamNameId, TDataType& anOutValue) const
 				{
-					if (ParamData* paramData = GetParamDataMutable(aParamNameId))
+					if (const ParamData* paramData = GetParamData(aParamNameId))
 					{
 						return paramData->GetData(anOutValue);
 					}
@@ -107,11 +107,11 @@ namespace Alba
 				struct ParamData
 				{	
 					FixedString<16> myValue;
-					Any				myCachedTypedValue;
+					mutable Any		myCachedTypedValue;
 
 					template <typename TDataType>
 					bool GetData(TDataType& anOutValue,
-								 typename std::enable_if<is_string<TDataType>::value, TDataType>::type* = nullptr)
+								 typename std::enable_if<is_string<TDataType>::value, TDataType>::type* = nullptr) const
 					{
 						anOutValue = myValue.c_str();
 						return true;
@@ -119,7 +119,7 @@ namespace Alba
 
 					template <typename TDataType>
 					bool GetData(TDataType& anOutValue,
-		 						 typename std::enable_if<!is_string<TDataType>::value, TDataType>::type* = nullptr)
+		 						 typename std::enable_if<!is_string<TDataType>::value, TDataType>::type* = nullptr) const
 					{
 						// Try to get cached converted value first
 						if (myCachedTypedValue.Is<TDataType>())
@@ -149,6 +149,7 @@ namespace Alba
 				// Private Methods
 				//=================================================================================
 				ParamData* GetParamDataMutable(NoCaseStringHash32 aParamNameId);
+				const ParamData* GetParamData(NoCaseStringHash32 aParamNameId) const;
 
 				//=================================================================================
 				// Private Data

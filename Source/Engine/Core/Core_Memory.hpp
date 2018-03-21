@@ -27,6 +27,7 @@ namespace Alba
 			CoreDebug			= 2,
 			Module				= 3,
 			Window				= 4,
+			Framework			= 5,
 			
 			Count
 		};
@@ -80,6 +81,12 @@ namespace Alba
 		};
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+void* ALBA_CDECL operator new(size_t);
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+void  ALBA_CDECL operator delete(void*, size_t);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::Core::uint32 line);

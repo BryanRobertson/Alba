@@ -107,7 +107,7 @@ namespace Alba
 					#endif
 				}
 
-				explicit constexpr TStringHashBase(const char* aString)
+				constexpr TStringHashBase(const char* aString)
 					: myHashValue(HashAlgorithm::GetHash(aString))
 				{
 					#if defined(ALBA_DEBUG_STRINGHASH)
@@ -293,7 +293,7 @@ namespace Alba
 
 				}
 
-				explicit constexpr StringHash32(const char* aString)
+				constexpr StringHash32(const char* aString)
 					: Super(aString)
 				{
 
@@ -335,7 +335,7 @@ namespace Alba
 
 				}
 
-				explicit constexpr StringHash64(const char* aString)
+				constexpr StringHash64(const char* aString)
 					: Super(aString)
 				{
 
@@ -377,7 +377,7 @@ namespace Alba
 
 				}
 
-				explicit constexpr NoCaseStringHash32(const char* aString)
+				constexpr NoCaseStringHash32(const char* aString)
 					: Super(aString)
 				{
 
@@ -419,7 +419,7 @@ namespace Alba
 
 				}
 
-				explicit constexpr NoCaseStringHash64(const char* aString)
+				constexpr NoCaseStringHash64(const char* aString)
 					: Super(aString)
 				{
 

@@ -43,8 +43,8 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				bool		LoadModule(StringHash32 aModuleNameId, const AnyDictionary& someParams = AnyDictionary());
-				void		UnloadModule(StringHash32 aModuleNameId);
+				bool		LoadModule(NoCaseStringHash32 aModuleNameId, const AnyDictionary& someParams = AnyDictionary());
+				void		UnloadModule(NoCaseStringHash32 aModuleNameId);
 				void		UnloadAndUnregisterAll();
 
 			private:
@@ -68,7 +68,7 @@ namespace Alba
 					UnloadFunc	   myUnloadFunc		= nullptr;
 				};
 
-				typedef VectorMap<StringHash32, ModuleInfo> Modules;
+				typedef VectorMap<NoCaseStringHash32, ModuleInfo> Modules;
 
 				//=================================================================================
 				// Private Constructors
@@ -79,8 +79,8 @@ namespace Alba
 				//=================================================================================
 				// Private Methods
 				//=================================================================================
-				void		RegisterModule(StringHash32 aModuleNameId, ModuleInfo&& aModule);
-				void		UnregisterModule(StringHash32 aModuleNameId);
+				void		RegisterModule(NoCaseStringHash32 aModuleNameId, ModuleInfo&& aModule);
+				void		UnregisterModule(NoCaseStringHash32 aModuleNameId);
 
 				//=================================================================================
 				// Private Data

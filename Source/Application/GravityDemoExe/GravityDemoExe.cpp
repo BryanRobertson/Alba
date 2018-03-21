@@ -9,8 +9,11 @@
 #include "Core_Window.hpp"
 #include "Core_UniquePtr.hpp"
 #include "Core_ModuleRepository.hpp"
+#include "Core_CommandLineModule.hpp"
+#include "Core_Memory_Impl.hpp"
+
 #include "Framework.hpp"
-#include "Framework_InitParams.hpp"
+#include "Framework_GameApplication.hpp"
 
 ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 
@@ -23,6 +26,7 @@ ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 	{
 		using Alba::Core::UniquePtr;
 		using Alba::Core::StringHash32;
+		using Alba::Framework::GameApplication;
 		
 		using namespace Alba::BasicTypes;
 
@@ -35,45 +39,46 @@ ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 		//--------------------------------------------------------------------------
 		// Initialise framework
 		//--------------------------------------------------------------------------
-		Alba::Framework::InitParams initParams;
-
-		initParams.myCommandLine.Init(lpCmdLine);
-		initParams.myCommandLine.TryGetParamValue("windowPosX", initParams.myWindowPosX);
-		initParams.myCommandLine.TryGetParamValue("windowPosY", initParams.myWindowPosY);
-		initParams.myCommandLine.TryGetParamValue("windowWidth", initParams.myWindowWidth);
-		initParams.myCommandLine.TryGetParamValue("windowHeight", initParams.myWindowHeight);
+		Alba::Framework::FrameworkInitParams frameworkInitParams;
+		frameworkInitParams.myCommandLineString = lpCmdLine;
 
 		//----------------------------------------------------------------------
 		// Init
 		//----------------------------------------------------------------------
-		if (const uint32 result = Alba::Framework::Init(initParams) != 0)
+		if (const uint32 result = Alba::Framework::Init(frameworkInitParams) != 0)
 		{
 			ALBA_LOG_ERROR(GravityDemo, "Error initialising application: %u", result);
 			return result;
 		}
 
-		Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
-		
+		//----------------------------------------------------------------------
+		// Register modules
+		//----------------------------------------------------------------------
+		//Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
+
+		Alba::Core::RegisterModules();
+		Alba::Framework::RegisterModules();
+
 		//----------------------------------------------------------------------
 		// Load modules
 		//----------------------------------------------------------------------
 		{
-			Alba::Core::AnyDictionary loadParams;
-			loadParams.Set<Alba::Framework::InitParams>(initParams);
-
-			if (!moduleRepository.LoadModule(StringHash32("Alba.Framework"), loadParams))
-			{
-				return 1;
-			}
+			
 		}
 
 		//--------------------------------------------------------------------------
-		// Update
+		// Run
 		//--------------------------------------------------------------------------
-		while (Alba::Framework::Update())
-		{
+		Alba::Framework::ApplicationInitParams initParams;
+		const Alba::Core::CommandLineParameters& commandLine = Alba::Core::CommandLineModule::Get().GetParams();
 
-		}
+		commandLine.TryGetParamValue("windowPosX", initParams.myWindowPosX);
+		commandLine.TryGetParamValue("windowPosY", initParams.myWindowPosY);
+		commandLine.TryGetParamValue("windowWidth", initParams.myWindowWidth);
+		commandLine.TryGetParamValue("windowHeight", initParams.myWindowHeight);
+
+		UniquePtr<Alba::Framework::GameApplication> application = Alba::Framework::GameApplication::Create();
+		const uint32 returnCode = application->Run();
 
 		//--------------------------------------------------------------------------
 		// Shutdown
@@ -81,7 +86,7 @@ ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 		Alba::Framework::Shutdown();
 		Alba::Framework::ShutdownLog();
 
-		return 0;
+		return returnCode;
 	}
 
 #endif

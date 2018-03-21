@@ -51,13 +51,13 @@ namespace Alba
 		//------------------------------------------------------------------------------------------
 		void ModuleRepository::UnloadAndUnregisterAll()
 		{
-			FixedVector<Pair<StringHash32, ModuleInfo>, 256> modules;
+			FixedVector<Pair<NoCaseStringHash32, ModuleInfo>, 256> modules;
 			for (auto& itr : myModules)
 			{
 				modules.push_back(itr);
 			}
 
-			for (const Pair<StringHash32, ModuleInfo>& moduleInfo : modules)
+			for (const Pair<NoCaseStringHash32, ModuleInfo>& moduleInfo : modules)
 			{
 				moduleInfo.second.myUnloadFunc();
 				moduleInfo.second.myUnregisterFunc();
@@ -66,21 +66,21 @@ namespace Alba
 
 		//------------------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------------------
-		void ModuleRepository::RegisterModule(StringHash32 aModuleNameId, ModuleRepository::ModuleInfo&& aModule)
+		void ModuleRepository::RegisterModule(NoCaseStringHash32 aModuleNameId, ModuleRepository::ModuleInfo&& aModule)
 		{
 			myModules.insert(MakePair(aModuleNameId, std::move(aModule)));
 		}
 
 		//------------------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------------------
-		void ModuleRepository::UnregisterModule(StringHash32 aModuleNameId)
+		void ModuleRepository::UnregisterModule(NoCaseStringHash32 aModuleNameId)
 		{
 			myModules.erase(aModuleNameId);
 		}
 
 		//------------------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------------------
-		bool ModuleRepository::LoadModule(StringHash32 aModuleNameId, const AnyDictionary& someParams)
+		bool ModuleRepository::LoadModule(NoCaseStringHash32 aModuleNameId, const AnyDictionary& someParams)
 		{
 			auto itr = myModules.find(aModuleNameId);
 			if (itr != myModules.end())
@@ -93,7 +93,7 @@ namespace Alba
 
 		//------------------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------------------
-		void ModuleRepository::UnloadModule(StringHash32 aModuleNameId)
+		void ModuleRepository::UnloadModule(NoCaseStringHash32 aModuleNameId)
 		{
 			auto itr = myModules.find(aModuleNameId);
 			if (itr != myModules.end())

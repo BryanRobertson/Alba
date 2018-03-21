@@ -45,6 +45,9 @@
     <ClCompile Include="Core_AnyDictionary.cpp">
       <Filter>Containers</Filter>
     </ClCompile>
+    <ClCompile Include="Core_CommandLineModule.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
@@ -204,6 +207,9 @@
     </ClInclude>
     <ClInclude Include="Core_Variant.hpp">
       <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_CommandLineModule.hpp">
+      <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

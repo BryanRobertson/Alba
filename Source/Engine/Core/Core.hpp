@@ -9,3 +9,14 @@
 #include "Core_Memory.hpp"
 #include "Core_Assert.hpp"
 #include "Core_EASTLSprintf.hpp"
+
+//-------------------------------------------------------------------------------------------------
+// Functions
+//-------------------------------------------------------------------------------------------------
+namespace Alba
+{
+	namespace Core
+	{
+		void ALBA_CORE_API RegisterModules();
+	}
+}

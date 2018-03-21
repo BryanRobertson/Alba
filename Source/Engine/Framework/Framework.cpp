@@ -1,17 +1,15 @@
 #include "Framework_Precompile.hpp"
 #include "Framework.hpp"
-#include "Framework_InitParams.hpp"
-#include "Framework_Module.hpp"
+#include "Framework_GameApplication.hpp"
 
 #include "Core.hpp"
-
-#if defined(ALBA_CORE_LIBRARY_DLL)
-#include "Core_Memory_Impl.hpp"
-#endif
+//#include "Core_Memory_Impl.hpp"
 
 #include "Core_Window.hpp"
 #include "Core_ModuleRepository.hpp"
+#include "Core_CommandLineModule.hpp"
 #include "Core_Any.hpp"
+#include "Core_StringHash.hpp"
 
 namespace Alba
 {
@@ -35,27 +33,32 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		// Initialise Framework
 		//-----------------------------------------------------------------------------------------
-		uint32 Init(InitParams& /*aInitParams*/)
+		uint32 Init(FrameworkInitParams& aInitParams)
 		{
 			//----------------------------------------------------------------------
-			// Init module repository
+			// Create module repository
 			//----------------------------------------------------------------------
 			Alba::Core::ModuleRepository::Create();
 
 			//----------------------------------------------------------------------
-			// Register modules
+			// Command line module is the always loaded by default
 			//----------------------------------------------------------------------
-			FrameworkModule::Register();
+			{
+				Core::AnyDictionary params;
+				params.Set<Core::String>(aInitParams.myCommandLineString);
+
+				Alba::Core::ModuleRepository::Get().LoadModule("Alba.Core.CommandLine", params);
+			}
 
 			return 0;
 		}
 
 		//-----------------------------------------------------------------------------------------
-		// Update
+		// Register Modules Framework
 		//-----------------------------------------------------------------------------------------
-		bool Update()
+		uint32 RegisterModules()
 		{
-			return FrameworkModule::Get().GetWindow().Update();
+			return 0;
 		}
 
 		//-----------------------------------------------------------------------------------------

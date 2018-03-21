@@ -12,6 +12,18 @@
 #include "Core_BasicTypes.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+void* ALBA_CDECL operator new(size_t size)
+{
+	return Alba::Core::Malloc(size, 0, 0, Alba::Core::TAllocType(Alba::Core::AllocationType::Unknown), "", "", 0);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+void ALBA_CDECL operator delete(void* ptr, size_t)
+{
+	return Alba::Core::Free(ptr);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::Core::uint32 line)
 {
 	return Alba::Core::Malloc(size, alignment, alignmentOffset, allocType, description, file, line);

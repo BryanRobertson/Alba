@@ -286,7 +286,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		bool CommandLineParameters::IsParamPresent(const char* aParamName)
+		bool CommandLineParameters::IsParamPresent(const char* aParamName) const
 		{
 			const NoCaseStringHash32 hash(aParamName);
 
@@ -345,6 +345,17 @@ namespace Alba
 			return itr != myParams.end()
 					? &(itr->second)
 					: nullptr;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		const CommandLineParameters::ParamData* CommandLineParameters::GetParamData(NoCaseStringHash32 aParamNameId) const
+		{
+			auto itr = myParams.find(aParamNameId);
+
+			return itr != myParams.end()
+				? &(itr->second)
+				: nullptr;
 		}
 	}
 }

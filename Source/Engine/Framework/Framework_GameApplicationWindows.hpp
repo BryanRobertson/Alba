@@ -1,46 +1,56 @@
 #pragma once
 
-#include "Framework_API.hpp"
-#include "Core_Module.hpp"
+#include "Core.hpp"
 #include "Core_Window.hpp"
 #include "Core_UniquePtr.hpp"
+#include "Framework_API.hpp"
+
+#if defined(ALBA_PLATFORM_WINDOWS)
 
 namespace Alba
 {
 	namespace Framework
 	{
+		struct ApplicationInitParams;
+
 		//-----------------------------------------------------------------------------------------
-		// Name	:	Framework
+		// Name	:	GameApplicationWindows
+		// Desc	:	Game application class for the windows platform
 		//-----------------------------------------------------------------------------------------
-		class FrameworkModule : public Core::Module<FrameworkModule>
+		class GameApplicationWindows final
 		{
 			public:
 
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static const char* GetModuleName() { return "Alba.Framework"; }
+				static Core::UniquePtr<GameApplicationWindows> Create();
+
+				//=================================================================================
+				// Public Constructors
+				//=================================================================================
+				GameApplicationWindows();
+				~GameApplicationWindows();
 
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				void	OnRegister();
-				void	OnUnregister();
+				uint32		Init(ApplicationInitParams anInitParams);
+				uint32		Run();
+				uint32		Shutdown();
 
-				bool	OnLoad(const Core::AnyDictionary& someParameters);
-				void	OnUnload();		
-
-				Core::Window& GetWindow() const 
-				{
-					return *ourApplicationWindow; 
-				}
+				void		Quit();
 
 			private:
 
 				//=================================================================================
-				// Public Data
+				// Private Data
 				//=================================================================================
-				Core::UniquePtr<Core::Window> ourApplicationWindow;
+				Core::UniquePtr<Core::Window> myWindow;
+				ApplicationInitParams		  myInitParams;
+				bool						  myQuit;
 		};
 	}
 }
+
+#endif

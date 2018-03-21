@@ -3,13 +3,25 @@
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Framework_Precompile.cpp" />
-    <ClCompile Include="Framework_Module.cpp" />
+    <ClCompile Include="Framework_GameApplicationWindows.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.hpp" />
     <ClInclude Include="Framework_API.hpp" />
-    <ClInclude Include="Framework_InitParams.hpp" />
     <ClInclude Include="Framework_Precompile.hpp" />
-    <ClInclude Include="Framework_Module.hpp" />
+    <ClInclude Include="Framework_GameApplication.hpp" />
+    <ClInclude Include="Framework_GameApplicationWindows.hpp">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{73e02a75-30fa-469a-9b7e-8f0dd3d9e678}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{8438a32c-63cf-4ae4-82ce-2fd3ad48c402}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
