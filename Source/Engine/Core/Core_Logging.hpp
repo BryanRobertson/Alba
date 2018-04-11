@@ -13,7 +13,7 @@
 	{																					\
 		ALBA_GET_LOG_MANAGER().LogMessage												\
 		(																				\
-			aLogCategory,																\
+			LogCategories::##aLogCategory,												\
 			aLevel,																		\
 			::Alba::Core::FormatString<256>(aFormat, __VA_ARGS__).c_str()				\
 		);																				\

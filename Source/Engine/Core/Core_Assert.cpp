@@ -24,7 +24,7 @@ namespace Alba
 				{
 					ALBA_LOG
 					(
-						::Alba::Core::Critical,
+						Critical,
 						LogLevel::Error,
 						"%s(%u): Assertion Failed ( %s ) - \"%s\"",
 						aFile, aLine, aCondition, anErrorMessage
@@ -34,7 +34,7 @@ namespace Alba
 				{
 					ALBA_LOG
 					(
-						::Alba::Core::Critical,
+						Critical,
 						LogLevel::Error,
 						"%s(%u): Assertion Failed ( %s )",
 						aFile, aLine, aCondition

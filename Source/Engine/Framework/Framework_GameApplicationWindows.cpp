@@ -104,7 +104,7 @@ namespace Alba
 			myQuit = false;
 			while (!myQuit)
 			{
-				myQuit = !myWindow->Update();
+				myWindow->Update();
 			}
 
 			//-------------------------------------------------------------------------------------
@@ -119,6 +119,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		uint32 GameApplicationWindows::Shutdown()
 		{
+			// Destroy window
 			myWindow.reset();
 
 			return 0;

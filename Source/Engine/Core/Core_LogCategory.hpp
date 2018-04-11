@@ -9,13 +9,13 @@
 // Declare a log category - only needed if you want the log category to be 
 // available from multiple .cpp files
 //-------------------------------------------------------------------------------------------------
-#define ALBA_DECLARE_LOG_CATEGORY(aCategoryName)		extern ::Alba::Core::LogCategory aCategoryName;
+#define ALBA_DECLARE_LOG_CATEGORY(aCategoryName)	namespace LogCategories { extern ::Alba::Core::LogCategory aCategoryName; }
 
 //-------------------------------------------------------------------------------------------------
 // Implement log category. Can be used on its own the log category only needs to be usable
 // from a single .cpp file
 //-------------------------------------------------------------------------------------------------
-#define ALBA_IMPLEMENT_LOG_CATEGORY(aCategoryName)		::Alba::Core::LogCategory aCategoryName(#aCategoryName);
+#define ALBA_IMPLEMENT_LOG_CATEGORY(aCategoryName)	namespace LogCategories { ::Alba::Core::LogCategory aCategoryName(#aCategoryName); }
 
 //-------------------------------------------------------------------------------------------------
 // Name      : Core_LogCategory.hpp
