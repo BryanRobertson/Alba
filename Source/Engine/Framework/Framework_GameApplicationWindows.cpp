@@ -2,6 +2,8 @@
 #include "Framework_GameApplication.hpp"
 #include "Core_Memory.hpp"
 #include "Core_Pair.hpp"
+#include "Core_Window.hpp"
+#include "Core_WindowEventHandler.hpp"
 
 namespace Alba
 {
@@ -40,28 +42,62 @@ namespace Alba
 		uint32 GameApplicationWindows::Init(ApplicationInitParams anInitParams)
 		{
 			myInitParams = std::move(anInitParams);
+			CreateWindow(myInitParams.myWindowInitParams);
 
 			return 0;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		uint32 GameApplicationWindows::Run()
+		uint32 GameApplicationWindows::CreateWindow(const Core::WindowInitParams& aWindowInitParams)
 		{
 			//-------------------------------------------------------------------------------------
 			// Create window
 			//-------------------------------------------------------------------------------------
-			Core::WindowParams windowParams;
-			windowParams.myPosition = Core::Pair<int, int>(myInitParams.myWindowPosX, myInitParams.myWindowPosY);
-			windowParams.mySize = Core::Pair<uint16, uint16>(myInitParams.myWindowWidth, myInitParams.myWindowHeight);
-			windowParams.myTitle = myInitParams.myWindowTitle.c_str();
-
 			myWindow = Core::Window::Create();
-			if ( !myWindow->Init(windowParams) )
+			if (!myWindow->Init(aWindowInitParams))
 			{
 				return 1;
 			}
 
+			//-------------------------------------------------------------------------------------
+			// Set event handler
+			//-------------------------------------------------------------------------------------
+			Alba::Core::WindowEventHandler eventHandler;
+			eventHandler.Bind(this, &GameApplicationWindows::WindowHandler);
+
+			myWindow->SetEventHandler(eventHandler);
+
+			return 0;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		LRESULT	GameApplicationWindows::WindowHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+		{
+			switch (uMsg)
+			{
+				case WM_CLOSE:
+				{
+					PostQuitMessage(0);
+				}
+				break;
+
+				case WM_DESTROY:
+				case WM_QUIT:
+				{
+					myQuit = true;
+				}
+				break;
+			}
+
+			return DefWindowProc(hWnd, uMsg, wParam, lParam);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		uint32 GameApplicationWindows::Run()
+		{
 			//-------------------------------------------------------------------------------------
 			// Update
 			//-------------------------------------------------------------------------------------

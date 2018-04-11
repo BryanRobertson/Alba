@@ -86,6 +86,31 @@ namespace Alba
 					return false;
 				}
 
+				template <typename TDataType>
+				bool TryGetParamValue(const char* aParamName, TDataType& anOutValue, const TDataType& aDefault) const
+				{
+					const NoCaseStringHash32 paramNameId(aParamName);
+					if (const ParamData* paramData = GetParamData(paramNameId))
+					{
+						return paramData->GetData(anOutValue);
+					}
+
+					anOutValue = aDefault;
+					return false;
+				}
+
+				template <typename TDataType>
+				bool TryGetParamValue(NoCaseStringHash32 aParamNameId, TDataType& anOutValue, const TDataType& aDefault) const
+				{
+					if (const ParamData* paramData = GetParamData(aParamNameId))
+					{
+						return paramData->GetData(anOutValue);
+					}
+
+					anOutValue = aDefault;
+					return false;
+				}
+
 				//---------------------------------------------------------------------------------
 				// Name	: AddParam
 				// Desc : Add a parameter

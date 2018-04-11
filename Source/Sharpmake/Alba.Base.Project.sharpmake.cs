@@ -96,11 +96,21 @@ namespace Alba
 
                 //---------------------------------------------------------------------------------
                 //conf.Options.Add(Options.Vc.Linker.IgnoreAllDefaultLibraries.Enable);
-                conf.Options.Add(Options.Vc.Compiler.CppLanguageStandard.CPP14);
+                //conf.Options.Add(Options.Vc.Compiler.CppLanguageStandard.CPP14);
+         
+                // C++17 switch not supported by Fastbuild yet
+                conf.AdditionalCompilerOptions.Add("/std:c++17");
+
                 conf.Options.Add(Options.Vc.Compiler.Exceptions.EnableWithSEH);
                 conf.Options.Add(Options.Vc.General.TreatWarningsAsErrors.Enable);
                 conf.Options.Add(Alba.Settings.WindowsTargetPlatformVersion);
+
+                // C4577 - 'noexpect' used with no exception handling mode specified
                 conf.Options.Add(new Sharpmake.Options.Vc.Compiler.DisableSpecificWarnings("4577"));
+
+                // C4127 - Conditional expression is constant
+                conf.Options.Add(new Sharpmake.Options.Vc.Compiler.DisableSpecificWarnings("4127"));
+                
             }
 		}
 	}

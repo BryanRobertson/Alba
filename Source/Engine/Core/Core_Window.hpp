@@ -4,6 +4,7 @@
 #include "Core_AnyDictionary.hpp"
 #include "Core_UniquePtr.hpp"
 #include "Core_FixedString.hpp"
+#include "Math_Vector.hpp"
 
 //-------------------------------------------------------------------------------------------------
 // Name	:	Core_Window.hpp
@@ -18,13 +19,13 @@ namespace Alba
 		struct WindowEventHandler;
 
 		//-----------------------------------------------------------------------------------------
-		// Name	:	WindowParams
+		// Name	:	WindowInitParams
 		//-----------------------------------------------------------------------------------------
-		struct WindowParams
+		struct WindowInitParams
 		{
-			Pair<int, int>	 myPosition;
-			Pair<uint, uint> mySize;
-			FixedString<32>	 myTitle = "Alba";
+			Math::Vector2i	 myPosition = Math::Vector2i(100, 100);
+			Math::Vector2i	 mySize		= Math::Vector2i(800, 600);
+			FixedString<32>	 myTitle	= "Alba";
 			bool			 myIsHidden = false;
 		};
 
@@ -52,7 +53,7 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				// Initialise
 				//---------------------------------------------------------------------------------
-				bool				Init(const WindowParams& aParams);
+				bool				Init(const WindowInitParams& aParams);
 
 				//---------------------------------------------------------------------------------
 				// Update

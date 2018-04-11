@@ -1,3 +1,6 @@
 [submodule "Source/External/EASTL"]
 	path = Source/External/EASTL
 	url = https://github.com/electronicarts/EASTL
+[submodule "Source/External/eigen"]
+	path = Source/External/eigen
+	url = https://github.com/eigenteam/eigen-git-mirror

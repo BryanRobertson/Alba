@@ -4,6 +4,7 @@
 #include "Core_Config.hpp"
 #include "Core_String.hpp"
 #include "Core_FixedString.hpp"
+#include "Core_Window.hpp"
 
 namespace Alba
 {
@@ -14,12 +15,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		struct ApplicationInitParams
 		{
-			uint16		 myWindowWidth  = 800;
-			uint16		 myWindowHeight = 600;
-			int16		 myWindowPosX   = 100;
-			int16		 myWindowPosY   = 100;
-
-			Core::String myWindowTitle = "Alba";
+			Alba::Core::WindowInitParams myWindowInitParams;
 		};
 
 		//-----------------------------------------------------------------------------------------

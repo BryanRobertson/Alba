@@ -165,7 +165,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		bool Window::Init(const WindowParams& aParams)
+		bool Window::Init(const WindowInitParams& aParams)
 		{
 			const HINSTANCE hInstance = GetModuleHandle(nullptr);
 
@@ -218,8 +218,8 @@ namespace Alba
 				WindowLogCategory,
 				LogLevel::Info, 
 				"CreateWindow(x=%d, y=%d, w=%d, h=%d)",
-				aParams.myPosition.first, aParams.myPosition.second,
-				aParams.mySize.first, aParams.mySize.second
+				aParams.myPosition.x(), aParams.myPosition.y(),
+				aParams.mySize.x(), aParams.mySize.y()
 			);
 
 			const DWORD dwStyle		= WS_OVERLAPPED | WS_BORDER | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU;
@@ -231,10 +231,10 @@ namespace Alba
 				theWindowClassName,						//className
 				aParams.myTitle.c_str(),				//lpWindowName
 				dwStyle,								//dwStyle
-				aParams.myPosition.first,				//x
-				aParams.myPosition.second,				//y
-				aParams.mySize.first,					//width
-				aParams.mySize.second,					//height
+				aParams.myPosition.x(),					//x
+				aParams.myPosition.y(),					//y
+				aParams.mySize.x(),						//width
+				aParams.mySize.y(),						//height
 				0,										//hWndParent
 				0,										//hMenu
 				hInstance,								//hInstance

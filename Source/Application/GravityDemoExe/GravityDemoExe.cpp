@@ -36,7 +36,7 @@ ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 		// Initialise logging
 		//--------------------------------------------------------------------------
 		Alba::Framework::InitLog();
-		ALBA_LOG_INFO(GravityDemo, "Initialise application - commandLine: %s", lpCmdLine);
+		ALBA_LOG_INFO(GravityDemo, "Initialise framework - commandLine: %s", lpCmdLine);
 
 		//--------------------------------------------------------------------------
 		// Initialise framework
@@ -49,36 +49,41 @@ ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
 		//----------------------------------------------------------------------
 		if (const uint32 result = Alba::Framework::Init(frameworkInitParams) != 0)
 		{
-			ALBA_LOG_ERROR(GravityDemo, "Error initialising application: %u", result);
+			ALBA_LOG_ERROR(GravityDemo, "Error initialising Framework: %u", result);
 			return result;
 		}
 
 		//----------------------------------------------------------------------
-		// Register modules
-		//----------------------------------------------------------------------
-		//Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
-
-		Alba::Core::RegisterModules();
-		Alba::Framework::RegisterModules();
-		Alba::Gravity::RegisterModules();
-
-		//----------------------------------------------------------------------
-		// Load modules
+		// Register and Load modules
 		//----------------------------------------------------------------------
 		{
-			
+			Alba::Core::RegisterModules();
+			Alba::Framework::RegisterModules();
+			Alba::Gravity::RegisterModules();
 		}
 
 		//--------------------------------------------------------------------------
 		// Run
 		//--------------------------------------------------------------------------
-		Alba::Framework::ApplicationInitParams initParams;
 		const Alba::Core::CommandLineParameters& commandLine = Alba::Core::CommandLineModule::Get().GetParams();
 
-		commandLine.TryGetParamValue("windowPosX", initParams.myWindowPosX);
-		commandLine.TryGetParamValue("windowPosY", initParams.myWindowPosY);
-		commandLine.TryGetParamValue("windowWidth", initParams.myWindowWidth);
-		commandLine.TryGetParamValue("windowHeight", initParams.myWindowHeight);
+		Alba::Framework::ApplicationInitParams initParams;
+
+		// Init window params
+		int windowPosX = 100;
+		int windowPosY = 100;
+		int windowWidth = 800;
+		int windowHeight = 600;
+
+		commandLine.TryGetParamValue("windowPosX", windowPosX);
+		commandLine.TryGetParamValue("windowPosY", windowPosY);
+		commandLine.TryGetParamValue("windowWidth", windowWidth);
+		commandLine.TryGetParamValue("windowHeight", windowHeight);
+
+		Alba::Core::WindowInitParams& windowParams = initParams.myWindowInitParams;
+		windowParams.myIsHidden = false;
+		windowParams.myPosition = Alba::Math::Vector2i(windowPosX, windowPosY);
+		windowParams.mySize = Alba::Math::Vector2i(windowWidth, windowHeight);
 
 		UniquePtr<Alba::Framework::GameApplication> application = Alba::Framework::GameApplication::Create();
 		application->Init(std::move(initParams));
