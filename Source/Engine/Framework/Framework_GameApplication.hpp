@@ -6,6 +6,10 @@
 #include "Core_FixedString.hpp"
 #include "Core_Window.hpp"
 
+#ifdef CreateWindow
+	#undef CreateWindow
+#endif
+
 namespace Alba
 {
 	namespace Framework
@@ -18,18 +22,56 @@ namespace Alba
 			Alba::Core::WindowInitParams myWindowInitParams;
 		};
 
+		struct ApplicationInitParams;
+
 		//-----------------------------------------------------------------------------------------
-		// GameApplication
+		// Name	:	GameApplication
+		// Desc	:	Game application class. 
+		//			Encapsulates initialisation, update, shutdown, etc.
 		//-----------------------------------------------------------------------------------------
-		#if defined(ALBA_PLATFORM_WINDOWS)
-			class GameApplicationWindows;
-			typedef GameApplicationWindows GameApplication;
-		#else
-			#error "Alba GameApplication class not defined for this platform!"
-		#endif
+		class GameApplication final
+		{
+			public:
+
+				friend struct GameWindowEventHandlerImpl;
+
+				//=================================================================================
+				// Public Static Methods
+				//=================================================================================
+				static Core::UniquePtr<GameApplication> Create();
+
+				//=================================================================================
+				// Public Constructors
+				//=================================================================================
+				GameApplication();
+				~GameApplication();
+
+				//=================================================================================
+				// Public Methods
+				//=================================================================================
+				uint32		Init(ApplicationInitParams anInitParams);
+				uint32		Run();
+				uint32		Shutdown();
+
+				void		Quit();
+
+			private:
+
+				//=================================================================================
+				// Private Methods
+				//=================================================================================
+				void		BeginFrame();
+				void		Update();
+				void		EndFrame();
+				
+				uint32		CreateWindow(const Core::WindowInitParams& aWindowInitParams);
+
+				//=================================================================================
+				// Private Data
+				//=================================================================================
+				Core::UniquePtr<Core::Window> myWindow;
+				ApplicationInitParams		  myInitParams;
+				bool						  myQuit;
+		};
 	}
 }
-
-#if defined(ALBA_PLATFORM_WINDOWS)
-	#include "Framework_GameApplicationWindows.hpp"
-#endif

@@ -6,15 +6,13 @@
     <ClCompile Include="Framework_GameApplicationWindows.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Framework_GameApplication.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.hpp" />
     <ClInclude Include="Framework_API.hpp" />
     <ClInclude Include="Framework_Precompile.hpp" />
     <ClInclude Include="Framework_GameApplication.hpp" />
-    <ClInclude Include="Framework_GameApplicationWindows.hpp">
-      <Filter>Platform\Windows</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">

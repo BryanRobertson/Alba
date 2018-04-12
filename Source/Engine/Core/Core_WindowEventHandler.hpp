@@ -17,7 +17,7 @@ namespace Alba
 			//=====================================================================================
 			// Public Types
 			//=====================================================================================
-			typedef Function<LRESULT(HWND, UINT, WPARAM, LPARAM)> HandlerFunc;
+			typedef FixedFunction<LRESULT(HWND, UINT, WPARAM, LPARAM)> HandlerFunc;
 
 			//=====================================================================================
 			// Public Methods

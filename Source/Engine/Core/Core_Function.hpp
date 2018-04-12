@@ -20,11 +20,16 @@ namespace Alba
 		{
 			struct DefaultBufferSize
 			{
-				static const int Value = 32;
+				static const int Value = 64 - sizeof(void*);
 			};
 		}
 
+		// Function with a fixed-size buffer. Prefer this over Function
 		template <typename T>
-		using Function = eastl::fixed_function<FunctionInternal::DefaultBufferSize::Value, T>;
+		using FixedFunction = eastl::fixed_function<FunctionInternal::DefaultBufferSize::Value, T>;
+
+		// Fallback for special cases
+		//template <typename T>
+		//using Function = eastl::function<T>;
 	}
 }
