@@ -26,7 +26,9 @@ namespace Alba
                 conf.ProjectPath = SourceRootPath;
 
                 conf.IncludePaths.Add(SourceRootPath);
+
                 conf.IncludePaths.Add(Alba.Settings.GetExternalLibraryPath("eigen"));
+                conf.IncludePaths.Add(Alba.Settings.GetExternalLibraryPath(Path.Combine("remotery", "lib")));
 
                 conf.AddPublicDependency<External.EASTL.Project>(target);
             }

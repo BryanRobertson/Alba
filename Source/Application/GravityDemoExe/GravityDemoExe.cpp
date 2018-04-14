@@ -11,6 +11,7 @@
 #include "Core_ModuleRepository.hpp"
 #include "Core_CommandLineModule.hpp"
 #include "Core_Memory_Impl.hpp"
+#include "Core_Profile.hpp"
 
 #include "Framework.hpp"
 #include "Framework_GameApplication.hpp"
@@ -34,14 +35,7 @@ namespace GravityDemo
 		using Alba::Core::UniquePtr;
 		using Alba::Core::StringHash32;
 		using Alba::Framework::GameApplication;
-		
 		using namespace Alba::BasicTypes;
-
-		//--------------------------------------------------------------------------
-		// Initialise logging
-		//--------------------------------------------------------------------------
-		Alba::Framework::InitLog();
-		ALBA_LOG_INFO(GravityDemo, "Initialise framework - commandLine: %s", lpCmdLine);
 
 		//--------------------------------------------------------------------------
 		// Initialise framework
@@ -54,9 +48,10 @@ namespace GravityDemo
 		//----------------------------------------------------------------------
 		if (const uint32 result = Alba::Framework::Init(frameworkInitParams) != 0)
 		{
-			ALBA_LOG_ERROR(GravityDemo, "Error initialising Framework: %u", result);
 			return result;
-		}
+		}		
+
+		ALBA_PROFILE_BEGIN(InitApplication);
 
 		//----------------------------------------------------------------------
 		// Register and Load modules
@@ -79,13 +74,14 @@ namespace GravityDemo
 		UniquePtr<Alba::Framework::GameApplication> application = Alba::Framework::GameApplication::Create();
 		application->Init(std::move(initParams));
 
+		ALBA_PROFILE_END(InitApplication);
+
 		const uint32 returnCode = application->Run();
 
 		//--------------------------------------------------------------------------
 		// Shutdown
 		//--------------------------------------------------------------------------
 		Alba::Framework::Shutdown();
-		Alba::Framework::ShutdownLog();
 
 		return returnCode;
 	}

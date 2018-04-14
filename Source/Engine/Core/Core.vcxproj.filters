@@ -48,6 +48,9 @@
     <ClCompile Include="Core_CommandLineModule.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Core_Profile.cpp">
+      <Filter>Profiling</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
@@ -220,6 +223,9 @@
     <ClInclude Include="Math_Quaternion.hpp">
       <Filter>Maths</Filter>
     </ClInclude>
+    <ClInclude Include="Core_Profile.hpp">
+      <Filter>Profiling</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">
@@ -260,6 +266,9 @@
     </Filter>
     <Filter Include="Maths">
       <UniqueIdentifier>{3fa7508c-12a1-44f0-9073-6b689c8a2de2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Profiling">
+      <UniqueIdentifier>{55e33dae-7450-40c2-b690-5361a3e7ce1c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

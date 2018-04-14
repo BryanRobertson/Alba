@@ -4,3 +4,6 @@
 [submodule "Source/External/eigen"]
 	path = Source/External/eigen
 	url = https://github.com/eigenteam/eigen-git-mirror
+[submodule "Source/External/remotery"]
+	path = Source/External/remotery
+	url = https://github.com/Celtoys/Remotery
