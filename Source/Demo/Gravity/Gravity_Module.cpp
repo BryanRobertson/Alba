@@ -1,6 +1,7 @@
 #include "Gravity_Precompile.hpp"
 #include "Gravity_Module.hpp"
 #include "Core_ModuleRepository.hpp"
+#include "Core_Profile.hpp"
 
 namespace Alba
 {
@@ -38,6 +39,13 @@ namespace Alba
 		void GravityModule::OnUnload()
 		{
 
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void GravityModule::Update()
+		{
+			ALBA_PROFILE_SCOPED(GravityModule_Update);
 		}
 	}
 }

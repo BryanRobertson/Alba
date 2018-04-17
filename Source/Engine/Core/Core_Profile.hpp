@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.hpp"
+#include "Core_StringUtils.hpp"
 
 //-------------------------------------------------------------------------------------------------
 // Support for performance profiling
@@ -26,7 +27,7 @@
 	//---------------------------------------------------------------------------------------------
 	// Log Text
 	//---------------------------------------------------------------------------------------------
-	#define ALBA_PROFILE_LOGTEXT(aLogString)			rmt_LogText(aLogString)
+	#define ALBA_PROFILE_LOGTEXT(aLogString)			rmt_LogText(aLogString)		
 
 	//---------------------------------------------------------------------------------------------
 	// Scoped profile 
@@ -44,6 +45,16 @@
 	#define ALBA_PROFILE_SCOPED_RECURSIVE(anId)		rmt_ScopedCPUSample(anId, RMTSF_Recursive)
 
 	//---------------------------------------------------------------------------------------------
+	// Function profile 
+	//---------------------------------------------------------------------------------------------
+	//#define ALBA_PROFILE_FUNCTION()					rmt_ScopedCPUSample(__FUNCTION__, 0)
+
+	//---------------------------------------------------------------------------------------------
+	// Function profile - Use for recursive functions to merge into a single timer
+	//---------------------------------------------------------------------------------------------
+	//#define ALBA_PROFILE_FUNCTION_RECURSIVE()		rmt_ScopedCPUSample(__FUNCTION__, RMTSF_Recursive)
+
+	//---------------------------------------------------------------------------------------------
 	// Manual profile begin/end
 	//---------------------------------------------------------------------------------------------
 	#define ALBA_PROFILE_BEGIN(anId)				rmt_BeginCPUSample(anId, 0)
@@ -54,6 +65,27 @@
 
 	#define ALBA_PROFILE_BEGIN_RECURSIVE(anId)		rmt_BeginCPUSample(anId, RMTSF_Recursive)
 	#define ALBA_PROFILE_END_RECURSIVE(anId)		rmt_EndCPUSample()
+
+	//---------------------------------------------------------------------------------------------
+	// Begin frame
+	//---------------------------------------------------------------------------------------------
+	#define ALBA_PROFILE_BEGINFRAME()																	\
+		RMT_OPTIONAL																					\
+		(																								\
+			RMT_ENABLED,																				\
+			{																							\
+				static char buffer[128];																\
+				std::snprintf(buffer, 64, "%u", Alba::Core::ProfileInternal::theProfilerFrameIndex);	\
+																										\
+				++Alba::Core::ProfileInternal::theProfilerFrameIndex;									\
+				_rmt_BeginCPUSample(buffer, 0, &::Alba::Core::ProfileInternal::theProfilerFrameIndex);	\
+			}																							\
+		);
+
+	//---------------------------------------------------------------------------------------------
+	// End frame
+	//---------------------------------------------------------------------------------------------
+	#define ALBA_PROFILE_ENDFRAME()					rmt_EndCPUSample()
 
 	//---------------------------------------------------------------------------------------------
 	// Set current thread name
@@ -73,6 +105,8 @@
 			{
 				extern ALBA_CORE_API void InitProfiling();
 				extern ALBA_CORE_API void ShutDownProfiling();
+
+				ALBA_CORE_API extern uint32 theProfilerFrameIndex;
 			}
 		}
 	}
@@ -80,9 +114,13 @@
 #else
 	#define ALBA_PROFILE_INIT()
 	#define ALBA_PROFILE_LOGTEXT(aLogString)
+	#define ALBA_PROFILE_BEGINFRAME()
+	#define ALBA_PROFILE_ENDFRAME()
 	#define ALBA_PROFILE_SCOPED(anId)
 	#define ALBA_PROFILE_SCOPED_AGGREGATE(anId)	
 	#define ALBA_PROFILE_SCOPED_RECURSIVE(anId)
+	//#define ALBA_PROFILE_FUNCTION()
+	//#define ALBA_PROFILE_FUNCTION_RECURSIVE()
 	#define ALBA_PROFILE_BEGIN(anId)			
 	#define ALBA_PROFILE_END(anId)				
 	#define ALBA_PROFILE_BEGIN_AGGREGATE(anId)	

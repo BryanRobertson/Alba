@@ -15,6 +15,7 @@ namespace Alba
 		void Time::Reset()
 		{
 			mySystemTime = myGameTime = ClockType::now();
+			myFrameIndex = 0;
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -30,6 +31,8 @@ namespace Alba
 
 			mySystemTimeDelta = timeDelta;
 			myGameTimeDelta = timeDelta;
+
+			++myFrameIndex;
 		}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,6 +49,8 @@ namespace Alba
 
 			mySystemTimeDelta = timeDelta;
 			myGameTimeDelta = 0ns;
+
+			++myFrameIndex;
 		}
 	}
 }

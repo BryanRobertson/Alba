@@ -69,9 +69,10 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				Core::UniquePtr<Core::Window> myWindow;
-				ApplicationInitParams		  myInitParams;
-				bool						  myQuit;
+				Core::UniquePtr<Core::Window>	myWindow;
+				ApplicationInitParams			myInitParams;
+				Core::Time						myTimer;
+				bool							myQuit;
 		};
 	}
 }

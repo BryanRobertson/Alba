@@ -6,6 +6,7 @@
 #include "Core_VectorMap.hpp"
 #include "Core_AnyDictionary.hpp"
 #include "Core_LogCategory.hpp"
+#include "Core_Function.hpp"
 
 namespace Alba
 {
@@ -43,9 +44,18 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
+
+				//---------------------------------------------------------------------------------
+				// Load/Unload modules
+				//---------------------------------------------------------------------------------
 				bool		LoadModule(NoCaseStringHash32 aModuleNameId, const AnyDictionary& someParams = AnyDictionary());
 				void		UnloadModule(NoCaseStringHash32 aModuleNameId);
 				void		UnloadAndUnregisterAll();
+
+				//---------------------------------------------------------------------------------
+				// Update
+				//---------------------------------------------------------------------------------
+				void		Update();
 
 			private:
 
@@ -63,12 +73,13 @@ namespace Alba
 					typedef bool(*LoadFunc)(const AnyDictionary& someParams);
 					typedef void(*UnloadFunc)();
 
-					UnregisterFunc myUnregisterFunc = nullptr;
-					LoadFunc	   myLoadFunc		= nullptr;
-					UnloadFunc	   myUnloadFunc		= nullptr;
+					UnregisterFunc	myUnregisterFunc	= nullptr;
+					LoadFunc		myLoadFunc			= nullptr;
+					UnloadFunc		myUnloadFunc		= nullptr;
 				};
 
 				typedef VectorMap<NoCaseStringHash32, ModuleInfo> Modules;
+				typedef VectorMap<NoCaseStringHash32, FixedFunction<void()>> ModuleUpdaters;
 
 				//=================================================================================
 				// Private Constructors
@@ -82,10 +93,14 @@ namespace Alba
 				void		RegisterModule(NoCaseStringHash32 aModuleNameId, ModuleInfo&& aModule);
 				void		UnregisterModule(NoCaseStringHash32 aModuleNameId);
 
+				void		RegisterUpdater(NoCaseStringHash32 aModuleNameId, FixedFunction<void()>&& anUpdater);
+				void		UnregisterUpdater(NoCaseStringHash32 aModuleNameId);
+
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				Modules		myModules;
+				Modules				myModules;
+				ModuleUpdaters		myModuleUpdaters;
 		};
 	}
 }

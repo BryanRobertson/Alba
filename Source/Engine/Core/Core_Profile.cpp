@@ -8,6 +8,8 @@
 #include <Remotery.c>
 #pragma warning(pop)
 
+#ifdef ALBA_PROFILING_ENABLED
+
 namespace Alba
 {
 	namespace Core
@@ -16,16 +18,66 @@ namespace Alba
 		{
 			Remotery* theRemoteryInstance = nullptr;
 
+			//-------------------------------------------------------------------------------------
+			//-------------------------------------------------------------------------------------
+			ALBA_CORE_API uint32 theProfilerFrameIndex = 0;
+
+			//-------------------------------------------------------------------------------------
+			//-------------------------------------------------------------------------------------
 			void InitProfiling()
 			{
+				#if 0
+				rmtSettings* settings = rmt_Settings();
+
+				//-------------------------------------------------------------------------------------
+				// Malloc
+				//-------------------------------------------------------------------------------------
+				settings->malloc = [](void* /*mm_context*/, rmtU32 size)
+				{
+					return Alba::Core::Malloc
+					(
+						size, 
+						Alba::Core::DefaultAlignment, 
+						0, 
+						(Alba::Core::TAllocType)Alba::Core::AllocationType::CoreDebug, 
+						"Profiler", 
+						"", 
+						0
+					);
+				};
+
+				//-------------------------------------------------------------------------------------
+				// Realloc
+				//-------------------------------------------------------------------------------------
+				settings->realloc = [](void* /*mm_context*/, void* ptr, rmtU32 size)
+				{
+					return Alba::Core::Realloc(ptr, size, "", 0);
+				};
+			
+				//-------------------------------------------------------------------------------------
+				// Free
+				//-------------------------------------------------------------------------------------
+				settings->free = [](void* /*mm_context*/, void* ptr)
+				{
+					Alba::Core::Free(ptr);
+				};
+				#endif
+
 				rmt_CreateGlobalInstance(&theRemoteryInstance);
 			}
 
+			//-------------------------------------------------------------------------------------
+			//-------------------------------------------------------------------------------------
 			void ShutDownProfiling()
 			{
-				rmt_DestroyGlobalInstance(theRemoteryInstance);
-				theRemoteryInstance = nullptr;
+				if (theRemoteryInstance)
+				{
+					rmt_DestroyGlobalInstance(theRemoteryInstance);
+					theRemoteryInstance = nullptr;
+				}
 			}
 		}
 	}
 }
+
+#endif

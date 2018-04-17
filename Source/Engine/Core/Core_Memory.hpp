@@ -32,19 +32,20 @@ namespace Alba
 			Count
 		};
 
+		constexpr size_t DefaultAlignment = 8;
 
 		//-------------------------------------------------------------------------------------------------
 		// New/Delete macros
 		//-------------------------------------------------------------------------------------------------
-		#define ALBA_NEW(AllocType, Description)							new(size_t(0), size_t(0), static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
-		#define ALBA_NEW_ARRAY(ClassType, AllocType, Description)			new[](size_t(0), size_t(0), static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
+		#define ALBA_NEW(AllocType, Description)							new(size_t(0), ::Alba::Core::DefaultAlignment, static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
+		#define ALBA_NEW_ARRAY(ClassType, AllocType, Description)			new[](size_t(0), ::Alba::Core::DefaultAlignment, static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
 		#define ALBA_DELETE(Object)											delete Object
 		#define ALBA_DELETE_ARRAY(Object)									delete[] Object
 
-		#define ALBA_NEW_ALIGNED(AllocType, Description)					new(size_t(0), size_t(0), size_t(0), static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
-		#define ALBA_NEW_ARRAY_ALIGNED(ClassType, AllocType, Description)	new[](size_t(0), size_t(0), size_t(0), static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
+		#define ALBA_NEW_ALIGNED(AllocType, Description)					new(size_t(0), ::Alba::Core::DefaultAlignment, size_t(0), static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
+		#define ALBA_NEW_ARRAY_ALIGNED(ClassType, AllocType, Description)	new[](size_t(0), ::Alba::Core::DefaultAlignment, size_t(0), static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
 
-		#define ALBA_MALLOC(Size, AllocType, Description)					Alba::Core::Malloc(Size, size_t(0), size_t(0), AllocType, Description, __FILE__, __LINE__)
+		#define ALBA_MALLOC(Size, AllocType, Description)					Alba::Core::Malloc(Size, ::Alba::Core::DefaultAlignment, size_t(0), AllocType, Description, __FILE__, __LINE__)
 		#define ALBA_REALLOC(Pointer, Size)									Alba::Core::Realloc(Pointer, Size, __FILE__, __LINE__)
 		#define ALBA_FREE(Pointer)											Alba::Core::Free(Pointer)
 

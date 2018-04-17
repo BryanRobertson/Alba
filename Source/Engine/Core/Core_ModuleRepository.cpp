@@ -2,6 +2,7 @@
 #include "Core_ModuleRepository.hpp"
 #include "Core_FixedVector.hpp"
 #include "Core_AnyDictionary.hpp"
+#include "Core_Profile.hpp"
 
 namespace Alba
 {
@@ -15,7 +16,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		ModuleRepository::ModuleRepository()
 		{
-
+			myModules.reserve(128);
+			myModuleUpdaters.reserve(128);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -66,6 +68,18 @@ namespace Alba
 
 		//------------------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------------------
+		void ModuleRepository::Update()
+		{
+			ALBA_PROFILE_SCOPED(ModuleRepository_Update);
+
+			for (auto& updater : myModuleUpdaters)
+			{
+				updater.second();
+			}
+		}
+
+		//------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------
 		void ModuleRepository::RegisterModule(NoCaseStringHash32 aModuleNameId, ModuleRepository::ModuleInfo&& aModule)
 		{
 			myModules.insert(MakePair(aModuleNameId, std::move(aModule)));
@@ -76,6 +90,20 @@ namespace Alba
 		void ModuleRepository::UnregisterModule(NoCaseStringHash32 aModuleNameId)
 		{
 			myModules.erase(aModuleNameId);
+		}
+
+		//------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------
+		void ModuleRepository::RegisterUpdater(NoCaseStringHash32 aModuleNameId, FixedFunction<void()>&& anUpdater)
+		{
+			myModuleUpdaters.insert(MakePair(aModuleNameId, std::move(anUpdater)));
+		}
+
+		//------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------
+		void ModuleRepository::UnregisterUpdater(NoCaseStringHash32 aModuleNameId)
+		{
+			myModuleUpdaters.erase(aModuleNameId);
 		}
 
 		//------------------------------------------------------------------------------------------

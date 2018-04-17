@@ -111,6 +111,31 @@ namespace Alba
 			private:
 
 				//=================================================================================
+				// Private Types
+				//=================================================================================
+				template<typename T>
+				struct HasUpdateMethod
+				{
+					private:
+
+						// We test if the type has serialize using decltype and declval.
+						template <typename C> static constexpr decltype(std::declval<C>().Update(), bool()) Test(int /* unused */)
+						{
+							return true;
+						}
+
+						template <typename C> static constexpr bool Test(...)
+						{
+							return false;
+						}
+
+					public:
+
+						static constexpr bool Value = Test<T>(int());
+				};
+
+
+				//=================================================================================
 				// Private Static Data
 				//=================================================================================
 				static UniquePtr<TDerived> ourInstance;
@@ -131,6 +156,9 @@ namespace Alba
 					if (result)
 					{
 						ourInstance->myState = ModuleState::Loaded;
+
+						// Register updater if we have one
+						ConditionalRegisterUpdater(ourInstance.get());
 					}
 
 					return result;
@@ -145,9 +173,41 @@ namespace Alba
 					ALBA_ASSERT(ourInstance != nullptr, "Trying to unload unregistered module");
 					static_cast<TDerived*>(ourInstance.get())->OnUnload();
 
+					ConditionalUnregisterUpdater(ourInstance.get());
+
 					ourInstance->myState = ModuleState::Registered;
 				}
 
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
+				static void ConditionalRegisterUpdater(TDerived* anInstance)
+				{
+					(void)anInstance;
+
+					if constexpr (HasUpdateMethod<TDerived>::Value)
+					{
+						const NoCaseStringHash32 nameId(GetName());
+
+						ModuleRepository& moduleRepository = ModuleRepository::Get();
+						moduleRepository.RegisterUpdater(nameId, [anInstance]() { anInstance->Update(); });
+					}
+				}
+
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
+				static void ConditionalUnregisterUpdater(TDerived* anInstance)
+				{
+					(void)anInstance;
+
+					if constexpr (HasUpdateMethod<TDerived>::Value)
+					{
+						const NoCaseStringHash32 nameId(GetName());
+						
+						ModuleRepository& moduleRepository = ModuleRepository::Get();
+						moduleRepository.UnregisterUpdater(nameId);
+					}
+				}
+				
 				//=================================================================================
 				// Private Data
 				//=================================================================================

@@ -32,6 +32,8 @@ namespace Alba
 
 				bool	OnLoad(const Core::AnyDictionary& someParameters);
 				void	OnUnload();
+
+				void	Update();
 		};
 	}
 }

@@ -29,6 +29,8 @@ namespace Alba
 		template <typename TStorageType>
 		using TimeSeconds = chrono::duration<TStorageType, std::ratio<1> >;
 
+		typedef uint64 FrameIndex;
+
 		//-------------------------------------------------------------------------------------------------
 		// Name	:	Core::Time
 		// Desc	:	Time related functions
@@ -71,6 +73,11 @@ namespace Alba
 				TimePoint					GetGameTime() const							{ return myGameTime;	}
 				TimeDuration				GetGameDeltaTime() const					{ return myGameTimeDelta; }
 
+				//-----------------------------------------------------------------------------------------
+				// Frame Index
+				//-----------------------------------------------------------------------------------------
+				FrameIndex					GetFrameIndex() const						{ return myFrameIndex; }
+
 			private:
 
 				//=========================================================================================
@@ -81,6 +88,8 @@ namespace Alba
 
 				TimeDuration				mySystemTimeDelta;
 				TimeDuration				myGameTimeDelta;
+
+				FrameIndex					myFrameIndex;
 		};
 	}
 }
