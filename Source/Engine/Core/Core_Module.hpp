@@ -61,7 +61,10 @@ namespace Alba
 					ModuleRepository::Get().RegisterModule(nameId, std::move(info));
 					ourInstance->myState = ModuleState::Registered;
 
-					static_cast<TDerived*>(ourInstance.get())->OnRegister();
+					if constexpr (HasOnRegisterMethod<TDerived>::Value)
+					{
+						static_cast<TDerived*>(ourInstance.get())->OnRegister();
+					}					
 				}
 
 				//---------------------------------------------------------------------------------
@@ -73,8 +76,12 @@ namespace Alba
 					const NoCaseStringHash32 nameId(GetName());
 
 					ModuleRepository::Get().UnregisterModule(nameId);
-					static_cast<TDerived*>(ourInstance.get())->OnUnregister();
-
+					
+					if constexpr (HasOnUnregisterMethod<TDerived>::Value)
+					{
+						static_cast<TDerived*>(ourInstance.get())->OnUnregister();
+					}
+					
 					ourInstance.reset();
 				}
 
@@ -118,20 +125,41 @@ namespace Alba
 				{
 					private:
 
-						// We test if the type has serialize using decltype and declval.
-						template <typename C> static constexpr decltype(std::declval<C>().Update(), bool()) Test(int /* unused */)
-						{
-							return true;
-						}
-
-						template <typename C> static constexpr bool Test(...)
-						{
-							return false;
-						}
+						template <typename T2> static constexpr decltype(std::declval<T2>().Update(), bool()) Check(int) { return true; }
+						template <typename T2> static constexpr bool Check(...) { return false; }
 
 					public:
 
-						static constexpr bool Value = Test<T>(int());
+						static constexpr bool Value = Check<T>(int());
+				};
+
+				template<typename T>
+				struct HasOnRegisterMethod
+				{
+					private:
+
+						// We test if the type has serialize using decltype and declval.
+						template <typename T2> static constexpr decltype(std::declval<T2>().OnRegister(), bool()) Check(int) { return true; }
+						template <typename T2> static constexpr bool Check(...) { return false; }
+
+
+					public:
+
+						static constexpr bool Value = Check<T>(int());					
+				};
+
+				template<typename T>
+				struct HasOnUnregisterMethod
+				{
+					private:
+
+						// We test if the type has serialize using decltype and declval.
+						template <typename T2> static constexpr decltype(std::declval<T2>().OnUnregister(), bool()) Check(int) { return true; }
+						template <typename T2> static constexpr bool Check(...) { return false; }
+
+					public:
+
+						static constexpr bool Value = Check<T>(int());
 				};
 
 
@@ -157,8 +185,19 @@ namespace Alba
 					{
 						ourInstance->myState = ModuleState::Loaded;
 
-						// Register updater if we have one
-						ConditionalRegisterUpdater(ourInstance.get());
+						// Register Update method if we have one
+						if constexpr (HasUpdateMethod<TDerived>::Value)
+						{
+							const NoCaseStringHash32 nameId(GetName());
+
+							TDerived* instance = ourInstance.get();
+
+							ModuleRepository& moduleRepository = ModuleRepository::Get();
+							moduleRepository.RegisterUpdater(nameId, [instance]() 
+							{ 
+								instance->Update(); 
+							});
+						}
 					}
 
 					return result;
@@ -173,39 +212,16 @@ namespace Alba
 					ALBA_ASSERT(ourInstance != nullptr, "Trying to unload unregistered module");
 					static_cast<TDerived*>(ourInstance.get())->OnUnload();
 
-					ConditionalUnregisterUpdater(ourInstance.get());
-
-					ourInstance->myState = ModuleState::Registered;
-				}
-
-				//---------------------------------------------------------------------------------
-				//---------------------------------------------------------------------------------
-				static void ConditionalRegisterUpdater(TDerived* anInstance)
-				{
-					(void)anInstance;
-
+					// Unregister updater if we have an Update method
 					if constexpr (HasUpdateMethod<TDerived>::Value)
 					{
 						const NoCaseStringHash32 nameId(GetName());
 
-						ModuleRepository& moduleRepository = ModuleRepository::Get();
-						moduleRepository.RegisterUpdater(nameId, [anInstance]() { anInstance->Update(); });
-					}
-				}
-
-				//---------------------------------------------------------------------------------
-				//---------------------------------------------------------------------------------
-				static void ConditionalUnregisterUpdater(TDerived* anInstance)
-				{
-					(void)anInstance;
-
-					if constexpr (HasUpdateMethod<TDerived>::Value)
-					{
-						const NoCaseStringHash32 nameId(GetName());
-						
 						ModuleRepository& moduleRepository = ModuleRepository::Get();
 						moduleRepository.UnregisterUpdater(nameId);
 					}
+
+					ourInstance->myState = ModuleState::Registered;
 				}
 				
 				//=================================================================================

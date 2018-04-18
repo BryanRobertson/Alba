@@ -67,7 +67,7 @@ namespace GravityDemo
 			//-------------------------------------------------------------------------------------
 			Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
 
-			moduleRepository.LoadModule("Alba.Gravity.Gravity");
+			moduleRepository.LoadModule("Alba.Gravity");
 		}
 
 		//-----------------------------------------------------------------------------------------

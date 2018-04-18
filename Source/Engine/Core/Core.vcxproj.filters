@@ -51,6 +51,9 @@
     <ClCompile Include="Core_Profile.cpp">
       <Filter>Profiling</Filter>
     </ClCompile>
+    <ClCompile Include="Core_ThreadPool.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
@@ -225,6 +228,9 @@
     </ClInclude>
     <ClInclude Include="Core_Profile.hpp">
       <Filter>Profiling</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_ThreadPool.hpp">
+      <Filter>Threading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

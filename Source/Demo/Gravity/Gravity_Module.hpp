@@ -22,14 +22,11 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static const char* GetModuleName() { return "Alba.Gravity.Gravity"; }
+				static const char* GetModuleName() { return "Alba.Gravity"; }
 
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				void	OnRegister();
-				void	OnUnregister();
-
 				bool	OnLoad(const Core::AnyDictionary& someParameters);
 				void	OnUnload();
 
