@@ -1,36 +1,29 @@
 #pragma once
 
 #include "Graphics_API.hpp"
-#include "Core_BasicTypes.hpp"
 
 namespace Alba
 {
 	namespace Graphics
 	{
-		struct InitParams;
-		using namespace Alba::BasicTypes;
-
-		class GraphicsImplementation;
-
 		//-----------------------------------------------------------------------------------------
-		// Name	: GraphicsService
-		// Desc	: Class that wraps the graphics API
+		// Name	:	RenderBackEnd
+		// Desc	:	Base class for renderer implementations using a specific graphics API
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API GraphicsService final
+		class ALBA_GRAPHICS_API RenderBackEnd
 		{
 			public:
 
 				//=================================================================================
-				// Public Constructors/Destructors
+				// Public Constructors / Destructors
 				//=================================================================================
-				GraphicsService();
-				~GraphicsService();
+				RenderBackEnd();
+				virtual ~RenderBackEnd();
 
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				uint32		Init(InitParams&& anInitParams);
-				uint32		ShutDown();
+				virtual void Present() = 0;
 		};
 	}
 }

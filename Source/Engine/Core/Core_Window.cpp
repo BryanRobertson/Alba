@@ -41,7 +41,7 @@ namespace Alba
 				MSG msg;
 
 				//Check for window messages
-				if (PeekMessage(&msg, myPlatformWindowHandle, 0, 0, PM_REMOVE))
+				while (PeekMessage(&msg, myPlatformWindowHandle, 0, 0, PM_REMOVE))
 				{
 					TranslateMessage(&msg);
 					DispatchMessage(&msg);
@@ -176,14 +176,26 @@ namespace Alba
 			std::memset(&windowClass, 0, sizeof(windowClass));
 
 			windowClass.cbSize				= sizeof(windowClass);
-			windowClass.style				= CS_OWNDC;
+			windowClass.style				= CS_OWNDC | CS_DBLCLKS;
 			windowClass.hInstance			= hInstance;
 			windowClass.hCursor				= LoadCursor(nullptr, IDC_ARROW);
 			windowClass.lpszClassName		= theWindowClassName;
 			windowClass.hIcon				= LoadIcon(GetModuleHandle(nullptr), "IDI_ICON1");
 			windowClass.hIconSm				= LoadIcon(GetModuleHandle(nullptr), "IDI_ICON1");
 			windowClass.lpfnWndProc			= &WindowImpl::MessageDispatcher;
+			windowClass.hbrBackground		= (HBRUSH)GetStockObject(BLACK_BRUSH);
 
+			// If icon is null, try to get the first icon from the .exe
+			if (windowClass.hIcon == nullptr)
+			{
+				TCHAR exePath[MAX_PATH];
+				GetModuleFileName(NULL, exePath, MAX_PATH);
+
+				windowClass.hIcon = ExtractIcon(hInstance, exePath, 0);
+				windowClass.hIconSm = windowClass.hIcon;
+			}
+
+			// Fallback
 			if (windowClass.hIcon == nullptr)
 			{
 				windowClass.hIcon = LoadIcon(NULL, "IDI_APPLICATION");
@@ -191,23 +203,27 @@ namespace Alba
 
 			if (windowClass.hIconSm == nullptr)
 			{
-				windowClass.hIcon = LoadIcon(NULL, "IDI_APPLICATION");
+				windowClass.hIconSm = LoadIcon(NULL, "IDI_APPLICATION");
 			}
 
 			ALBA_LOG(WindowLogCategory, LogLevel::Info, "RegisterWindowClass(%s)", theWindowClassName);
 
 			if (RegisterClassEx(&windowClass) == int(WindowsReturnCode::Failed))
 			{
-				ALBA_LOG
-				(
-					WindowLogCategory, 
-					LogLevel::Info, 
-					"Failed! Error: {%d, \"%s\"}", 
-					GetLastError(), 
-					GetLastErrorString().c_str()
-				);
+				const DWORD errorCode = GetLastError();
+				if (errorCode != ERROR_CLASS_ALREADY_EXISTS)
+				{
+					ALBA_LOG
+					(
+						WindowLogCategory,
+						LogLevel::Info,
+						"Failed! Error: {%d, \"%s\"}",
+						GetLastError(),
+						GetLastErrorString().c_str()
+					);
 
-				return false;
+					return false;
+				}
 			}
 			
 			//----------------------------------------------------------------------

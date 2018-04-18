@@ -2,6 +2,7 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Graphics_Precompile.cpp" />
+    <ClCompile Include="Graphics_Service.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics_API.hpp" />
@@ -9,5 +10,11 @@
     <ClInclude Include="Graphics_PlatformData.hpp" />
     <ClInclude Include="Graphics_Precompile.hpp" />
     <ClInclude Include="Graphics_Service.hpp" />
+    <ClInclude Include="Graphics_RenderBackEnd.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="DirectX">
+      <UniqueIdentifier>{af31df77-8c5e-4482-89b8-95f905d13759}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
