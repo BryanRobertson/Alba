@@ -26,6 +26,13 @@ namespace Alba
                 conf.ProjectPath = SourceRootPath;
 
                 conf.IncludePaths.Add(SourceRootPath);
+
+                if (target.Platform == Platform.win64)
+                {
+                    conf.LibraryFiles.Add("d3d11");
+                    //conf.LibraryFiles.Add("d3dx11");
+                }
+
                 conf.AddPublicDependency<CoreProject>(target);
             }
         }

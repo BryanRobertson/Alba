@@ -2,6 +2,7 @@
 
 #include "Graphics_API.hpp"
 #include "Graphics_RenderBackEnd.hpp"
+#include "Graphics_DX11PointerTypes.hpp"
 
 namespace Alba
 {
@@ -33,7 +34,9 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-
+				DXGISwapChainPtr		mySwapChain;
+				D3D11DevicePtr			myDevice;
+				D3D11DeviceContextPtr	myDeviceContext;
 		};
 	}
 }

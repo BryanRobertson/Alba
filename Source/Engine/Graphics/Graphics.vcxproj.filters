@@ -11,6 +11,9 @@
     </ClCompile>
     <ClCompile Include="Graphics_Module.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="Graphics_DX11PointerTypes.cpp">
+      <Filter>BackEnd\DirectX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics_API.hpp" />
@@ -26,6 +29,9 @@
       <Filter>BackEnd</Filter>
     </ClInclude>
     <ClInclude Include="Graphics.hpp" />
+    <ClInclude Include="Graphics_DX11PointerTypes.hpp">
+      <Filter>BackEnd\DirectX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="BackEnd">
