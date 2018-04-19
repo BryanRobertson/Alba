@@ -28,6 +28,7 @@ namespace Alba
 			Module				= 3,
 			Window				= 4,
 			Framework			= 5,
+			Renderer			= 6,
 			
 			Count
 		};

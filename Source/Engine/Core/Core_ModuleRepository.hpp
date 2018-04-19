@@ -15,6 +15,8 @@ namespace Alba
 		template <typename TDerived>
 		class Module;
 
+		class Time;
+
 		ALBA_DECLARE_LOG_CATEGORY(ModuleLog);
 
 		//-----------------------------------------------------------------------------------------
@@ -55,7 +57,7 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				// Update
 				//---------------------------------------------------------------------------------
-				void		Update();
+				void		Update(const Time& aTime);
 
 			private:
 
@@ -78,8 +80,10 @@ namespace Alba
 					UnloadFunc		myUnloadFunc		= nullptr;
 				};
 
+				typedef FixedFunction<void(const Time& aTime)> UpdateFunc;
+
 				typedef VectorMap<NoCaseStringHash32, ModuleInfo> Modules;
-				typedef VectorMap<NoCaseStringHash32, FixedFunction<void()>> ModuleUpdaters;
+				typedef VectorMap<NoCaseStringHash32, UpdateFunc> ModuleUpdaters;
 
 				//=================================================================================
 				// Private Constructors
@@ -93,7 +97,7 @@ namespace Alba
 				void		RegisterModule(NoCaseStringHash32 aModuleNameId, ModuleInfo&& aModule);
 				void		UnregisterModule(NoCaseStringHash32 aModuleNameId);
 
-				void		RegisterUpdater(NoCaseStringHash32 aModuleNameId, FixedFunction<void()>&& anUpdater);
+				void		RegisterUpdater(NoCaseStringHash32 aModuleNameId, UpdateFunc&& anUpdater);
 				void		UnregisterUpdater(NoCaseStringHash32 aModuleNameId);
 
 				//=================================================================================

@@ -125,7 +125,7 @@ namespace Alba
 				{
 					private:
 
-						template <typename T2> static constexpr decltype(std::declval<T2>().Update(), bool()) Check(int) { return true; }
+						template <typename T2> static constexpr decltype(std::declval<T2>().Update(Alba::Core::Time()), bool()) Check(int) { return true; }
 						template <typename T2> static constexpr bool Check(...) { return false; }
 
 					public:
@@ -193,9 +193,9 @@ namespace Alba
 							TDerived* instance = ourInstance.get();
 
 							ModuleRepository& moduleRepository = ModuleRepository::Get();
-							moduleRepository.RegisterUpdater(nameId, [instance]() 
+							moduleRepository.RegisterUpdater(nameId, [instance](const Time& aTime) 
 							{ 
-								instance->Update(); 
+								instance->Update(aTime); 
 							});
 						}
 					}

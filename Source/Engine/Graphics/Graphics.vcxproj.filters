@@ -3,6 +3,14 @@
   <ItemGroup>
     <ClCompile Include="Graphics_Precompile.cpp" />
     <ClCompile Include="Graphics_Service.cpp" />
+    <ClCompile Include="Graphics_DX11RenderBackEnd.cpp">
+      <Filter>BackEnd\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics_RenderBackEnd.cpp">
+      <Filter>BackEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics_Module.cpp" />
+    <ClCompile Include="Graphics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics_API.hpp" />
@@ -10,11 +18,21 @@
     <ClInclude Include="Graphics_PlatformData.hpp" />
     <ClInclude Include="Graphics_Precompile.hpp" />
     <ClInclude Include="Graphics_Service.hpp" />
-    <ClInclude Include="Graphics_RenderBackEnd.hpp" />
+    <ClInclude Include="Graphics_DX11RenderBackEnd.hpp">
+      <Filter>BackEnd\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics_Module.hpp" />
+    <ClInclude Include="Graphics_RenderBackEnd.hpp">
+      <Filter>BackEnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="DirectX">
-      <UniqueIdentifier>{af31df77-8c5e-4482-89b8-95f905d13759}</UniqueIdentifier>
+    <Filter Include="BackEnd">
+      <UniqueIdentifier>{560a5cd1-7505-4b60-8afd-09b7fec672fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BackEnd\DirectX">
+      <UniqueIdentifier>{661e42c3-4bb9-4ebe-9123-070682d49e1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

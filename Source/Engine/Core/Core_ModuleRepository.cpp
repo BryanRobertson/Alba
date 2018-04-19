@@ -3,6 +3,7 @@
 #include "Core_FixedVector.hpp"
 #include "Core_AnyDictionary.hpp"
 #include "Core_Profile.hpp"
+#include "Core_Time.hpp"
 
 namespace Alba
 {
@@ -68,13 +69,13 @@ namespace Alba
 
 		//------------------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------------------
-		void ModuleRepository::Update()
+		void ModuleRepository::Update(const Alba::Core::Time& aTime)
 		{
 			ALBA_PROFILE_SCOPED(ModuleRepository_Update);
 
 			for (auto& updater : myModuleUpdaters)
 			{
-				updater.second();
+				updater.second(aTime);
 			}
 		}
 
@@ -94,7 +95,7 @@ namespace Alba
 
 		//------------------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------------------
-		void ModuleRepository::RegisterUpdater(NoCaseStringHash32 aModuleNameId, FixedFunction<void()>&& anUpdater)
+		void ModuleRepository::RegisterUpdater(NoCaseStringHash32 aModuleNameId, UpdateFunc&& anUpdater)
 		{
 			myModuleUpdaters.insert(MakePair(aModuleNameId, std::move(anUpdater)));
 		}

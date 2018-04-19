@@ -1,45 +1,39 @@
 #pragma once
 
 #include "Graphics_API.hpp"
-#include "Core_BasicTypes.hpp"
-#include "Core_UniquePtr.hpp"
+#include "Graphics_RenderBackEnd.hpp"
 
 namespace Alba
 {
 	namespace Graphics
 	{
-		struct InitParams;
-		using namespace Alba::BasicTypes;
-
-		class RenderBackEnd;
-
 		//-----------------------------------------------------------------------------------------
-		// Name	: GraphicsService
-		// Desc	: Class that wraps the graphics API
+		// Name	:	DX11RenderBackEnd
+		// Desc	:	Base class for renderer implementations using a specific graphics API
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API GraphicsService final
+		class ALBA_GRAPHICS_API DX11RenderBackEnd : public RenderBackEnd
 		{
 			public:
 
 				//=================================================================================
-				// Public Constructors/Destructors
+				// Public Constructors / Destructors
 				//=================================================================================
-				GraphicsService();
-				~GraphicsService();
+				DX11RenderBackEnd();
+				virtual ~DX11RenderBackEnd();
 
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				uint32		Init(const InitParams& anInitParams);
-				void		Present();
-				void		ShutDown();
+				virtual uint32	Init(const InitParams& someInitParams) override;
+				virtual void	Present() override;
+				virtual void	ShutDown() override;
 
 			private:
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				Core::UniquePtr<RenderBackEnd> myRenderBackEnd;
+
 		};
 	}
 }

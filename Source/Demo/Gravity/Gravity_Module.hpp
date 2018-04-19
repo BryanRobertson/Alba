@@ -30,7 +30,7 @@ namespace Alba
 				bool	OnLoad(const Core::AnyDictionary& someParameters);
 				void	OnUnload();
 
-				void	Update();
+				void	Update(const Core::Time& aTime);
 		};
 	}
 }

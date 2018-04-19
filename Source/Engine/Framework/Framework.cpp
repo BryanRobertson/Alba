@@ -2,6 +2,8 @@
 #include "Framework.hpp"
 #include "Framework_GameApplication.hpp"
 
+#include "Graphics_Module.hpp"
+
 #include "Core.hpp"
 //#include "Core_Memory_Impl.hpp"
 

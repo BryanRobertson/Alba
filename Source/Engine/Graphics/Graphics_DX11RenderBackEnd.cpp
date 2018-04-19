@@ -1,45 +1,43 @@
 #include "Graphics_Precompile.hpp"
-#include "Graphics_InitParams.hpp"
-#include "Graphics_Service.hpp"
 #include "Graphics_DX11RenderBackEnd.hpp"
 
 namespace Alba
 {
 	namespace Graphics
 	{
+
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		GraphicsService::GraphicsService()
+		DX11RenderBackEnd::DX11RenderBackEnd()
 		{
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		GraphicsService::~GraphicsService()
+		DX11RenderBackEnd::~DX11RenderBackEnd()
 		{
+			ShutDown();
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		uint32 GraphicsService::Init(const InitParams& anInitParams)
+		uint32 DX11RenderBackEnd::Init(const InitParams& /*someInitParams*/)
 		{
-			myRenderBackEnd.reset(ALBA_NEW(Alba::Core::AllocationType::Renderer, "RenderBackEnd") DX11RenderBackEnd());
-			return myRenderBackEnd->Init(anInitParams);
+			return 0;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void GraphicsService::Present()
+		void DX11RenderBackEnd::Present()
 		{
-			myRenderBackEnd->Present();
+
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void GraphicsService::ShutDown()
+		void DX11RenderBackEnd::ShutDown()
 		{
-			myRenderBackEnd->ShutDown();
-			myRenderBackEnd.reset();
+
 		}
 	}
 }

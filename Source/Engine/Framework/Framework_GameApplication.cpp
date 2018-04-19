@@ -1,5 +1,7 @@
 #include "Framework_Precompile.hpp"
 #include "Framework_GameApplication.hpp"
+#include "Graphics_InitParams.hpp"
+#include "Graphics_PlatformData.hpp"
 #include "Core_Memory.hpp"
 #include "Core_Pair.hpp"
 #include "Core_Window.hpp"
@@ -48,6 +50,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		uint32 GameApplication::Init(ApplicationInitParams anInitParams)
 		{
+			Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
+
 			//----------------------------------------------------------------------
 			// Initialise profiling, unless explicitly disabled on the commandline
 			//----------------------------------------------------------------------
@@ -65,10 +69,41 @@ namespace Alba
 			//----------------------------------------------------------------------
 			// Initialise application
 			//----------------------------------------------------------------------
-			myInitParams = std::move(anInitParams);
-			CreateWindow(myInitParams.myWindowInitParams);
+			{
+				myInitParams = std::move(anInitParams);
+				CreateWindow(myInitParams.myWindowInitParams);
+			}
+
+			//----------------------------------------------------------------------
+			// Initialise graphics
+			//----------------------------------------------------------------------
+			{
+				Core::AnyDictionary initParamsDict;
+
+				Alba::Graphics::InitParams graphicsInitParams;
+				graphicsInitParams.myWindowWidth = anInitParams.myWindowInitParams.mySize.x();
+				graphicsInitParams.myWindowHeight = anInitParams.myWindowInitParams.mySize.y();
+				InitGraphicsPlatformData(graphicsInitParams.myPlatformData);
+
+				initParamsDict.Set(graphicsInitParams);
+
+				if ( !moduleRepository.LoadModule("Alba.Graphics", initParamsDict) )
+				{
+					return 1;
+				}
+			}
 
 			return 0;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void GameApplication::InitGraphicsPlatformData(Core::Any& aPlatformDataOut)
+		{
+			Graphics::PlatformData platformData;
+			platformData.myWindowHandle = myWindow->GetPlatformData().Get<HWND>();
+
+			aPlatformDataOut = platformData;
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -124,7 +159,7 @@ namespace Alba
 				//-----------------------------------------------------------------------------------------
 				{
 					Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
-					moduleRepository.Update();
+					moduleRepository.Update(myTimer);
 				}
 
 				//-----------------------------------------------------------------------------------------

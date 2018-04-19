@@ -1,45 +1,41 @@
 #pragma once
 
 #include "Graphics_API.hpp"
-#include "Core_BasicTypes.hpp"
+#include "Graphics_Service.hpp"
+#include "Core_Module.hpp"
 #include "Core_UniquePtr.hpp"
 
 namespace Alba
 {
 	namespace Graphics
 	{
-		struct InitParams;
-		using namespace Alba::BasicTypes;
-
-		class RenderBackEnd;
+		class GraphicsService;
 
 		//-----------------------------------------------------------------------------------------
-		// Name	: GraphicsService
-		// Desc	: Class that wraps the graphics API
+		// Name	: GraphicsModule
+		// Desc	: Graphics module
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API GraphicsService final
+		class GraphicsModule : public Core::Module<GraphicsModule>
 		{
 			public:
 
 				//=================================================================================
-				// Public Constructors/Destructors
+				// Public Static Methods
 				//=================================================================================
-				GraphicsService();
-				~GraphicsService();
+				static const char* GetModuleName() { return "Alba.Graphics"; }
 
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				uint32		Init(const InitParams& anInitParams);
-				void		Present();
-				void		ShutDown();
+				bool	OnLoad(const Core::AnyDictionary& someLoadParams);
+				void	OnUnload();
 
 			private:
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				Core::UniquePtr<RenderBackEnd> myRenderBackEnd;
+				Core::UniquePtr<GraphicsService> myGraphicsService;
 		};
 	}
 }

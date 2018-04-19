@@ -13,6 +13,8 @@
 #include "Core_Memory_Impl.hpp"
 #include "Core_Profile.hpp"
 
+#include "Graphics.hpp"
+
 #include "Framework.hpp"
 #include "Framework_GameApplication.hpp"
 
@@ -59,6 +61,7 @@ namespace GravityDemo
 			// Register
 			//-------------------------------------------------------------------------------------
 			Alba::Core::RegisterModules();
+			Alba::Graphics::RegisterModules();
 			Alba::Framework::RegisterModules();
 			Alba::Gravity::RegisterModules();
 

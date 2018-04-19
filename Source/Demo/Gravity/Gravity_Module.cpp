@@ -30,7 +30,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void GravityModule::Update()
+		void GravityModule::Update(const Core::Time& /*aTime*/)
 		{
 			ALBA_PROFILE_SCOPED(GravityModule_Update);
 		}
