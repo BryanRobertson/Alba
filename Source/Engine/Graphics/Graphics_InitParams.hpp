@@ -14,11 +14,13 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------------
 		struct InitParams
 		{
-			int				myWindowWidth	= 800;
-			int				myWindowHeight	= 600;
-
 			// Platform specific data
-			Core::Any		myPlatformData;
+			Core::AnyDictionary		myPlatformData;
+
+			// Window params
+			int						myWindowWidth	= 800;
+			int						myWindowHeight	= 600;
+			bool					myIsFullScreen	= false;
 		};
 	}
 }

@@ -70,7 +70,7 @@ namespace Alba
 				void		EndFrame();
 
 				uint32		CreateWindow(const Core::WindowInitParams& aWindowInitParams);
-				void		InitGraphicsPlatformData(Core::Any& aPlatformDataOut);
+				void		InitGraphicsPlatformData(Core::AnyDictionary& aPlatformDataOut);
 
 				//=================================================================================
 				// Private Data

@@ -31,6 +31,7 @@ namespace Alba
 				// Public Methods
 				//=================================================================================
 				uint32		Init(const InitParams& anInitParams);
+				void		ClearBuffer();
 				void		Present();
 				void		ShutDown();
 

@@ -25,18 +25,34 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				virtual uint32	Init(const InitParams& someInitParams) override;
+				virtual uint32	Init(const InitParams& anInitParams) override;
+				virtual void	ClearBuffer() override;
 				virtual void	Present() override;
 				virtual void	ShutDown() override;
 
 			private:
 
 				//=================================================================================
+				// Private Methods
+				//=================================================================================
+				uint32			CreateDevice(const InitParams& anInitParams);
+				uint32			CreateSwapChain(const InitParams& anInitParams);
+				uint32			CreateMainRenderTarget(const InitParams& anInitParams);
+
+				//=================================================================================
 				// Private Data
 				//=================================================================================
-				DXGISwapChainPtr		mySwapChain;
 				D3D11DevicePtr			myDevice;
+				DXGISwapChainPtr		mySwapChain;
 				D3D11DeviceContextPtr	myDeviceContext;
+				DXGIAdapterPtr			myAdapter;
+				DXGIFactoryPtr			myFactory;
+				D3D_FEATURE_LEVEL		myFeatureLevel;
+
+				D3D11Texture2DPtr		myBackBuffer;
+				D3D11_TEXTURE2D_DESC	myBackBufferDesc;
+
+				D3D11RenderTargetViewPtr myRenderTarget;
 		};
 	}
 }

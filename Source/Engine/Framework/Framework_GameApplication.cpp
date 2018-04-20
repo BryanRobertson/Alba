@@ -1,7 +1,6 @@
 #include "Framework_Precompile.hpp"
 #include "Framework_GameApplication.hpp"
 #include "Graphics_InitParams.hpp"
-#include "Graphics_PlatformData.hpp"
 #include "Core_Memory.hpp"
 #include "Core_Pair.hpp"
 #include "Core_Window.hpp"
@@ -98,12 +97,9 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void GameApplication::InitGraphicsPlatformData(Core::Any& aPlatformDataOut)
+		void GameApplication::InitGraphicsPlatformData(Core::AnyDictionary& aPlatformDataOut)
 		{
-			Graphics::PlatformData platformData;
-			platformData.myWindowHandle = myWindow->GetPlatformData().Get<HWND>();
-
-			aPlatformDataOut = platformData;
+			aPlatformDataOut = myWindow->GetPlatformData();
 		}
 
 		//-----------------------------------------------------------------------------------------

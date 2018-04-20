@@ -28,6 +28,7 @@ namespace Alba
 				// Public Methods
 				//=================================================================================
 				virtual uint32	Init(const InitParams& someInitParams) = 0;
+				virtual void	ClearBuffer() = 0;
 				virtual void	Present() = 0;
 				virtual void	ShutDown() = 0;
 		};
