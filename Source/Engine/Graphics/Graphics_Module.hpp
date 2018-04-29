@@ -27,8 +27,10 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				bool	OnLoad(const Core::AnyDictionary& someLoadParams);
-				void	OnUnload();
+				bool				OnLoad(const Core::AnyDictionary& someLoadParams);
+				void				OnUnload();
+
+				GraphicsService&	GetGraphicsServiceMutable();
 
 			private:
 

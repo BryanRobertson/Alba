@@ -83,7 +83,13 @@ namespace GravityDemo
 		// Run
 		//-----------------------------------------------------------------------------------------
 		UniquePtr<Alba::Framework::GameApplication> application = Alba::Framework::GameApplication::Create();
-		application->Init(std::move(initParams));
+		{
+			const uint32 initResult = application->Init(std::move(initParams));
+			if (initResult != 0)
+			{
+				return initResult;
+			}
+		}
 
 		const uint32 returnCode = application->Run();
 

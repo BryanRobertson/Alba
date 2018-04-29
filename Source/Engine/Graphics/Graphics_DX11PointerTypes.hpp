@@ -22,5 +22,7 @@ namespace Alba
 
 		typedef ComPtr<ID3D11Texture2D>				D3D11Texture2DPtr;
 		typedef ComPtr<ID3D11RenderTargetView>		D3D11RenderTargetViewPtr;
+
+		typedef ComPtr<ID3D11DepthStencilView>		D3D11DepthStencilViewPtr;
 	}
 }

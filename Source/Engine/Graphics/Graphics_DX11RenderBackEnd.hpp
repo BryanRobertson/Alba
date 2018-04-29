@@ -38,21 +38,28 @@ namespace Alba
 				uint32			CreateDevice(const InitParams& anInitParams);
 				uint32			CreateSwapChain(const InitParams& anInitParams);
 				uint32			CreateMainRenderTarget(const InitParams& anInitParams);
+				uint32			CreateDepthStencilView(const InitParams& anInitParams);
+				uint32			CreateViewport(const InitParams& anInitParams);
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				D3D11DevicePtr			myDevice;
-				DXGISwapChainPtr		mySwapChain;
-				D3D11DeviceContextPtr	myDeviceContext;
-				DXGIAdapterPtr			myAdapter;
-				DXGIFactoryPtr			myFactory;
-				D3D_FEATURE_LEVEL		myFeatureLevel;
+				D3D11DevicePtr				myDevice;
+				DXGISwapChainPtr			mySwapChain;
+				D3D11DeviceContextPtr		myDeviceContext;
+				DXGIAdapterPtr				myAdapter;
+				DXGIFactoryPtr				myFactory;
+				D3D_FEATURE_LEVEL			myFeatureLevel;
 
-				D3D11Texture2DPtr		myBackBuffer;
-				D3D11_TEXTURE2D_DESC	myBackBufferDesc;
+				D3D11Texture2DPtr			myBackBuffer;
+				D3D11_TEXTURE2D_DESC		myBackBufferDesc;
 
-				D3D11RenderTargetViewPtr myRenderTarget;
+				D3D11Texture2DPtr			myDepthStencil;
+				D3D11DepthStencilViewPtr	myDepthStencilView;
+
+				D3D11RenderTargetViewPtr	myRenderTarget;
+
+				D3D11_VIEWPORT				myViewport;
 		};
 	}
 }

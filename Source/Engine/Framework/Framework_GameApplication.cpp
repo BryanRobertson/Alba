@@ -1,6 +1,8 @@
 #include "Framework_Precompile.hpp"
 #include "Framework_GameApplication.hpp"
 #include "Graphics_InitParams.hpp"
+#include "Graphics_Module.hpp"
+#include "Graphics_Service.hpp"
 #include "Core_Memory.hpp"
 #include "Core_Pair.hpp"
 #include "Core_Window.hpp"
@@ -90,6 +92,9 @@ namespace Alba
 				{
 					return 1;
 				}
+
+				Alba::Graphics::GraphicsModule& graphicsModule = Alba::Graphics::GraphicsModule::Get();
+				myGraphicsService = &graphicsModule.GetGraphicsServiceMutable();
 			}
 
 			return 0;
@@ -162,11 +167,8 @@ namespace Alba
 				// Render
 				//-----------------------------------------------------------------------------------------
 				{
-					ALBA_PROFILE_SCOPED(Render);
+					Render();
 				}
-
-				using namespace std::literals;
-				Alba::Core::ThisThread::sleep_for(10ms);
 
 				//-----------------------------------------------------------------------------------------
 				// End Frame
@@ -184,6 +186,23 @@ namespace Alba
 		void GameApplication::BeginFrame()
 		{
 			ALBA_PROFILE_SCOPED(BeginFrame);
+			
+			myGraphicsService->ClearBuffer();
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void GameApplication::Render()
+		{
+			ALBA_PROFILE_SCOPED(Render);
+
+			{
+				ALBA_PROFILE_SCOPED(Present);
+				myGraphicsService->Present();
+
+				using namespace std::literals;
+				Alba::Core::ThisThread::sleep_for(10ms);
+			}
 		}
 
 		//-----------------------------------------------------------------------------------------

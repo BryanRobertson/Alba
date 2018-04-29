@@ -61,6 +61,28 @@ namespace Alba
 				}
 			}
 
+			//-------------------------------------------------------------------------------------
+			// Create depth stencil view
+			//-------------------------------------------------------------------------------------
+			{
+				const uint32 result = CreateDepthStencilView(anInitParams);
+				if (result != 0)
+				{
+					return result;
+				}
+			}
+
+			//-------------------------------------------------------------------------------------
+			// Create viewport
+			//-------------------------------------------------------------------------------------
+			{
+				const uint32 result = CreateViewport(anInitParams);
+				if (result != 0)
+				{
+					return result;
+				}
+			}
+
 			return 0;
 		}
 
@@ -187,16 +209,72 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
+		uint32 DX11RenderBackEnd::CreateDepthStencilView(const InitParams& /*anInitParams*/)
+		{
+			CD3D11_TEXTURE2D_DESC depthStencilDesc
+			(
+				DXGI_FORMAT_D24_UNORM_S8_UINT,
+				static_cast<UINT> (myBackBufferDesc.Width),
+				static_cast<UINT> (myBackBufferDesc.Height),
+				1, // This depth stencil view has only one texture.
+				1, // Use a single mipmap level.
+				D3D11_BIND_DEPTH_STENCIL
+			);
+
+			myDevice->CreateTexture2D
+			(
+				&depthStencilDesc,
+				nullptr,
+				myDepthStencil.GetAddressOf()
+			);
+
+			CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(D3D11_DSV_DIMENSION_TEXTURE2D);
+
+			myDevice->CreateDepthStencilView
+			(
+				myDepthStencil.Get(),
+				&depthStencilViewDesc,
+				myDepthStencilView.GetAddressOf()
+			);
+
+			return 0;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		uint32 DX11RenderBackEnd::CreateViewport(const InitParams& /*anInitParams*/)
+		{
+			ZeroMemory(&myViewport, sizeof(D3D11_VIEWPORT));
+
+			myViewport.Height	= (float)myBackBufferDesc.Height;
+			myViewport.Width	= (float)myBackBufferDesc.Width;
+			myViewport.MinDepth = 0;
+			myViewport.MaxDepth = 1;
+
+			myDeviceContext->RSSetViewports
+			(
+				1,
+				&myViewport
+			);
+
+			return 0;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		void DX11RenderBackEnd::ClearBuffer()
 		{
+			const float colour[] = { 0.0f, 0.0f, 0.0f, 0.0f }; //{ 0.0f, 0.6f, 0.8f, 1.0f };
+			myDeviceContext->ClearRenderTargetView(myRenderTarget.Get(), colour);
 
+			//myDeviceContext->ClearDepthStencilView(myDepthStencilView.Get(), )
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		void DX11RenderBackEnd::Present()
 		{
-
+			mySwapChain->Present(0, 0);
 		}
 
 		//-----------------------------------------------------------------------------------------

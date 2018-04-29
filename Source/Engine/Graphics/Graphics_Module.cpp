@@ -14,7 +14,7 @@ namespace Alba
 			const InitParams& initParams = someLoadParams.Get<InitParams>();
 
 			myGraphicsService.reset(ALBA_NEW(Alba::Core::AllocationType::Renderer, "Renderer") GraphicsService());
-			return myGraphicsService->Init(initParams) != 0;
+			return myGraphicsService->Init(initParams) == 0;
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -22,6 +22,13 @@ namespace Alba
 		void GraphicsModule::OnUnload()
 		{
 			myGraphicsService.reset();
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		GraphicsService& GraphicsModule::GetGraphicsServiceMutable()
+		{
+			return *myGraphicsService;
 		}
 	}
 }

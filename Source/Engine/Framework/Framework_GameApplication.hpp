@@ -15,6 +15,7 @@ namespace Alba
 	namespace Graphics
 	{
 		struct PlatformData;
+		class GraphicsService;
 	}
 
 	namespace Framework
@@ -67,6 +68,7 @@ namespace Alba
 				//=================================================================================
 				void		BeginFrame();
 				void		Update();
+				void		Render();
 				void		EndFrame();
 
 				uint32		CreateWindow(const Core::WindowInitParams& aWindowInitParams);
@@ -75,11 +77,12 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				Core::UniquePtr<Core::Window>	myWindow;
+				Core::UniquePtr<Core::Window>		myWindow;
+				Alba::Graphics::GraphicsService*	myGraphicsService;
 
-				ApplicationInitParams			myInitParams;
-				Core::Time						myTimer;
-				bool							myQuit;
+				ApplicationInitParams				myInitParams;
+				Core::Time							myTimer;
+				bool								myQuit;
 		};
 	}
 }
