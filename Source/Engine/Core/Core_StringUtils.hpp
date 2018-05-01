@@ -8,6 +8,7 @@
 #include "Core.hpp"
 #include "Core_String.hpp"
 #include "Core_FixedString.hpp"
+#include "Core_StringView.hpp"
 #include "Core_Utils.hpp"
 
 #include <cstdlib>
@@ -51,74 +52,73 @@ namespace Alba
 
 				//=================================================================================
 				// Public Static Methods
-				//=================================================================================
-				template <typename TCharType, typename TAllocator>
-				static bool From(const BasicString<TCharType, TAllocator>& aString, TDataType& aOutData)
+				//================================================================================
+				static bool From(const StringView& aStringView, TDataType& aOutData)
 				{
-					return Convert(aString.c_str(), aOutData);
+					return Convert(aStringView, aOutData);
 				}
 
 			protected:
 
 				template <typename TCharType, typename TAllocator>
-				static bool Convert(const char* aString, BasicString<TCharType, TAllocator>& aOutData)
+				static bool Convert(const StringView& aStringView, BasicString<TCharType, TAllocator>& aOutData)
 				{
-					aOutData.assign(aString);
+					aOutData.assign(aStringView.data(), aStringView.length());
 					return true;
 				}
 
-				static bool Convert(const char* aString, int8& aOutData)
+				static bool Convert(const StringView& aStringView, int8& aOutData)
 				{
-					aOutData = static_cast<int8>(std::atoi(aString));
+					aOutData = static_cast<int8>(std::atoi(aStringView.data()));
 					return true;
 				}
 
-				static bool Convert(const char* aString, uint8& aOutData)
+				static bool Convert(const StringView& aStringView, uint8& aOutData)
 				{
-					aOutData = static_cast<uint8>(std::atoi(aString));
+					aOutData = static_cast<uint8>(std::atoi(aStringView.data()));
 					return true;
 				}
 
-				static bool Convert(const char* aString, int16& aOutData)
+				static bool Convert(const StringView& aStringView, int16& aOutData)
 				{
-					aOutData = static_cast<int16>(std::atoi(aString));
+					aOutData = static_cast<int16>(std::atoi(aStringView.data()));
 					return true;
 				}
 
-				static bool Convert(const char* aString, uint16& aOutData)
+				static bool Convert(const StringView& aStringView, uint16& aOutData)
 				{
-					aOutData = static_cast<uint16>(std::atoi(aString));
+					aOutData = static_cast<uint16>(std::atoi(aStringView.data()));
 					return true;
 				}
 
-				static bool Convert(const char* aString, int32& aOutData)
+				static bool Convert(const StringView& aStringView, int32& aOutData)
 				{
-					aOutData = static_cast<int32>(std::atoi(aString));
+					aOutData = static_cast<int32>(std::atoi(aStringView.data()));
 					return true;
 				}
 
-				static bool Convert(const char* aString, uint32& aOutData)
+				static bool Convert(const StringView& aStringView, uint32& aOutData)
 				{
-					aOutData = static_cast<uint32>(std::atoi(aString));
+					aOutData = static_cast<uint32>(std::atoi(aStringView.data()));
 					return true;
 				}
 
-				static bool Convert(const char* aString, int64& aOutData)
+				static bool Convert(const StringView& aStringView, int64& aOutData)
 				{
-					aOutData = static_cast<int64>(std::atoll(aString));
+					aOutData = static_cast<int64>(std::atoll(aStringView.data()));
 					return true;
 				}
 
-				static bool Convert(const char* aString, uint64& aOutData)
+				static bool Convert(const StringView& aStringView, uint64& aOutData)
 				{
-					aOutData = static_cast<uint64>(std::atoll(aString));
+					aOutData = static_cast<uint64>(std::atoll(aStringView.data()));
 					return true;
 				}
 
-				static bool Convert(const char* aString, bool& aOutData)
+				static bool Convert(const StringView& aStringView, bool& aOutData)
 				{
 					uint value = 0;
-					if (Convert(aString, value))
+					if (Convert(aStringView, value))
 					{
 						aOutData = value != 0;
 						return true;
@@ -129,9 +129,9 @@ namespace Alba
 						return std::tolower(left) == std::tolower(right);
 					};
 
-					const FixedString<8> fixedStr(aString);
-
+					const FixedString<8> fixedStr(aStringView.data());
 					static const FixedString<8> trueStr("true");
+
 					if (fixedStr.comparei(trueStr))
 					{
 						aOutData = true;

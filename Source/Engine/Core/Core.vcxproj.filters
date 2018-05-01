@@ -54,6 +54,12 @@
     <ClCompile Include="Core_ThreadPool.cpp">
       <Filter>Threading</Filter>
     </ClCompile>
+    <ClCompile Include="Core_Console.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_ConsoleCommand.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
@@ -232,6 +238,15 @@
     <ClInclude Include="Core_ThreadPool.hpp">
       <Filter>Threading</Filter>
     </ClInclude>
+    <ClInclude Include="Core_Console.hpp">
+      <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_ConsoleCommand.hpp">
+      <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_StringView.hpp">
+      <Filter>String</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">
@@ -275,6 +290,9 @@
     </Filter>
     <Filter Include="Profiling">
       <UniqueIdentifier>{55e33dae-7450-40c2-b690-5361a3e7ce1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Console">
+      <UniqueIdentifier>{ef502dd9-cdf2-4711-a6b1-e5360d6b1f01}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

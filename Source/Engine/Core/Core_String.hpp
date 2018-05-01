@@ -17,8 +17,8 @@ namespace Alba
 
 		typedef BasicString<char>		String;
 		typedef BasicString<wchar_t>	WString;
-		typedef BasicString<char16_t>	UTF16String;
-		typedef BasicString<char32_t>	UTF32String;
+		typedef BasicString<char16_t>	String16;
+		typedef BasicString<char32_t>	String32;
 	}
 }
 

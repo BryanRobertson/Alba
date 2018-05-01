@@ -12,68 +12,20 @@
 #include "Core_Mutex.hpp"
 #include "Core_HashMap.hpp"
 #include "Core_String.hpp"
+#include "Core_StringView.hpp"
 #include "Core_FixedString.hpp"
+#include "Core_StringUtils.hpp"
 #include "Core_Pair.hpp"
 
 namespace Alba
 {
 	namespace Core
 	{
-		struct FNVHashAlgorithm_Tag {};
-		struct FNVHashAlgorithmNoCase_Tag {};
-
-		template <typename THashValueType, typename THashAlgorithmTag>
-		struct TStringHashAlgorithm;
-
-		template <>
-		struct TStringHashAlgorithm<uint32, FNVHashAlgorithm_Tag>
-		{
-			static const uint32 ourInvalidHash = theFNV1a32OffsetBasis;
-			
-			static constexpr uint32 GetHash(const char* aString)
-			{
-				return FNV1a32Hash(aString);
-			}
-		};
-
-		template <>
-		struct TStringHashAlgorithm<uint64, FNVHashAlgorithm_Tag>
-		{
-			static const uint64 ourInvalidHash = theFNV1a64OffsetBasis;
-
-			static constexpr uint64 GetHash(const char* aString)
-			{
-				return FNV1a64Hash(aString);
-			}
-		};
-
-		template <>
-		struct TStringHashAlgorithm<uint32, FNVHashAlgorithmNoCase_Tag>
-		{
-			static const uint32 ourInvalidHash = theFNV1a32OffsetBasis;
-
-			static constexpr uint32 GetHash(const char* aString)
-			{
-				return FNV1a32HashNoCase(aString);
-			}
-		};
-
-		template <>
-		struct TStringHashAlgorithm<uint64, FNVHashAlgorithmNoCase_Tag>
-		{
-			static const uint64 ourInvalidHash = theFNV1a64OffsetBasis;
-
-			static constexpr uint64 GetHash(const char* aString)
-			{
-				return FNV1a64HashNoCase(aString);
-			}
-		};
-
 		//-----------------------------------------------------------------------------------------
 		// Name	:	TStringHash
 		// Desc	:	Template for a string hash. Uses Fnv1a hash as the hashing algorithm
 		//-----------------------------------------------------------------------------------------
-		template <typename THashValueType, typename THashAlgorithmTag=FNVHashAlgorithm_Tag>
+		template <typename THashValueType, typename THashAlgorithm=FNV1a32Hash>
 		class TStringHashBase
 		{
 			public:
@@ -81,7 +33,10 @@ namespace Alba
 				//=================================================================================
 				// Public Types
 				//=================================================================================
-				typedef TStringHashAlgorithm<THashValueType, THashAlgorithmTag>		HashAlgorithm;
+				typedef THashValueType	HashValueType;
+				typedef THashAlgorithm	HashAlgorithm;
+
+				struct CompileTimeHash{};
 				
 				//=================================================================================
 				// Public Static Constants
@@ -93,7 +48,7 @@ namespace Alba
 				//=================================================================================
 				static constexpr TStringHashBase<THashValueType> FromString(const char* aString)
 				{
-					return HashAlgorithm::GetHash(aString);
+					return HashAlgorithm::CompileTimeHash(aString);
 				}
 
 				//=================================================================================
@@ -107,8 +62,8 @@ namespace Alba
 					#endif
 				}
 
-				constexpr TStringHashBase(const char* aString)
-					: myHashValue(HashAlgorithm::GetHash(aString))
+				constexpr TStringHashBase(const char* aString, const CompileTimeHash&)
+					: myHashValue(HashAlgorithm::CompileTimeHash(aString))
 				{
 					#if defined(ALBA_DEBUG_STRINGHASH)
 					{
@@ -117,13 +72,13 @@ namespace Alba
 					#endif
 				}
 
-				template <typename TCharType, typename TAllocator>
-				explicit TStringHashBase(const BasicString<TCharType, TAllocator>& aString)
-					: myHashValue(HashAlgorithm::GetHash(aString.c_str()))
+				template <typename TCharType>
+				explicit TStringHashBase(const BasicStringView<TCharType>& aStringView)
+					: myHashValue(HashAlgorithm::Hash(aStringView.data()))
 				{
 					#if defined(ALBA_DEBUG_STRINGHASH)
 					{
-						myDebugString = ourDebugStringTable.Set(myHashValue, aString.c_str());
+						myDebugString = ourDebugStringTable.Set(myHashValue, aStringView.data());
 					}
 					#endif
 				}
@@ -154,32 +109,32 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				// Operator overloads
 				//---------------------------------------------------------------------------------
-				bool operator == (const TStringHashBase<THashValueType, THashAlgorithmTag>& anOther) const
+				bool operator == (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
 				{
 					return myHashValue == anOther.myHashValue;
 				}
 
-				bool operator != (const TStringHashBase<THashValueType, THashAlgorithmTag>& anOther) const
+				bool operator != (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
 				{
 					return myHashValue != anOther.myHashValue;
 				}
 
-				bool operator <= (const TStringHashBase<THashValueType, THashAlgorithmTag>& anOther) const
+				bool operator <= (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
 				{
 					return myHashValue <= anOther.myHashValue;
 				}
 
-				bool operator >= (const TStringHashBase<THashValueType, THashAlgorithmTag>& anOther) const
+				bool operator >= (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
 				{
 					return myHashValue >= anOther.myHashValue;
 				}
 
-				bool operator < (const TStringHashBase<THashValueType, THashAlgorithmTag>& anOther) const
+				bool operator < (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
 				{
 					return myHashValue < anOther.myHashValue;
 				}
 
-				bool operator > (const TStringHashBase<THashValueType, THashAlgorithmTag>& anOther) const
+				bool operator > (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
 				{
 					return myHashValue > anOther.myHashValue;
 				}
@@ -266,17 +221,17 @@ namespace Alba
 		};
 
 		#if defined(ALBA_DEBUG_STRINGHASH)
-			template <typename THashValueType, typename THashAlgorithmTag>
-			typename TStringHashBase<THashValueType, THashAlgorithmTag>::DebugStringTable TStringHashBase<THashValueType, THashAlgorithmTag>::ourDebugStringTable;
+			template <typename THashValueType, typename THashAlgorithm>
+			typename TStringHashBase<THashValueType, THashAlgorithm>::DebugStringTable TStringHashBase<THashValueType, THashAlgorithm>::ourDebugStringTable;
 		#endif
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	StringHash32
 		// Desc	:	32-bit string hash
 		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API StringHash32 : public TStringHashBase<uint32>
+		class ALBA_CORE_API StringHash32 : public TStringHashBase<uint32, FNV1a32Hash>
 		{
-			typedef TStringHashBase<uint32> Super;
+			typedef TStringHashBase<uint32, FNV1a32Hash> Super;
 
 			public:
 
@@ -287,14 +242,70 @@ namespace Alba
 				explicit StringHash32(uint32 aHash);
 
 				template <typename TCharType, typename TAllocator>
-				explicit StringHash32(const BasicString<TCharType, TAllocator>& aString)
-					: Super(aString)
+					StringHash32(const BasicString<TCharType, TAllocator>& aString)
+						: Super(BasicStringView<TCharType>(aString.c_str()))
 				{
 
 				}
 
+				template<typename TCharType, size_t	TCount, OverflowBehavior TOverflowBehavior, typename TOverflowAllocator>
+					StringHash32(const FixedBasicString<TCharType, TCount, TOverflowBehavior, TOverflowAllocator>& aString)
+						: Super(BasicStringView<TCharType>(aString.c_str()))
+				{
+					
+				}
+
 				constexpr StringHash32(const char* aString)
-					: Super(aString)
+					: Super(aString, CompileTimeHash())
+				{
+
+				}
+
+				//=================================================================================
+				// Public Methods
+				//=================================================================================
+				FixedString<64> LogString()
+				{
+					#if defined(ALBA_DEBUG_STRINGHASH)
+						return Debug_GetString();
+					#else
+						return FormatString<64>("0x%x", GetHash());
+					#endif
+				}
+		};
+
+		//-----------------------------------------------------------------------------------------
+		// Name	:	NoCaseStringHash32
+		// Desc	:	32-bit string no-case hash (converts string to lower case before hashing)
+		//-----------------------------------------------------------------------------------------
+		class ALBA_CORE_API NoCaseStringHash32 : public TStringHashBase<uint32, FNV1a32HashNoCase>
+		{
+			typedef TStringHashBase<uint32, FNV1a32HashNoCase> Super;
+
+			public:
+
+				//=================================================================================
+				// Public Constructors
+				//=================================================================================
+				NoCaseStringHash32();
+				explicit NoCaseStringHash32(uint32 aHash);
+
+				template <typename TCharType, typename TAllocator>
+					NoCaseStringHash32(const BasicString<TCharType, TAllocator>& aString)
+						: Super(BasicStringView<TCharType>(aString.c_str()))
+				{
+
+				}
+
+				template<typename TCharType, size_t	TCount, OverflowBehavior TOverflowBehavior, typename TOverflowAllocator>
+					NoCaseStringHash32(const FixedBasicString<TCharType, TCount, TOverflowBehavior, TOverflowAllocator>& aString)
+						: Super(BasicStringView<TCharType>(aString.c_str()))
+				{
+
+				}
+
+				constexpr NoCaseStringHash32(const char* aString)
+					: Super(aString, CompileTimeHash())
 				{
 
 				}
@@ -316,9 +327,9 @@ namespace Alba
 		// Name	:	StringHash64
 		// Desc	:	64-bit string hash
 		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API StringHash64 : public TStringHashBase<uint64>
+		class ALBA_CORE_API StringHash64 : public TStringHashBase<uint64, FNV1a64Hash>
 		{
-			typedef TStringHashBase<uint64> Super;
+			typedef TStringHashBase<uint64, FNV1a64Hash> Super;
 
 			public:
 
@@ -329,56 +340,21 @@ namespace Alba
 				explicit StringHash64(uint64 aHash);
 
 				template <typename TCharType, typename TAllocator>
-				explicit StringHash64(const BasicString<TCharType, TAllocator>& aString)
-					: Super(aString)
+					StringHash64(const BasicString<TCharType, TAllocator>& aString)
+						: Super(BasicStringView<TCharType>(aString.c_str()))
+				{
+
+				}
+
+				template<typename TCharType, size_t	TCount, OverflowBehavior TOverflowBehavior, typename TOverflowAllocator>
+					StringHash64(const FixedBasicString<TCharType, TCount, TOverflowBehavior, TOverflowAllocator>& aString)
+						: Super(BasicStringView<TCharType>(aString.c_str()))
 				{
 
 				}
 
 				constexpr StringHash64(const char* aString)
-					: Super(aString)
-				{
-
-				}
-
-				//=================================================================================
-				// Public Methods
-				//=================================================================================
-				FixedString<64> LogString()
-				{
-					#if defined(ALBA_DEBUG_STRINGHASH)
-						return Debug_GetString();
-					#else
-						return FormatString<32>("0x%x", GetHash());
-					#endif
-				}
-		};
-
-		//-----------------------------------------------------------------------------------------
-		// Name	:	NoCaseStringHash32
-		// Desc	:	32-bit string no-case hash (converts string to lower case before hashing)
-		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API NoCaseStringHash32 : public TStringHashBase<uint32, FNVHashAlgorithmNoCase_Tag>
-		{
-			typedef TStringHashBase<uint32, FNVHashAlgorithmNoCase_Tag> Super;
-
-			public:
-
-				//=================================================================================
-				// Public Constructors
-				//=================================================================================
-				NoCaseStringHash32();
-				explicit NoCaseStringHash32(uint32 aHash);
-
-				template <typename TCharType, typename TAllocator>
-				explicit NoCaseStringHash32(const BasicString<TCharType, TAllocator>& aString)
-					: Super(aString)
-				{
-
-				}
-
-				constexpr NoCaseStringHash32(const char* aString)
-					: Super(aString)
+					: Super(aString, CompileTimeHash())
 				{
 
 				}
@@ -400,9 +376,9 @@ namespace Alba
 		// Name	:	NoCaseStringHash64
 		// Desc	:	64-bit string no-case hash (converts string to lower case before hashing)
 		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API NoCaseStringHash64 : public TStringHashBase<uint64, FNVHashAlgorithmNoCase_Tag>
+		class ALBA_CORE_API NoCaseStringHash64 : public TStringHashBase<uint64, FNV1a64HashNoCase>
 		{
-			typedef TStringHashBase<uint64, FNVHashAlgorithmNoCase_Tag> Super;
+			typedef TStringHashBase<uint64, FNV1a64HashNoCase> Super;
 
 			public:
 
@@ -413,14 +389,21 @@ namespace Alba
 				explicit NoCaseStringHash64(uint64 aHash);
 
 				template <typename TCharType, typename TAllocator>
-				explicit NoCaseStringHash64(const BasicString<TCharType, TAllocator>& aString)
-					: Super(aString)
+				NoCaseStringHash64(const BasicString<TCharType, TAllocator>& aString)
+					: Super(BasicStringView<TCharType>(aString.c_str(), aString.length()))
+				{
+
+				}
+
+				template<typename TCharType, size_t	TCount, OverflowBehavior TOverflowBehavior, typename TOverflowAllocator>
+				NoCaseStringHash64(const FixedBasicString<TCharType, TCount, TOverflowBehavior, TOverflowAllocator>& aString)
+					: Super(BasicStringView<TCharType>(aString.c_str(), aString.length()))
 				{
 
 				}
 
 				constexpr NoCaseStringHash64(const char* aString)
-					: Super(aString)
+					: Super(aString, CompileTimeHash())
 				{
 
 				}

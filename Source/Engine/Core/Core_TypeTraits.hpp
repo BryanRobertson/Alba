@@ -5,6 +5,7 @@
 #include "Core_FixedString.hpp"
 #include "Core_StringHash.hpp"
 #include <EASTL/type_traits.h>
+#include <type_traits>
 
 namespace Alba
 {
@@ -17,7 +18,6 @@ namespace Alba
 		template <typename T>
 		struct is_string : public eastl::false_type
 		{
-			
 		};
 
 		template <typename TCharType, typename TAllocator>

@@ -16,6 +16,15 @@ namespace Alba
 	namespace Core
 	{
 		ALBA_DECLARE_LOG_CATEGORY(Critical);
+	}
+}
+
+#if defined(ALBA_DEBUG_ASSERTS_ENABLED)
+namespace Alba
+{
+	namespace Core
+	{
+		ALBA_DECLARE_LOG_CATEGORY(Critical);
 
 		//------------------------------------------------------------------------------------------------ -
 		// Name : EAssertFailBehaviour
@@ -81,6 +90,7 @@ namespace Alba
 		}
 	}
 }
+#endif
 
 #if defined(ALBA_COMPILER_VISUALSTUDIO)
 	#define ALBA_DEBUG_BREAK()	__debugbreak()	

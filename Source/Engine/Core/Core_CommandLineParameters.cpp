@@ -280,7 +280,8 @@ namespace Alba
 
 			while (parser.ParseParam(tokenName, tokenValue))
 			{
-				AddParam(NoCaseStringHash32(tokenName), tokenValue);
+				const NoCaseStringHash32 nameHash(tokenName);
+				AddParam(tokenName, tokenValue);
 			}
 		}
 
