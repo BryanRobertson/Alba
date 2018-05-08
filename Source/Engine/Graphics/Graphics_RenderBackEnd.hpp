@@ -2,6 +2,8 @@
 
 #include "Graphics_API.hpp"
 #include "Core_BasicTypes.hpp"
+#include "Core_Assert.hpp"
+#include "Math_Vector.hpp"
 
 namespace Alba
 {
@@ -28,7 +30,7 @@ namespace Alba
 				// Public Methods
 				//=================================================================================
 				virtual uint32	Init(const InitParams& someInitParams) = 0;
-				virtual void	ClearBuffer() = 0;
+				virtual void	ClearBuffer(const Math::Vector4f& aColour) = 0;
 				virtual void	Present() = 0;
 				virtual void	ShutDown() = 0;
 		};

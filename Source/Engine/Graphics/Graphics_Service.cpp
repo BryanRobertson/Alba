@@ -29,9 +29,9 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void GraphicsService::ClearBuffer()
+		void GraphicsService::ClearBuffer(const Math::Vector4f& aColour)
 		{
-			myRenderBackEnd->ClearBuffer();
+			myRenderBackEnd->ClearBuffer(aColour);
 		}
 
 		//-----------------------------------------------------------------------------------------

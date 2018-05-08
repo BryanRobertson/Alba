@@ -7,6 +7,14 @@ namespace Alba
 {
 	namespace Gravity
 	{
+		enum class GravityModuleState : uint8
+		{
+			Init,
+			Loading,
+			Running,
+			Unloaded
+		};
+
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		void RegisterModules()
@@ -16,8 +24,17 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
+		GravityModule::GravityModule()
+		{
+			myGravityModuleState = GravityModuleState::Init;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		bool GravityModule::OnLoad(const Core::AnyDictionary& /*someParameters*/)
 		{
+			myGravityModuleState = GravityModuleState::Loading;
+
 			return true;
 		}
 
@@ -25,7 +42,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void GravityModule::OnUnload()
 		{
-
+			myGravityModuleState = GravityModuleState::Unloaded;
 		}
 
 		//-----------------------------------------------------------------------------------------

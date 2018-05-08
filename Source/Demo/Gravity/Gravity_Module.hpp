@@ -7,6 +7,8 @@ namespace Alba
 {
 	namespace Gravity
 	{
+		enum class GravityModuleState : uint8;
+
 		//-----------------------------------------------------------------------------------------
 		// Register modules for this project
 		//-----------------------------------------------------------------------------------------
@@ -25,12 +27,24 @@ namespace Alba
 				static const char* GetModuleName() { return "Alba.Gravity"; }
 
 				//=================================================================================
+				// Public Constructors
+				//=================================================================================
+				GravityModule();
+
+				//=================================================================================
 				// Public Methods
 				//=================================================================================
 				bool	OnLoad(const Core::AnyDictionary& someParameters);
 				void	OnUnload();
 
 				void	Update(const Core::Time& aTime);
+
+			private:
+
+				//=================================================================================
+				// Private Data
+				//=================================================================================
+				GravityModuleState	myGravityModuleState;
 		};
 	}
 }

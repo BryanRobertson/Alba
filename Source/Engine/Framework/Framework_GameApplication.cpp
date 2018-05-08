@@ -187,7 +187,7 @@ namespace Alba
 		{
 			ALBA_PROFILE_SCOPED(BeginFrame);
 			
-			myGraphicsService->ClearBuffer();
+			myGraphicsService->ClearBuffer(Math::Vector4f(0.0f, 0.0f, 0.0f, 1.0f));
 		}
 
 		//-----------------------------------------------------------------------------------------

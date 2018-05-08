@@ -60,6 +60,9 @@
     <ClCompile Include="Core_ConsoleCommand.cpp">
       <Filter>Console</Filter>
     </ClCompile>
+    <ClCompile Include="Core_AssertMutex.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
@@ -245,6 +248,12 @@
       <Filter>Console</Filter>
     </ClInclude>
     <ClInclude Include="Core_StringView.hpp">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_AssertMutex.hpp">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_FixedStringStream.hpp">
       <Filter>String</Filter>
     </ClInclude>
   </ItemGroup>

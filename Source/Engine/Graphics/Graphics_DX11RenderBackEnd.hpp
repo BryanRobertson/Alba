@@ -3,6 +3,8 @@
 #include "Graphics_API.hpp"
 #include "Graphics_RenderBackEnd.hpp"
 #include "Graphics_DX11PointerTypes.hpp"
+#include "Core_Assert.hpp"
+#include "Math_Vector.hpp"
 
 namespace Alba
 {
@@ -26,7 +28,7 @@ namespace Alba
 				// Public Methods
 				//=================================================================================
 				virtual uint32	Init(const InitParams& anInitParams) override;
-				virtual void	ClearBuffer() override;
+				virtual void	ClearBuffer(const Math::Vector4f& aColour) override;
 				virtual void	Present() override;
 				virtual void	ShutDown() override;
 

@@ -3,6 +3,7 @@
 #include "Graphics_API.hpp"
 #include "Core_BasicTypes.hpp"
 #include "Core_UniquePtr.hpp"
+#include "Math_Vector.hpp"
 
 namespace Alba
 {
@@ -31,7 +32,7 @@ namespace Alba
 				// Public Methods
 				//=================================================================================
 				uint32		Init(const InitParams& anInitParams);
-				void		ClearBuffer();
+				void		ClearBuffer(const Math::Vector4f& aColour);
 				void		Present();
 				void		ShutDown();
 
