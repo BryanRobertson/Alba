@@ -256,6 +256,9 @@
     <ClInclude Include="Core_FixedStringStream.hpp">
       <Filter>String</Filter>
     </ClInclude>
+    <ClInclude Include="Core_ConsoleCommandInternal.hpp">
+      <Filter>Console</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">

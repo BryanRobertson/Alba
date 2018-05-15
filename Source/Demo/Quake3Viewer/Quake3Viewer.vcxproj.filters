@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Quake3Viewer.cpp" />
+    <ClCompile Include="Quake3Viewer_Precompile.cpp" />
+    <ClCompile Include="Quake3Viewer_Module.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Quake3Viewer.hpp" />
+    <ClInclude Include="Quake3Viewer_API.hpp" />
+    <ClInclude Include="Quake3Viewer_Precompile.hpp" />
+    <ClInclude Include="Quake3Viewer_Module.hpp" />
+  </ItemGroup>
+</Project>

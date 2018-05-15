@@ -38,8 +38,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Alba.Application.GravityDemoExe.sharpmake.cs" />
+    <Compile Include="Alba.Application.Quake3ViewerExe.sharpmake.cs" />
     <Compile Include="Alba.Base.ExecutableProject.sharpmake.cs" />
     <Compile Include="Alba.Demo.Gravity.sharpmake.cs" />
+    <Compile Include="Alba.Demo.Quake3Viewer.sharpmake.cs" />
     <Compile Include="Alba.Engine.Core.sharpmake.cs" />
     <Compile Include="Alba.Engine.Framework.sharpmake.cs" />
     <Compile Include="Alba.Base.Project.sharpmake.cs" />

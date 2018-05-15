@@ -4,6 +4,7 @@
 #include "Core_StringView.hpp"
 #include "Core_Any.hpp"
 #include "Core_StringHash.hpp"
+#include "Core_ConsoleCommandInternal.hpp"
 
 namespace Alba
 {
@@ -30,7 +31,7 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				// Execute
 				//---------------------------------------------------------------------------------
-				uint32				Execute(const StringView& aCommandString);
+				uint32						Execute(const StringView& aCommandString);
 
 				//---------------------------------------------------------------------------------
 				// Accessors
@@ -58,10 +59,7 @@ namespace Alba
 				//=================================================================================
 				// Private Types
 				//=================================================================================
-				struct ParamTypeVTableBase
-				{
-					size_t(*FromStringFunc)(const StringView& aStr, void* aValueOut);
-				};
+				typedef ConsoleCommandInternal::ParamTypeVTableBase ParamTypeVTableBase;
 
 				struct ParamData
 				{
@@ -83,8 +81,8 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				FixedString<32>			myName;
-				NoCaseStringHash32		myNameId;
+				FixedString<32>				myName;
+				NoCaseStringHash32			myNameId;
 		};
 
 		//-----------------------------------------------------------------------------------------
