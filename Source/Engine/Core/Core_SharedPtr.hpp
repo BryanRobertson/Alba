@@ -23,18 +23,19 @@ namespace Alba
 		//------------------------------------------------------------------------------------------------
 		// Name	:	Core::MakeShared
 		//------------------------------------------------------------------------------------------------
-		template <typename TValueType, typename ...TArgs>
-		SharedPtr<TValueType> Core_MakeShared(TArgs&& args)
+		template <typename TValueType, typename... TArgs>
+		SharedPtr<TValueType> MakeShared(TArgs&&... args)
 		{
 			return eastl::make_shared<TValueType, TArgs>(eastl::forward<TArgs>(args)...);
 		}
+
 		//------------------------------------------------------------------------------------------------
 		// Name	:	Core::AllocateShared
 		//------------------------------------------------------------------------------------------------
 		template <typename TValueType, typename TAllocator, typename... TArgs>
 		SharedPtr<TValueType> AllocateShared(const TAllocator& allocator, TArgs&&... args)
 		{
-			return eastl::allocate_shared<TValueType, TAllocator, eastl::forward<TArgs>(args)...);
+			return eastl::allocate_shared<TValueType, TAllocator, TArgs...>(eastl::forward<TArgs>(args)...);
 		}
 	}
 }

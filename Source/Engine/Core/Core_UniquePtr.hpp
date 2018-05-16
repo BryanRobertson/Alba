@@ -18,7 +18,7 @@ namespace Alba
 		// Name	:	UniquePtr<T>
 		//------------------------------------------------------------------------------------------------
 		template <typename TValueType, typename TDeleter = eastl::default_delete<TValueType> >
-		using UniquePtr = eastl::unique_ptr<TValueType>;
+		using UniquePtr = eastl::unique_ptr<TValueType, TDeleter>;
 
 		//------------------------------------------------------------------------------------------------
 		// Name	:	MakeUnique

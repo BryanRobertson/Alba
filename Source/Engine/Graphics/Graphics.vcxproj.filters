@@ -14,6 +14,12 @@
     <ClCompile Include="Graphics_DX11PointerTypes.cpp">
       <Filter>BackEnd\DirectX</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics_Texture.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics_Shader.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics_API.hpp" />
@@ -31,6 +37,12 @@
     <ClInclude Include="Graphics_DX11PointerTypes.hpp">
       <Filter>BackEnd\DirectX</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics_Texture.hpp">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics_Shader.hpp">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="BackEnd">
@@ -38,6 +50,9 @@
     </Filter>
     <Filter Include="BackEnd\DirectX">
       <UniqueIdentifier>{661e42c3-4bb9-4ebe-9123-070682d49e1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{f16af0d2-0353-4ef3-89c0-aa7486b0d0b7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

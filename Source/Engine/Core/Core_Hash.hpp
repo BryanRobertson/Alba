@@ -30,11 +30,15 @@ namespace Alba
 		{
 			static const uint32 ourInvalidHash = theFNV1a32OffsetBasis;
 
-			static constexpr uint32 CompileTimeHash(const char* aString, uint32 aHashValue = theFNV1a32OffsetBasis)
+			static constexpr uint32 CompileTimeHash(const char* aString)
 			{
-				return (aString && *aString != '\0')
-					? CompileTimeHash(aString + 1, (aHashValue ^ *aString) * theFNV1a32Prime)
-					: aHashValue;
+				uint32 hash = theFNV1a32OffsetBasis;
+				for (const char* itr = aString; itr && *itr != '\0'; ++itr)
+				{
+					hash = (hash ^ *itr) * theFNV1a32Prime;
+				}
+
+				return hash;
 			}
 
 			static uint32 Hash(const StringView& aStringView)
@@ -58,11 +62,15 @@ namespace Alba
 		{
 			static const uint32 ourInvalidHash = theFNV1a32OffsetBasis;
 
-			static constexpr uint32 CompileTimeHash(const char* aString, uint32 aHashValue = theFNV1a32OffsetBasis)
+			static constexpr uint32 CompileTimeHash(const char* aString)
 			{
-				return (aString && *aString != '\0')
-					? CompileTimeHash(aString + 1, (aHashValue ^ std::tolower(*aString)) * theFNV1a32Prime)
-					: aHashValue;
+				uint32 hash = theFNV1a32OffsetBasis;
+				for (const char* itr = aString; itr && *itr != '\0'; ++itr)
+				{
+					hash = (hash ^ std::tolower(*itr)) * theFNV1a32Prime;
+				}
+
+				return hash;
 			}
 
 			static uint32 Hash(const StringView& aStringView)
@@ -85,11 +93,15 @@ namespace Alba
 		{
 			static const uint64 ourInvalidHash = theFNV1a64OffsetBasis;
 
-			static constexpr uint64 CompileTimeHash(const char* aString, uint64 aHashValue = theFNV1a64OffsetBasis)
+			static constexpr uint64 CompileTimeHash(const char* aString)
 			{
-				return (aString && *aString != '\0')
-					? CompileTimeHash(aString + 1, (aHashValue ^ *aString) * theFNV1a64Prime)
-					: aHashValue;
+				uint64 hash = theFNV1a64OffsetBasis;
+				for (const char* itr = aString; itr && *itr != '\0'; ++itr)
+				{
+					hash = (hash ^ *itr) * theFNV1a64Prime;
+				}
+
+				return hash;
 			}
 
 			static uint64 Hash(const StringView& aStringView)
@@ -113,11 +125,15 @@ namespace Alba
 		{
 			static const uint64 ourInvalidHash = theFNV1a64OffsetBasis;
 
-			static constexpr uint64 CompileTimeHash(const char* aString, uint64 aHashValue = theFNV1a64OffsetBasis)
+			static constexpr uint64 CompileTimeHash(const char* aString)
 			{
-				return (aString && *aString != '\0')
-					? CompileTimeHash(aString + 1, (aHashValue ^ std::tolower(*aString)) * theFNV1a64Prime)
-					: aHashValue;
+				uint64 hash = theFNV1a64OffsetBasis;
+				for (const char* itr = aString; itr && *itr != '\0'; ++itr)
+				{
+					hash = (hash ^ std::tolower(*itr)) * theFNV1a64Prime;
+				}
+
+				return hash;
 			}
 
 			static uint64 Hash(const StringView& aStringView)
