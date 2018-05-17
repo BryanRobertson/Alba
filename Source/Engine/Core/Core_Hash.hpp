@@ -16,136 +16,86 @@ namespace Alba
 {
 	namespace Core
 	{
-		static const uint32 theFNV1a32OffsetBasis	= 0x811c9dc5;
-		static const uint32 theFNV1a32Prime			= 16777619;
+		enum HashOptions : uint8
+		{ 
+			CaseInsensitive, 
+			CaseSensitive 
+		};
 
-		static const uint64 theFNV1a64OffsetBasis	= 0xcbf29ce484222325;
-		static const uint64 theFNV1a64Prime			= 1099511628211;
+		template <typename THashValueType>
+		struct FNV1aTraits;
 
-		//-----------------------------------------------------------------------------------------
-		// Name	:	Fnv1a32Hash
-		// Desc	:	Hash a string using the FNV1a32 hashing algorithm
-		//-----------------------------------------------------------------------------------------
-		struct FNV1a32Hash
+		template <>
+		struct FNV1aTraits<uint32>
 		{
-			static const uint32 ourInvalidHash = theFNV1a32OffsetBasis;
+			static constexpr uint32 ourOffsetBasis  = 0x811c9dc5;
+			static constexpr uint32 ourPrime		= 0x1000193;
+		};
 
-			static constexpr uint32 CompileTimeHash(const char* aString)
+		template <>
+		struct FNV1aTraits<uint64>
+		{
+			static const uint64 ourOffsetBasis		= 0xcbf29ce484222325;
+			static const uint64 ourPrime			= 0x100000001b3;
+		};
+
+		template <typename THashValueType, HashOptions THashOptions>
+		struct FNV1aHashStatic
+		{
+			static const THashValueType ourOffsetBasis  = FNV1aTraits<THashValueType>::ourOffsetBasis;
+			static const THashValueType ourPrime		= FNV1aTraits<THashValueType>::ourPrime;
+			static const THashValueType	ourInvalidHash	= ourOffsetBasis;
+
+			static constexpr char ToLower(char c)
 			{
-				uint32 hash = theFNV1a32OffsetBasis;
-				for (const char* itr = aString; itr && *itr != '\0'; ++itr)
-				{
-					hash = (hash ^ *itr) * theFNV1a32Prime;
-				}
-
-				return hash;
+				return c >= 'A' && c <= 'Z' 
+					   ? c - ('A'-'a') 
+					   : c;
 			}
 
-			static uint32 Hash(const StringView& aStringView)
+			static constexpr THashValueType Hash(StringView aString)
 			{
-				uint32 hash = theFNV1a32OffsetBasis;
-				for (char character : aStringView)
+				THashValueType hash = ourInvalidHash;
+				for (size_t index = 0, count = aString.size(); index < count; ++index)
 				{
-					hash = (hash ^ character) * theFNV1a32Prime;
+					if constexpr (THashOptions == HashOptions::CaseSensitive)
+					{
+						hash = static_cast<THashValueType>((hash ^ aString[index]) * static_cast<unsigned long long>(ourPrime));
+					}
+					else
+					{
+						hash = static_cast<THashValueType>((hash ^ ToLower(aString[index])) * static_cast<unsigned long long>(ourPrime));
+					}
 				}
 
 				return hash;
 			}
 		};
+
+		//-----------------------------------------------------------------------------------------
+		// Name	:	Fnv1a32Hash
+		// Desc	:	Hash a string using the FNV1a32 hashing algorithm
+		//-----------------------------------------------------------------------------------------
+		struct FNV1a32Hash : public FNV1aHashStatic<uint32, HashOptions::CaseSensitive> {};	
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	Fnv1a32HashNoCase
 		// Desc	:	Hash a string using the FNV1a32 hashing algorithm
 		//			automatically converts the string to lower case first
 		//-----------------------------------------------------------------------------------------
-		struct FNV1a32HashNoCase
-		{
-			static const uint32 ourInvalidHash = theFNV1a32OffsetBasis;
-
-			static constexpr uint32 CompileTimeHash(const char* aString)
-			{
-				uint32 hash = theFNV1a32OffsetBasis;
-				for (const char* itr = aString; itr && *itr != '\0'; ++itr)
-				{
-					hash = (hash ^ std::tolower(*itr)) * theFNV1a32Prime;
-				}
-
-				return hash;
-			}
-
-			static uint32 Hash(const StringView& aStringView)
-			{
-				uint32 hash = theFNV1a32OffsetBasis;
-				for (char character : aStringView)
-				{
-					hash = (hash ^ std::tolower(character)) * theFNV1a32Prime;
-				}
-
-				return hash;
-			}
-		};
+		struct FNV1a32HashNoCase : public FNV1aHashStatic<uint32, HashOptions::CaseInsensitive> {};
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	Fnv1a64Hash
 		// Desc	:	Hash a string using the FNV1a64 hashing algorithm
 		//-----------------------------------------------------------------------------------------
-		struct FNV1a64Hash
-		{
-			static const uint64 ourInvalidHash = theFNV1a64OffsetBasis;
-
-			static constexpr uint64 CompileTimeHash(const char* aString)
-			{
-				uint64 hash = theFNV1a64OffsetBasis;
-				for (const char* itr = aString; itr && *itr != '\0'; ++itr)
-				{
-					hash = (hash ^ *itr) * theFNV1a64Prime;
-				}
-
-				return hash;
-			}
-
-			static uint64 Hash(const StringView& aStringView)
-			{
-				uint64 hash = theFNV1a64OffsetBasis;
-				for (char character : aStringView)
-				{
-					hash = (hash ^ character) * theFNV1a64Prime;
-				}
-
-				return hash;
-			}
-		};
-
+		struct FNV1a64Hash : public FNV1aHashStatic<uint64, HashOptions::CaseSensitive> {};
+		
 		//-----------------------------------------------------------------------------------------
 		// Name	:	Fnv1a64HashNoCase
 		// Desc	:	Hash a string using the FNV1a64 hashing algorithm
 		//			automatically converts the string to lower case first
 		//-----------------------------------------------------------------------------------------
-		struct FNV1a64HashNoCase
-		{
-			static const uint64 ourInvalidHash = theFNV1a64OffsetBasis;
-
-			static constexpr uint64 CompileTimeHash(const char* aString)
-			{
-				uint64 hash = theFNV1a64OffsetBasis;
-				for (const char* itr = aString; itr && *itr != '\0'; ++itr)
-				{
-					hash = (hash ^ std::tolower(*itr)) * theFNV1a64Prime;
-				}
-
-				return hash;
-			}
-
-			static uint64 Hash(const StringView& aStringView)
-			{
-				uint64 hash = theFNV1a64OffsetBasis;
-				for (char character : aStringView)
-				{
-					hash = (hash ^ std::tolower(character)) * theFNV1a64Prime;
-				}
-
-				return hash;
-			}
-		};
+		struct FNV1a64HashNoCase : public FNV1aHashStatic<uint64, HashOptions::CaseInsensitive> {};
 	}
 }

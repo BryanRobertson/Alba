@@ -22,6 +22,8 @@
 
 ALBA_IMPLEMENT_LOG_CATEGORY(Quake3ViewerDemo);
 
+using namespace Alba::Literals;
+
 namespace Quake3ViewerExe
 {
 	void InitApplicationParams(Alba::Framework::ApplicationInitParams& anInitParamsOut);
@@ -70,7 +72,7 @@ namespace Quake3ViewerExe
 			//-------------------------------------------------------------------------------------
 			Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
 
-			moduleRepository.LoadModule("Alba.Quake3Viewer");
+			moduleRepository.LoadModule("Alba.Quake3Viewer"_nocasehash32);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -105,6 +107,13 @@ namespace Quake3ViewerExe
 
 namespace Quake3ViewerExe
 {
+	using namespace Alba::BasicTypes;
+
+	template <uint32 TValue> struct StaticNoCaseStringHash
+	{
+		static constexpr uint32 Value = TValue;
+	};
+
 	//---------------------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------
 	void InitApplicationParams(Alba::Framework::ApplicationInitParams& anInitParamsOut)
@@ -117,10 +126,10 @@ namespace Quake3ViewerExe
 		int windowWidth = 800;
 		int windowHeight = 600;
 
-		commandLine.TryGetParamValue("windowPosX", windowPosX);
-		commandLine.TryGetParamValue("windowPosY", windowPosY);
-		commandLine.TryGetParamValue("windowWidth", windowWidth);
-		commandLine.TryGetParamValue("windowHeight", windowHeight);
+		commandLine.TryGetParamValue("windowPosX"_nocasehash32, windowPosX);
+		commandLine.TryGetParamValue("windowPosY"_nocasehash32, windowPosY);
+		commandLine.TryGetParamValue("windowWidth"_nocasehash32, windowWidth);
+		commandLine.TryGetParamValue("windowHeight"_nocasehash32, windowHeight);
 
 		Alba::Core::WindowInitParams& windowParams = anInitParamsOut.myWindowInitParams;
 

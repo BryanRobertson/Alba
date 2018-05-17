@@ -38,6 +38,7 @@ namespace GravityDemo
 		using Alba::Core::StringHash32;
 		using Alba::Framework::GameApplication;
 		using namespace Alba::BasicTypes;
+		using namespace Alba::Literals;
 
 		//-----------------------------------------------------------------------------------------
 		// Initialise framework
@@ -70,7 +71,7 @@ namespace GravityDemo
 			//-------------------------------------------------------------------------------------
 			Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
 
-			moduleRepository.LoadModule("Alba.Gravity");
+			moduleRepository.LoadModule("Alba.Gravity"_nocasehash32);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -109,6 +110,8 @@ namespace GravityDemo
 	//---------------------------------------------------------------------------------------------
 	void InitApplicationParams(Alba::Framework::ApplicationInitParams& anInitParamsOut)
 	{
+		using namespace Alba::Literals;
+
 		const Alba::Core::CommandLineParameters& commandLine = Alba::Core::CommandLineModule::Get().GetParams();	
 
 		// Init window params
@@ -117,10 +120,10 @@ namespace GravityDemo
 		int windowWidth = 800;
 		int windowHeight = 600;
 
-		commandLine.TryGetParamValue("windowPosX", windowPosX);
-		commandLine.TryGetParamValue("windowPosY", windowPosY);
-		commandLine.TryGetParamValue("windowWidth", windowWidth);
-		commandLine.TryGetParamValue("windowHeight", windowHeight);
+		commandLine.TryGetParamValue("windowPosX"_nocasehash32, windowPosX);
+		commandLine.TryGetParamValue("windowPosY"_nocasehash32, windowPosY);
+		commandLine.TryGetParamValue("windowWidth"_nocasehash32, windowWidth);
+		commandLine.TryGetParamValue("windowHeight"_nocasehash32, windowHeight);
 
 		Alba::Core::WindowInitParams& windowParams = anInitParamsOut.myWindowInitParams;
 

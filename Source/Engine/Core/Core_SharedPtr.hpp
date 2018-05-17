@@ -26,7 +26,7 @@ namespace Alba
 		template <typename TValueType, typename... TArgs>
 		SharedPtr<TValueType> MakeShared(TArgs&&... args)
 		{
-			return eastl::make_shared<TValueType, TArgs>(eastl::forward<TArgs>(args)...);
+			return eastl::make_shared<TValueType, TArgs...>(eastl::forward<TArgs>(args)...);
 		}
 
 		//------------------------------------------------------------------------------------------------

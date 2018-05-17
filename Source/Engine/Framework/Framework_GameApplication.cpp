@@ -51,6 +51,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		uint32 GameApplication::Init(ApplicationInitParams anInitParams)
 		{
+			using namespace Alba::Literals;
+
 			Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
 
 			//----------------------------------------------------------------------
@@ -60,7 +62,7 @@ namespace Alba
 				const Alba::Core::CommandLineParameters& commandLine = Alba::Core::CommandLineModule::Get().GetParams();
 
 				bool disableProfiler = false;
-				if (!commandLine.TryGetParamValue("disableProfiler", disableProfiler) || !disableProfiler)
+				if (!commandLine.TryGetParamValue("disableProfiler"_nocasehash32, disableProfiler) || !disableProfiler)
 				{
 					ALBA_PROFILE_INIT();
 					ALBA_PROFILE_SETCURRENTTHREADNAME("Main Thread");
@@ -88,7 +90,7 @@ namespace Alba
 
 				initParamsDict.Set(graphicsInitParams);
 
-				if ( !moduleRepository.LoadModule("Alba.Graphics", initParamsDict) )
+				if ( !moduleRepository.LoadModule("Alba.Graphics"_nocasehash32, initParamsDict) )
 				{
 					return 1;
 				}

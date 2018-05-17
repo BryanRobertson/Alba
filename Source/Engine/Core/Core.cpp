@@ -14,7 +14,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void RegisterModules()
 		{
-			CommandLineModule::Register();
+			
 		}
 	}
 }

@@ -26,7 +26,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		CommandLineParameters::CommandLineParameters(const char* aCommandLineString)
+		CommandLineParameters::CommandLineParameters(StringView aCommandLineString)
 		{
 			Init(aCommandLineString);
 		}
@@ -260,34 +260,36 @@ namespace Alba
 				return *myCurrentChar == '-';
 			}
 
-			const char* myCommandLineString = nullptr;
+			const char* myCommandLineString;
 			const char* myCurrentChar = nullptr;
 		};
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void CommandLineParameters::Init(const char* aCommandLineString)
+		void CommandLineParameters::Init(StringView aCommandLineString)
 		{
-			if (!aCommandLineString)
+			if (aCommandLineString.size() == 0)
 			{
 				return;
 			}
 
-			CommandLineParser parser(aCommandLineString);
+			CommandLineParser parser(aCommandLineString.begin());
 
 			FixedString<32> tokenName;
 			FixedString<32> tokenValue;
 
 			while (parser.ParseParam(tokenName, tokenValue))
 			{
-				const NoCaseStringHash32 nameHash(tokenName);
+				const StringView name(tokenName);
+				const NoCaseStringHash32 nameHash(name);
+
 				AddParam(tokenName, tokenValue);
 			}
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		bool CommandLineParameters::IsParamPresent(const char* aParamName) const
+		bool CommandLineParameters::IsParamPresent(StringView aParamName) const
 		{
 			const NoCaseStringHash32 hash(aParamName);
 
@@ -299,14 +301,14 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void CommandLineParameters::AddParam(const char* aParamName, const char* aParamValue /*= nullptr*/)
+		void CommandLineParameters::AddParam(StringView aParamName, StringView aParamValue /*= nullptr*/)
 		{
 			const NoCaseStringHash32 hash(aParamName);
 
 			FixedString<32> paramValue;
-			if (aParamValue)
+			if (aParamValue.size() > 0)
 			{
-				paramValue = aParamValue;
+				paramValue.assign(aParamValue.begin(), aParamValue.end());
 			}
 
 			AddParam(hash, paramValue);
@@ -327,8 +329,12 @@ namespace Alba
 				{
 					paramData.myCachedTypedValue = true;
 				}
+				else
+				{
+					paramData.myCachedTypedValue.Clear();
+				}
 
-				myParams.insert(MakePair(aParamNameId, paramData));
+				myParams.insert(MakePair(aParamNameId, std::move(paramData)));
 			}
 			else
 			{

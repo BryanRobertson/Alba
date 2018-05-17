@@ -78,6 +78,8 @@ namespace Alba
 
                     // Full inlining
                     conf.Options.Add(Options.Vc.Compiler.Inline.AnySuitable);
+                    conf.Options.Add(Options.Vc.Compiler.Optimization.FullOptimization);
+                    conf.Options.Add(Options.Vc.Compiler.Optimization.MaximizeSpeed);
                 }
 				
 				if ( target.Platform == Platform.win32 || target.Platform == Platform.win64 )
@@ -103,6 +105,7 @@ namespace Alba
 
                 conf.Options.Add(Options.Vc.Compiler.Exceptions.EnableWithSEH);
                 conf.Options.Add(Options.Vc.General.TreatWarningsAsErrors.Enable);
+                conf.Options.Add(Options.Vc.Compiler.EnhancedInstructionSet.AdvancedVectorExtensions2);
                 conf.Options.Add(Alba.Settings.WindowsTargetPlatformVersion);
 
                 // C4577 - 'noexpect' used with no exception handling mode specified

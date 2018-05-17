@@ -28,6 +28,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		uint32 Init(FrameworkInitParams& aInitParams)
 		{
+			using namespace Alba::Literals;
+
 			//----------------------------------------------------------------------
 			// Initialise logging
 			//----------------------------------------------------------------------
@@ -41,15 +43,17 @@ namespace Alba
 			// Create module repository
 			//----------------------------------------------------------------------
 			Alba::Core::ModuleRepository::Create();
-
+			
 			//----------------------------------------------------------------------
-			// Command line module is the always loaded by default
+			// Command line module is always registered/loaded by default
 			//----------------------------------------------------------------------
 			{
+				Alba::Core::CommandLineModule::Register();
+
 				Core::AnyDictionary params;
 				params.Set<Core::String>(aInitParams.myCommandLineString);
 
-				Alba::Core::ModuleRepository::Get().LoadModule("Alba.Core.CommandLine", params);
+				Alba::Core::ModuleRepository::Get().LoadModule("Alba.Core.CommandLine"_nocasehash32, params);
 			}
 
 			// If we fail to initialise log that too

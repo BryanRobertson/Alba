@@ -83,6 +83,7 @@ namespace Alba
 		//------------------------------------------------------------------------------------------
 		void ModuleRepository::RegisterModule(NoCaseStringHash32 aModuleNameId, ModuleRepository::ModuleInfo&& aModule)
 		{
+			ALBA_ASSERT(myModules.find(aModuleNameId) == myModules.end(), "Attempted to register the \"%s\" module twice!", aModuleNameId.LogString().c_str());
 			myModules.insert(MakePair(aModuleNameId, std::move(aModule)));
 		}
 
@@ -115,6 +116,10 @@ namespace Alba
 			if (itr != myModules.end())
 			{
 				return itr->second.myLoadFunc(someParams);
+			}
+			else
+			{
+				ALBA_ASSERT(itr != myModules.end(), "Attempted to load unregistered module \"%s\"!", aModuleNameId.LogString().c_str());
 			}
 			
 			return false;

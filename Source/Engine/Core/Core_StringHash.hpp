@@ -21,6 +21,14 @@ namespace Alba
 {
 	namespace Core
 	{
+		// Some constexpr constructors can't be constexpr if string hash debugging is enabled
+		// (because they modify a dictionary of hash->string)
+		#if !defined(ALBA_DEBUG_STRINGHASH)
+			#define ALBA_STRINGHASH_CONSTEXPR constexpr
+		#else
+			#define ALBA_STRINGHASH_CONSTEXPR
+		#endif
+
 		//-----------------------------------------------------------------------------------------
 		// Name	:	TStringHash
 		// Desc	:	Template for a string hash. Uses Fnv1a hash as the hashing algorithm
@@ -44,17 +52,9 @@ namespace Alba
 				static const THashValueType ourInvalidHashValue		= HashAlgorithm::ourInvalidHash;
 
 				//=================================================================================
-				// Public Static Methods
-				//=================================================================================
-				static constexpr TStringHashBase<THashValueType> FromString(const char* aString)
-				{
-					return HashAlgorithm::CompileTimeHash(aString);
-				}
-
-				//=================================================================================
 				// Public Constructors
 				//=================================================================================
-				TStringHashBase()
+				constexpr TStringHashBase()
 					: myHashValue(ourInvalidHashValue)
 				{
 					#if defined(ALBA_DEBUG_STRINGHASH)
@@ -62,19 +62,8 @@ namespace Alba
 					#endif
 				}
 
-				constexpr TStringHashBase(const char* aString, const CompileTimeHash&)
-					: myHashValue(HashAlgorithm::CompileTimeHash(aString))
-				{
-					#if defined(ALBA_DEBUG_STRINGHASH)
-					{
-						myDebugString = ourDebugStringTable.Set(myHashValue, aString);
-					}
-					#endif
-				}
-
-				template <typename TCharType>
-				explicit TStringHashBase(const BasicStringView<TCharType>& aStringView)
-					: myHashValue(HashAlgorithm::Hash(aStringView.data()))
+				inline explicit ALBA_STRINGHASH_CONSTEXPR TStringHashBase(StringView aStringView)
+					: myHashValue(HashAlgorithm::Hash(aStringView))
 				{
 					#if defined(ALBA_DEBUG_STRINGHASH)
 					{
@@ -83,7 +72,7 @@ namespace Alba
 					#endif
 				}
 
-				explicit TStringHashBase(THashValueType aHash)
+				explicit constexpr TStringHashBase(THashValueType aHash)
 					: myHashValue(aHash)
 				{
 					#if defined(ALBA_DEBUG_STRINGHASH)
@@ -96,12 +85,12 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				THashValueType GetHash() const		
+				constexpr THashValueType GetHash() const
 				{
 					return myHashValue; 
 				}
 
-				bool IsValid() const
+				constexpr bool IsValid() const
 				{ 
 					return myHashValue != ourInvalidHashValue;
 				}
@@ -109,32 +98,32 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				// Operator overloads
 				//---------------------------------------------------------------------------------
-				bool operator == (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
+				constexpr bool operator == (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
 				{
 					return myHashValue == anOther.myHashValue;
 				}
 
-				bool operator != (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
+				constexpr bool operator != (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
 				{
 					return myHashValue != anOther.myHashValue;
 				}
 
-				bool operator <= (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
+				constexpr bool operator <= (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
 				{
 					return myHashValue <= anOther.myHashValue;
 				}
 
-				bool operator >= (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
+				constexpr bool operator >= (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
 				{
 					return myHashValue >= anOther.myHashValue;
 				}
 
-				bool operator < (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
+				constexpr bool operator < (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
 				{
 					return myHashValue < anOther.myHashValue;
 				}
 
-				bool operator > (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
+				constexpr bool operator > (const TStringHashBase<THashValueType, THashAlgorithm>& anOther) const
 				{
 					return myHashValue > anOther.myHashValue;
 				}
@@ -146,6 +135,16 @@ namespace Alba
 						return ourDebugStringTable.Get(myHashValue); 
 					}
 				#endif
+
+				// LogString is defined even when string hashing debug isn't enabled. In that case it just converts the hash to a string
+				FixedString<64> LogString()
+				{
+					#if defined(ALBA_DEBUG_STRINGHASH)
+						return Debug_GetString();
+					#else
+						return FormatString<64>("0x%x", GetHash());
+					#endif
+				}
 
 			private:
 
@@ -225,201 +224,10 @@ namespace Alba
 			typename TStringHashBase<THashValueType, THashAlgorithm>::DebugStringTable TStringHashBase<THashValueType, THashAlgorithm>::ourDebugStringTable;
 		#endif
 
-		//-----------------------------------------------------------------------------------------
-		// Name	:	StringHash32
-		// Desc	:	32-bit string hash
-		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API StringHash32 : public TStringHashBase<uint32, FNV1a32Hash>
-		{
-			typedef TStringHashBase<uint32, FNV1a32Hash> Super;
-
-			public:
-
-				//=================================================================================
-				// Public Constructors
-				//=================================================================================
-				StringHash32();
-				explicit StringHash32(uint32 aHash);
-
-				template <typename TCharType, typename TAllocator>
-					StringHash32(const BasicString<TCharType, TAllocator>& aString)
-						: Super(BasicStringView<TCharType>(aString.c_str()))
-				{
-
-				}
-
-				template<typename TCharType, size_t	TCount, OverflowBehavior TOverflowBehavior, typename TOverflowAllocator>
-					StringHash32(const FixedBasicString<TCharType, TCount, TOverflowBehavior, TOverflowAllocator>& aString)
-						: Super(BasicStringView<TCharType>(aString.c_str()))
-				{
-					
-				}
-
-				constexpr StringHash32(const char* aString)
-					: Super(aString, CompileTimeHash())
-				{
-
-				}
-
-				//=================================================================================
-				// Public Methods
-				//=================================================================================
-				FixedString<64> LogString()
-				{
-					#if defined(ALBA_DEBUG_STRINGHASH)
-						return Debug_GetString();
-					#else
-						return FormatString<64>("0x%x", GetHash());
-					#endif
-				}
-		};
-
-		//-----------------------------------------------------------------------------------------
-		// Name	:	NoCaseStringHash32
-		// Desc	:	32-bit string no-case hash (converts string to lower case before hashing)
-		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API NoCaseStringHash32 : public TStringHashBase<uint32, FNV1a32HashNoCase>
-		{
-			typedef TStringHashBase<uint32, FNV1a32HashNoCase> Super;
-
-			public:
-
-				//=================================================================================
-				// Public Constructors
-				//=================================================================================
-				NoCaseStringHash32();
-				explicit NoCaseStringHash32(uint32 aHash);
-
-				template <typename TCharType, typename TAllocator>
-					NoCaseStringHash32(const BasicString<TCharType, TAllocator>& aString)
-						: Super(BasicStringView<TCharType>(aString.c_str()))
-				{
-
-				}
-
-				template<typename TCharType, size_t	TCount, OverflowBehavior TOverflowBehavior, typename TOverflowAllocator>
-					NoCaseStringHash32(const FixedBasicString<TCharType, TCount, TOverflowBehavior, TOverflowAllocator>& aString)
-						: Super(BasicStringView<TCharType>(aString.c_str()))
-				{
-
-				}
-
-				constexpr NoCaseStringHash32(const char* aString)
-					: Super(aString, CompileTimeHash())
-				{
-
-				}
-
-				//=================================================================================
-				// Public Methods
-				//=================================================================================
-				FixedString<64> LogString()
-				{
-					#if defined(ALBA_DEBUG_STRINGHASH)
-						return Debug_GetString();
-					#else
-						return FormatString<64>("0x%x", GetHash());
-					#endif
-				}
-		};
-
-		//-----------------------------------------------------------------------------------------
-		// Name	:	StringHash64
-		// Desc	:	64-bit string hash
-		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API StringHash64 : public TStringHashBase<uint64, FNV1a64Hash>
-		{
-			typedef TStringHashBase<uint64, FNV1a64Hash> Super;
-
-			public:
-
-				//=================================================================================
-				// Public Constructors
-				//=================================================================================
-				StringHash64();
-				explicit StringHash64(uint64 aHash);
-
-				template <typename TCharType, typename TAllocator>
-					StringHash64(const BasicString<TCharType, TAllocator>& aString)
-						: Super(BasicStringView<TCharType>(aString.c_str()))
-				{
-
-				}
-
-				template<typename TCharType, size_t	TCount, OverflowBehavior TOverflowBehavior, typename TOverflowAllocator>
-					StringHash64(const FixedBasicString<TCharType, TCount, TOverflowBehavior, TOverflowAllocator>& aString)
-						: Super(BasicStringView<TCharType>(aString.c_str()))
-				{
-
-				}
-
-				constexpr StringHash64(const char* aString)
-					: Super(aString, CompileTimeHash())
-				{
-
-				}
-
-				//=================================================================================
-				// Public Methods
-				//=================================================================================
-				FixedString<64> LogString()
-				{
-					#if defined(ALBA_DEBUG_STRINGHASH)
-						return Debug_GetString();
-					#else
-						return FormatString<64>("0x%x", GetHash());
-					#endif
-				}
-		};
-
-		//-----------------------------------------------------------------------------------------
-		// Name	:	NoCaseStringHash64
-		// Desc	:	64-bit string no-case hash (converts string to lower case before hashing)
-		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API NoCaseStringHash64 : public TStringHashBase<uint64, FNV1a64HashNoCase>
-		{
-			typedef TStringHashBase<uint64, FNV1a64HashNoCase> Super;
-
-			public:
-
-				//=================================================================================
-				// Public Constructors
-				//=================================================================================
-				NoCaseStringHash64();
-				explicit NoCaseStringHash64(uint64 aHash);
-
-				template <typename TCharType, typename TAllocator>
-				NoCaseStringHash64(const BasicString<TCharType, TAllocator>& aString)
-					: Super(BasicStringView<TCharType>(aString.c_str(), aString.length()))
-				{
-
-				}
-
-				template<typename TCharType, size_t	TCount, OverflowBehavior TOverflowBehavior, typename TOverflowAllocator>
-				NoCaseStringHash64(const FixedBasicString<TCharType, TCount, TOverflowBehavior, TOverflowAllocator>& aString)
-					: Super(BasicStringView<TCharType>(aString.c_str(), aString.length()))
-				{
-
-				}
-
-				constexpr NoCaseStringHash64(const char* aString)
-					: Super(aString, CompileTimeHash())
-				{
-
-				}
-
-				//=================================================================================
-				// Public Methods
-				//=================================================================================
-				FixedString<64> LogString()
-				{
-					#if defined(ALBA_DEBUG_STRINGHASH)
-						return Debug_GetString();
-					#else
-						return FormatString<64>("0x%x", GetHash());
-					#endif
-				}
-		};
+		typedef TStringHashBase<uint32, FNV1a32Hash>		StringHash32;
+		typedef TStringHashBase<uint32, FNV1a32HashNoCase>	NoCaseStringHash32;
+		typedef TStringHashBase<uint64, FNV1a64Hash>		StringHash64;
+		typedef TStringHashBase<uint64, FNV1a64HashNoCase>	NoCaseStringHash64;
 	}
 }
 
@@ -462,3 +270,31 @@ template <> struct std::hash<Alba::Core::NoCaseStringHash64>
 {
 	size_t operator()(Alba::Core::NoCaseStringHash64 val) const { return static_cast<size_t>(val.GetHash()); }
 };
+
+namespace Alba
+{
+	namespace Literals
+	{
+		inline ALBA_STRINGHASH_CONSTEXPR Alba::Core::StringHash32 operator "" _hash32(const char* aStr, size_t aSize)
+		{
+			return Alba::Core::StringHash32(Alba::Core::StringView(aStr, aSize));
+		}
+
+		inline ALBA_STRINGHASH_CONSTEXPR Alba::Core::StringHash64 operator "" _hash64(const char* aStr, size_t aSize)
+		{
+			return Alba::Core::StringHash64(Alba::Core::StringView(aStr, aSize));
+		}
+
+		inline ALBA_STRINGHASH_CONSTEXPR Alba::Core::NoCaseStringHash32 operator "" _nocasehash32(const char* aStr, size_t aSize)
+		{
+			return Alba::Core::NoCaseStringHash32(Alba::Core::StringView(aStr, aSize));
+		}
+
+		inline ALBA_STRINGHASH_CONSTEXPR Alba::Core::NoCaseStringHash64 operator "" _nocasehash64(const char* aStr, size_t aSize)
+		{
+			return Alba::Core::NoCaseStringHash64(Alba::Core::StringView(aStr, aSize));
+		}
+	}
+}
+
+#undef ALBA_STRINGHASH_CONSTEXPR
