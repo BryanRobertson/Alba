@@ -82,8 +82,8 @@ namespace Alba
 			//----------------------------------------------------------------------
 			{
 				Alba::Graphics::InitParams graphicsInitParams;
-				graphicsInitParams.myWindowWidth = anInitParams.myWindowInitParams.mySize.x();
-				graphicsInitParams.myWindowHeight = anInitParams.myWindowInitParams.mySize.y();
+				graphicsInitParams.myWindowWidth = anInitParams.myWindowInitParams.mySizeX;
+				graphicsInitParams.myWindowHeight = anInitParams.myWindowInitParams.mySizeY;
 				InitGraphicsPlatformData(graphicsInitParams.myPlatformData);
 
 				if ( !moduleRepository.LoadModule("Alba.Graphics"_nocasehash32, std::move(graphicsInitParams)) )

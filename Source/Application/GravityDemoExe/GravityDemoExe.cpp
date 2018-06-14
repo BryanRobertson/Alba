@@ -129,7 +129,9 @@ namespace GravityDemo
 		Alba::Core::WindowInitParams& windowParams = anInitParamsOut.myWindowInitParams;
 
 		windowParams.myIsHidden = false;
-		windowParams.myPosition = Alba::Math::Vector2i(windowPosX, windowPosY);
-		windowParams.mySize = Alba::Math::Vector2i(windowWidth, windowHeight);
+		windowParams.myPositionX = windowPosX;
+		windowParams.myPositionY = windowPosY;
+		windowParams.mySizeX = windowWidth;
+		windowParams.mySizeY = windowHeight;
 	}
 }

@@ -23,8 +23,10 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		struct WindowInitParams
 		{
-			Math::Vector2i	 myPosition = Math::Vector2i(100, 100);
-			Math::Vector2i	 mySize		= Math::Vector2i(800, 600);
+			int32			 myPositionX = 100;
+			int32			 myPositionY = 100;
+			int32			 mySizeX	 = 800;
+			int32			 mySizeY	 = 600;
 			FixedString<32>	 myTitle	= "Alba";
 			bool			 myIsHidden = false;
 		};

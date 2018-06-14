@@ -234,8 +234,8 @@ namespace Alba
 				WindowLogCategory,
 				LogLevel::Info, 
 				"CreateWindow(x=%d, y=%d, w=%d, h=%d)",
-				aParams.myPosition.x(), aParams.myPosition.y(),
-				aParams.mySize.x(), aParams.mySize.y()
+				aParams.myPositionX, aParams.myPositionY,
+				aParams.mySizeX, aParams.mySizeY
 			);
 
 			const DWORD dwStyle		= WS_OVERLAPPED | WS_BORDER | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU;
@@ -247,10 +247,10 @@ namespace Alba
 				theWindowClassName,						//className
 				aParams.myTitle.c_str(),				//lpWindowName
 				dwStyle,								//dwStyle
-				aParams.myPosition.x(),					//x
-				aParams.myPosition.y(),					//y
-				aParams.mySize.x(),						//width
-				aParams.mySize.y(),						//height
+				aParams.myPositionX,					//x
+				aParams.myPositionY,					//y
+				aParams.mySizeX,						//width
+				aParams.mySizeY,						//height
 				0,										//hWndParent
 				0,										//hMenu
 				hInstance,								//hInstance

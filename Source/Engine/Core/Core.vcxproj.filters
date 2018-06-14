@@ -220,15 +220,6 @@
     <ClInclude Include="Core_CommandLineModule.hpp">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Math_Vector.hpp">
-      <Filter>Maths</Filter>
-    </ClInclude>
-    <ClInclude Include="Math_Matrix.hpp">
-      <Filter>Maths</Filter>
-    </ClInclude>
-    <ClInclude Include="Math_Quaternion.hpp">
-      <Filter>Maths</Filter>
-    </ClInclude>
     <ClInclude Include="Core_Profile.hpp">
       <Filter>Profiling</Filter>
     </ClInclude>
@@ -268,6 +259,8 @@
     <ClInclude Include="Core_VectorMultiMap.hpp">
       <Filter>Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Core_Resource.hpp" />
+    <ClInclude Include="Core_ResourceRepository.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">
@@ -305,9 +298,6 @@
     </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{e16b68bf-fea4-493f-bfab-ab2b79d2067d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Maths">
-      <UniqueIdentifier>{3fa7508c-12a1-44f0-9073-6b689c8a2de2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Profiling">
       <UniqueIdentifier>{55e33dae-7450-40c2-b690-5361a3e7ce1c}</UniqueIdentifier>

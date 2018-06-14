@@ -264,7 +264,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void DX11RenderBackEnd::ClearBuffer(const Math::Vector4f& aColour)
 		{
-			const float colour[] = { aColour.x(), aColour.y(), aColour.z(), aColour.w() };
+			const float colour[] = { aColour[0], aColour[1], aColour[2], aColour[3] };
 			myDeviceContext->ClearRenderTargetView(myRenderTarget.Get(), colour);
 
 			//myDeviceContext->ClearDepthStencilView(myDepthStencilView.Get(), )

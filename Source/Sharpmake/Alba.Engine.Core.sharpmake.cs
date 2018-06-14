@@ -2,6 +2,7 @@ using System.IO;
 using Sharpmake;
 
 [module: Sharpmake.Include("Alba.Base.LibraryProject.sharpmake.cs")]
+[module: Sharpmake.Include("Alba.Engine.Math.sharpmake.cs")]
 [module: Sharpmake.Include("External.EASTL.sharpmake.cs")]
 
 namespace Alba
@@ -30,6 +31,7 @@ namespace Alba
                 conf.IncludePaths.Add(Alba.Settings.GetExternalLibraryPath("eigen"));
                 conf.IncludePaths.Add(Alba.Settings.GetExternalLibraryPath(Path.Combine("remotery", "lib")));
 
+				conf.AddPublicDependency<Alba.Engine.MathProject>(target);
                 conf.AddPublicDependency<External.EASTL.Project>(target);
             }
         }
