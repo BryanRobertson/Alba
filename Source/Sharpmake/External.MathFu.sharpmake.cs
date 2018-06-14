@@ -25,7 +25,7 @@ namespace External
             [Configure()]
             public override void ConfigureAll(Configuration conf, Target target)
             {
-                base.ConfigureAll(conf, target);
+                //base.ConfigureAll(conf, target);
 
                 //---------------------------------------------------------------------------------
                 // Includes

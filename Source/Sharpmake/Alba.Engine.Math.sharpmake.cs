@@ -2,7 +2,7 @@ using System.IO;
 using Sharpmake;
 
 [module: Sharpmake.Include("Alba.Base.LibraryProject.sharpmake.cs")]
-[module: Sharpmake.Include("External.MathFu.sharpmake.cs")]
+//[module: Sharpmake.Include("External.MathFu.sharpmake.cs")]
 
 namespace Alba
 {
@@ -11,6 +11,8 @@ namespace Alba
         [Sharpmake.Generate]
         class MathProject : Alba.Base.LibraryProject
         {
+            private readonly string MathFuPath = Alba.Settings.GetExternalLibraryPath("MathFu");
+
             public MathProject()
             {
                 Name = "Math";
@@ -25,9 +27,13 @@ namespace Alba
                 conf.SolutionFolder = "Alba/Engine";
                 conf.ProjectPath = SourceRootPath;
 
+                //---------------------------------------------------------------------------------
+                // Includes
+                //---------------------------------------------------------------------------------
+                conf.IncludePaths.Add(Path.Combine(MathFuPath, "include"));
                 conf.IncludePaths.Add(SourceRootPath);
 
-                conf.AddPublicDependency<External.MathFu.Project>(target);
+                //conf.AddPublicDependency<External.MathFu.Project>(target);
             }
         }
     }
