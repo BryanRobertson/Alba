@@ -51,7 +51,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------------
 		template <typename TDerived>
-		Resource<TDerived>::Resource(Resource<TDerived>::NameIdType aResourceNameId)
+		Resource<TDerived>::Resource(NoCaseStringHash32 aResourceNameId)
 			: myResourceNameId(aResourceNameId)
 		{
 

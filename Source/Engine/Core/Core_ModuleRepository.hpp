@@ -50,7 +50,25 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				// Load/Unload modules
 				//---------------------------------------------------------------------------------
-				bool		LoadModule(NoCaseStringHash32 aModuleNameId, const AnyDictionary& someParams = AnyDictionary());
+				template <typename TValueType>
+				bool LoadModule(NoCaseStringHash32 aModuleNameId, const TValueType& aParam)
+				{
+					AnyDictionary params;
+					params.Set(aParam);
+
+					return LoadModule(aModuleNameId, std::move(params));
+				}
+
+				template <typename TValueType, class=std::enable_if<!std::is_lvalue_reference_v<TValueType>> >
+				bool LoadModule(NoCaseStringHash32 aModuleNameId, TValueType&& aParam)
+				{
+					AnyDictionary params;
+					params.Set(std::move(aParam));
+
+					return LoadModule(aModuleNameId, std::move(params));
+				}
+
+				bool		LoadModule(NoCaseStringHash32 aModuleNameId, AnyDictionary someParams = AnyDictionary());
 				void		UnloadModule(NoCaseStringHash32 aModuleNameId);
 				void		UnloadAndUnregisterAll();
 
@@ -72,7 +90,7 @@ namespace Alba
 				struct ModuleInfo
 				{
 					typedef void(*UnregisterFunc)();
-					typedef bool(*LoadFunc)(const AnyDictionary& someParams);
+					typedef bool(*LoadFunc)(AnyDictionary someParams);
 					typedef void(*UnloadFunc)();
 
 					UnregisterFunc	myUnregisterFunc	= nullptr;

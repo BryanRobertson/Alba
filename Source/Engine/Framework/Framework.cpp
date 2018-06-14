@@ -28,7 +28,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		uint32 Init(FrameworkInitParams& aInitParams)
 		{
-			using namespace Alba::Literals;
+			using namespace Alba::StringHashLiterals;
 
 			//----------------------------------------------------------------------
 			// Initialise logging
@@ -36,7 +36,7 @@ namespace Alba
 			Alba::Core::LogManager::CreateInstance();
 
 			ALBA_LOG_INFO(Framework, "---------------------------------------------------------------");
-			ALBA_LOG_INFO(Framework, "Init Framework: CommandLine = %s", aInitParams.myCommandLineString.c_str());
+			ALBA_LOG_INFO(Framework, "Init Framework:");
 			ALBA_LOG_INFO(Framework, "---------------------------------------------------------------");
 
 			//----------------------------------------------------------------------
@@ -49,11 +49,11 @@ namespace Alba
 			//----------------------------------------------------------------------
 			{
 				Alba::Core::CommandLineModule::Register();
-
-				Core::AnyDictionary params;
-				params.Set<Core::String>(aInitParams.myCommandLineString);
-
-				Alba::Core::ModuleRepository::Get().LoadModule("Alba.Core.CommandLine"_nocasehash32, params);
+				Alba::Core::ModuleRepository::Get().LoadModule
+				(
+					"Alba.Core.CommandLine"_nocasehash32, 
+					std::move(aInitParams.myCommandLineParameters)
+				);
 			}
 
 			// If we fail to initialise log that too

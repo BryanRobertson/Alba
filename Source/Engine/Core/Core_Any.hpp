@@ -88,10 +88,10 @@ namespace Alba
 				// Name	:	Set
 				// Desc	:	Set the Any to a typed value
 				//---------------------------------------------------------------------------------------------
-				template <typename TDataType>
+				template <typename TDataType, class = std::enable_if<!std::is_lvalue_reference<TDataType>> >
 				void Set(TDataType&& aData)
 				{
-					myData = std::forward<std::decay_t<TDataType> >(aData);
+					myData.emplace(std::move(aData));
 				}
 
 				template <typename TDataType>
@@ -131,6 +131,15 @@ namespace Alba
 				const typename std::decay<TDataType>::type& To() const
 				{
 					const auto* value = eastl::any_cast<const std::decay<TDataType>::type>(&myData);
+					ALBA_ASSERT(value != nullptr, "Attempting to use To<T> on an Any that does not contain the specified type. Use Is<T> first");
+
+					return *value;
+				}
+
+				template <typename TDataType>
+				typename std::decay<TDataType>::type& To()
+				{
+					auto* value = eastl::any_cast<std::decay<TDataType>::type>(&myData);
 					ALBA_ASSERT(value != nullptr, "Attempting to use To<T> on an Any that does not contain the specified type. Use Is<T> first");
 
 					return *value;

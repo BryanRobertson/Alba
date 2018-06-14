@@ -27,7 +27,7 @@ namespace Alba
 				void	OnRegister();
 				void	OnUnregister();
 
-				bool	OnLoad(const Core::AnyDictionary& someParameters);
+				bool	OnLoad(Core::AnyDictionary someParameters);
 				void	OnUnload();
 
 				const CommandLineParameters& GetParams() const  { return myCommandLineParameters; }

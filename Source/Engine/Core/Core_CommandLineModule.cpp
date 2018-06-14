@@ -21,12 +21,12 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		bool CommandLineModule::OnLoad(const Core::AnyDictionary& someParams)
+		bool CommandLineModule::OnLoad(Core::AnyDictionary someParams)
 		{
-			if (someParams.Has<Core::String>())
+			if (someParams.Has<Core::CommandLineParameters>())
 			{
-				const Core::String& commandLine = someParams.Get<Core::String>();
-				myCommandLineParameters.Init(commandLine.c_str());
+				Core::CommandLineParameters& commandLine = someParams.GetMutable<Core::CommandLineParameters>();
+				myCommandLineParameters = std::move(commandLine);
 			}
 
 			return true;

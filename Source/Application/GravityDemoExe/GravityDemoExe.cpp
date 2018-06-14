@@ -32,19 +32,20 @@ namespace GravityDemo
 	//-------------------------------------------------------------------------------------------------
 	// WinMain
 	//-------------------------------------------------------------------------------------------------
-	int CALLBACK WinMain(_In_ HINSTANCE /*hInstance*/, _In_ HINSTANCE /*hPrevInstance*/, _In_ LPSTR lpCmdLine, _In_ int /*nCmdShow*/)
+	int CALLBACK WinMain(_In_ HINSTANCE /*hInstance*/, _In_ HINSTANCE /*hPrevInstance*/, _In_ LPSTR /*lpCmdLine*/, _In_ int /*nCmdShow*/)
 	{
+		using namespace Alba::BasicTypes;
+		using namespace Alba::StringHashLiterals;
+
 		using Alba::Core::UniquePtr;
 		using Alba::Core::StringHash32;
 		using Alba::Framework::GameApplication;
-		using namespace Alba::BasicTypes;
-		using namespace Alba::Literals;
 
 		//-----------------------------------------------------------------------------------------
 		// Initialise framework
 		//-----------------------------------------------------------------------------------------
 		Alba::Framework::FrameworkInitParams frameworkInitParams;
-		frameworkInitParams.myCommandLineString = lpCmdLine;
+		frameworkInitParams.myCommandLineParameters = Alba::Core::CommandLineParameters::CreateWindows();
 
 		//-----------------------------------------------------------------------------------------
 		// Init
@@ -110,7 +111,7 @@ namespace GravityDemo
 	//---------------------------------------------------------------------------------------------
 	void InitApplicationParams(Alba::Framework::ApplicationInitParams& anInitParamsOut)
 	{
-		using namespace Alba::Literals;
+		using namespace Alba::StringHashLiterals;
 
 		const Alba::Core::CommandLineParameters& commandLine = Alba::Core::CommandLineModule::Get().GetParams();	
 

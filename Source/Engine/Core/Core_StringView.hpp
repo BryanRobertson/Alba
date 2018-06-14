@@ -10,6 +10,8 @@
 
 namespace Alba
 {
+	namespace StringViewLiterals = eastl::string_view_literals;
+
 	namespace Core
 	{
 		template <typename TCharType>

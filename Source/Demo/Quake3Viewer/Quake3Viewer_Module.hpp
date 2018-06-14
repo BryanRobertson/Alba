@@ -24,7 +24,7 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				bool	OnLoad(const Core::AnyDictionary& someLoadParams);
+				bool	OnLoad(Core::AnyDictionary someLoadParams);
 				void	OnUnload();
 				void	Update(const Core::Time& aTime);
 

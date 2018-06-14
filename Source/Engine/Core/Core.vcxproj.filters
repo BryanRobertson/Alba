@@ -88,12 +88,6 @@
     <ClInclude Include="Core_FixedSubstring.hpp">
       <Filter>String</Filter>
     </ClInclude>
-    <ClInclude Include="Core_FixedVector.hpp">
-      <Filter>String</Filter>
-    </ClInclude>
-    <ClInclude Include="Core_Bitset.hpp">
-      <Filter>Containers</Filter>
-    </ClInclude>
     <ClInclude Include="Core_Deque.hpp">
       <Filter>Containers</Filter>
     </ClInclude>
@@ -259,8 +253,20 @@
     <ClInclude Include="Core_ConsoleCommandInternal.hpp">
       <Filter>Console</Filter>
     </ClInclude>
-    <ClInclude Include="Core_Resource.hpp">
-      <Filter>Resource</Filter>
+    <ClInclude Include="Core_RingBuffer.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_BitVector.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_BitSet.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_VectorMultiSet.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_VectorMultiMap.hpp">
+      <Filter>Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -312,10 +318,5 @@
     <Filter Include="Resource">
       <UniqueIdentifier>{1a409d32-6549-4942-885f-21742cc8ef81}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Core_ResourceRepository.hpp">
-      <Filter>Resource</Filter>
-    </None>
   </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@ namespace Alba
 	{
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		bool GraphicsModule::OnLoad(const Core::AnyDictionary & someLoadParams)
+		bool GraphicsModule::OnLoad(Core::AnyDictionary someLoadParams)
 		{
 			const InitParams& initParams = someLoadParams.Get<InitParams>();
 

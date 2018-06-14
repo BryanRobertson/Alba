@@ -31,7 +31,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		bool GravityModule::OnLoad(const Core::AnyDictionary& /*someParameters*/)
+		bool GravityModule::OnLoad(Core::AnyDictionary /*someParameters*/)
 		{
 			myGravityModuleState = GravityModuleState::Loading;
 

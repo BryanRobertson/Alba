@@ -21,14 +21,6 @@ namespace Alba
 {
 	namespace Core
 	{
-		// Some constexpr constructors can't be constexpr if string hash debugging is enabled
-		// (because they modify a dictionary of hash->string)
-		#if !defined(ALBA_DEBUG_STRINGHASH)
-			#define ALBA_STRINGHASH_CONSTEXPR constexpr
-		#else
-			#define ALBA_STRINGHASH_CONSTEXPR
-		#endif
-
 		//-----------------------------------------------------------------------------------------
 		// Name	:	TStringHash
 		// Desc	:	Template for a string hash. Uses Fnv1a hash as the hashing algorithm
@@ -62,12 +54,27 @@ namespace Alba
 					#endif
 				}
 
-				inline explicit ALBA_STRINGHASH_CONSTEXPR TStringHashBase(StringView aStringView)
+				explicit TStringHashBase(StringView aStringView)
 					: myHashValue(HashAlgorithm::Hash(aStringView))
 				{
 					#if defined(ALBA_DEBUG_STRINGHASH)
 					{
 						myDebugString = ourDebugStringTable.Set(myHashValue, aStringView.data());
+					}
+					#endif
+				}
+
+				struct CompileTimeHash
+				{
+					constexpr CompileTimeHash() {}
+				};
+
+				explicit constexpr TStringHashBase(StringView aStringView, const CompileTimeHash&)
+					: myHashValue(HashAlgorithm::Hash(aStringView))
+				{
+					#if defined(ALBA_DEBUG_STRINGHASH)
+					{
+						myDebugString = aStringView.data();
 					}
 					#endif
 				}
@@ -137,10 +144,19 @@ namespace Alba
 				#endif
 
 				// LogString is defined even when string hashing debug isn't enabled. In that case it just converts the hash to a string
-				FixedString<64> LogString()
+				constexpr FixedString<64> LogString()
 				{
 					#if defined(ALBA_DEBUG_STRINGHASH)
-						return Debug_GetString();
+						if (myDebugString)
+						{
+							return myDebugString;
+						}
+						else
+						{
+							myDebugString = Debug_GetString();
+						}
+
+						return myDebugString;
 					#else
 						return FormatString<64>("0x%x", GetHash());
 					#endif
@@ -273,26 +289,26 @@ template <> struct std::hash<Alba::Core::NoCaseStringHash64>
 
 namespace Alba
 {
-	namespace Literals
+	namespace StringHashLiterals
 	{
-		inline ALBA_STRINGHASH_CONSTEXPR Alba::Core::StringHash32 operator "" _hash32(const char* aStr, size_t aSize)
+		inline constexpr Alba::Core::StringHash32 operator "" _hash32(const char* aStr, size_t aSize)
 		{
-			return Alba::Core::StringHash32(Alba::Core::StringView(aStr, aSize));
+			return Alba::Core::StringHash32(Alba::Core::StringView(aStr, aSize), Alba::Core::StringHash32::CompileTimeHash());
 		}
 
-		inline ALBA_STRINGHASH_CONSTEXPR Alba::Core::StringHash64 operator "" _hash64(const char* aStr, size_t aSize)
+		inline constexpr Alba::Core::StringHash64 operator "" _hash64(const char* aStr, size_t aSize)
 		{
-			return Alba::Core::StringHash64(Alba::Core::StringView(aStr, aSize));
+			return Alba::Core::StringHash64(Alba::Core::StringView(aStr, aSize), Alba::Core::StringHash64::CompileTimeHash());
 		}
 
-		inline ALBA_STRINGHASH_CONSTEXPR Alba::Core::NoCaseStringHash32 operator "" _nocasehash32(const char* aStr, size_t aSize)
+		inline constexpr Alba::Core::NoCaseStringHash32 operator "" _nocasehash32(const char* aStr, size_t aSize)
 		{
-			return Alba::Core::NoCaseStringHash32(Alba::Core::StringView(aStr, aSize));
+			return Alba::Core::NoCaseStringHash32(Alba::Core::StringView(aStr, aSize), Alba::Core::NoCaseStringHash32::CompileTimeHash());
 		}
 
-		inline ALBA_STRINGHASH_CONSTEXPR Alba::Core::NoCaseStringHash64 operator "" _nocasehash64(const char* aStr, size_t aSize)
+		inline constexpr Alba::Core::NoCaseStringHash64 operator "" _nocasehash64(const char* aStr, size_t aSize)
 		{
-			return Alba::Core::NoCaseStringHash64(Alba::Core::StringView(aStr, aSize));
+			return Alba::Core::NoCaseStringHash64(Alba::Core::StringView(aStr, aSize), Alba::Core::NoCaseStringHash64::CompileTimeHash());
 		}
 	}
 }

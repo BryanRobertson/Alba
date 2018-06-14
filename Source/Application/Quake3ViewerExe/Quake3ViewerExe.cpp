@@ -22,7 +22,7 @@
 
 ALBA_IMPLEMENT_LOG_CATEGORY(Quake3ViewerDemo);
 
-using namespace Alba::Literals;
+using namespace Alba::StringHashLiterals;
 
 namespace Quake3ViewerExe
 {
@@ -34,18 +34,19 @@ namespace Quake3ViewerExe
 	//-------------------------------------------------------------------------------------------------
 	// WinMain
 	//-------------------------------------------------------------------------------------------------
-	int CALLBACK WinMain(_In_ HINSTANCE /*hInstance*/, _In_ HINSTANCE /*hPrevInstance*/, _In_ LPSTR lpCmdLine, _In_ int /*nCmdShow*/)
+	int CALLBACK WinMain(_In_ HINSTANCE /*hInstance*/, _In_ HINSTANCE /*hPrevInstance*/, _In_ LPSTR /*lpCmdLine*/, _In_ int /*nCmdShow*/)
 	{
+		using namespace Alba::BasicTypes;
+
 		using Alba::Core::UniquePtr;
 		using Alba::Core::StringHash32;
 		using Alba::Framework::GameApplication;
-		using namespace Alba::BasicTypes;
 
 		//-----------------------------------------------------------------------------------------
 		// Initialise framework
 		//-----------------------------------------------------------------------------------------
 		Alba::Framework::FrameworkInitParams frameworkInitParams;
-		frameworkInitParams.myCommandLineString = lpCmdLine;
+		frameworkInitParams.myCommandLineParameters = Alba::Core::CommandLineParameters::CreateWindows();
 
 		//-----------------------------------------------------------------------------------------
 		// Init

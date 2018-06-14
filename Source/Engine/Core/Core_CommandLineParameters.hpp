@@ -33,11 +33,17 @@ namespace Alba
 			public:
 
 				//=================================================================================
+				// Public Static Methods
+				//=================================================================================
+				#if defined(ALBA_PLATFORM_WINDOWS) && defined(ALBA_COMPILER_VISUALSTUDIO)
+					static CommandLineParameters CreateWindows();
+				#endif
+
+				//=================================================================================
 				// Public Constructors
 				//=================================================================================
 				explicit CommandLineParameters();
-				explicit CommandLineParameters(int argc, char* argv[]);
-				explicit CommandLineParameters(StringView aCommandLineString);
+				explicit CommandLineParameters(int argc, char** argv);
 
 				CommandLineParameters(const CommandLineParameters& anOther);
 				CommandLineParameters(CommandLineParameters&& anOther);
@@ -50,8 +56,8 @@ namespace Alba
 				// Name	:	Init
 				// Desc	:	Initialise the command line parameters from command-line data
 				//---------------------------------------------------------------------------------
-				void Init(int argc, char* argv[]);
-				void Init(StringView aCommandLineStr);
+				void Init(int argc, char** argv);
+				void Init(const Core::Vector<String> someParams);
 
 				//---------------------------------------------------------------------------------
 				// Name	:	IsParamPresent
@@ -91,8 +97,8 @@ namespace Alba
 				// Name	: AddParam
 				// Desc : Add a parameter
 				//---------------------------------------------------------------------------------
-				void AddParam(StringView aParamName, StringView aParamValue = nullptr);
-				void AddParam(NoCaseStringHash32 aParamNameId, const FixedString<32>& aParamValue = FixedString<32>());
+				void AddParam(NoCaseStringHash32 aParamNameId, StringView aParamValue = "");
+				void AddParam(NoCaseStringHash32 aParamNameId, String aParamValue);
 
 				//---------------------------------------------------------------------------------
 				// Operator overloads
@@ -107,14 +113,14 @@ namespace Alba
 				//=================================================================================
 				struct ParamData
 				{	
-					FixedString<16> myValue;
+					StringView		myValue;
 					mutable Any		myCachedTypedValue;
 
 					template <typename TDataType>
 					bool GetData(TDataType& anOutValue,
 								 typename std::enable_if<is_string<TDataType>::value, TDataType>::type* = nullptr) const
 					{
-						anOutValue = myValue.c_str();
+						anOutValue = myValue.data();
 						return true;
 					}
 
@@ -155,7 +161,8 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				ParamDataCollection myParams;
+				ParamDataCollection		myParams;
+				Vector<String>			myStringStorage;
 		};
 	}
 }

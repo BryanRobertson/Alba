@@ -1,6 +1,6 @@
 #include "Core_Precompile.hpp"
 #include "Core_ModuleRepository.hpp"
-#include "Core_FixedVector.hpp"
+#include "Core_Vector.hpp"
 #include "Core_AnyDictionary.hpp"
 #include "Core_Profile.hpp"
 #include "Core_Time.hpp"
@@ -110,12 +110,12 @@ namespace Alba
 
 		//------------------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------------------
-		bool ModuleRepository::LoadModule(NoCaseStringHash32 aModuleNameId, const AnyDictionary& someParams)
+		bool ModuleRepository::LoadModule(NoCaseStringHash32 aModuleNameId, AnyDictionary someParams)
 		{
 			auto itr = myModules.find(aModuleNameId);
 			if (itr != myModules.end())
 			{
-				return itr->second.myLoadFunc(someParams);
+				return itr->second.myLoadFunc(std::move(someParams));
 			}
 			else
 			{

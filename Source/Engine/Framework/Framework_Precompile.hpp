@@ -11,7 +11,7 @@
 #include "Core_StringHash.hpp"
 #include "Core_FixedString.hpp"
 #include "Core_StringView.hpp"
-#include "Core_FixedVector.hpp"
+#include "Core_Vector.hpp"
 #include "Core_Vector.hpp"
 
 #include "Framework.hpp"

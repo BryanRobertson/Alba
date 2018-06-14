@@ -6,6 +6,7 @@
 #include "Core.hpp"
 #include "Core_LogCategory.hpp"
 #include "Core_String.hpp"
+#include "Core_CommandLineParameters.hpp"
 
 #include "Framework_API.hpp"
 
@@ -23,7 +24,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------------
 		struct FrameworkInitParams
 		{
-			Core::String myCommandLineString;
+			Core::CommandLineParameters myCommandLineParameters;
 		};
 
 		//-----------------------------------------------------------------------------------------

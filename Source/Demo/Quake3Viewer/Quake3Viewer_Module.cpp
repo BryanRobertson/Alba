@@ -7,7 +7,7 @@ namespace Alba
 	{
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		bool Quake3ViewerModule::OnLoad(const Core::AnyDictionary& /*someLoadParams*/)
+		bool Quake3ViewerModule::OnLoad(Core::AnyDictionary /*someLoadParams*/)
 		{
 			return true;
 		}

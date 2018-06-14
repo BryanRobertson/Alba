@@ -51,7 +51,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		uint32 GameApplication::Init(ApplicationInitParams anInitParams)
 		{
-			using namespace Alba::Literals;
+			using namespace Alba::StringHashLiterals;
 
 			Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
 
@@ -81,16 +81,12 @@ namespace Alba
 			// Initialise graphics
 			//----------------------------------------------------------------------
 			{
-				Core::AnyDictionary initParamsDict;
-
 				Alba::Graphics::InitParams graphicsInitParams;
 				graphicsInitParams.myWindowWidth = anInitParams.myWindowInitParams.mySize.x();
 				graphicsInitParams.myWindowHeight = anInitParams.myWindowInitParams.mySize.y();
 				InitGraphicsPlatformData(graphicsInitParams.myPlatformData);
 
-				initParamsDict.Set(graphicsInitParams);
-
-				if ( !moduleRepository.LoadModule("Alba.Graphics"_nocasehash32, initParamsDict) )
+				if ( !moduleRepository.LoadModule("Alba.Graphics"_nocasehash32, std::move(graphicsInitParams)) )
 				{
 					return 1;
 				}

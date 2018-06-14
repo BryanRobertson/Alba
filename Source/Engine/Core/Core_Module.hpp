@@ -174,12 +174,12 @@ namespace Alba
 
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------
-				static bool Load(const AnyDictionary& someParams)
+				static bool Load(AnyDictionary someParams)
 				{
 					ALBA_LOG_INFO(ModuleLog, "LoadModule( \"%s\" )", GetName().c_str());
 
 					ALBA_ASSERT(ourInstance != nullptr, "Trying to load unregistered module!");
-					const bool result = static_cast<TDerived*>(ourInstance.get())->OnLoad(someParams);
+					const bool result = static_cast<TDerived*>(ourInstance.get())->OnLoad(std::move(someParams));
 
 					if (result)
 					{
