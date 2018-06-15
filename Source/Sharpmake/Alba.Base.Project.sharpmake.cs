@@ -61,9 +61,8 @@ namespace Alba
                     conf.Defines.Add("ALBA_DEBUG_BUILD");
 
                     // Disable inlining entirely in debug builds
-                    // (Reenable this when Sharpmake bug is fixed. Current version writes "Disable" instead of "Disabled"
-                    // which breaks the project file)
-                    //conf.Options.Add(Options.Vc.Compiler.Inline.Disable);
+                    // Note: This won't work in vanilla fastbuild - Current version writes "Disable" instead of "Disabled" which breaks the project file
+                    conf.Options.Add(Options.Vc.Compiler.Inline.Disable);
                 }
                 else if (target.Optimization == Optimization.Release)
                 {
