@@ -57,7 +57,6 @@ namespace Alba
 				// Desc	:	Initialise the command line parameters from command-line data
 				//---------------------------------------------------------------------------------
 				void Init(int argc, char** argv);
-				void Init(const Core::Vector<String> someParams);
 
 				//---------------------------------------------------------------------------------
 				// Name	:	IsParamPresent

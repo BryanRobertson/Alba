@@ -312,5 +312,3 @@ namespace Alba
 		}
 	}
 }
-
-#undef ALBA_STRINGHASH_CONSTEXPR

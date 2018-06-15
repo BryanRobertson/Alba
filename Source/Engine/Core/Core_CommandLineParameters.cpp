@@ -73,35 +73,75 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void CommandLineParameters::Init(int argc, char** argv)
 		{
-			Optional<StringView> paramName;
-			for (int index = 0; index < argc; ++index)
+			// Only used for arguments that span
+			FixedString<256> tempArgBuffer;
+
+			for (size_t index = 1; index < argc; ++index)
 			{
-				const StringView arg = argv[index];
-			
-				if (!paramName.has_value())
-				{
-					paramName = Core::StringView(argv[index]);
-
-					if (index + 1 >= argc)
-					{
-						const NoCaseStringHash32 nameId(argv[index]);
-						AddParam(nameId);
-					}
-				}
+				StringView arg = argv[index];
 				
-				const NoCaseStringHash32 nameId(argv[index]);
-				const Core::StringView value(argv[index]);
+				// Skip to first argument
+				while (index < argc && argv[index][0] != '-')
+				{
+					arg = argv[index];
+					++index;
+				}
 
-				AddParam(nameId, value);
-				paramName.reset();
+				// If we didn't get an argument then we're done
+				if (index >= argc)
+				{
+					break;
+				}
+
+				StringView paramName = StringView(argv[index]);
+				const size_t startIndex = paramName.find_first_not_of('-', 0);
+
+				if (startIndex == StringView::npos)
+				{
+					continue;
+				}
+
+				paramName.remove_prefix(startIndex);
+
+				// Read argument value, if the argument only takes up one entry in argv, then we'll use stringview
+				// otherwise construct a temporary argument buffer
+				size_t count = 0;
+				for (size_t searchIndex = index+1; searchIndex < argc && argv[searchIndex][0] != '-'; ++searchIndex, ++count)
+				{
+
+				}
+
+				const NoCaseStringHash32 paramNameId(paramName);
+				if (count == 0)
+				{
+					AddParam(paramNameId);
+				}
+				else if (count == 1)
+				{
+					const StringView value = StringView(argv[index + 1]);
+
+					AddParam(paramNameId, value);
+					++index;
+				}
+				else
+				{
+					tempArgBuffer.clear();
+					for (size_t offset = 1; offset <= count; ++offset)
+					{
+						if (offset > 1)
+						{
+							tempArgBuffer.append(" ");
+						}
+
+						tempArgBuffer.append(argv[index + offset]);
+					}
+
+					String value(tempArgBuffer.begin(), tempArgBuffer.end());
+
+					AddParam(paramNameId, std::move(value));
+					index += count;
+				}
 			}
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		void CommandLineParameters::Init(const Core::Vector<String> someParams)
-		{
-			
 		}
 
 		//-----------------------------------------------------------------------------------------

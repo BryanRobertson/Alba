@@ -18,6 +18,7 @@ namespace External
                      
                 SourceRootPath = Path.Combine(EASTLPath, "source");
                 AdditionalSourceRootPaths.Add(Path.Combine(EASTLPath, "include"));
+                NatvisFiles.Add(Path.Combine(EASTLPath, "doc", "EASTL.natvis"));
             }
 
             public override string GetLibraryDefine()
