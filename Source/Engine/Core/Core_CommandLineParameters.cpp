@@ -31,13 +31,14 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		CommandLineParameters::CommandLineParameters()
 		{
-
+			myParams.reserve(32);
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		CommandLineParameters::CommandLineParameters(int argc, char** argv)
 		{
+			myParams.reserve(32);
 			Init(argc, argv);
 		}
 
@@ -178,17 +179,17 @@ namespace Alba
 				ParamData paramData;
 				paramData.myValue = aParamValue.data();
 
+				auto newEntry = myParams.emplace(aParamNameId, std::move(paramData));
+
 				// If the token is empty then the param is just a boolean switch
 				if (aParamValue.empty())
 				{
-					paramData.myCachedTypedValue = true;
+					newEntry.first->second.myCachedTypedValue = true;
 				}
 				else
 				{
-					paramData.myCachedTypedValue.Clear();
+					newEntry.first->second.myCachedTypedValue.Clear();
 				}
-
-				myParams.insert(MakePair(aParamNameId, std::move(paramData)));
 			}
 			else
 			{

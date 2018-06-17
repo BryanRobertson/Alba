@@ -48,7 +48,7 @@ namespace Alba
 				}
 
 				template <typename TDataType>
-				void Set(const TDataType&& aTypedValue)
+				void Set(TDataType&& aTypedValue)
 				{
 					const TypeId typeId = GetTypeId<TDataType>();
 					auto itr = myData.find(typeId);
@@ -59,7 +59,7 @@ namespace Alba
 					}
 					else
 					{
-						myData.insert(MakePair(typeId, MakeAny(std::move(aTypedValue))));
+						myData.emplace(typeId, MakeAny(std::move(aTypedValue)));
 					}
 				}
 

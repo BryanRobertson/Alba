@@ -29,19 +29,19 @@ namespace Alba
 				// Public Constructors
 				//=============================================================================================
 				Any();
-				Any(const Any& anOther);
-				Any(Any&& anOther);
+				Any(const Any& aCopyFrom);
+				Any(Any&& aMoveFrom);
 				
 				template <typename TDataType>
 				explicit Any(const TDataType& aData)
 				{
-					Set(aData);
+					myData = TDataType(aData);
 				}
 
-				template <typename TDataType>
+				template <typename TDataType, class=std::enable_if<!std::is_lvalue_reference_v<TDataType>> >
 				explicit Any(TDataType&& aData)
 				{
-					Set(std::forward<TDataType>(aData));
+					myData = std::move(aData);
 				}
 
 				//=============================================================================================
@@ -61,7 +61,7 @@ namespace Alba
 				template <typename TDataType>
 				Any& operator= (TDataType&& aData)
 				{
-					Set(std::forward<TDataType>(aData));
+					Set(std::move(aData));
 					return *this;
 				}
 
@@ -72,15 +72,23 @@ namespace Alba
 					return *this;
 				}
 
-				Any& operator= (const Any& anOther)
+				Any& operator= (const Any& aCopyFrom)
 				{
-					myData = anOther.myData;
+					if (aCopyFrom.myData.has_value())
+					{
+						myData = aCopyFrom.myData;
+					}
+					
 					return *this;
 				}
 
-				Any& operator= (Any&& anOther)
+				Any& operator= (Any&& aMoveFrom)
 				{
-					myData = std::move(anOther.myData);
+					if (aMoveFrom.myData.has_value())
+					{
+						myData = std::move(aMoveFrom.myData);
+					}
+					
 					return *this;
 				}
 
@@ -156,7 +164,7 @@ namespace Alba
 		template <typename T>
 		auto MakeAny(T&& aData)
 		{
-			return Any(std::forward<T>(aData));
+			return Any(std::move(aData));
 		}
 
 		template <typename T>
