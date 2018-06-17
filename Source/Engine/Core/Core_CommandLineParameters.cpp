@@ -17,7 +17,11 @@ namespace Alba
 			/*static*/ CommandLineParameters CommandLineParameters::CreateWindows()
 			{
 				CommandLineParameters params;
-				params.Init(__argc, __argv);
+
+				const int argc = __argc;
+				char** argv = __argv;
+
+				params.Init(argc, argv);
 
 				return params;
 			}

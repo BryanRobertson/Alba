@@ -183,10 +183,8 @@ namespace Alba
 						auto itr = myDebugStringTable.find(aHash);
 						if (itr == myDebugStringTable.end())
 						{
-							Pair<THashValueType, String> pair(aHash, String(fixedStr.c_str()));
-							debugStr = pair.second.c_str();
-
-							myDebugStringTable.insert(std::move(pair));
+							myDebugStringTable.emplace(aHash, String(fixedStr.begin(), fixedStr.end()));
+							debugStr = myDebugStringTable[aHash].c_str();
 						}
 						else
 						{

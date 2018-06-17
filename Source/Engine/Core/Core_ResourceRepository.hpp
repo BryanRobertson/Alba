@@ -18,6 +18,7 @@ namespace Alba
 			protected:
 
 				typedef SharedPtr<TResourceType> ResourcePtr;
+				typedef WeakPtr<TResourceType> ResourceWeakPtr;
 
 				//=================================================================================
 				// Protected Constructors
@@ -28,11 +29,10 @@ namespace Alba
 				//=================================================================================
 				// Protected Methods
 				//=================================================================================
-				inline const ResourcePtr	GetResource(NoCaseStringHash32 aResourceNameId) const
-				inline ResourcePtr			GetResourceMutable(NoCaseStringHash32 aResourceNameId);
+				inline ResourcePtr			GetResource(NoCaseStringHash32 aResourceNameId) const;
 				inline bool					HasResource(NoCaseStringHash32 aResourceNameId) const;
 
-				inline ResourcePtr&			AddResource(NoCaseStringHash32 aResourceNameId);
+				inline ResourcePtr			AddResource(NoCaseStringHash32 aResourceNameId, ScopedPtr<TResourceType> aResource);
 				inline void					RemoveResource(NoCaseStringHash32 aResourceNameId);
 
 			private:
@@ -40,7 +40,7 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				VectorMap<NoCaseStringHash32, TResourceType> myResources;
+				VectorMap<NoCaseStringHash32, ResourceWeakPtr> myResources;
 		};
 
 		//-----------------------------------------------------------------------------------------
@@ -54,17 +54,15 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template <typename TDerived, typename TResourceType>
-		const ResourceRepository<TDerived, TResourceType>::ResourcePtr ResourceRepository<TDerived, TResourceType>::GetResource(NoCaseStringHash32 aResourceNameId) const
+		ResourceRepository<TDerived, TResourceType>::ResourcePtr ResourceRepository<TDerived, TResourceType>::GetResource(NoCaseStringHash32 aResourceNameId) const
 		{
-			
-		}
+			auto itr = myResources.find(aResourcceNameId);
+			if (itr != myResources.end())
+			{
+				return itr.second.lock();
+			}
 
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		template <typename TDerived, typename TResourceType>
-		ResourceRepository<TDerived, TResourceType>::ResourcePtr ResourceRepository<TDerived, TResourceType>::GetResourceMutable(NoCaseStringHash32 aResourceNameId)
-		{
-			
+			return ResourcePtr();
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -72,12 +70,24 @@ namespace Alba
 		template <typename TDerived, typename TResourceType>
 		bool ResourceRepository<TDerived, TResourceType>::HasResource(NoCaseStringHash32 aResourceNameId) const
 		{
-
+			return myResources.find(aResourceNameId) != myResources.end();
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		inline ResourcePtr&			AddResource(NoCaseStringHash32 aResourceNameId);
-		inline void					RemoveResource(NoCaseStringHash32 aResourceNameId);
+		template <typename TDerived, typename TResourceType>
+		ResourceRepository<TDerived, TResourceType>::ResourcePtr ResourceRepository<TDerived, TResourceType>::AddResource(NoCaseStringHash32 aResourceNameId, ScopedPtr<TResourceType> aResource)
+		{
+			ALBA_ASSERT(!HasResource(aResourceNameId), "Trying to add duplicate resource %s", aResourceNameId.LogString().c_str());
+			myResources.emplace(aResourceNameId, std::move(aResource));
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template <typename TDerived, typename TResourceType>
+		void ResourceRepository<TDerived, TResourceType>::RemoveResource(NoCaseStringHash32 aResourceNameId)
+		{
+			myResources.erase(aResourceNameId);
+		}
 	}
 }

@@ -199,7 +199,7 @@ namespace Alba
 				myGraphicsService->Present();
 
 				using namespace std::literals;
-				Alba::Core::ThisThread::sleep_for(10ms);
+				Alba::Core::ThisThread::sleep_for(5ms);
 			}
 		}
 
