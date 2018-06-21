@@ -117,7 +117,7 @@ namespace Alba
 
 					template <typename TDataType>
 					bool GetData(TDataType& anOutValue,
-								 typename std::enable_if<is_string<TDataType>::value, TDataType>::type* = nullptr) const
+								 class enable_if_t<is_string_v<TDataType>, TDataType>* = nullptr) const
 					{
 						anOutValue = myValue.data();
 						return true;
@@ -125,7 +125,7 @@ namespace Alba
 
 					template <typename TDataType>
 					bool GetData(TDataType& anOutValue,
-		 						 typename std::enable_if<!is_string<TDataType>::value, TDataType>::type* = nullptr) const
+		 						 class enable_if_t<!is_string_v<TDataType>, TDataType>* = nullptr) const
 					{
 						// Try to get cached converted value first
 						if (myCachedTypedValue.IsSet() && myCachedTypedValue.Is<TDataType>())

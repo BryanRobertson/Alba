@@ -8,9 +8,9 @@
 //------------------------------------------------------------------------------------------------
 
 #include "Core.hpp"
+#include "Core_TypeTraits.hpp"
 
 #include <EASTL/utility.h>
-#include <EASTL/type_traits.h>
 #include <EASTL/any.h>
 
 namespace Alba
@@ -38,7 +38,7 @@ namespace Alba
 					myData = TDataType(aData);
 				}
 
-				template <typename TDataType, class=std::enable_if<!std::is_lvalue_reference_v<TDataType>> >
+				template <typename TDataType, class=enable_if_t<!is_lvalue_reference_v<TDataType>> >
 				explicit Any(TDataType&& aData)
 				{
 					myData = std::move(aData);
@@ -96,7 +96,7 @@ namespace Alba
 				// Name	:	Set
 				// Desc	:	Set the Any to a typed value
 				//---------------------------------------------------------------------------------------------
-				template <typename TDataType, class = std::enable_if<!std::is_lvalue_reference<TDataType>> >
+				template <typename TDataType, class = enable_if_t<!is_lvalue_reference<TDataType>> >
 				void Set(TDataType&& aData)
 				{
 					myData.emplace(std::move(aData));

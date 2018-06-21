@@ -59,7 +59,7 @@ namespace Alba
 					return LoadModule(aModuleNameId, std::move(params));
 				}
 
-				template <typename TValueType, class=std::enable_if<!std::is_lvalue_reference_v<TValueType>> >
+				template <typename TValueType, class=enable_if<!is_lvalue_reference_v<TValueType>> >
 				bool LoadModule(NoCaseStringHash32 aModuleNameId, TValueType&& aParam)
 				{
 					AnyDictionary params;

@@ -4,11 +4,19 @@
 #include "Core_String.hpp"
 #include "Core_FixedString.hpp"
 #include "Core_StringHash.hpp"
-#include <EASTL/type_traits.h>
 #include <type_traits>
 
 namespace Alba
 {
+	using std::enable_if;
+	using std::enable_if_t;
+	using std::is_lvalue_reference;
+	using std::is_lvalue_reference_v;
+	using std::is_rvalue_reference;
+	using std::is_rvalue_reference_v;
+	using std::is_integral;
+	using std::is_integral_v;
+
 	namespace Core
 	{
 		//-----------------------------------------------------------------------------------------
@@ -21,7 +29,7 @@ namespace Alba
 		};
 
 		template <typename TCharType, typename TAllocator>
-		struct is_string < eastl::basic_string<TCharType, TAllocator> > : public eastl::true_type
+		struct is_string < eastl::basic_string<TCharType, TAllocator> > : public std::true_type
 		{
 		};
 
@@ -32,8 +40,11 @@ namespace Alba
 			OverflowBehavior TOverflowBehavior,
 			typename TOverflowAllocator
 		>
-		struct is_string <eastl::fixed_string<TCharType, TCount, TOverflowBehavior, TOverflowAllocator> > : public eastl::true_type
+		struct is_string <eastl::fixed_string<TCharType, TCount, TOverflowBehavior, TOverflowAllocator> > : public std::true_type
 		{
 		};
+
+		template<class T>
+		constexpr bool is_string_v = is_string<T>::value;
 	}
 }

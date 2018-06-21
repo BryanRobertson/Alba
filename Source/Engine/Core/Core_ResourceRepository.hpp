@@ -2,7 +2,9 @@
 
 #include "Core.hpp"
 #include "Core_VectorMap.hpp"
+#include "Core_BitVector.hpp"
 #include "Core_StringHash.hpp"
+#include "Core_ResourceHandle.hpp"
 
 namespace Alba
 {
@@ -17,8 +19,7 @@ namespace Alba
 		{
 			protected:
 
-				typedef SharedPtr<TResourceType> ResourcePtr;
-				typedef WeakPtr<TResourceType> ResourceWeakPtr;
+				typedef ResourceHandle<TResourceType, ResourceRepository<TDerived, TResourceType> > Handle;
 
 				//=================================================================================
 				// Protected Constructors
@@ -29,18 +30,25 @@ namespace Alba
 				//=================================================================================
 				// Protected Methods
 				//=================================================================================
-				inline ResourcePtr			GetResource(NoCaseStringHash32 aResourceNameId) const;
+				inline void					Init(size_t aCapacity);
+
+				inline Handle				GetResource(NoCaseStringHash32 aResourceNameId) const;
+				inline Handle				GetResource(Handle aHandle) const;
+
 				inline bool					HasResource(NoCaseStringHash32 aResourceNameId) const;
 
-				inline ResourcePtr			AddResource(NoCaseStringHash32 aResourceNameId, ScopedPtr<TResourceType> aResource);
-				inline void					RemoveResource(NoCaseStringHash32 aResourceNameId);
+				inline Handle				CreateResource(NoCaseStringHash32 aResourceNameId);
+				inline void					DestroyResource(NoCaseStringHash32 aResourceNameId);
 
 			private:
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				VectorMap<NoCaseStringHash32, ResourceWeakPtr> myResources;
+				Vector<TResourceType>					myResources;
+				
+				VectorMap<NoCaseStringHash32, uint32>	myNameIdHashToIndex;
+				BitVector<uint64>						myFreeIndices;
 		};
 
 		//-----------------------------------------------------------------------------------------
@@ -48,7 +56,15 @@ namespace Alba
 		template <typename TDerived, typename TResourceType>
 		/*inline*/ ResourceRepository<TDerived, TResourceType>::ResourceRepository(uint32 aReserveSize)
 		{
-			myResources.Reserve(aReserveSize);
+			myResources.(aReserveSize);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template <typename TDerived, typename TResourceType>
+		/*inline*/ ResourceRepository<TDerived, TResourceType>::~ResourceRepository()
+		{
+
 		}
 
 		//-----------------------------------------------------------------------------------------
