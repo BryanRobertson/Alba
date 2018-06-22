@@ -259,8 +259,24 @@
     <ClInclude Include="Core_VectorMultiMap.hpp">
       <Filter>Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Core_Resource.hpp" />
-    <ClInclude Include="Core_ResourceRepository.hpp" />
+    <ClInclude Include="Core_Resource.hpp">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_ResourceRepository.hpp">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_ResourceHandle.hpp">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_ResourceId.hpp">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_StronglyTypedId.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_ResourceReference.hpp">
+      <Filter>Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">

@@ -35,7 +35,8 @@ namespace Alba
 				template <typename TDataType>
 				explicit Any(const TDataType& aData)
 				{
-					myData = TDataType(aData);
+					TDataType value(aData);
+					myData = std::move(value);
 				}
 
 				template <typename TDataType, class=enable_if_t<!is_lvalue_reference_v<TDataType>> >
@@ -161,7 +162,7 @@ namespace Alba
 				eastl::any	myData;
 		};
 
-		template <typename T>
+		template <typename T, class = enable_if<is_rvalue_reference_v<T>> >
 		auto MakeAny(T&& aData)
 		{
 			return Any(std::move(aData));

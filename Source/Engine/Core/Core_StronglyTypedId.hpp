@@ -20,12 +20,18 @@ namespace Alba
 				//=================================================================================
 				// Public Constants
 				//=================================================================================
-				constexpr StronglyTypedId<TValueType, TTagType> InvalidId = StronglyTypedId<TValueType, TTagType>(std::numeric_limits<TValueType>::max());
+				static const StronglyTypedId<TValueType, TTagType> InvalidId;
 
 				//=================================================================================
 				// Public Constructors
 				//=================================================================================
-				explicit StronglyTypedId(TValueType anId)
+				constexpr StronglyTypedId()
+					: myValue(InvalidId.myValue)
+				{
+
+				}
+
+				explicit constexpr StronglyTypedId(TValueType anId)
 					: myValue(anId)
 				{
 
@@ -34,43 +40,43 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				TValueType GetValue() const
+				constexpr TValueType GetValue() const
 				{
 					return myValue;
 				}
 
-				StronglyTypedId<TValueType, TTagType>& operator=(StronglyTypedId<TValueType, TTagType> aRhs)
+				constexpr StronglyTypedId<TValueType, TTagType>& operator=(StronglyTypedId<TValueType, TTagType> aRhs)
 				{
 					myValue = aRhs.myValue;
 					return *this;
 				}
 
-				bool operator == (StronglyTypedId<TValueType, TTagType> aRhs) const
+				constexpr bool operator == (StronglyTypedId<TValueType, TTagType> aRhs) const
 				{
 					return myValue == aRhs.myValue;
 				}
 
-				bool operator != (StronglyTypedId<TValueType, TTagType> aRhs) const
+				constexpr bool operator != (StronglyTypedId<TValueType, TTagType> aRhs) const
 				{
 					return myValue != aRhs.myValue;
 				}
 
-				bool operator <= (StronglyTypedId<TValueType, TTagType> aRhs) const
+				constexpr bool operator <= (StronglyTypedId<TValueType, TTagType> aRhs) const
 				{
 					return myValue <= aRhs.myValue;
 				}
 
-				bool operator < (StronglyTypedId<TValueType, TTagType> aRhs) const
+				constexpr bool operator < (StronglyTypedId<TValueType, TTagType> aRhs) const
 				{
 					return myValue < aRhs.myValue;
 				}
 
-				bool operator >= (StronglyTypedId<TValueType, TTagType> aRhs) const
+				constexpr bool operator >= (StronglyTypedId<TValueType, TTagType> aRhs) const
 				{
 					return myValue >= aRhs.myValue;
 				}
 
-				bool operator > (StronglyTypedId<TValueType, TTagType> aRhs) const
+				constexpr bool operator > (StronglyTypedId<TValueType, TTagType> aRhs) const
 				{
 					return myValue > aRhs.myValues;
 				}
@@ -82,5 +88,8 @@ namespace Alba
 				//=================================================================================
 				TValueType	myValue;
 		};
+
+		template <typename TValueType, typename TTagType, class _>
+		const StronglyTypedId<TValueType, TTagType, _> StronglyTypedId<TValueType, TTagType, _>::InvalidId(std::numeric_limits<TValueType>::max());
 	}
 }

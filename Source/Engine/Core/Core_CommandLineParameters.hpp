@@ -115,35 +115,36 @@ namespace Alba
 					StringView		myValue;
 					mutable Any		myCachedTypedValue;
 
-					template <typename TDataType>
-					bool GetData(TDataType& anOutValue,
-								 class enable_if_t<is_string_v<TDataType>, TDataType>* = nullptr) const
-					{
-						anOutValue = myValue.data();
-						return true;
-					}
 
 					template <typename TDataType>
-					bool GetData(TDataType& anOutValue,
-		 						 class enable_if_t<!is_string_v<TDataType>, TDataType>* = nullptr) const
+					bool GetData(TDataType& anOutValue) const
 					{
-						// Try to get cached converted value first
-						if (myCachedTypedValue.IsSet() && myCachedTypedValue.Is<TDataType>())
+						if constexpr(is_string_v<TDataType>)
 						{
-							anOutValue = myCachedTypedValue.To<TDataType>();
+							anOutValue = myValue.data();
 							return true;
 						}
-						// Otherwise attempt to convert it
-						else if (StringConverter<TDataType>::From(myValue, anOutValue))
+						else
 						{
-							// If the cached value isn't already set, then cache it for future use
-							if (!myCachedTypedValue.IsSet())
+							// Try to get cached converted value first
+							if (myCachedTypedValue.IsSet() && myCachedTypedValue.Is<TDataType>())
 							{
-								myCachedTypedValue.Set(TDataType(anOutValue));
+								anOutValue = myCachedTypedValue.To<TDataType>();
+								return true;
 							}
+							// Otherwise attempt to convert it
+							else if (StringConverter<TDataType>::From(myValue, anOutValue))
+							{
+								// If the cached value isn't already set, then cache it for future use
+								if (!myCachedTypedValue.IsSet())
+								{
+									myCachedTypedValue.Set(TDataType(anOutValue));
+								}
 
-							return true;
+								return true;
+							}
 						}
+
 
 						return false;
 					}

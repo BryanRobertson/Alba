@@ -15,5 +15,8 @@ namespace Alba
 	{
 		template <size_t TSize, size_t TAlign = EASTL_ALIGN_OF(double)>
 		using AlignedStorage = eastl::aligned_storage_t<TSize, TAlign>;
+
+		template <typename TDataType>
+		using AlignedStorageT = eastl::aligned_storage<sizeof(TDataType), alignof(TDataType)>;
 	}
 }

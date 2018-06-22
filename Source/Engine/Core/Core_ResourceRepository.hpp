@@ -4,6 +4,7 @@
 #include "Core_VectorMap.hpp"
 #include "Core_BitVector.hpp"
 #include "Core_StringHash.hpp"
+#include "Core_AlignedStorage.hpp"
 #include "Core_ResourceHandle.hpp"
 
 namespace Alba
@@ -32,21 +33,21 @@ namespace Alba
 				//=================================================================================
 				inline void					Init(size_t aCapacity);
 
-				inline Handle				GetResource(NoCaseStringHash32 aResourceNameId) const;
-				inline Handle				GetResource(Handle aHandle) const;
+				inline Handle				Get(NoCaseStringHash32 aResourceNameId) const;
+				inline Handle				Get(Handle aHandle) const;
 
 				inline bool					HasResource(NoCaseStringHash32 aResourceNameId) const;
 
-				inline Handle				CreateResource(NoCaseStringHash32 aResourceNameId);
-				inline void					DestroyResource(NoCaseStringHash32 aResourceNameId);
+				inline Handle				Create(NoCaseStringHash32 aResourceNameId);
+				inline void					Destroy(NoCaseStringHash32 aResourceNameId);
+				inline void					Destroy(Handle aHandle);
 
 			private:
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				Vector<TResourceType>					myResources;
-				
+				Vector<TResourceType>					myResources;				
 				VectorMap<NoCaseStringHash32, uint32>	myNameIdHashToIndex;
 				BitVector<uint64>						myFreeIndices;
 		};
@@ -56,7 +57,8 @@ namespace Alba
 		template <typename TDerived, typename TResourceType>
 		/*inline*/ ResourceRepository<TDerived, TResourceType>::ResourceRepository(uint32 aReserveSize)
 		{
-			myResources.(aReserveSize);
+			myResources.resize(aReserveSize);
+			myFreeIndices.set(aReserveSize, true);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -64,21 +66,35 @@ namespace Alba
 		template <typename TDerived, typename TResourceType>
 		/*inline*/ ResourceRepository<TDerived, TResourceType>::~ResourceRepository()
 		{
-
+			
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template <typename TDerived, typename TResourceType>
-		ResourceRepository<TDerived, TResourceType>::ResourcePtr ResourceRepository<TDerived, TResourceType>::GetResource(NoCaseStringHash32 aResourceNameId) const
+		ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::Get(NoCaseStringHash32 aResourceNameId) const
 		{
-			auto itr = myResources.find(aResourcceNameId);
-			if (itr != myResources.end())
+			auto itr = myNameIdHashToIndex.find(aResourceNameId);
+			if (itr != myNameIdHashToIndex.end())
 			{
-				return itr.second.lock();
+				ALBA_ASSERT(myResources.size() > itr->second);
+				const TResourceType* resource = myResources[itr->second];
+
+				return resource->GetId();
 			}
 
-			return ResourcePtr();
+			return Handle();
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template <typename TDerived, typename TResourceType>
+		ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::Get(NoCaseStringHash32 aResourceHandle) const
+		{
+			//const TResourceType* resource = myResources[itr->second];
+			//resource->GetId();
+
+			return Handle();
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -86,24 +102,7 @@ namespace Alba
 		template <typename TDerived, typename TResourceType>
 		bool ResourceRepository<TDerived, TResourceType>::HasResource(NoCaseStringHash32 aResourceNameId) const
 		{
-			return myResources.find(aResourceNameId) != myResources.end();
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		template <typename TDerived, typename TResourceType>
-		ResourceRepository<TDerived, TResourceType>::ResourcePtr ResourceRepository<TDerived, TResourceType>::AddResource(NoCaseStringHash32 aResourceNameId, ScopedPtr<TResourceType> aResource)
-		{
-			ALBA_ASSERT(!HasResource(aResourceNameId), "Trying to add duplicate resource %s", aResourceNameId.LogString().c_str());
-			myResources.emplace(aResourceNameId, std::move(aResource));
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		template <typename TDerived, typename TResourceType>
-		void ResourceRepository<TDerived, TResourceType>::RemoveResource(NoCaseStringHash32 aResourceNameId)
-		{
-			myResources.erase(aResourceNameId);
+			return myNameIdHashToIndex.find(aResourceNameId) != myResources.end();
 		}
 	}
 }
