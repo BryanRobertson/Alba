@@ -21,7 +21,8 @@ namespace Alba
 			protected:
 
 				typedef ResourceHandle<TResourceType, ResourceRepository<TDerived, TResourceType> > Handle;
-
+				typedef ResourceReference<TResourceType, ResourceRepository<TDerived, TResourceType> > Reference;
+				
 				//=================================================================================
 				// Protected Constructors
 				//=================================================================================
@@ -31,10 +32,9 @@ namespace Alba
 				//=================================================================================
 				// Protected Methods
 				//=================================================================================
-				inline void					Init(size_t aCapacity);
-
-				inline Handle				Get(NoCaseStringHash32 aResourceNameId) const;
-				inline Handle				Get(Handle aHandle) const;
+				inline Handle				GetHandle(NoCaseStringHash32 aResourceNameId) const;
+				inline const TResourceType*	GetResource(Handle aHandle) const;
+				inline TResourceType*		GetResourceMutable(Handle aHandle);
 
 				inline bool					HasResource(NoCaseStringHash32 aResourceNameId) const;
 
@@ -47,7 +47,8 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				Vector<TResourceType>					myResources;				
+				Vector<TResourceType>					myResources;
+
 				VectorMap<NoCaseStringHash32, uint32>	myNameIdHashToIndex;
 				BitVector<uint64>						myFreeIndices;
 		};
@@ -72,7 +73,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template <typename TDerived, typename TResourceType>
-		ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::Get(NoCaseStringHash32 aResourceNameId) const
+		ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::GetHandle(NoCaseStringHash32 aResourceNameId) const
 		{
 			auto itr = myNameIdHashToIndex.find(aResourceNameId);
 			if (itr != myNameIdHashToIndex.end())
@@ -89,12 +90,21 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template <typename TDerived, typename TResourceType>
-		ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::Get(NoCaseStringHash32 aResourceHandle) const
+		const TResourceType* ResourceRepository<TDerived, TResourceType>::GetResource(ResourceRepository<TDerived, TResourceType>::Handle aResourceHandle) const
 		{
 			//const TResourceType* resource = myResources[itr->second];
 			//resource->GetId();
+			return nullptr;
+		}
 
-			return Handle();
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template <typename TDerived, typename TResourceType>
+		TResourceType* ResourceRepository<TDerived, TResourceType>::GetResourceMutable(ResourceRepository<TDerived, TResourceType>::Handle aResourceHandle)
+		{
+			//const TResourceType* resource = myResources[itr->second];
+			//resource->GetId();
+			return nullptr;
 		}
 
 		//-----------------------------------------------------------------------------------------

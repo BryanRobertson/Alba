@@ -10,7 +10,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		// Name	:	ResourceHandle
 		//-----------------------------------------------------------------------------------------
-		template <typename TResourceType, template <typename TDerived, typename TResourceType> class TResourceRepository>
+		template <typename TResourceType, typename TResourceRepository>
 		class ResourceHandle
 		{
 			public:
@@ -18,7 +18,9 @@ namespace Alba
 				//=================================================================================
 				// Public Types
 				//=================================================================================
-				typedef ResourceId<TResourceType> IdType;
+				typedef ResourceId<TResourceType>	IdType;
+				typedef TResourceType				ResourceType;
+				typedef TResourceRepository			RepositoryType;
 
 				//=================================================================================
 				// Public Constructors
