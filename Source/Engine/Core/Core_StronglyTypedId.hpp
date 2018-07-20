@@ -45,6 +45,11 @@ namespace Alba
 					return myValue;
 				}
 
+				bool IsValid() const
+				{
+					return myValue != InvalidId;
+				}
+
 				constexpr StronglyTypedId<TValueType, TTagType>& operator=(StronglyTypedId<TValueType, TTagType> aRhs)
 				{
 					myValue = aRhs.myValue;

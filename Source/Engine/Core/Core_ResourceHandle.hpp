@@ -52,6 +52,11 @@ namespace Alba
 					return myResourceId;
 				}
 
+				bool IsValid() const
+				{
+					return myResourceId.IsValid();
+				}
+
 				const ResourceType* Lock() const
 				{
 					return myRepository->GetResourcePtr(myResourceId);

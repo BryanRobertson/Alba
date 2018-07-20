@@ -191,7 +191,7 @@ namespace Alba
 			}
 
 			const Handle resourceHandle(aResourceNameId, id);
-
+			return resourceHandle;
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -218,6 +218,18 @@ namespace Alba
 
 			ResourceIdInternal idFields;
 			std::memcpy(&idFields, &idValue, sizeof(idFields));
+
+			if (idFields.myFields.myIndex >= myResources.size())
+			{
+				return;
+			}
+
+			if (myResources[idFields.myFields.myIndex].GetId() != id)
+			{
+				return;
+			}
+
+			DestroyResourceInternal(idFields.myFields.myIndex);
 		}
 
 		//-----------------------------------------------------------------------------------------
