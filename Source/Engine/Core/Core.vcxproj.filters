@@ -274,9 +274,6 @@
     <ClInclude Include="Core_StronglyTypedId.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Core_ResourceReference.hpp">
-      <Filter>Resource</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">
