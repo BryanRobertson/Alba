@@ -2,6 +2,7 @@
 
 #include "Core.hpp"
 #include "Core_ResourceId.hpp"
+#include "Core_ResourceHandle.hpp"
 
 namespace Alba
 {
@@ -21,18 +22,37 @@ namespace Alba
 				//=============================================================================================
 				// Public Constructors
 				//=============================================================================================
-				inline Resource();
-				explicit inline Resource(NameIdType aResourceNameId, ResourceId<TDerived> anId);
-				
-				inline Resource(const Resource<TDerived>& aCopyFrom) = delete;
-				inline Resource(Resource<TDerived>&& aMoveFrom) = default;
+				inline Resource()
+					: myResourceNameId()
+					, myId()
+				{
 
+				}
+
+				explicit inline Resource(NameIdType aResourceNameId, ResourceId<TDerived> anId)
+					: myResourceNameId(aResourceNameId)
+					, myId(anId)
+				{
+
+				}
+				
 				//=============================================================================================
 				// Public Methods
 				//=============================================================================================
 				inline NameIdType				GetResourceNameId() const;
 				inline ResourceId<TDerived>		GetId() const;
 
+			protected:
+
+				//=============================================================================================
+				// Protected Constructors
+				//=============================================================================================
+				inline Resource(const Resource<TDerived>& aCopyFrom) = delete;
+				inline Resource(Resource<TDerived>&& aMoveFrom) = default;
+
+				//=============================================================================================
+				// Protected Methods
+				//=============================================================================================
 				Resource<TDerived>& operator= (const Resource<TDerived>& aCopyFrom) = delete;
 				Resource<TDerived>& operator= (Resource<TDerived>&& aMoveFrom) = default;
 
@@ -44,26 +64,6 @@ namespace Alba
 				NameIdType				myResourceNameId;
 				ResourceId<TDerived>	myId;
 		};
-
-		//-----------------------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------------------
-		template <typename TDerived>
-		Resource<TDerived>::Resource()
-			: myResourceNameId()
-			, myId()
-		{
-
-		}
-
-		//-----------------------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------------------
-		template <typename TDerived>
-		Resource<TDerived>::Resource(NoCaseStringHash32 aResourceNameId, ResourceId<TDerived> anId)
-			: myResourceNameId(aResourceNameId)
-			, myId(anId)
-		{
-
-		}
 
 		//-----------------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------------

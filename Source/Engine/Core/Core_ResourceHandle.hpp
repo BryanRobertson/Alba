@@ -22,7 +22,7 @@ namespace Alba
 				typedef TResourceType				ResourceType;
 				typedef TResourceRepository			RepositoryType;
 
-				typedef ResourceHandle<typename TResourceType, typename TResourceRepository> ThisType;
+				typedef ResourceHandle<TResourceType, TResourceRepository> ThisType;
 
 				//=================================================================================
 				// Public Constructors

@@ -5,17 +5,31 @@ namespace Alba
 {
 	namespace Graphics
 	{
+		static constexpr size_t ourMaxShaders = 2048;
+
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		ShaderPtr Shader::Create(const Core::StringView& aFileName)
+		ShaderRepository::ShaderRepository()
+			: Super(ourMaxShaders)
 		{
-			return Core::MakeShared<Shader>(Super::NameIdType(aFileName), DisableExternalConstruction());
+
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		Shader::Shader(Core::Resource<Shader>::NameIdType aResourceNameId, Shader::DisableExternalConstruction)
-			: Super(aResourceNameId)
+		/*static*/ ShaderRepository	Shader::ourShaderRepository;
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		ShaderHandle Shader::Get(const Core::StringView& aFileName)
+		{
+			return ourShaderRepository.GetResource(Core::NoCaseStringHash32(aFileName));
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		Shader::Shader(Core::Resource<Shader>::NameIdType aResourceNameId, ShaderId aShaderId, Shader::DisableExternalConstruction&&)
+			: Super(aResourceNameId, aShaderId)
 		{
 
 		}

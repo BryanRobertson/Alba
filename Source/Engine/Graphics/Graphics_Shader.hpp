@@ -4,7 +4,7 @@
 #include "Core_BasicTypes.hpp"
 #include "Core_StringHash.hpp"
 #include "Core_Resource.hpp"
-#include "Core_SharedPtr.hpp"
+#include "Core_ResourceRepository.hpp"
 
 namespace Alba
 {
@@ -14,25 +14,40 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		class Shader;
-		
-		/*
-		struct ALBA_GRAPHICS_API ShaderDeleter final
-		{
-			void operator()(Shader* aShader) const noexcept;
-		};
-		*/
-
-		typedef Core::SharedPtr<Shader> ShaderPtr;
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
 		enum class ShaderType : uint8 
 		{
 			Vertex,
 			Pixel,
 			Geometry
 		};
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		class ALBA_GRAPHICS_API ShaderRepository final : public Core::ResourceRepository<ShaderRepository, Shader>
+		{
+			typedef Core::ResourceRepository<ShaderRepository, Shader> Super;
+
+			public:
+
+				//=================================================================================
+				// Public Constructors
+				//=================================================================================
+				ShaderRepository();
+
+				//=================================================================================
+				// Public Methods
+				//=================================================================================
+		};
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		class Shader;
+		class ShaderRepository;
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		typedef Core::ResourceHandle<Shader, ShaderRepository>	ShaderHandle;
+		typedef Core::ResourceId<Shader>						ShaderId;
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	Shader
@@ -52,12 +67,12 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				ShaderPtr Create(const Core::StringView& aFileName);
+				ShaderHandle Get(const Core::StringView& aFileName);
 
 				//=================================================================================
 				// Public Constructors/Destructors
 				//=================================================================================
-				Shader(Core::Resource<Shader>::NameIdType aResourceNameId, DisableExternalConstruction);
+				Shader(Core::Resource<Shader>::NameIdType aResourceNameId, ShaderId aShaderId, DisableExternalConstruction&&);
 				Shader(const Shader& aCopyFrom) = delete;
 				Shader(Shader&& aMoveFrom) = default;
 
@@ -68,6 +83,11 @@ namespace Alba
 				Shader& operator=(Shader&& aMoveFrom) = default;
 
 			private:			
+
+				//=================================================================================
+				// Private Static Data
+				//=================================================================================
+				static ShaderRepository		ourShaderRepository;
 
 				//=================================================================================
 				// Private Data

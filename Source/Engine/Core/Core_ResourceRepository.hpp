@@ -6,6 +6,8 @@
 #include "Core_StringHash.hpp"
 #include "Core_AlignedStorage.hpp"
 #include "Core_ResourceHandle.hpp"
+#include "Core_Algorithm.hpp"
+#include "Core_Optional.hpp"
 
 namespace Alba
 {
@@ -22,10 +24,10 @@ namespace Alba
 
 			Fields myFields;
 			uint64 myValue;
-
-			// Ensure fields fit inside myValue
-			static_assert(sizeof(myFields) == sizeof(myValue));
 		};
+
+		// Ensure fields fit inside myValue
+		static_assert(sizeof(ResourceIdInternal::myFields) == sizeof(ResourceIdInternal::myValue));
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	ResourceRepository
@@ -39,8 +41,8 @@ namespace Alba
 				//=================================================================================
 				// Public Types
 				//=================================================================================
-				typedef ResourceHandle<TResourceType, ResourceRepository<TDerived, TResourceType> > Handle;
-				friend class ResourceHandle<TResourceType, ResourceRepository<TDerived, TResourceType> >;
+				typedef ResourceHandle<TResourceType, TDerived>			Handle;
+				friend class ResourceHandle<TResourceType, TDerived>;
 
 				//=================================================================================
 				// Public Constructors/Destructors
@@ -74,8 +76,20 @@ namespace Alba
 				//=================================================================================
 				inline const TResourceType*	GetResourcePtr(Handle aHandle) const;
 				inline TResourceType*		GetResourcePtrMutable(Handle aHandle);
-
 				inline void					DestroyResourceInternal(size_t anIndex);
+
+				inline Core::Optional<size_t> HandleToIndex(Handle aHandle) const
+				{
+					const ResourceId<TResourceType> id = aHandle.GetId();
+					const uint64 idValue = id.GetValue();
+
+					// Need to memcpy because it's undefined behavior to access more than 
+					// one field of the same union
+					ResourceIdInternal idFields;
+					std::memcpy(&idFields, &idValue, sizeof(idFields));
+
+					return idFields.myIndex;
+				}
 
 				//=================================================================================
 				// Private Data
@@ -213,23 +227,24 @@ namespace Alba
 		template <typename TDerived, typename TResourceType>
 		/*inline*/ void ResourceRepository<TDerived, TResourceType>::DestroyResource(Handle aHandle)
 		{
-			const ResourceId<TResourceType> id = aHandle.GetId();
-			const uint64 idValue = id.GetValue();
+			const Core::Optional<size_t> index = HandleToIndex(aHandle);
 
-			ResourceIdInternal idFields;
-			std::memcpy(&idFields, &idValue, sizeof(idFields));
-
-			if (idFields.myFields.myIndex >= myResources.size())
+			if (!index.has_value())
 			{
 				return;
 			}
 
-			if (myResources[idFields.myFields.myIndex].GetId() != id)
+			if (index.get() >= myResources.size())
 			{
 				return;
 			}
 
-			DestroyResourceInternal(idFields.myFields.myIndex);
+			if (myResources[index.get()].GetId() != aHandle.GetId())
+			{
+				return;
+			}
+
+			DestroyResourceInternal(index.get());
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -237,7 +252,26 @@ namespace Alba
 		template <typename TDerived, typename TResourceType>
 		/*inline*/ void	ResourceRepository<TDerived, TResourceType>::DestroyResourceInternal(size_t anIndex)
 		{
+			{
+				Core::ScopedWriterMutexLock(myModifyNameIdHashToIndex);
+	
+				auto itr = Algorithm::find_if(myNameIdHashToIndex.begin(), myNameIdHashToIndex.end(), [&anIndex](const auto& entry)
+				{
+					return entry.second == anIndex;
+				});
 
+				if (itr != myNameIdHashToIndex.end())
+				{
+					myNameIdHashToIndex.erase(itr);
+				}
+			}
+
+			{
+				Core::ScopedMutexLock lock(myModifyFreeIndicesMutex);
+				
+				myResources[index] = TResourceType();
+				myFreeIndices[anIndex] = true;
+			}
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -245,9 +279,24 @@ namespace Alba
 		template <typename TDerived, typename TResourceType>
 		const TResourceType* ResourceRepository<TDerived, TResourceType>::GetResourcePtr(ResourceRepository<TDerived, TResourceType>::Handle aResourceHandle) const
 		{
-			//const TResourceType* resource = myResources[itr->second];
-			//resource->GetId();
-			return nullptr;
+			const Core::Optional<size_t> index = HandleToIndex(aHandle);
+
+			if (!index.has_value())
+			{
+				return nullptr;
+			}
+
+			if (index.get() >= myResources.size())
+			{
+				return nullptr;
+			}
+
+			if (myResources[index.get()].GetId() != aHandle.GetId())
+			{
+				return nullptr;
+			}
+
+			return &(myResources[index.get()]);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -255,9 +304,24 @@ namespace Alba
 		template <typename TDerived, typename TResourceType>
 		TResourceType* ResourceRepository<TDerived, TResourceType>::GetResourcePtrMutable(ResourceRepository<TDerived, TResourceType>::Handle aResourceHandle)
 		{
-			//const TResourceType* resource = myResources[itr->second];
-			//resource->GetId();
-			return nullptr;
+			const Core::Optional<size_t> index = HandleToIndex(aHandle);
+
+			if (!index.has_value())
+			{
+				return nullptr;
+			}
+
+			if (index.get() >= myResources.size())
+			{
+				return nullptr;
+			}
+
+			if (myResources[index.get()].GetId() != aHandle.GetId())
+			{
+				return nullptr;
+			}
+
+			return &(myResources[index.get()]);
 		}
 	}
 }
