@@ -33,16 +33,16 @@ namespace Alba
 				{
 
 				}
-				
+
 				explicit ResourceHandle(IdType anId, RepositoryType& aRepository)
 					: myResourceId(anId)
 					, myRepository(&aRepository)
 				{
 
 				}
-
-				explicit ResourceHandle(const ThisType& aCopyFrom) = default;
-				explicit ResourceHandle(ThisType&& aMoveFrom) = default;
+			
+				ResourceHandle(const ThisType& aCopyFrom) = default;
+				ResourceHandle(ThisType&& aMoveFrom) = default;
 
 				//=================================================================================
 				// Public Methods

@@ -5,6 +5,7 @@
 #include "Core_StringHash.hpp"
 #include "Core_SharedPtr.hpp"
 #include "Core_Resource.hpp"
+#include "Core_ResourceRepository.hpp"
 
 namespace Alba
 {
@@ -14,14 +15,28 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		class Texture;
 
-		/*
-		struct ALBA_GRAPHICS_API TextureDeleter final
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		class ALBA_GRAPHICS_API TextureRepository final : public Core::ResourceRepository<TextureRepository, Texture>
 		{
-			void operator()(Texture* aTexture) const noexcept;
-		};
-		*/
+			typedef Core::ResourceRepository<TextureRepository, Texture> Super;
 
-		typedef Core::SharedPtr<Texture> TexturePtr;
+		public:
+
+			//=================================================================================
+			// Public Constructors
+			//=================================================================================
+			TextureRepository();
+
+			//=================================================================================
+			// Public Methods
+			//=================================================================================
+		};
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		typedef Core::ResourceHandle<Texture, TextureRepository>	TextureHandle;
+		typedef Core::ResourceId<Texture>							TextureId;
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	Texture
@@ -31,22 +46,19 @@ namespace Alba
 		{
 			typedef Core::Resource<Texture> Super;
 
-			private:
-
-				// Ensures that MakeShared can call our constructor, but only from Create
-				struct DisableExternalConstruction {};
-
 			public:
 
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				TexturePtr Create(const Core::StringView& aFileName);
+				static TextureHandle Get(const Core::StringView& aFileName);
 			
 				//=================================================================================
 				// Public Constructors
 				//=================================================================================
-				Texture(const Core::NoCaseStringHash32 aResourceNameId, DisableExternalConstruction);
+				Texture() = default;
+
+				Texture(const Core::NoCaseStringHash32 aResourceNameId, TextureId anId);
 				Texture(const Texture& aCopyFrom) = delete;
 				Texture(Texture&& aMoveFrom) = default;
 
@@ -61,7 +73,11 @@ namespace Alba
 				//=================================================================================
 				// Private Constructors
 				//=================================================================================
-				
+
+				//=================================================================================
+				// Private Static Data
+				//=================================================================================
+				static TextureRepository		ourTextureRepository;
 
 				//=================================================================================
 				// Private Data

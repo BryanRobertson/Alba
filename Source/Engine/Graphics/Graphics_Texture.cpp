@@ -5,26 +5,31 @@ namespace Alba
 {
 	namespace Graphics
 	{
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		/*
-		void TextureDeleter::operator()(Texture* aTexture) const noexcept
-		{
-			delete aTexture;
-		}
-		*/
+		static constexpr size_t ourMaxTextures = 4096;
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		TexturePtr Texture::Create(const Core::StringView& aFileName)
+		/*static*/ TextureRepository Texture::ourTextureRepository;
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		TextureRepository::TextureRepository()
+			: Super(ourMaxTextures)
 		{
-			return Core::MakeShared<Texture>(Super::NameIdType(aFileName), DisableExternalConstruction());
+
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		Texture::Texture(const Core::NoCaseStringHash32 aResourceNameId, DisableExternalConstruction)
-			: Super(aResourceNameId)
+		TextureHandle Texture::Get(const Core::StringView& aFileName)
+		{
+			return ourTextureRepository.GetOrCreateResource(Core::NoCaseStringHash32(aFileName));
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		Texture::Texture(const Core::NoCaseStringHash32 aResourceNameId, TextureId anId)
+			: Super(aResourceNameId, anId)
 		{
 
 		}

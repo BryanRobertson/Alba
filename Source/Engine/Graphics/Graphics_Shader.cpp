@@ -23,12 +23,12 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		ShaderHandle Shader::Get(const Core::StringView& aFileName)
 		{
-			return ourShaderRepository.GetResource(Core::NoCaseStringHash32(aFileName));
+			return ourShaderRepository.GetOrCreateResource(Core::NoCaseStringHash32(aFileName));
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		Shader::Shader(Core::Resource<Shader>::NameIdType aResourceNameId, ShaderId aShaderId, Shader::DisableExternalConstruction&&)
+		Shader::Shader(Core::Resource<Shader>::NameIdType aResourceNameId, ShaderId aShaderId)
 			: Super(aResourceNameId, aShaderId)
 		{
 

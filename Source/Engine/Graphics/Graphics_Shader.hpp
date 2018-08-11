@@ -21,6 +21,8 @@ namespace Alba
 			Geometry
 		};
 
+		class Shader;
+
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		class ALBA_GRAPHICS_API ShaderRepository final : public Core::ResourceRepository<ShaderRepository, Shader>
@@ -41,11 +43,6 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		class Shader;
-		class ShaderRepository;
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
 		typedef Core::ResourceHandle<Shader, ShaderRepository>	ShaderHandle;
 		typedef Core::ResourceId<Shader>						ShaderId;
 
@@ -57,22 +54,19 @@ namespace Alba
 		{
 			typedef Core::Resource<Shader> Super;
 
-			private:
-
-				// Ensures that MakeShared can call our constructor, but only from Create
-				struct DisableExternalConstruction {};
-
 			public:
 
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				ShaderHandle Get(const Core::StringView& aFileName);
+				static ShaderHandle Get(const Core::StringView& aFileName);
 
 				//=================================================================================
 				// Public Constructors/Destructors
 				//=================================================================================
-				Shader(Core::Resource<Shader>::NameIdType aResourceNameId, ShaderId aShaderId, DisableExternalConstruction&&);
+				Shader() = default;
+
+				Shader(Core::Resource<Shader>::NameIdType aResourceNameId, ShaderId aShaderId);
 				Shader(const Shader& aCopyFrom) = delete;
 				Shader(Shader&& aMoveFrom) = default;
 
