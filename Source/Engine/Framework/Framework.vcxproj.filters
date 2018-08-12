@@ -13,6 +13,7 @@
     <ClInclude Include="Framework_API.hpp" />
     <ClInclude Include="Framework_Precompile.hpp" />
     <ClInclude Include="Framework_GameApplication.hpp" />
+    <ClInclude Include="Framework_RenderCallback.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">

@@ -23,7 +23,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		TextureHandle Texture::Get(const Core::StringView& aFileName)
 		{
-			return ourTextureRepository.GetOrCreateResource(Core::NoCaseStringHash32(aFileName));
+			TextureHandle handle = ourTextureRepository.GetOrCreateResource(aFileName, Core::NoCaseStringHash32(aFileName));
+			return handle;
 		}
 
 		//-----------------------------------------------------------------------------------------

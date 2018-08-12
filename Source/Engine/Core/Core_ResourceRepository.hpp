@@ -53,7 +53,7 @@ namespace Alba
 				// Public Methods
 				//=================================================================================
 				inline Handle				GetResource(NoCaseStringHash32 aResourceNameId);
-				inline Handle				GetOrCreateResource(NoCaseStringHash32 aResourceNameId);
+				inline Handle				GetOrCreateResource(const Core::StringView& aResourceName, NoCaseStringHash32 aResourceNameId);
 
 				inline bool					HasResource(NoCaseStringHash32 aResourceNameId) const;
 
@@ -67,7 +67,7 @@ namespace Alba
 				//=================================================================================
 				// Protected Constructors
 				//=================================================================================
-				inline Handle				CreateResource(NoCaseStringHash32 aResourceNameId);
+				inline Handle				CreateResource(const Core::StringView& aResourceName, NoCaseStringHash32 aResourceNameId);
 				inline void					DestroyResource(NoCaseStringHash32 aResourceNameId);
 				inline void					DestroyResource(Handle aHandle);
 			
@@ -145,7 +145,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template <typename TDerived, typename TResourceType>
-		typename ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::GetOrCreateResource(NoCaseStringHash32 aResourceNameId)
+		typename ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::GetOrCreateResource(const Core::StringView& aResourceName, NoCaseStringHash32 aResourceNameId)
 		{
 			Core::ScopedReaderMutexLock lock(myModifyNameIdHashToIndex);
 
@@ -159,7 +159,7 @@ namespace Alba
 			}
 			else
 			{
-				return CreateResource(aResourceNameId);
+				return CreateResource(aResourceName, aResourceNameId);
 			}
 		}
 
@@ -176,7 +176,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template <typename TDerived, typename TResourceType>
-		/*inline*/ typename ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::CreateResource(NoCaseStringHash32 aResourceNameId)
+		/*inline*/ typename ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::CreateResource(const Core::StringView& aResourceName, NoCaseStringHash32 aResourceNameId)
 		{
 			uint64 index = 0;
 
@@ -220,6 +220,7 @@ namespace Alba
 			
 			// Set resource
 			myResources[index] = TResourceType(aResourceNameId, id);
+			myResources[index].SetResourceName(aResourceName);
 
 			// Set name lookup
 			{
