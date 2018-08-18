@@ -24,6 +24,58 @@ namespace Alba
 
 				typedef ResourceHandle<TResourceType, TResourceRepository> ThisType;
 
+				struct ResourceLock
+				{
+					ResourceLock(TResourceType* aResource)
+						: myResource(aResource)
+					{
+
+					}
+
+					~ResourceLock()
+					{
+
+					}
+
+					operator TResourceType*()
+					{
+						return myResource;
+					}
+
+					TResourceType* operator->()
+					{
+						return myResource;
+					}
+
+					TResourceType* myResource;
+				};
+
+				struct ConstResourceLock
+				{
+					ConstResourceLock(const TResourceType* aResource)
+						: myResource(aResource)
+					{
+
+					}
+
+					~ConstResourceLock()
+					{
+
+					}
+
+					operator const TResourceType*()
+					{
+						return myResource;
+					}
+
+					const TResourceType* operator->()
+					{
+						return myResource;
+					}
+
+					const TResourceType* myResource;
+				};
+
 				//=================================================================================
 				// Public Constructors
 				//=================================================================================
@@ -57,14 +109,14 @@ namespace Alba
 					return myResourceId.IsValid();
 				}
 
-				const ResourceType* Lock() const
+				ConstResourceLock Lock() const
 				{
-					return myRepository->GetResourcePtr(*this);
+					return ConstResourceLock(myRepository->GetResourcePtr(*this));
 				}
 
-				ResourceType* LockMutable()
+				ResourceLock LockMutable()
 				{
-					return myRepository->GetResourcePtrMutable(*this);
+					return ResourceLock(myRepository->GetResourcePtrMutable(*this));
 				}
 
 				void Unlock()
