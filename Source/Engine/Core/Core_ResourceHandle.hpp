@@ -59,12 +59,12 @@ namespace Alba
 
 				const ResourceType* Lock() const
 				{
-					return myRepository->GetResourcePtr(myResourceId);
+					return myRepository->GetResourcePtr(*this);
 				}
 
 				ResourceType* LockMutable()
 				{
-					return myRepository->GetResourcePtrMutable(myResourceId);
+					return myRepository->GetResourcePtrMutable(*this);
 				}
 
 				void Unlock()
@@ -102,6 +102,8 @@ namespace Alba
 				{
 					myResourceId = aHandle.myResourceId;
 					myRepository = aHandle.myRepository;
+
+					return *this;
 				}
 
 			private:

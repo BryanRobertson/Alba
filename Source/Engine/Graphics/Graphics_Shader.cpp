@@ -1,5 +1,6 @@
 #include "Graphics_Precompile.hpp"
 #include "Graphics_Shader.hpp"
+#include "Core_Assert.hpp"
 
 namespace Alba
 {
@@ -21,9 +22,43 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		ShaderHandle Shader::Get(const Core::StringView& aFileName)
+		/*static*/ShaderHandle Shader::Get(Core::StringView aFileName)
 		{
-			ShaderHandle handle = ourShaderRepository.GetOrCreateResource(aFileName, Core::NoCaseStringHash32(aFileName));
+			const Core::NoCaseStringHash32 resourceNameId(aFileName);
+
+			ShaderHandle handle = ourShaderRepository.GetResource(resourceNameId);
+			if (!handle.IsValid())
+			{
+				handle = ourShaderRepository.CreateResource(resourceNameId);
+				ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
+
+				handle.LockMutable()->SetFileName(aFileName);
+				handle.Unlock();
+			}
+
+			return handle;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ ShaderHandle Shader::Create(Core::StringView aFileName)
+		{
+			const Core::NoCaseStringHash32 resourceNameId(aFileName);
+
+			ShaderHandle handle = ourShaderRepository.CreateResource(resourceNameId);
+			ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
+
+			handle.LockMutable()->SetFileName(aFileName);
+			handle.Unlock();
+
+			return handle;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ ShaderHandle Shader::Get(Core::Resource<Shader>::NameIdType aResourceNameId)
+		{
+			const ShaderHandle handle = ourShaderRepository.GetResource(aResourceNameId);
 			return handle;
 		}
 
