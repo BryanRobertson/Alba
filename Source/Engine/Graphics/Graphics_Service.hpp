@@ -36,6 +36,8 @@ namespace Alba
 				void		Present();
 				void		ShutDown();
 
+				RenderBackEnd& GetBackEnd();
+
 			private:
 
 				//=================================================================================

@@ -61,11 +61,11 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static ShaderHandle Get(Core::StringView aFileName);
+				static ShaderHandle Get(ShaderType aShaderType, Core::StringView aFileName);
 				static ShaderHandle Get(NameId aResourceNameId);
 
-				static ShaderHandle CreateFromFile(Core::StringView aFileName);
-				static ShaderHandle CreateFromString(NameId aNameId, Core::StringView aShaderSource);
+				static ShaderHandle CreateFromFile(ShaderType aShaderType, Core::StringView aFileName);
+				static ShaderHandle CreateFromString(ShaderType aShaderType, NameId aNameId, Core::StringView aShaderSourceCode);
 
 				//=================================================================================
 				// Public Constructors/Destructors
@@ -82,12 +82,21 @@ namespace Alba
 				Shader& operator=(const Shader& aCopyFrom) = delete;
 				Shader& operator=(Shader&& aMoveFrom) = default;
 
+				void CancelLoad();
+				void Unload();
+
 			private:			
 
 				//=================================================================================
 				// Private Static Data
 				//=================================================================================
 				static ShaderRepository		ourShaderRepository;
+
+				//=================================================================================
+				// Private Methods
+				//=================================================================================
+				void	SetType(ShaderType aShaderType);
+				bool	LoadFromString(Core::StringView aShaderSourceCode);
 
 				//=================================================================================
 				// Private Data

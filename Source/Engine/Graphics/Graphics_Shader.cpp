@@ -22,7 +22,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ShaderHandle Shader::Get(Core::StringView aFileName)
+		/*static*/ShaderHandle Shader::Get(ShaderType aShaderType, Core::StringView aFileName)
 		{
 			const Core::NoCaseStringHash32 resourceNameId(aFileName);
 
@@ -32,7 +32,10 @@ namespace Alba
 				handle = ourShaderRepository.CreateResource(resourceNameId);
 				ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
 
-				handle.LockMutable()->SetFileName(aFileName);
+				Shader* shader = handle.LockMutable(); 
+				shader->SetType(aShaderType);
+				shader->SetFileName(aFileName);
+
 				handle.Unlock();
 			}
 
@@ -41,14 +44,24 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ ShaderHandle Shader::CreateFromFile(Core::StringView aFileName)
+		/*static*/ ShaderHandle Shader::Get(Shader::NameId aResourceNameId)
+		{
+			return ourShaderRepository.GetResource(aResourceNameId);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ ShaderHandle Shader::CreateFromFile(ShaderType aShaderType, Core::StringView aFileName)
 		{
 			const Core::NoCaseStringHash32 resourceNameId(aFileName);
 
 			ShaderHandle handle = ourShaderRepository.CreateResource(resourceNameId);
 			ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
 
-			handle.LockMutable()->SetFileName(aFileName);
+			Shader* shader = handle.LockMutable();
+			shader->SetType(aShaderType);
+			shader->SetFileName(aFileName);
+
 			handle.Unlock();
 
 			return handle;
@@ -56,12 +69,15 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ ShaderHandle Shader::CreateFromString(NameId aNameId, Core::StringView aShaderSource)
+		/*static*/ ShaderHandle Shader::CreateFromString(ShaderType aShaderType, NameId aNameId, Core::StringView aShaderSource)
 		{
 			ALBA_ASSERT(!ourShaderRepository.HasResource(aNameId), "Attempting to create duplicate shader \"%s\"", aNameId.LogString().c_str());
 
 			ShaderHandle handle = ourShaderRepository.CreateResource(aNameId);
 			ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aNameId.LogString().c_str());
+
+			Shader* shader = handle.LockMutable();
+			shader->SetType(aShaderType);
 
 			return handle;
 		}
@@ -80,6 +96,44 @@ namespace Alba
 			: Super(aResourceNameId, aShaderId)
 		{
 
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void Shader::SetType(ShaderType aShaderType)
+		{
+			myShaderType = aShaderType;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		bool Shader::LoadFromString(Core::StringView /*aShaderSourceCode*/)
+		{
+
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void Shader::CancelLoad()
+		{
+			if (IsLoading())
+			{
+
+			}
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void Shader::Unload()
+		{
+			if (IsLoading())
+			{
+				CancelLoad();
+			}
+			else if (IsLoaded())
+			{
+
+			}
 		}
 	}
 }
