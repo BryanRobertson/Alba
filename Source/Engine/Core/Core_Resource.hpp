@@ -9,6 +9,16 @@ namespace Alba
 	namespace Core
 	{
 		//-----------------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------------
+		enum class ResourceState : uint32
+		{
+			Invalid,
+			Unloaded,
+			Loading,
+			Loaded
+		};
+
+		//-----------------------------------------------------------------------------------------------------
 		// Name :	Resource<T>
 		// Desc	:	Base class for all resource types
 		//-----------------------------------------------------------------------------------------------------
@@ -25,6 +35,7 @@ namespace Alba
 				inline Resource()
 					: myResourceNameId()
 					, myId()
+					, myState(ResourceState::Unloaded)
 				{
 
 				}
@@ -32,6 +43,7 @@ namespace Alba
 				explicit inline Resource(NameIdType aResourceNameId, ResourceId<TDerived> anId)
 					: myResourceNameId(aResourceNameId)
 					, myId(anId)
+					, myState(ResourceState::Unloaded)
 				{
 
 				}
@@ -41,6 +53,10 @@ namespace Alba
 				//=============================================================================================
 				inline NameIdType				GetResourceNameId() const;
 				inline ResourceId<TDerived>		GetId() const;
+
+				inline ResourceState			GetState() const;
+				inline bool						IsLoading() const;
+				inline bool						IsLoaded() const;
 
 				inline void						SetFileName(Core::StringView aFileName);
 				inline const Core::String&		GetFileName() const;
@@ -59,6 +75,8 @@ namespace Alba
 				Resource<TDerived>& operator= (const Resource<TDerived>& aCopyFrom) = delete;
 				Resource<TDerived>& operator= (Resource<TDerived>&& aMoveFrom) = default;
 
+				inline void				SetResourceState(ResourceState aResourceState);
+
 			private:
 
 				//=============================================================================================
@@ -68,6 +86,8 @@ namespace Alba
 				ResourceId<TDerived>	myId;
 
 				Core::String			myFileName;
+
+				ResourceState			myState;
 		};
 
 		//-----------------------------------------------------------------------------------------------------
@@ -100,6 +120,38 @@ namespace Alba
 		/*inline*/ ResourceId<TDerived>	Resource<TDerived>::GetId() const
 		{
 			return myId;
+		}
+
+		//-----------------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------------
+		template <typename TDerived>
+		/*inline*/ ResourceState Resource<TDerived>::GetState() const
+		{
+			return myState;
+		}
+
+		//-----------------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------------
+		template <typename TDerived>
+		/*inline*/ bool Resource<TDerived>::IsLoading() const
+		{
+			return GetState() == ResourceState::Loading;
+		}
+
+		//-----------------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------------
+		template <typename TDerived>
+		/*inline*/ bool Resource<TDerived>::IsLoaded() const
+		{
+			return GetState() == ResourceState::Loaded;
+		}
+
+		//-----------------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------------
+		template <typename TDerived>
+		/*inline*/ void Resource<TDerived>::SetResourceState(ResourceState aResourceState)
+		{
+			myState = aResourceState;
 		}
 	}
 }

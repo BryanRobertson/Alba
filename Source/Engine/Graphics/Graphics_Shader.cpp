@@ -41,7 +41,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ ShaderHandle Shader::Create(Core::StringView aFileName)
+		/*static*/ ShaderHandle Shader::CreateFromFile(Core::StringView aFileName)
 		{
 			const Core::NoCaseStringHash32 resourceNameId(aFileName);
 
@@ -50,6 +50,18 @@ namespace Alba
 
 			handle.LockMutable()->SetFileName(aFileName);
 			handle.Unlock();
+
+			return handle;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ ShaderHandle Shader::CreateFromString(NameId aNameId, Core::StringView aShaderSource)
+		{
+			ALBA_ASSERT(!ourShaderRepository.HasResource(aNameId), "Attempting to create duplicate shader \"%s\"", aNameId.LogString().c_str());
+
+			ShaderHandle handle = ourShaderRepository.CreateResource(aNameId);
+			ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aNameId.LogString().c_str());
 
 			return handle;
 		}

@@ -56,12 +56,16 @@ namespace Alba
 
 			public:
 
+				typedef Core::Resource<Shader>::NameIdType NameId;
+
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
 				static ShaderHandle Get(Core::StringView aFileName);
-				static ShaderHandle Create(Core::StringView aFileName);
-				static ShaderHandle Get(Core::Resource<Shader>::NameIdType aResourceNameId);
+				static ShaderHandle Get(NameId aResourceNameId);
+
+				static ShaderHandle CreateFromFile(Core::StringView aFileName);
+				static ShaderHandle CreateFromString(NameId aNameId, Core::StringView aShaderSource);
 
 				//=================================================================================
 				// Public Constructors/Destructors
