@@ -14,6 +14,7 @@
     <ClInclude Include="Framework_Precompile.hpp" />
     <ClInclude Include="Framework_GameApplication.hpp" />
     <ClInclude Include="Framework_RenderCallback.hpp" />
+    <ClInclude Include="Framework_Viewport.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">
