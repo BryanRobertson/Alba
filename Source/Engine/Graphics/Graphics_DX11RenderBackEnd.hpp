@@ -32,6 +32,12 @@ namespace Alba
 				virtual void	Present() override;
 				virtual void	ShutDown() override;
 
+				virtual uint32	CreateVertexShaderFromString(ShaderId aShaderId, Core::StringView aString) override;
+				virtual uint32	CreateVertexShaderFromFile(ShaderId aShaderId, Core::StringView aFileName) override;
+
+				virtual uint32	CreatePixelShaderFromString(ShaderId aShaderId, Core::StringView aString) override;
+				virtual uint32	CreatePixelShaderFromFile(ShaderId aShaderId, Core::StringView aFileName) override;
+
 			private:
 
 				//=================================================================================

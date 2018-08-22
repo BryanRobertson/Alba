@@ -283,5 +283,33 @@ namespace Alba
 		{
 
 		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		uint32 DX11RenderBackEnd::CreateVertexShaderFromString(ShaderId /*aShaderId*/, Core::StringView /*aString*/)
+		{
+			return 0;
+		}
+		
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		uint32 DX11RenderBackEnd::CreateVertexShaderFromFile(ShaderId /*aShaderId*/, Core::StringView /*aFileName*/)
+		{
+			return 0;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		uint32 DX11RenderBackEnd::CreatePixelShaderFromString(ShaderId /*aShaderId*/, Core::StringView /*aString*/)
+		{
+			return 0;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		uint32 DX11RenderBackEnd::CreatePixelShaderFromFile(ShaderId /*aShaderId*/, Core::StringView /*aFileName*/)
+		{
+			return 0;
+		}
 	}
 }
