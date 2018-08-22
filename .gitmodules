@@ -7,3 +7,6 @@
 [submodule "Source/External/mathfu"]
 	path = Source/External/mathfu
 	url = https://github.com/google/mathfu
+[submodule "Source/External/imgui"]
+	path = Source/External/imgui
+	url = https://github.com/ocornut/imgui

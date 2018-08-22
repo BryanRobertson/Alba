@@ -53,9 +53,8 @@ namespace Alba
 				// Public Methods
 				//=================================================================================
 				inline Handle				GetResource(NoCaseStringHash32 aResourceNameId);
-				inline Handle				GetOrCreateResource(const Core::StringView& aResourceName, NoCaseStringHash32 aResourceNameId);
-
 				inline bool					HasResource(NoCaseStringHash32 aResourceNameId) const;
+				inline Handle				CreateResource(NoCaseStringHash32 aResourceNameId);
 
 			protected:
 
@@ -67,7 +66,6 @@ namespace Alba
 				//=================================================================================
 				// Protected Constructors
 				//=================================================================================
-				inline Handle				CreateResource(const Core::StringView& aResourceName, NoCaseStringHash32 aResourceNameId);
 				inline void					DestroyResource(NoCaseStringHash32 aResourceNameId);
 				inline void					DestroyResource(Handle aHandle);
 			
@@ -90,7 +88,7 @@ namespace Alba
 					ResourceIdInternal idFields;
 					std::memcpy(&idFields, &idValue, sizeof(idFields));
 
-					return idFields.myIndex;
+					return idFields.myFields.myIndex;
 				}
 
 				//=================================================================================
@@ -134,33 +132,12 @@ namespace Alba
 			if (itr != myNameIdHashToIndex.end())
 			{
 				ALBA_ASSERT(myResources.size() > itr->second);
-				const TResourceType* resource = myResources[itr->second];
+				const TResourceType* resource = &myResources[itr->second];
 
 				return Handle(resource->GetId(), static_cast<TDerived&>(*this));
 			}
 
 			return Handle();
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		template <typename TDerived, typename TResourceType>
-		typename ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::GetOrCreateResource(const Core::StringView& aResourceName, NoCaseStringHash32 aResourceNameId)
-		{
-			Core::ScopedReaderMutexLock lock(myModifyNameIdHashToIndex);
-
-			auto itr = myNameIdHashToIndex.find(aResourceNameId);
-			if (itr != myNameIdHashToIndex.end())
-			{
-				ALBA_ASSERT(myResources.size() > itr->second);
-				const TResourceType* resource = &myResources[itr->second];
-
-				return Handle(resource->GetId(), static_cast<TDerived&>(*this));
-			}
-			else
-			{
-				return CreateResource(aResourceName, aResourceNameId);
-			}
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -176,7 +153,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template <typename TDerived, typename TResourceType>
-		/*inline*/ typename ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::CreateResource(const Core::StringView& aResourceName, NoCaseStringHash32 aResourceNameId)
+		/*inline*/ typename ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::CreateResource(NoCaseStringHash32 aResourceNameId)
 		{
 			uint64 index = 0;
 
@@ -220,7 +197,6 @@ namespace Alba
 			
 			// Set resource
 			myResources[index] = TResourceType(aResourceNameId, id);
-			myResources[index].SetResourceName(aResourceName);
 
 			// Set name lookup
 			{
@@ -309,12 +285,13 @@ namespace Alba
 				return nullptr;
 			}
 
-			if (index.get() >= myResources.size())
+			const size_t indexValue = index.value();
+			if (indexValue >= myResources.size())
 			{
 				return nullptr;
 			}
 
-			if (myResources[index.get()].GetId() != aHandle.GetId())
+			if (myResources[indexValue].GetId() != aHandle.GetId())
 			{
 				return nullptr;
 			}
@@ -327,24 +304,25 @@ namespace Alba
 		template <typename TDerived, typename TResourceType>
 		TResourceType* ResourceRepository<TDerived, TResourceType>::GetResourcePtrMutable(typename ResourceRepository<TDerived, TResourceType>::Handle aResourceHandle)
 		{
-			const Core::Optional<size_t> index = HandleToIndex(aHandle);
+			const Core::Optional<size_t> index = HandleToIndex(aResourceHandle);
 
 			if (!index.has_value())
 			{
 				return nullptr;
 			}
 
-			if (index.get() >= myResources.size())
+			const size_t indexValue = index.value();
+			if (indexValue >= myResources.size())
 			{
 				return nullptr;
 			}
 
-			if (myResources[index.get()].GetId() != aHandle.GetId())
+			if (myResources[indexValue].GetId() != aResourceHandle.GetId())
 			{
 				return nullptr;
 			}
 
-			return &(myResources[index.get()]);
+			return &(myResources[indexValue]);
 		}
 	}
 }

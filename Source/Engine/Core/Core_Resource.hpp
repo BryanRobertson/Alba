@@ -40,11 +40,10 @@ namespace Alba
 				// Public Methods
 				//=============================================================================================
 				inline NameIdType				GetResourceNameId() const;
-				inline const Core::String&		GetResourceName() const;
-
 				inline ResourceId<TDerived>		GetId() const;
 
-				inline void						SetResourceName(const Core::StringView& aResourceName);
+				inline void						SetFileName(Core::StringView aFileName);
+				inline const Core::String&		GetFileName() const;
 
 			protected:
 
@@ -68,7 +67,7 @@ namespace Alba
 				NameIdType				myResourceNameId;
 				ResourceId<TDerived>	myId;
 
-				Core::String			myResourceName;
+				Core::String			myFileName;
 		};
 
 		//-----------------------------------------------------------------------------------------------------
@@ -82,17 +81,17 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------------
 		template <typename TDerived>
-		/*inline*/ const Core::String& Resource<TDerived>::GetResourceName() const
+		/*inline*/ const Core::String& Resource<TDerived>::GetFileName() const
 		{
-			return myResourceName;
+			return myFileName;
 		}
 
 		//-----------------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------------
 		template <typename TDerived>
-		/*inline*/ void SetResourceName(const Core::StringView& aResourceName)
+		/*inline*/ void SetFileName(Core::StringView aFileName)
 		{
-			myResourceName = aResourceName;
+			myFileName = aFileName;
 		}
 
 		//-----------------------------------------------------------------------------------------------------

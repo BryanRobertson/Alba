@@ -51,7 +51,9 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static TextureHandle Get(const Core::StringView& aFileName);
+				static TextureHandle Get(Core::StringView aFileName);
+				static TextureHandle Create(Core::StringView aFileName);
+				static TextureHandle Get(Core::Resource<Texture>::NameIdType aResourceNameId);
 			
 				//=================================================================================
 				// Public Constructors

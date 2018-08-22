@@ -21,9 +21,43 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		TextureHandle Texture::Get(const Core::StringView& aFileName)
+		/*static*/ TextureHandle Texture::Get(Core::StringView aFileName)
 		{
-			TextureHandle handle = ourTextureRepository.GetOrCreateResource(aFileName, Core::NoCaseStringHash32(aFileName));
+			const Core::NoCaseStringHash32 resourceNameId(aFileName);
+
+			TextureHandle handle = ourTextureRepository.GetResource(resourceNameId);
+			if (!handle.IsValid())
+			{
+				handle = ourTextureRepository.CreateResource(resourceNameId);
+				ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
+
+				handle.LockMutable()->SetFileName(aFileName);
+				handle.Unlock();
+			}
+
+			return handle;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ TextureHandle Texture::Create(Core::StringView aFileName)
+		{
+			const Core::NoCaseStringHash32 resourceNameId(aFileName);
+
+			TextureHandle handle = ourTextureRepository.CreateResource(resourceNameId);
+			ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
+
+			handle.LockMutable()->SetFileName(aFileName);
+			handle.Unlock();
+
+			return handle;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ TextureHandle Texture::Get(Core::Resource<Texture>::NameIdType aResourceNameId)
+		{
+			const TextureHandle handle = ourTextureRepository.GetResource(aResourceNameId);
 			return handle;
 		}
 

@@ -47,7 +47,7 @@ namespace Alba
 
 				bool IsValid() const
 				{
-					return myValue != InvalidId;
+					return myValue != InvalidId.GetValue();
 				}
 
 				constexpr StronglyTypedId<TValueType, TTagType>& operator=(StronglyTypedId<TValueType, TTagType> aRhs)

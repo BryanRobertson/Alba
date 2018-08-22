@@ -59,7 +59,9 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static ShaderHandle Get(const Core::StringView& aFileName);
+				static ShaderHandle Get(Core::StringView aFileName);
+				static ShaderHandle Create(Core::StringView aFileName);
+				static ShaderHandle Get(Core::Resource<Shader>::NameIdType aResourceNameId);
 
 				//=================================================================================
 				// Public Constructors/Destructors
