@@ -1,15 +1,23 @@
 #include "Framework_Precompile.hpp"
+#include "Core.hpp"
+
+#ifdef ALBA_PLATFORM_WINDOWS
+
 #include "Framework_GameApplication.hpp"
+#include "Graphics_ImGuiModule.hpp"
 #include "Core_Memory.hpp"
 #include "Core_Pair.hpp"
 #include "Core_Window.hpp"
 #include "Core_WindowEventHandler.hpp"
 
+#include <imgui.h>
+#include <examples/imgui_impl_win32.h>
+
 #ifdef CreateWindow // God damn it Windows.h
 	#undef CreateWindow
 #endif
 
-#ifdef ALBA_PLATFORM_WINDOWS
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace Alba
 {
@@ -25,6 +33,11 @@ namespace Alba
 			//-----------------------------------------------------------------------------------------
 			static LRESULT EventHandler(GameApplication& anApplication, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
+				if (Graphics::ImGuiModule::IsLoaded())
+				{
+					ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
+				}				
+
 				switch (uMsg)
 				{
 					case WM_CLOSE:
