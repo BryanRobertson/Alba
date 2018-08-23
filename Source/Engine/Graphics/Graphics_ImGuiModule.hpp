@@ -1,44 +1,33 @@
 #pragma once
 
 #include "Graphics_API.hpp"
-#include "Graphics_Service.hpp"
 #include "Core_Module.hpp"
-#include "Core_UniquePtr.hpp"
 
 namespace Alba
 {
 	namespace Graphics
 	{
-		class GraphicsService;
-
 		//-----------------------------------------------------------------------------------------
-		// Name	: GraphicsModule
-		// Desc	: Graphics module
+		// Name	:	ImGuiModule
+		// Desc	:	Module to wrap the ImGui library
 		//-----------------------------------------------------------------------------------------
-		class GraphicsModule : public Core::Module<GraphicsModule>
+		class ImGuiModule : public Core::Module<ImGuiModule>
 		{
 			public:
 
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static const char* GetModuleName() { return "Alba.Graphics"; }
-
+				static const char* GetModuleName() { return "Alba.Graphics.ImGui"; }
+	
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				bool					OnLoad(Core::AnyDictionary someLoadParams);
-				void					OnUnload();
+				bool				OnLoad(Core::AnyDictionary someLoadParams);
+				void				OnUnload();
 
-				GraphicsService&		GetGraphicsServiceMutable();
-				const GraphicsService&	GetGraphicsService() const;
-
-			private:
-
-				//=================================================================================
-				// Private Data
-				//=================================================================================
-				Core::UniquePtr<GraphicsService> myGraphicsService;
+				void				BeginFrame();
+				void				EndFrame();
 		};
 	}
 }

@@ -28,9 +28,14 @@ namespace Alba
 				// Public Methods
 				//=================================================================================
 				virtual uint32	Init(const InitParams& anInitParams) override;
+				virtual void	BeginFrame() override;
 				virtual void	ClearBuffer(const Math::Vector4f& aColour) override;
 				virtual void	Present() override;
+				virtual void	EndFrame() override;
 				virtual void	ShutDown() override;
+
+				virtual bool	ImGuiInit() override;
+				virtual void	ImGuiShutDown() override;
 
 				virtual uint32	CreateVertexShaderFromString(ShaderId aShaderId, Core::StringView aString) override;
 				virtual uint32	CreateVertexShaderFromFile(ShaderId aShaderId, Core::StringView aFileName) override;
@@ -68,6 +73,8 @@ namespace Alba
 				D3D11RenderTargetViewPtr	myRenderTarget;
 
 				D3D11_VIEWPORT				myViewport;
+
+				bool						myIsImGuiInitialised;
 		};
 	}
 }

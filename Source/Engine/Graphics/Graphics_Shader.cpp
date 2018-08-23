@@ -69,7 +69,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ ShaderHandle Shader::CreateFromString(ShaderType aShaderType, NameId aNameId, Core::StringView aShaderSource)
+		/*static*/ ShaderHandle Shader::CreateFromString(ShaderType aShaderType, NameId aNameId, Core::StringView /*aShaderSource*/)
 		{
 			ALBA_ASSERT(!ourShaderRepository.HasResource(aNameId), "Attempting to create duplicate shader \"%s\"", aNameId.LogString().c_str());
 
@@ -80,16 +80,8 @@ namespace Alba
 			shader->SetType(aShaderType);
 
 			return handle;
-		}
 
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		/*static*/ ShaderHandle Shader::Get(Core::Resource<Shader>::NameIdType aResourceNameId)
-		{
-			const ShaderHandle handle = ourShaderRepository.GetResource(aResourceNameId);
-			return handle;
 		}
-
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		Shader::Shader(Core::Resource<Shader>::NameIdType aResourceNameId, ShaderId aShaderId)
@@ -109,7 +101,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		bool Shader::LoadFromString(Core::StringView /*aShaderSourceCode*/)
 		{
-
+			return false;
 		}
 
 		//-----------------------------------------------------------------------------------------

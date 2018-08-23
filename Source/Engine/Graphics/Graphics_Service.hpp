@@ -3,6 +3,7 @@
 #include "Graphics_API.hpp"
 #include "Core_BasicTypes.hpp"
 #include "Core_UniquePtr.hpp"
+#include "Core_AnyDictionary.hpp"
 #include "Math_Vector.hpp"
 
 namespace Alba
@@ -23,6 +24,11 @@ namespace Alba
 			public:
 
 				//=================================================================================
+				// Public Types
+				//=================================================================================
+				typedef Core::AnyDictionary AnyDict;
+
+				//=================================================================================
 				// Public Constructors/Destructors
 				//=================================================================================
 				GraphicsService();
@@ -31,12 +37,16 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				uint32		Init(const InitParams& anInitParams);
-				void		ClearBuffer(const Math::Vector4f& aColour);
-				void		Present();
-				void		ShutDown();
+				uint32					Init(const InitParams& anInitParams);
 
-				RenderBackEnd& GetBackEnd();
+				void					BeginFrame();
+				void					ClearBuffer(const Math::Vector4f& aColour);
+				void					EndFrame();
+				
+				void					ShutDown();
+
+				RenderBackEnd&			GetBackEnd();
+				inline const AnyDict&	GetPlatformData() const;
 
 			private:
 
@@ -44,6 +54,14 @@ namespace Alba
 				// Private Data
 				//=================================================================================
 				Core::UniquePtr<RenderBackEnd> myRenderBackEnd;
+				Core::AnyDictionary			   myPlatformData;
 		};
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*inline*/ const Core::AnyDictionary& GraphicsService::GetPlatformData() const
+		{
+			return myPlatformData;
+		}
 	}
 }

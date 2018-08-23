@@ -1,6 +1,7 @@
 #include "Graphics_Precompile.hpp"
 #include "Graphics_InitParams.hpp"
 #include "Graphics_Service.hpp"
+#include "Graphics_ImGuiModule.hpp"
 #include "Graphics_DX11RenderBackEnd.hpp"
 
 namespace Alba
@@ -23,6 +24,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		uint32 GraphicsService::Init(const InitParams& anInitParams)
 		{
+			myPlatformData = anInitParams.myPlatformData;
+
 			myRenderBackEnd.reset(ALBA_NEW(Alba::Core::AllocationType::Renderer, "RenderBackEnd") DX11RenderBackEnd());
 			return myRenderBackEnd->Init(anInitParams);
 		}
@@ -36,8 +39,25 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void GraphicsService::Present()
+		void GraphicsService::BeginFrame()
 		{
+			ImGuiModule imGuiModule = ImGuiModule::Get();
+			if (imGuiModule.IsLoaded())
+			{
+				imGuiModule.BeginFrame();
+			}
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void GraphicsService::EndFrame()
+		{
+			ImGuiModule imGuiModule = ImGuiModule::Get();
+			if (imGuiModule.IsLoaded())
+			{
+				imGuiModule.EndFrame();
+			}
+
 			myRenderBackEnd->Present();
 		}
 

@@ -30,5 +30,12 @@ namespace Alba
 		{
 			return *myGraphicsService;
 		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		const GraphicsService& GraphicsModule::GetGraphicsService() const
+		{
+			return *myGraphicsService;
+		}
 	}
 }

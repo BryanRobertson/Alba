@@ -31,9 +31,15 @@ namespace Alba
 				// Public Methods
 				//=================================================================================
 				virtual uint32	Init(const InitParams& someInitParams) = 0;
+
+				virtual void	BeginFrame() = 0;
 				virtual void	ClearBuffer(const Math::Vector4f& aColour) = 0;
 				virtual void	Present() = 0;
+				virtual void	EndFrame() = 0;
 				virtual void	ShutDown() = 0;
+
+				virtual bool	ImGuiInit() = 0;
+				virtual void	ImGuiShutDown() = 0;
 
 				virtual uint32	CreateVertexShaderFromString(ShaderId aShaderId, Core::StringView aString) = 0;
 				virtual uint32	CreateVertexShaderFromFile(ShaderId aShaderId, Core::StringView aFileName) = 0;

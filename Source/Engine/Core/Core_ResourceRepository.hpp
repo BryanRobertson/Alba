@@ -100,7 +100,7 @@ namespace Alba
 				BitVector<uint64>						myFreeIndices;
 
 				Mutex									myModifyFreeIndicesMutex;
-				ReadWriteMutex							myModifyNameIdHashToIndex;
+				mutable ReadWriteMutex					myModifyNameIdHashToIndex;
 		};
 
 		//-----------------------------------------------------------------------------------------
@@ -147,7 +147,7 @@ namespace Alba
 		{
 			Core::ScopedReaderMutexLock lock(myModifyNameIdHashToIndex);
 
-			return myNameIdHashToIndex.find(aResourceNameId) != myResources.end();
+			return myNameIdHashToIndex.find(aResourceNameId) != myNameIdHashToIndex.end();
 		}
 
 		//-----------------------------------------------------------------------------------------

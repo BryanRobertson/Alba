@@ -196,7 +196,7 @@ namespace Alba
 
 			{
 				ALBA_PROFILE_SCOPED(Present);
-				myGraphicsService->Present();
+				myGraphicsService->EndFrame();
 
 				using namespace std::literals;
 				Alba::Core::ThisThread::sleep_for(5ms);

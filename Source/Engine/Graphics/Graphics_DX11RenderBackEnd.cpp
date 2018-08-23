@@ -1,9 +1,14 @@
 #include "Graphics_Precompile.hpp"
 #include "Graphics_DX11RenderBackEnd.hpp"
 #include "Graphics_InitParams.hpp"
+#include "Graphics_ImGuiModule.hpp"
 #include <d3d11.h>
 #include <dxgi1_3.h>
 #include <wrl/client.h>
+
+#include <imgui.h>
+#include <examples/imgui_impl_dx11.h>
+#include <examples/imgui_impl_dx11.cpp>
 
 namespace Alba
 {
@@ -14,6 +19,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		DX11RenderBackEnd::DX11RenderBackEnd()
 			: myFeatureLevel()
+			, myIsImGuiInitialised(false)
 		{
 		}
 
@@ -281,7 +287,42 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void DX11RenderBackEnd::ShutDown()
 		{
+			ImGuiShutDown();
+		}
 
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void DX11RenderBackEnd::BeginFrame()
+		{
+			if (ImGuiModule::IsLoaded())
+			{
+				ImGui_ImplDX11_NewFrame();
+			}
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void DX11RenderBackEnd::EndFrame()
+		{
+			
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		bool DX11RenderBackEnd::ImGuiInit()
+		{
+			return ImGui_ImplDX11_Init(myDevice.Get(), myDeviceContext.Get());
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void DX11RenderBackEnd::ImGuiShutDown()
+		{
+			ImGuiModule& imGuiModule = ImGuiModule::Get();
+			if (imGuiModule.IsLoaded() && myIsImGuiInitialised)
+			{
+				ImGui_ImplDX11_Shutdown();
+			}
 		}
 
 		//-----------------------------------------------------------------------------------------
