@@ -93,6 +93,9 @@ namespace Alba
 
 				Alba::Graphics::GraphicsModule& graphicsModule = Alba::Graphics::GraphicsModule::Get();
 				myGraphicsService = &graphicsModule.GetGraphicsServiceMutable();
+
+				// Load ImGui module
+				moduleRepository.LoadModule("Alba.Graphics.ImGui"_nocasehash32);
 			}
 
 			return 0;
@@ -185,6 +188,7 @@ namespace Alba
 		{
 			ALBA_PROFILE_SCOPED(BeginFrame);
 			
+			myGraphicsService->BeginFrame();
 			myGraphicsService->ClearBuffer(Math::Vector4f(0.0f, 0.0f, 0.0f, 1.0f));
 		}
 
@@ -199,7 +203,7 @@ namespace Alba
 				myGraphicsService->EndFrame();
 
 				using namespace std::literals;
-				Alba::Core::ThisThread::sleep_for(5ms);
+				//Alba::Core::ThisThread::sleep_for(5ms);
 			}
 		}
 

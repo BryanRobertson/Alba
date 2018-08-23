@@ -98,6 +98,9 @@ namespace Alba
 		{
 			D3D_FEATURE_LEVEL levels[] = 
 			{
+				D3D_FEATURE_LEVEL_11_1,
+				D3D_FEATURE_LEVEL_11_0
+				/*
 				D3D_FEATURE_LEVEL_9_1,
 				D3D_FEATURE_LEVEL_9_2,
 				D3D_FEATURE_LEVEL_9_3,
@@ -105,6 +108,7 @@ namespace Alba
 				D3D_FEATURE_LEVEL_10_1,
 				D3D_FEATURE_LEVEL_11_0,
 				D3D_FEATURE_LEVEL_11_1
+				*/
 			};
 
 			// This flag adds support for surfaces with a color-channel ordering different
@@ -298,20 +302,39 @@ namespace Alba
 			{
 				ImGui_ImplDX11_NewFrame();
 			}
+
+			ID3D11RenderTargetView* renderTarget = myRenderTarget.Get();
+			myDeviceContext->OMSetRenderTargets(1, &renderTarget, myDepthStencilView.Get());
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		void DX11RenderBackEnd::EndFrame()
 		{
-			
+			if (ImGuiModule::IsLoaded())
+			{
+				ImGui::Render();
+				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+			}
+
+			Present();
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		bool DX11RenderBackEnd::ImGuiInit()
 		{
-			return ImGui_ImplDX11_Init(myDevice.Get(), myDeviceContext.Get());
+			if (!ImGui_ImplDX11_Init(myDevice.Get(), myDeviceContext.Get()))
+			{
+				return false;
+			}
+
+			if (!ImGui_ImplDX11_CreateDeviceObjects())
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		//-----------------------------------------------------------------------------------------

@@ -3,6 +3,8 @@
 #include "Graphics_API.hpp"
 #include "Core_Module.hpp"
 
+struct ImFont;
+
 namespace Alba
 {
 	namespace Graphics
@@ -28,6 +30,13 @@ namespace Alba
 
 				void				BeginFrame();
 				void				EndFrame();
+
+			private:
+
+				//=================================================================================
+				// Private Data
+				//=================================================================================
+				ImFont*				myFont = nullptr;
 		};
 	}
 }
