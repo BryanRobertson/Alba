@@ -34,16 +34,21 @@ namespace Alba
 				return false;
 			}
 
+			//---------------------------------------------
 			// Init ImGui
+			//---------------------------------------------
 			IMGUI_CHECKVERSION();
 
 			ImGui::CreateContext();
 			ImGuiIO& io = ImGui::GetIO();
 
-			// Windows implementation
+			GraphicsService& graphicsService = graphicsModule.GetGraphicsServiceMutable();
+
+			//---------------------------------------------
+			// Windows-specific initialisation
+			//---------------------------------------------
 			#ifdef ALBA_PLATFORM_WINDOWS
 			{
-				GraphicsService& graphicsService = graphicsModule.GetGraphicsServiceMutable();
 				if (!graphicsService.GetPlatformData().Has<HWND>())
 				{
 					ALBA_LOG_ERROR(Graphics, "Failed to load ImGui module - failed to get window handle!");
@@ -56,17 +61,13 @@ namespace Alba
 					ALBA_LOG_ERROR(Graphics, "Failed to load ImGui module - failed to initialise ImGui!");
 					return false;
 				}
-
-				RenderBackEnd& renderBackEnd = graphicsService.GetBackEnd();
-				if (!renderBackEnd.ImGuiInit())
-				{
-					ALBA_LOG_ERROR(Graphics, "Failed to load ImGui module - failed to initialise render backend!");
-					return false;
-				}
 			}
 			#endif
 
+			//---------------------------------------------
 			// Load font
+			// Note: This must be done before initialisation of the render backend
+			//---------------------------------------------
 			myFont = io.Fonts->AddFontFromFileTTF("../Data/fonts/DroidSans.ttf", 16.0f);
 			if (!myFont)
 			{
@@ -76,18 +77,18 @@ namespace Alba
 					return false;
 				}
 			}
-			/*
-			else
+
+			//---------------------------------------------
+			// Init render-backend part of ImGui
+			//---------------------------------------------
+			RenderBackEnd& renderBackEnd = graphicsService.GetBackEnd();
+			if (!renderBackEnd.ImGuiInit())
 			{
-				uint8_t* data = nullptr;
-				int32_t width = 0;
-				int32_t height = 0;
-
-				io.Fonts->GetTexDataAsRGBA32(&data, &width, &height);
+				ALBA_LOG_ERROR(Graphics, "Failed to load ImGui module - failed to initialise render backend!");
+				return false;
 			}
-			*/
 
-			// Dark style
+			//---------------------------------------------
 			ImGui::StyleColorsDark();
 
 			return true;
