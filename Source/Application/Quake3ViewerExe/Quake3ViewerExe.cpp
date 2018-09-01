@@ -57,7 +57,7 @@ namespace Quake3ViewerExe
 		}
 
 		//-----------------------------------------------------------------------------------------
-		// Register and Load modules
+		// Register modules
 		//-----------------------------------------------------------------------------------------
 		{
 			//-------------------------------------------------------------------------------------
@@ -67,13 +67,6 @@ namespace Quake3ViewerExe
 			Alba::Graphics::RegisterModules();
 			Alba::Framework::RegisterModules();
 			Alba::Quake3Viewer::RegisterModules();
-
-			//-------------------------------------------------------------------------------------
-			// Load
-			//-------------------------------------------------------------------------------------
-			Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
-
-			moduleRepository.LoadModule("Alba.Quake3Viewer"_nocasehash32);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -93,6 +86,14 @@ namespace Quake3ViewerExe
 				return initResult;
 			}
 		}
+
+		//-------------------------------------------------------------------------------------
+		// Load Main Module
+		//-------------------------------------------------------------------------------------
+		{
+			Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
+			moduleRepository.LoadModule("Alba.Quake3Viewer"_nocasehash32);
+		}		
 
 		const uint32 returnCode = application->Run();
 

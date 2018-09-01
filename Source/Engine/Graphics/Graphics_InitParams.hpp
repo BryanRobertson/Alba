@@ -12,7 +12,7 @@ namespace Alba
 		// Name	:	InitParams
 		// Desc:	Initialisation parameters for the framework
 		//-----------------------------------------------------------------------------------------------
-		struct InitParams
+		struct ALBA_GRAPHICS_API InitParams
 		{
 			// Platform specific data
 			Core::AnyDictionary		myPlatformData;

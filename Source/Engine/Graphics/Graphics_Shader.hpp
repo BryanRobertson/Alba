@@ -18,7 +18,10 @@ namespace Alba
 		{
 			Vertex,
 			Pixel,
-			Geometry
+			Geometry,
+			Compute,
+			Hull,
+			Domain
 		};
 
 		class Shader;

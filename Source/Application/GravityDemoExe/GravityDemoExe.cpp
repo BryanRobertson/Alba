@@ -56,7 +56,7 @@ namespace GravityDemo
 		}
 
 		//-----------------------------------------------------------------------------------------
-		// Register and Load modules
+		// Register modules
 		//-----------------------------------------------------------------------------------------
 		{
 			//-------------------------------------------------------------------------------------
@@ -66,13 +66,6 @@ namespace GravityDemo
 			Alba::Graphics::RegisterModules();
 			Alba::Framework::RegisterModules();
 			Alba::Gravity::RegisterModules();
-
-			//-------------------------------------------------------------------------------------
-			// Load
-			//-------------------------------------------------------------------------------------
-			Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
-
-			moduleRepository.LoadModule("Alba.Gravity"_nocasehash32);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -92,6 +85,12 @@ namespace GravityDemo
 				return initResult;
 			}
 		}
+
+		//-------------------------------------------------------------------------------------
+		// Load main module
+		//-------------------------------------------------------------------------------------
+		Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
+		moduleRepository.LoadModule("Alba.Gravity"_nocasehash32);
 
 		const uint32 returnCode = application->Run();
 

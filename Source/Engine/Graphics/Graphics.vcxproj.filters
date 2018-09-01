@@ -22,10 +22,10 @@
     </ClCompile>
     <ClCompile Include="Graphics_Debug.cpp" />
     <ClCompile Include="Graphics_ImGuiModule.cpp">
-      <Filter>ImGUI</Filter>
+      <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Graphics_ImGui.cpp">
-      <Filter>ImGUI</Filter>
+      <Filter>ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,10 +52,19 @@
     </ClInclude>
     <ClInclude Include="Graphics_Debug.hpp" />
     <ClInclude Include="Graphics_ImGuiModule.hpp">
-      <Filter>ImGUI</Filter>
+      <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Graphics_ImGui.hpp">
-      <Filter>ImGUI</Filter>
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics_VertexBuffer.hpp">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics_IndexBuffer.hpp">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics_ConstantBuffer.hpp">
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -68,8 +77,11 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{f16af0d2-0353-4ef3-89c0-aa7486b0d0b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ImGUI">
+    <Filter Include="ImGui">
       <UniqueIdentifier>{cb916b9e-ad7e-4a4a-a1e5-7df94b84f7fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{bb0f31c5-57e6-49ee-a8fb-4148c558a4d8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
