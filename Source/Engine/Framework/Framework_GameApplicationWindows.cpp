@@ -10,8 +10,11 @@
 #include "Core_Window.hpp"
 #include "Core_WindowEventHandler.hpp"
 
-#include <imgui.h>
-#include <examples/imgui_impl_win32.h>
+#include "Graphics_ImGui.hpp"
+
+#if defined(ALBA_IMGUI_ENABLED)
+#	include <examples/imgui_impl_win32.h>
+#endif
 
 #ifdef CreateWindow // God damn it Windows.h
 	#undef CreateWindow

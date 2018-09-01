@@ -6,9 +6,12 @@
 #include <dxgi1_3.h>
 #include <wrl/client.h>
 
-#include <imgui.h>
-#include <examples/imgui_impl_dx11.h>
-#include <examples/imgui_impl_dx11.cpp>
+#include "Graphics_ImGui.hpp"
+
+#if defined(ALBA_IMGUI_ENABLED)
+#	include <examples/imgui_impl_dx11.h>
+#	include <examples/imgui_impl_dx11.cpp>
+#endif
 
 namespace Alba
 {
@@ -298,10 +301,12 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void DX11RenderBackEnd::BeginFrame()
 		{
+#if defined(ALBA_IMGUI_ENABLED)
 			if (ImGuiModule::IsLoaded())
 			{
 				ImGui_ImplDX11_NewFrame();
 			}
+#endif
 
 			ID3D11RenderTargetView* renderTarget = myRenderTarget.Get();
 			myDeviceContext->OMSetRenderTargets(1, &renderTarget, myDepthStencilView.Get());
@@ -311,11 +316,13 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void DX11RenderBackEnd::EndFrame()
 		{
+#if defined(ALBA_IMGUI_ENABLED)
 			if (ImGuiModule::IsLoaded())
 			{
 				ImGui::Render();
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 			}
+#endif
 
 			Present();
 		}
@@ -324,6 +331,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		bool DX11RenderBackEnd::ImGuiInit()
 		{
+#if defined(ALBA_IMGUI_ENABLED)
 			if (!ImGui_ImplDX11_Init(myDevice.Get(), myDeviceContext.Get()))
 			{
 				return false;
@@ -333,7 +341,7 @@ namespace Alba
 			{
 				return false;
 			}
-
+#endif
 			return true;
 		}
 
@@ -341,11 +349,13 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void DX11RenderBackEnd::ImGuiShutDown()
 		{
+#if defined(ALBA_IMGUI_ENABLED)
 			ImGuiModule& imGuiModule = ImGuiModule::Get();
 			if (imGuiModule.IsLoaded() && myIsImGuiInitialised)
 			{
 				ImGui_ImplDX11_Shutdown();
 			}
+#endif
 		}
 
 		//-----------------------------------------------------------------------------------------

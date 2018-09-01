@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Graphics_API.hpp"
 #include "Core_Module.hpp"
+#include "Graphics_API.hpp"
+#include "Graphics_ImGui.hpp"
 
 struct ImFont;
 
@@ -36,7 +37,9 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
+				#if defined(ALBA_IMGUI_ENABLED)
 				ImFont*				myFont = nullptr;
+				#endif
 		};
 	}
 }

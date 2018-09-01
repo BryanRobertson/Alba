@@ -24,6 +24,9 @@
     <ClCompile Include="Graphics_ImGuiModule.cpp">
       <Filter>ImGUI</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics_ImGui.cpp">
+      <Filter>ImGUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics_API.hpp" />
@@ -49,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="Graphics_Debug.hpp" />
     <ClInclude Include="Graphics_ImGuiModule.hpp">
+      <Filter>ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics_ImGui.hpp">
       <Filter>ImGUI</Filter>
     </ClInclude>
   </ItemGroup>
