@@ -4,12 +4,14 @@
 #include "Core_AnyDictionary.hpp"
 #include "Core_Profile.hpp"
 #include "Core_Time.hpp"
+#include "Core_LogCategory.hpp"
+#include "Core_Logging.hpp"
 
 namespace Alba
 {
 	namespace Core
 	{
-		ALBA_IMPLEMENT_LOG_CATEGORY(ModuleLog);
+		ALBA_IMPLEMENT_LOG_CATEGORY(Module);
 
 		UniquePtr<ModuleRepository> ModuleRepository::ourInstance;
 
@@ -33,6 +35,8 @@ namespace Alba
 		/*static*/ void ModuleRepository::Create()
 		{
 			ALBA_ASSERT(ourInstance == nullptr, "Module repository already exists!");
+			ALBA_LOG_INFO(Module, "ModuleRepository: Create")
+
 			ourInstance.reset(ALBA_NEW(AllocationType::Module, "ModuleRepository") ModuleRepository());
 		}
 
@@ -40,6 +44,11 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		/*static*/ void ModuleRepository::Destroy()
 		{
+			if (ourInstance != nullptr)
+			{
+				ALBA_LOG_INFO(Module, "ModuleRepository: Destroy");
+			}
+
 			ourInstance.reset();
 		}
 
@@ -98,6 +107,8 @@ namespace Alba
 		//------------------------------------------------------------------------------------------
 		void ModuleRepository::RegisterUpdater(NoCaseStringHash32 aModuleNameId, UpdateFunc&& anUpdater)
 		{
+			ALBA_LOG_INFO(Module, "RegisterModuleUpdater( \"%s\" )", aModuleNameId.LogString().c_str());
+
 			myModuleUpdaters.insert(MakePair(aModuleNameId, std::move(anUpdater)));
 		}
 
@@ -105,6 +116,8 @@ namespace Alba
 		//------------------------------------------------------------------------------------------
 		void ModuleRepository::UnregisterUpdater(NoCaseStringHash32 aModuleNameId)
 		{
+			ALBA_LOG_INFO(Module, "UnregisterModuleUpdater( \"%s\" )", aModuleNameId.LogString().c_str());
+
 			myModuleUpdaters.erase(aModuleNameId);
 		}
 

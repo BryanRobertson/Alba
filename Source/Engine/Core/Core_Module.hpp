@@ -47,7 +47,7 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				static void	Register()
 				{
-					ALBA_LOG_INFO(ModuleLog, "RegisterModule( \"%s\" )", GetName().c_str());
+					ALBA_LOG_INFO(Module, "RegisterModule( \"%s\" )", GetName().c_str());
 
 					ourInstance.reset(ALBA_NEW(AllocationType::Module, "Module") TDerived());
 
@@ -71,7 +71,7 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				static void	Unregister()
 				{
-					ALBA_LOG_INFO(ModuleLog, "UnregisterModule( \"%s\" )", GetName().c_str());
+					ALBA_LOG_INFO(Module, "UnregisterModule( \"%s\" )", GetName().c_str());
 
 					const NoCaseStringHash32 nameId(GetName());
 
@@ -176,7 +176,7 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				static bool Load(AnyDictionary someParams)
 				{
-					ALBA_LOG_INFO(ModuleLog, "LoadModule( \"%s\" )", GetName().c_str());
+					ALBA_LOG_INFO(Module, "LoadModule( \"%s\" )", GetName().c_str());
 
 					ALBA_ASSERT(ourInstance != nullptr, "Trying to load unregistered module!");
 					const bool result = static_cast<TDerived*>(ourInstance.get())->OnLoad(std::move(someParams));
@@ -207,7 +207,7 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				static void Unload()
 				{
-					ALBA_LOG_INFO(ModuleLog, "UnloadModule( \"%s\" )", GetName().c_str());
+					ALBA_LOG_INFO(Module, "UnloadModule( \"%s\" )", GetName().c_str());
 
 					ALBA_ASSERT(ourInstance != nullptr, "Trying to unload unregistered module");
 					static_cast<TDerived*>(ourInstance.get())->OnUnload();

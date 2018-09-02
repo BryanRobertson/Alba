@@ -75,6 +75,10 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		uint32 Shutdown()
 		{
+			ALBA_LOG_INFO(Framework, "---------------------------------------------------------------");
+			ALBA_LOG_INFO(Framework, "Shutdown Framework:");
+			ALBA_LOG_INFO(Framework, "---------------------------------------------------------------");
+
 			// Init module repository
 			Alba::Core::ModuleRepository::Destroy();
 

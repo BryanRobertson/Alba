@@ -18,7 +18,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		ALBA_IMPLEMENT_LOG_CATEGORY(WindowLogCategory);
+		ALBA_IMPLEMENT_LOG_CATEGORY(Window);
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	WindowImpl
@@ -206,7 +206,7 @@ namespace Alba
 				windowClass.hIconSm = LoadIcon(NULL, "IDI_APPLICATION");
 			}
 
-			ALBA_LOG(WindowLogCategory, LogLevel::Info, "RegisterWindowClass(%s)", theWindowClassName);
+			ALBA_LOG(Window, LogLevel::Info, "RegisterWindowClass(%s)", theWindowClassName);
 
 			if (RegisterClassEx(&windowClass) == int(WindowsReturnCode::Failed))
 			{
@@ -215,7 +215,7 @@ namespace Alba
 				{
 					ALBA_LOG
 					(
-						WindowLogCategory,
+						Window,
 						LogLevel::Info,
 						"Failed! Error: {%d, \"%s\"}",
 						GetLastError(),
@@ -231,7 +231,7 @@ namespace Alba
 			//----------------------------------------------------------------------
 			ALBA_LOG
 			(
-				WindowLogCategory,
+				Window,
 				LogLevel::Info, 
 				"CreateWindow(x=%d, y=%d, w=%d, h=%d)",
 				aParams.myPositionX, aParams.myPositionY,
@@ -261,7 +261,7 @@ namespace Alba
 			{
 				ALBA_LOG
 				(
-					WindowLogCategory,
+					Window,
 					LogLevel::Info,
 					"Failed! Error: {%d, \"%s\"}",
 					GetLastError(),

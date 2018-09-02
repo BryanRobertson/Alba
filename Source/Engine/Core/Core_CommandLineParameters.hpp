@@ -105,6 +105,18 @@ namespace Alba
 				CommandLineParameters& operator=(const CommandLineParameters& anOther);
 				CommandLineParameters& operator=(CommandLineParameters&& anOther);
 
+				//---------------------------------------------------------------------------------
+				// Iterators
+				//---------------------------------------------------------------------------------
+				template <typename TIterator>
+				void ForEach_Param(const TIterator& anIterator)
+				{
+					for (const auto& param : myParams)
+					{
+						anIterator(param.first, param.second.myValue);
+					}
+				}
+
 			private:
 
 				//=================================================================================
@@ -114,7 +126,6 @@ namespace Alba
 				{	
 					StringView		myValue;
 					mutable Any		myCachedTypedValue;
-
 
 					template <typename TDataType>
 					bool GetData(TDataType& anOutValue) const

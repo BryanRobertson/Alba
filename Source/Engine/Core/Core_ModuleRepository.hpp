@@ -17,7 +17,7 @@ namespace Alba
 
 		class Time;
 
-		ALBA_DECLARE_LOG_CATEGORY(ModuleLog);
+		ALBA_DECLARE_LOG_CATEGORY(Module);
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	ModuleRepository

@@ -21,6 +21,14 @@ namespace Alba
 			//-------------------------------------------------------------------------------------
 			//-------------------------------------------------------------------------------------
 			ALBA_CORE_API uint32 theProfilerFrameIndex = 0;
+			ALBA_CORE_API bool theProfilerEnabled = false;
+
+			//-------------------------------------------------------------------------------------
+			//-------------------------------------------------------------------------------------
+			bool IsProfilerEnabled()
+			{
+				return theProfilerEnabled;
+			}
 
 			//-------------------------------------------------------------------------------------
 			//-------------------------------------------------------------------------------------
@@ -63,6 +71,7 @@ namespace Alba
 				};
 				#endif
 
+				theProfilerEnabled = true;
 				rmt_CreateGlobalInstance(&theRemoteryInstance);
 			}
 
@@ -72,6 +81,8 @@ namespace Alba
 			{
 				if (theRemoteryInstance)
 				{
+					theProfilerEnabled = false;
+
 					rmt_DestroyGlobalInstance(theRemoteryInstance);
 					theRemoteryInstance = nullptr;
 				}

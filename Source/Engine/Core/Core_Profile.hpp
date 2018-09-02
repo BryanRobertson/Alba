@@ -27,22 +27,22 @@
 	//---------------------------------------------------------------------------------------------
 	// Log Text
 	//---------------------------------------------------------------------------------------------
-	#define ALBA_PROFILE_LOGTEXT(aLogString)			rmt_LogText(aLogString)		
+	#define ALBA_PROFILE_LOGTEXT(aLogString)		if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { rmt_LogText(aLogString);	}	
 
 	//---------------------------------------------------------------------------------------------
 	// Scoped profile 
 	//---------------------------------------------------------------------------------------------
-	#define ALBA_PROFILE_SCOPED(anId)				rmt_ScopedCPUSample(anId, 0)
+	#define ALBA_PROFILE_SCOPED(anId)				if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { rmt_ScopedCPUSample(anId, 0); }
 
 	//---------------------------------------------------------------------------------------------
 	// Scoped profile - Search parent for profiles with the same name and aggregate into one timer
 	//---------------------------------------------------------------------------------------------
-	#define ALBA_PROFILE_SCOPED_AGGREGATE(anId)		rmt_ScopedCPUSample(anId, RMTSF_Aggregate)
+	#define ALBA_PROFILE_SCOPED_AGGREGATE(anId)		if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { rmt_ScopedCPUSample(anId, RMTSF_Aggregate); }
 
 	//---------------------------------------------------------------------------------------------
 	// Scoped profile - Use for recursive functions to merge into a single timer
 	//---------------------------------------------------------------------------------------------
-	#define ALBA_PROFILE_SCOPED_RECURSIVE(anId)		rmt_ScopedCPUSample(anId, RMTSF_Recursive)
+	#define ALBA_PROFILE_SCOPED_RECURSIVE(anId)		if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { rmt_ScopedCPUSample(anId, RMTSF_Recursive); }
 
 	//---------------------------------------------------------------------------------------------
 	// Function profile 
@@ -57,14 +57,14 @@
 	//---------------------------------------------------------------------------------------------
 	// Manual profile begin/end
 	//---------------------------------------------------------------------------------------------
-	#define ALBA_PROFILE_BEGIN(anId)				rmt_BeginCPUSample(anId, 0)
-	#define ALBA_PROFILE_END(anId)					rmt_EndCPUSample()
+	#define ALBA_PROFILE_BEGIN(anId)				if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { rmt_BeginCPUSample(anId, 0); }
+	#define ALBA_PROFILE_END(anId)					if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { rmt_EndCPUSample(); }
 
-	#define ALBA_PROFILE_BEGIN_AGGREGATE(anId)		rmt_BeginCPUSample(anId, RMTSF_Aggregate)
-	#define ALBA_PROFILE_END_AGGREGATE(anId)		rmt_EndCPUSample()
+	#define ALBA_PROFILE_BEGIN_AGGREGATE(anId)		if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { rmt_BeginCPUSample(anId, RMTSF_Aggregate); }
+	#define ALBA_PROFILE_END_AGGREGATE(anId)		if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { rmt_EndCPUSample(); }
 
-	#define ALBA_PROFILE_BEGIN_RECURSIVE(anId)		rmt_BeginCPUSample(anId, RMTSF_Recursive)
-	#define ALBA_PROFILE_END_RECURSIVE(anId)		rmt_EndCPUSample()
+	#define ALBA_PROFILE_BEGIN_RECURSIVE(anId)		if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { rmt_BeginCPUSample(anId, RMTSF_Recursive); }
+	#define ALBA_PROFILE_END_RECURSIVE(anId)		if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { rmt_EndCPUSample(); }
 
 	//---------------------------------------------------------------------------------------------
 	// Begin frame
@@ -85,17 +85,17 @@
 	//---------------------------------------------------------------------------------------------
 	// End frame
 	//---------------------------------------------------------------------------------------------
-	#define ALBA_PROFILE_ENDFRAME()					rmt_EndCPUSample()
+	#define ALBA_PROFILE_ENDFRAME()					if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { rmt_EndCPUSample(); }
 
 	//---------------------------------------------------------------------------------------------
 	// Set current thread name
 	//---------------------------------------------------------------------------------------------
-	#define ALBA_PROFILE_SETCURRENTTHREADNAME(aName) rmt_SetCurrentThreadName(aName)
+	#define ALBA_PROFILE_SETCURRENTTHREADNAME(aName) if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { rmt_SetCurrentThreadName(aName); }
 
 	//---------------------------------------------------------------------------------------------
 	// Shut down profiling
 	//---------------------------------------------------------------------------------------------
-	#define ALBA_PROFILE_SHUTDOWN()					::Alba::Core::ProfileInternal::ShutDownProfiling()
+	#define ALBA_PROFILE_SHUTDOWN()					if (::Alba::Core::ProfileInternal::IsProfilerEnabled()) { ::Alba::Core::ProfileInternal::ShutDownProfiling(); }
 
 	namespace Alba
 	{
@@ -103,6 +103,7 @@
 		{
 			namespace ProfileInternal
 			{
+				extern ALBA_CORE_API bool IsProfilerEnabled();
 				extern ALBA_CORE_API void InitProfiling();
 				extern ALBA_CORE_API void ShutDownProfiling();
 

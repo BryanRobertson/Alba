@@ -285,6 +285,15 @@ namespace Alba
 		void DX11RenderBackEnd::ShutDown()
 		{
 			ImGuiShutDown();
+
+			myRenderTarget.Reset();
+			myDepthStencilView.Reset();
+			myBackBuffer.Reset();
+			myFactory.Reset();
+			myAdapter.Reset();
+			myDeviceContext.Reset();
+			mySwapChain.Reset();
+			myDevice.Reset();
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -331,6 +340,8 @@ namespace Alba
 			{
 				return false;
 			}
+
+			myIsImGuiInitialised = true;
 #endif
 			return true;
 		}
@@ -344,6 +355,7 @@ namespace Alba
 			if (imGuiModule.IsLoaded() && myIsImGuiInitialised)
 			{
 				ImGui_ImplDX11_Shutdown();
+				myIsImGuiInitialised = false;
 			}
 #endif
 		}
