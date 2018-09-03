@@ -73,12 +73,13 @@
 		RMT_OPTIONAL																					\
 		(																								\
 			RMT_ENABLED,																				\
+			if (::Alba::Core::ProfileInternal::IsProfilerEnabled())										\
 			{																							\
 				static char buffer[128];																\
 				std::snprintf(buffer, 64, "%u", Alba::Core::ProfileInternal::theProfilerFrameIndex);	\
 																										\
 				++Alba::Core::ProfileInternal::theProfilerFrameIndex;									\
-				_rmt_BeginCPUSample(buffer, 0, &::Alba::Core::ProfileInternal::theProfilerFrameIndex);	\
+				_rmt_BeginCPUSample(&buffer[0], 0, &::Alba::Core::ProfileInternal::theProfilerFrameIndex);	\
 			}																							\
 		);
 

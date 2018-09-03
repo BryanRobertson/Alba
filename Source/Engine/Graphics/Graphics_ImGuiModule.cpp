@@ -132,8 +132,8 @@ namespace Alba
 
 			// 2. Show a simple window that we create ourselves.We use a Begin / End pair to created a named window.
 			{
-				static bool ourShowDemoWindow = true;
-				ImGui::ShowDemoWindow(&ourShowDemoWindow);
+				//static bool ourShowDemoWindow = true;
+				//ImGui::ShowDemoWindow(&ourShowDemoWindow);
 			}
 #endif
 		}

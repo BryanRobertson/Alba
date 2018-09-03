@@ -28,14 +28,14 @@ namespace Alba
 		{
 			#if defined(ALBA_IMGUI_ENABLED)
 			{
-				if (!myShowConsole)
-				{
-					return;
-				}
-
 				//if ( ImGui::IsKeyPressed(ImGui::Key))
 				{
 
+				}
+
+				if (!myShowConsole)
+				{
+					return;
 				}
 
 				//------------------------------------------------------------------------

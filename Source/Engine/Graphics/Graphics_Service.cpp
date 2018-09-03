@@ -44,7 +44,7 @@ namespace Alba
 		{
 			myRenderBackEnd->BeginFrame();
 
-			ImGuiModule imGuiModule = ImGuiModule::Get();
+			ImGuiModule& imGuiModule = ImGuiModule::Get();
 			if (imGuiModule.IsLoaded())
 			{
 				imGuiModule.BeginFrame();
@@ -55,13 +55,13 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void GraphicsService::EndFrame()
 		{
-			ConsoleModule consoleModule = ConsoleModule::Get();
+			ConsoleModule& consoleModule = ConsoleModule::Get();
 			if (consoleModule.IsLoaded())
 			{
 				consoleModule.Render();
 			}
 
-			ImGuiModule imGuiModule = ImGuiModule::Get();
+			ImGuiModule& imGuiModule = ImGuiModule::Get();
 			if (imGuiModule.IsLoaded())
 			{
 				imGuiModule.EndFrame();
