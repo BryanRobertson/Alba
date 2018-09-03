@@ -9,5 +9,7 @@ namespace Alba
 	namespace Framework
 	{
 		ALBA_DECLARE_LOG_CATEGORY(Framework);
+		ALBA_DECLARE_LOG_CATEGORY(Init);
+		ALBA_DECLARE_LOG_CATEGORY(Shutdown);
 	}
 }

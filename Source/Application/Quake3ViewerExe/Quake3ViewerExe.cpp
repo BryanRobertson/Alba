@@ -120,11 +120,6 @@ namespace Quake3ViewerExe
 {
 	using namespace Alba::BasicTypes;
 
-	template <uint32 TValue> struct StaticNoCaseStringHash
-	{
-		static constexpr uint32 Value = TValue;
-	};
-
 	//---------------------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------
 	void InitApplicationParams(Alba::Framework::ApplicationInitParams& anInitParamsOut)
