@@ -238,7 +238,8 @@ namespace Alba
 				aParams.mySizeX, aParams.mySizeY
 			);
 
-			const DWORD dwStyle		= WS_OVERLAPPED | WS_BORDER | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU;
+			const DWORD dwResizeStyle = aParams.myIsResizable ? WS_SIZEBOX : 0;
+			const DWORD dwStyle		= WS_OVERLAPPED | WS_BORDER | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU | dwResizeStyle;
 			const DWORD dwExStyle	= WS_EX_WINDOWEDGE;
 
 			myImpl->myPlatformWindowHandle = CreateWindowEx

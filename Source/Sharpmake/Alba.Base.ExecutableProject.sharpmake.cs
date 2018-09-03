@@ -30,7 +30,8 @@ namespace Alba
             [Configure()]
             public override void ConfigureAll(Configuration conf, Target target)
             {
-                
+                conf.ProjectPath = SourceRootPath;
+                conf.IncludePaths.Add(SourceRootPath);
 
                 base.ConfigureAll(conf, target);
             }

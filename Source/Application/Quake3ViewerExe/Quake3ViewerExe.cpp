@@ -6,27 +6,36 @@
 #include "Core_LogCategory.hpp"
 #include "Core_TypeTraits.hpp"
 #include "Core_PlatformHeader.hpp"
-#include "Core_Window.hpp"
-#include "Core_UniquePtr.hpp"
-#include "Core_ModuleRepository.hpp"
-#include "Core_CommandLineModule.hpp"
+#include "Core_Memory.hpp"
 #include "Core_Memory_Impl.hpp"
-#include "Core_Profile.hpp"
-
-#include "Graphics.hpp"
 
 #include "Framework.hpp"
-#include "Framework_GameApplication.hpp"
+#include "Framework_ApplicationUtils.hpp"
 
 #include "Quake3Viewer.hpp"
 
-ALBA_IMPLEMENT_LOG_CATEGORY(Quake3ViewerDemo);
-
-using namespace Alba::StringHashLiterals;
-
-namespace Quake3ViewerExe
+namespace
 {
-	void InitApplicationParams(Alba::Framework::ApplicationInitParams& anInitParamsOut);
+	//-------------------------------------------------------------------------------------------------
+	//-------------------------------------------------------------------------------------------------
+	Alba::Framework::ApplicationUtils::InitParams locGetApplicationInitParams()
+	{
+		using namespace Alba::Framework;
+		using namespace Alba::StringHashLiterals;
+
+		ApplicationUtils::InitParams initParams;
+		initParams.myMainApplicationModuleNameId = "Alba.Quake3Viewer"_nocasehash32;
+
+		//---------------------------------------------------------------------
+		// Register modules callback
+		//---------------------------------------------------------------------
+		initParams.myRegisterModulesCallback = []()
+		{
+			Alba::Quake3Viewer::RegisterModules();
+		};
+
+		return initParams;
+	}
 }
 
 #if ALBA_PLATFORM_WINDOWS
@@ -34,115 +43,25 @@ namespace Quake3ViewerExe
 	//-------------------------------------------------------------------------------------------------
 	// WinMain
 	//-------------------------------------------------------------------------------------------------
-	int CALLBACK WinMain(_In_ HINSTANCE /*hInstance*/, _In_ HINSTANCE /*hPrevInstance*/, _In_ LPSTR /*lpCmdLine*/, _In_ int /*nCmdShow*/)
+	int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 	{
-		using namespace Alba::BasicTypes;
+		using namespace Alba::Framework;
+		ApplicationUtils::InitParams initParams = locGetApplicationInitParams();
 
-		using Alba::Core::UniquePtr;
-		using Alba::Core::StringHash32;
-		using Alba::Framework::GameApplication;
-
-		//-----------------------------------------------------------------------------------------
-		// Initialise framework
-		//-----------------------------------------------------------------------------------------
-		Alba::Framework::FrameworkInitParams frameworkInitParams;
-		frameworkInitParams.myCommandLineParameters = Alba::Core::CommandLineParameters::CreateWindows();
-
-		//-----------------------------------------------------------------------------------------
-		// Init
-		//-----------------------------------------------------------------------------------------
-		if (const uint32 result = Alba::Framework::Init(frameworkInitParams) != 0)
-		{
-			return result;
-		}
-
-		//-----------------------------------------------------------------------------------------
-		// Register modules
-		//-----------------------------------------------------------------------------------------
-		{
-			ALBA_LOG_INFO(Quake3ViewerDemo, "---------------------------------------------------------------");
-			ALBA_LOG_INFO(Quake3ViewerDemo, "Register Modules")
-			ALBA_LOG_INFO(Quake3ViewerDemo, "---------------------------------------------------------------");
-
-			//-------------------------------------------------------------------------------------
-			// Register
-			//-------------------------------------------------------------------------------------
-			Alba::Core::RegisterModules();
-			Alba::Graphics::RegisterModules();
-			Alba::Framework::RegisterModules();
-			Alba::Quake3Viewer::RegisterModules();
-
-			ALBA_LOG_INFO(Quake3ViewerDemo, "---------------------------------------------------------------");
-		}
-
-		//-----------------------------------------------------------------------------------------
-		// Init application parameters
-		//-----------------------------------------------------------------------------------------
-		Alba::Framework::ApplicationInitParams initParams;
-		Quake3ViewerExe::InitApplicationParams(initParams);
-
-		//-----------------------------------------------------------------------------------------
-		// Run
-		//-----------------------------------------------------------------------------------------
-		UniquePtr<Alba::Framework::GameApplication> application = Alba::Framework::GameApplication::Create();
-		{
-			const uint32 initResult = application->Init(std::move(initParams));
-			if (initResult != 0)
-			{
-				return initResult;
-			}
-		}
-
-		//-------------------------------------------------------------------------------------
-		// Load Main Module
-		//-------------------------------------------------------------------------------------
-		{
-			Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
-			moduleRepository.LoadModule("Alba.Quake3Viewer"_nocasehash32);
-		}		
-
-		const uint32 returnCode = application->Run();
-		ALBA_LOG_INFO(Quake3ViewerDemo, "Application Exiting with code %u", returnCode);
-
-		//-----------------------------------------------------------------------------------------
-		// Shutdown
-		//-----------------------------------------------------------------------------------------
-		Alba::Framework::Shutdown();
-		
-		return returnCode;
+		return ApplicationUtils::RunApplication(std::move(initParams), hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 	}
 
 #else
-	#pragma error("Not Implemented");
-#endif
 
-namespace Quake3ViewerExe
-{
-	using namespace Alba::BasicTypes;
-
-	//---------------------------------------------------------------------------------------------
-	//---------------------------------------------------------------------------------------------
-	void InitApplicationParams(Alba::Framework::ApplicationInitParams& anInitParamsOut)
+	//-------------------------------------------------------------------------------------------------
+	// Main
+	//-------------------------------------------------------------------------------------------------
+	int main(int argc, char** argv)
 	{
-		const Alba::Core::CommandLineParameters& commandLine = Alba::Core::CommandLineModule::Get().GetParams();	
+		using namespace Alba::Framework;
+		ApplicationUtils::InitParams initParams = locGetApplicationInitParams();
 
-		// Init window params
-		int windowPosX = 100;
-		int windowPosY = 100;
-		int windowWidth = 800;
-		int windowHeight = 600;
-
-		commandLine.TryGetParamValue("windowPosX"_nocasehash32, windowPosX);
-		commandLine.TryGetParamValue("windowPosY"_nocasehash32, windowPosY);
-		commandLine.TryGetParamValue("windowWidth"_nocasehash32, windowWidth);
-		commandLine.TryGetParamValue("windowHeight"_nocasehash32, windowHeight);
-
-		Alba::Core::WindowInitParams& windowParams = anInitParamsOut.myWindowInitParams;
-
-		windowParams.myIsHidden = false;
-		windowParams.myPositionX = windowPosX;
-		windowParams.myPositionY = windowPosY;
-		windowParams.mySizeX = windowWidth;
-		windowParams.mySizeY = windowHeight;
+		return ApplicationUtils::RunApplication(std::move(initParams), argc, argv);
 	}
-}
+
+#endif

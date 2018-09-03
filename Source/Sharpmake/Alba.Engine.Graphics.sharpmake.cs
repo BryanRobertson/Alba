@@ -23,9 +23,6 @@ namespace Alba
                 base.ConfigureAll(conf, target);
 
                 conf.SolutionFolder = "Alba/Engine";
-                conf.ProjectPath = SourceRootPath;
-
-                conf.IncludePaths.Add(SourceRootPath);
                 conf.IncludePaths.Add(Alba.Settings.GetExternalLibraryPath("imgui"));
 
                 if (target.Platform == Platform.win64)

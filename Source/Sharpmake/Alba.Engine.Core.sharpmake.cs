@@ -24,10 +24,7 @@ namespace Alba
                 base.ConfigureAll(conf, target);
 
                 conf.SolutionFolder = "Alba/Engine";
-                conf.ProjectPath = SourceRootPath;
-
-                conf.IncludePaths.Add(SourceRootPath);
-
+                
                 conf.IncludePaths.Add(Alba.Settings.GetExternalLibraryPath("eigen"));
                 conf.IncludePaths.Add(Alba.Settings.GetExternalLibraryPath(Path.Combine("remotery", "lib")));
 

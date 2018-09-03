@@ -29,6 +29,7 @@ namespace Alba
 			int32			 mySizeY	 = 600;
 			FixedString<32>	 myTitle	= "Alba";
 			bool			 myIsHidden = false;
+			bool			 myIsResizable = false;
 		};
 
 		//-----------------------------------------------------------------------------------------

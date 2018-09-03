@@ -40,6 +40,9 @@ namespace Alba
 
                 conf.Name = @"[target.Optimization] [target.OutputType]";
 
+                conf.ProjectPath = SourceRootPath;
+                conf.IncludePaths.Add(SourceRootPath);
+
                 if (target.OutputType == OutputType.Dll)
                 {
                     // We want this to output a shared library. (DLL)

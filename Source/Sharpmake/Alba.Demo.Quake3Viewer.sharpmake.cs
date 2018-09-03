@@ -22,9 +22,7 @@ namespace Alba
                 base.ConfigureAll(conf, target);
 
                 conf.SolutionFolder = "Alba/Demo";
-                conf.ProjectPath = SourceRootPath;
 
-                conf.IncludePaths.Add(SourceRootPath);
                 conf.AddPublicDependency<Alba.Engine.FrameworkProject>(target);
             }
         }

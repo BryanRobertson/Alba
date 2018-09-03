@@ -69,10 +69,15 @@ namespace Alba
 				modules.push_back(itr);
 			}
 
-			for (const Pair<NoCaseStringHash32, ModuleInfo>& moduleInfo : modules)
+			// Unload/unregister in reverse order so that modules unload before the modules they depend on
+			while (!modules.empty())
 			{
-				moduleInfo.second.myUnloadFunc();
-				moduleInfo.second.myUnregisterFunc();
+				auto& back = modules.back();
+
+				back.second.myUnloadFunc();
+				back.second.myUnregisterFunc();
+
+				modules.pop_back();
 			}
 		}
 

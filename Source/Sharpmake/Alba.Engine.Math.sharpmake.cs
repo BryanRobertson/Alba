@@ -25,7 +25,6 @@ namespace Alba
                 base.ConfigureAll(conf, target);
 
                 conf.SolutionFolder = "Alba/Engine";
-                conf.ProjectPath = SourceRootPath;
 
                 //---------------------------------------------------------------------------------
                 // Includes

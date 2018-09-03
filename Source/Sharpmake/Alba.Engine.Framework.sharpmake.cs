@@ -23,9 +23,7 @@ namespace Alba
                 base.ConfigureAll(conf, target);
 
                 conf.SolutionFolder = "Alba/Engine";
-                conf.ProjectPath = SourceRootPath;
 
-                conf.IncludePaths.Add(SourceRootPath);
                 conf.AddPublicDependency<CoreProject>(target);
                 conf.AddPublicDependency<GraphicsProject>(target);
             }
