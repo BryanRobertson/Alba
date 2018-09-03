@@ -1,5 +1,6 @@
 #include "Framework_Precompile.hpp"
 #include "Framework_GameApplication.hpp"
+#include "Framework_Debug.hpp"
 #include "Graphics_InitParams.hpp"
 #include "Graphics_Module.hpp"
 #include "Graphics_Service.hpp"
@@ -55,17 +56,19 @@ namespace Alba
 
 			Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
 
+			const Alba::Core::CommandLineParameters& commandLine = Alba::Core::CommandLineModule::Get().GetParams();
+
 			//----------------------------------------------------------------------
 			// Initialise profiling, unless explicitly disabled on the commandline
 			//----------------------------------------------------------------------
 			{
-				const Alba::Core::CommandLineParameters& commandLine = Alba::Core::CommandLineModule::Get().GetParams();
-
 				bool disableProfiler = false;
 				if (!commandLine.TryGetParamValue("disableProfiler"_nocasehash32, disableProfiler) || !disableProfiler)
 				{
 					ALBA_PROFILE_INIT();
 					ALBA_PROFILE_SETCURRENTTHREADNAME("Main Thread");
+
+					ALBA_LOG_INFO(Framework, "Profiler initialised");
 				}
 			}
 
@@ -82,6 +85,14 @@ namespace Alba
 			//----------------------------------------------------------------------
 			{
 				Alba::Graphics::InitParams graphicsInitParams;
+
+				// Allow ImGui to be disabled on the commandline
+				bool disableImGui = false;
+				if (commandLine.TryGetParamValue("disableImGui"_nocasehash32, disableImGui))
+				{
+					graphicsInitParams.myEnableImGui = false;
+				}
+				
 				graphicsInitParams.myWindowWidth = anInitParams.myWindowInitParams.mySizeX;
 				graphicsInitParams.myWindowHeight = anInitParams.myWindowInitParams.mySizeY;
 				InitGraphicsPlatformData(graphicsInitParams.myPlatformData);
@@ -94,11 +105,15 @@ namespace Alba
 				Alba::Graphics::GraphicsModule& graphicsModule = Alba::Graphics::GraphicsModule::Get();
 				myGraphicsService = &graphicsModule.GetGraphicsServiceMutable();
 
-				// Load ImGui module
-				moduleRepository.LoadModule("Alba.Graphics.ImGui"_nocasehash32);
+				// Load ImGui/Console unless specifically disabled
+				if (graphicsInitParams.myEnableImGui)
+				{
+					// Load ImGui module
+					moduleRepository.LoadModule("Alba.Graphics.ImGui"_nocasehash32);
 
-				// Load console module
-				moduleRepository.LoadModule("Alba.Graphics.Console"_nocasehash32);
+					// Load console module
+					moduleRepository.LoadModule("Alba.Graphics.Console"_nocasehash32);
+				}			
 			}
 
 			return 0;

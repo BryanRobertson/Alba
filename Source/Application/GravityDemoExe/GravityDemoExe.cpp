@@ -59,6 +59,10 @@ namespace GravityDemo
 		// Register modules
 		//-----------------------------------------------------------------------------------------
 		{
+			ALBA_LOG_INFO(GravityDemo, "---------------------------------------------------------------");
+			ALBA_LOG_INFO(GravityDemo, "Register Modules")
+			ALBA_LOG_INFO(GravityDemo, "---------------------------------------------------------------");
+
 			//-------------------------------------------------------------------------------------
 			// Register
 			//-------------------------------------------------------------------------------------
@@ -66,6 +70,8 @@ namespace GravityDemo
 			Alba::Graphics::RegisterModules();
 			Alba::Framework::RegisterModules();
 			Alba::Gravity::RegisterModules();
+
+			ALBA_LOG_INFO(GravityDemo, "---------------------------------------------------------------");
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -93,6 +99,7 @@ namespace GravityDemo
 		moduleRepository.LoadModule("Alba.Gravity"_nocasehash32);
 
 		const uint32 returnCode = application->Run();
+		ALBA_LOG_INFO(GravityDemo, "Application Exiting with code %u", returnCode);
 
 		//-----------------------------------------------------------------------------------------
 		// Shutdown
@@ -102,6 +109,8 @@ namespace GravityDemo
 		return returnCode;
 	}
 
+#else
+	#pragma error("Not Implemented");
 #endif
 
 namespace GravityDemo

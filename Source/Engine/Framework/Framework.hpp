@@ -4,11 +4,10 @@
 // Includes
 //-------------------------------------------------------------------------------------------------
 #include "Core.hpp"
-#include "Core_LogCategory.hpp"
 #include "Core_String.hpp"
-#include "Core_CommandLineParameters.hpp"
 
 #include "Framework_API.hpp"
+#include "Framework_Debug.hpp"
 
 namespace Alba
 {
@@ -16,13 +15,11 @@ namespace Alba
 
 	namespace Framework
 	{
-		ALBA_DECLARE_LOG_CATEGORY(FrameworkLog);
-
 		//-----------------------------------------------------------------------------------------------
 		// Name	:	InitParams
 		// Desc:	Initialisation parameters for the framework
 		//-----------------------------------------------------------------------------------------------
-		struct FrameworkInitParams
+		struct ALBA_FRAMEWORK_API FrameworkInitParams
 		{
 			Core::CommandLineParameters myCommandLineParameters;
 		};

@@ -86,6 +86,11 @@ namespace Alba
 					return myValue > aRhs.myValues;
 				}
 
+				void Invalidate()
+				{
+					myValue = InvalidId;
+				}
+
 			private:
 
 				//=================================================================================

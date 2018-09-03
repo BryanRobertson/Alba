@@ -5,7 +5,6 @@
 #include "Graphics_Module.hpp"
 
 #include "Core.hpp"
-//#include "Core_Memory_Impl.hpp"
 
 #include "Core_Window.hpp"
 #include "Core_ModuleRepository.hpp"
@@ -18,8 +17,6 @@ namespace Alba
 {
 	namespace Framework
 	{
-		ALBA_IMPLEMENT_LOG_CATEGORY(Framework);
-
 		using Core::UniquePtr;
 		using Core::Window;
 
@@ -56,7 +53,6 @@ namespace Alba
 				);
 			}
 
-			// If we fail to initialise log that too
 			//ALBA_LOG_ERROR(Framework, "Error initialising Framework: %u", result);
 
 			return 0;

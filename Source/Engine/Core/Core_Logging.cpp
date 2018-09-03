@@ -1,11 +1,13 @@
 #include "Core_Precompile.hpp"
 #include "Core_Logging.hpp"
 #include "Core_Memory.hpp"
+#include "Core_StringView.hpp"
 
 #include <ctime>
 #include <iomanip>
 
 #include "Core_PlatformHeader.hpp"
+#include "Core_ConsoleModule.hpp"
 
 namespace Alba
 {
@@ -63,25 +65,57 @@ namespace Alba
 					SYSTEMTIME systemTime;
 					GetLocalTime(&systemTime);
 
-					typedef FixedString<16> StringType;
-					const StringType timeStr
+					const auto logStr = Core::FormatString<256>
 					(
-						StringType::CtorSprintf(),
-						"[%02d:%02d:%02d.%04d] - ",
+						"[%02d:%02d:%02d.%04d] - %s - %s",
 						static_cast<int>(systemTime.wHour), 
 						static_cast<int>(systemTime.wMinute), 
 						static_cast<int>(systemTime.wSecond), 
-						static_cast<int>(systemTime.wMilliseconds)
+						static_cast<int>(systemTime.wMilliseconds),
+						aCategory.GetName().c_str(), 
+						aMessage.data()
 					);
 
-					::OutputDebugString(timeStr.c_str());
-					::OutputDebugString(aCategory.GetName().c_str());
-					::OutputDebugString(" - ");
-					::OutputDebugStringA(aMessage.data());
-					::OutputDebugStringA("\n");
+					LogRaw(aLevel, StringView(logStr.data(), logStr.size()));
 				}
+				#else
+					#pragma error("Not Implemented");
 				#endif
 			}	
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void LogManager::LogRaw(LogLevel aLevel, StringView aRawLogMessage)
+		{
+			//-----------------------------------------------------------------------------------------
+			// Print to debugger output window
+			//-----------------------------------------------------------------------------------------
+			#if defined(ALBA_PLATFORM_WINDOWS) && !defined(ALBA_RETAIL_BUILD)
+			{
+				if (::IsDebuggerPresent())
+				{
+					::OutputDebugString(aRawLogMessage.data());
+					::OutputDebugString("\n");
+				}
+			}
+			#endif
+
+			//-----------------------------------------------------------------------------------------
+			// Print to console
+			//-----------------------------------------------------------------------------------------
+			if (ConsoleModule::IsLoaded())
+			{
+				if (aLevel >= LogLevel::Warn)
+				{
+					const ConsoleMessageType messageType = aLevel == LogLevel::Warn ? ConsoleMessageType::Warning : ConsoleMessageType::Error;
+
+					ConsoleModule& consoleModule = ConsoleModule::Get();
+					Console& console = consoleModule.GetConsole();
+
+					console.Print(messageType, aRawLogMessage);
+				}
+			}
 		}
 	}
 }

@@ -60,6 +60,10 @@ namespace Quake3ViewerExe
 		// Register modules
 		//-----------------------------------------------------------------------------------------
 		{
+			ALBA_LOG_INFO(Quake3ViewerDemo, "---------------------------------------------------------------");
+			ALBA_LOG_INFO(Quake3ViewerDemo, "Register Modules")
+			ALBA_LOG_INFO(Quake3ViewerDemo, "---------------------------------------------------------------");
+
 			//-------------------------------------------------------------------------------------
 			// Register
 			//-------------------------------------------------------------------------------------
@@ -67,6 +71,8 @@ namespace Quake3ViewerExe
 			Alba::Graphics::RegisterModules();
 			Alba::Framework::RegisterModules();
 			Alba::Quake3Viewer::RegisterModules();
+
+			ALBA_LOG_INFO(Quake3ViewerDemo, "---------------------------------------------------------------");
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -96,15 +102,18 @@ namespace Quake3ViewerExe
 		}		
 
 		const uint32 returnCode = application->Run();
+		ALBA_LOG_INFO(Quake3ViewerDemo, "Application Exiting with code %u", returnCode);
 
 		//-----------------------------------------------------------------------------------------
 		// Shutdown
 		//-----------------------------------------------------------------------------------------
 		Alba::Framework::Shutdown();
-
+		
 		return returnCode;
 	}
 
+#else
+	#pragma error("Not Implemented");
 #endif
 
 namespace Quake3ViewerExe

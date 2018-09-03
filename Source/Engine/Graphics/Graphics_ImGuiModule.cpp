@@ -24,8 +24,6 @@ namespace Alba
 		{
 			#if defined(ALBA_IMGUI_ENABLED)
 
-				myFont = nullptr;
-
 				GraphicsModule& graphicsModule = GraphicsModule::Get();
 				if ( !graphicsModule.IsLoaded() )
 				{
@@ -33,9 +31,9 @@ namespace Alba
 					return false;
 				}
 
-				//---------------------------------------------
+				//-------------------------------------------------------------
 				// Init ImGui
-				//---------------------------------------------
+				//-------------------------------------------------------------
 				IMGUI_CHECKVERSION();
 
 				ImGui::CreateContext();
@@ -43,9 +41,9 @@ namespace Alba
 
 				GraphicsService& graphicsService = graphicsModule.GetGraphicsServiceMutable();
 
-				//---------------------------------------------
+				//-------------------------------------------------------------
 				// Windows-specific initialisation
-				//---------------------------------------------
+				//-------------------------------------------------------------
 				#ifdef ALBA_PLATFORM_WINDOWS
 				{
 					if (!graphicsService.GetPlatformData().Has<HWND>())
@@ -61,25 +59,81 @@ namespace Alba
 						return false;
 					}
 				}
+				#else
+					#pragma error("Not Implemented");
 				#endif
 
-				//---------------------------------------------
-				// Load font
+				//-------------------------------------------------------------
+				// Load fonts
+				//
 				// Note: This must be done before initialisation of the render backend
-				//---------------------------------------------
-				myFont = io.Fonts->AddFontFromFileTTF("../Data/fonts/DroidSans.ttf", 16.0f);
-				if (!myFont)
+				//		 part of our ImGui init
+				//
+				//		 Otherwise ImGui won't have our overriden default font when it initialises
+				//		 and it'll fall back to the pixellated default font
+				//		 (which will then be a pain to override as we'll have to manually PushFont/PopFont
+				//		  every frame)
+				//-------------------------------------------------------------
+
+				ImFontConfig fontConfig;
+
+				static constexpr const char* const ourDefaultFontPath = "../Data/fonts/Roboto-Medium.ttf"; //"../Data/fonts/DroidSans.ttf";
+				static constexpr float ourDefaultFontSize = 14.0f; //16.0f;
+
+				//-------------------------------------------------------------
+				// Load default font
+				//-------------------------------------------------------------
 				{
-					if (!io.Fonts->AddFontDefault())
+					ImFont*& defaultFont = myFonts.push_back();
+
+					defaultFont = io.Fonts->AddFontFromFileTTF(ourDefaultFontPath, ourDefaultFontSize, &fontConfig);
+					if (!defaultFont)
 					{
-						ALBA_LOG_ERROR(Graphics, "Failed to load ImGui module - couldn't load default font!");
-						return false;
+						defaultFont = io.Fonts->AddFontDefault();
+						if (!defaultFont)
+						{
+							ALBA_LOG_ERROR(Graphics, "Failed to load ImGui module - couldn't load default font!");
+							return false;
+						}
 					}
 				}
 
-				//---------------------------------------------
+				//-------------------------------------------------------------
+				// Load console font
+				//-------------------------------------------------------------
+				{
+					ImFont*& consoleFont = myFonts.push_back();
+
+					consoleFont = io.Fonts->AddFontFromFileTTF("../Data/fonts/Cousine-Regular.ttf", 14.0f, &fontConfig);
+					if (!consoleFont)
+					{
+						consoleFont = GetDefaultFont();
+					}
+				}
+
+				//-------------------------------------------------------------
+				// Attempt to load a few other fonts
+				//-------------------------------------------------------------
+				{
+					if (ImFont* font = io.Fonts->AddFontFromFileTTF("../Data/fonts/Karla-Regular.ttf", 16.0f, &fontConfig))
+					{
+						myFonts.push_back(font);
+					}
+
+					if (ImFont* font = io.Fonts->AddFontFromFileTTF("../Data/fonts/ProggyClean.ttf", 16.0f, &fontConfig))
+					{
+						myFonts.push_back(font);
+					}
+
+					if (ImFont* font = io.Fonts->AddFontFromFileTTF("../Data/fonts/Roboto-Medium.ttf", 16.0f, &fontConfig))
+					{
+						myFonts.push_back(font);
+					}
+				}
+
+				//-------------------------------------------------------------
 				// Init render-backend part of ImGui
-				//---------------------------------------------
+				//-------------------------------------------------------------
 				RenderBackEnd& renderBackEnd = graphicsService.GetBackEnd();
 				if (!renderBackEnd.ImGuiInit())
 				{
@@ -87,7 +141,7 @@ namespace Alba
 					return false;
 				}
 
-				//---------------------------------------------
+				//-------------------------------------------------------------
 				ImGui::StyleColorsDark();
 				return true;
 
@@ -123,17 +177,12 @@ namespace Alba
 		{
 #if defined(ALBA_IMGUI_ENABLED)
 			ImGui_ImplWin32_NewFrame();
-			ImGui::NewFrame();
-
-			if (myFont && myFont->IsLoaded())
-			{
-				ImGui::PushFont(myFont);
-			}			
+			ImGui::NewFrame();	
 
 			// 2. Show a simple window that we create ourselves.We use a Begin / End pair to created a named window.
 			{
-				//static bool ourShowDemoWindow = true;
-				//ImGui::ShowDemoWindow(&ourShowDemoWindow);
+				static bool ourShowDemoWindow = true;
+				ImGui::ShowDemoWindow(&ourShowDemoWindow);
 			}
 #endif
 		}
@@ -142,12 +191,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void ImGuiModule::EndFrame()
 		{
-#if defined(ALBA_IMGUI_ENABLED)
-			if (myFont && myFont->IsLoaded())
-			{
-				ImGui::PopFont();
-			}
-#endif
+
 		}
 	}
 }

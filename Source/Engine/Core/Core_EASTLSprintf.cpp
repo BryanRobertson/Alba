@@ -20,6 +20,8 @@ namespace Alba
 		{
 #			if defined(ALBA_COMPILER_VISUALSTUDIO) && defined(ALBA_PLATFORM_WINDOWS)
 				return _vsnwprintf_s((wchar_t*)aDestination, count, count, (wchar_t*)aFormat, someArgs);
+			#else
+				#pragma error("Not Implemented");
 			#endif
 		}
 
@@ -29,6 +31,8 @@ namespace Alba
 		{
 			#if defined(ALBA_COMPILER_VISUALSTUDIO) && defined(ALBA_PLATFORM_WINDOWS)
 				return _vsnwprintf_s((wchar_t*)aDestination, count, count, (wchar_t*)aFormat, someArgs);
+			#else
+				#pragma error("Not Implemented");
 			#endif
 		}
 
@@ -38,6 +42,8 @@ namespace Alba
 		{
 			#if defined(ALBA_COMPILER_VISUALSTUDIO) && defined(ALBA_PLATFORM_WINDOWS)
 				return _vsnwprintf_s((wchar_t*)aDestination, count, count, (wchar_t*)aFormat, someArgs);
+			#else
+				#pragma error("Not Implemented");
 			#endif
 		}
 	}

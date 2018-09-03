@@ -1,11 +1,26 @@
 #pragma once
 
 #include "Core.hpp"
+#include "Core_StringView.hpp"
+#include "Core_Function.hpp"
+#include "Core_VectorMap.hpp"
+#include "Core_StronglyTypedId.hpp"
 
 namespace Alba
 {
 	namespace Core
 	{
+		//-----------------------------------------------------------------------------------------
+		// Name	:	ConsoleMessageType
+		// Desc	:	Type of message printed to the console (can be used for output colouring, etc)
+		//-----------------------------------------------------------------------------------------
+		enum class ConsoleMessageType
+		{
+			Info,
+			Warning,
+			Error
+		};
+
 		//-----------------------------------------------------------------------------------------
 		// Name	:	Console
 		// Desc :	Standard Quake/style command console
@@ -18,7 +33,8 @@ namespace Alba
 				//=================================================================================
 				// Public Types
 				//=================================================================================
-				
+				typedef FixedFunction<void(ConsoleMessageType aMessageType, StringView aStr)> PrintCallback;
+				typedef StronglyTypedId<uint32, PrintCallback> PrintCallbackId;
 
 				//=================================================================================
 				// Public Constructors
@@ -29,13 +45,24 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
+				template <typename... TArgs>
+				void Print(ConsoleMessageType aMessageType, StringView aFormat, TArgs&&... someArgs)
+				{
+					const auto outputStr = Core::FormatString<256>(aFormat.data(), std::forward<TArgs>(someArgs)...);
+					Print(aMessageType, StringView(outputStr.c_str()));
+				}
 
+				void Print(ConsoleMessageType aMessageType, StringView aStr);
+
+				PrintCallbackId RegisterPrintCallback(const PrintCallback& aCallback);
+				void		    UnregisterPrintCallback(PrintCallbackId anId);
 
 			private:
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
+				VectorMap<PrintCallbackId, PrintCallback> myPrintCallbacks;
 		};
 	}
 }

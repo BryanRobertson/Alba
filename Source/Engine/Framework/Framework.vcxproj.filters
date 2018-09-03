@@ -7,6 +7,7 @@
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Framework_GameApplication.cpp" />
+    <ClCompile Include="Framework_Debug.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.hpp" />
@@ -15,6 +16,7 @@
     <ClInclude Include="Framework_GameApplication.hpp" />
     <ClInclude Include="Framework_RenderCallback.hpp" />
     <ClInclude Include="Framework_Viewport.hpp" />
+    <ClInclude Include="Framework_Debug.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">

@@ -25,5 +25,8 @@ namespace Alba
 		typedef mathfu::Vector<std::int16_t, 2> Vector2s;
 		typedef mathfu::Vector<std::int16_t, 3> Vector3s;
 		typedef mathfu::Vector<std::int16_t, 4> Vector4s;
+
+		typedef mathfu::Vector<std::int8_t, 4>	Vector4b;
+		typedef mathfu::Vector<std::uint8_t, 4>	Colour4b;
 	}
 }

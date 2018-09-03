@@ -30,6 +30,9 @@
     <ClCompile Include="Graphics_ConsoleModule.cpp">
       <Filter>Console</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics_Console.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics_API.hpp" />
@@ -70,6 +73,9 @@
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Graphics_ConsoleModule.hpp">
+      <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics_Console.hpp">
       <Filter>Console</Filter>
     </ClInclude>
   </ItemGroup>

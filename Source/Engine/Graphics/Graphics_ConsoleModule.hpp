@@ -3,12 +3,17 @@
 #include "Core_Module.hpp"
 #include "Core_Array.hpp"
 #include "Core_StringHash.hpp"
+#include "Core_UniquePtr.hpp"
+#include "Core_Console.hpp"
 #include "Graphics_API.hpp"
+#include "Graphics_Console.hpp"
 
 namespace Alba
 {
 	namespace Graphics
 	{
+		class Console;
+
 		//-----------------------------------------------------------------------------------------
 		// Name	:	ConsoleModule
 		// Desc	:	Module that implements the logic side of a debug command console
@@ -40,10 +45,6 @@ namespace Alba
 				bool		OnLoad(Core::AnyDictionary someParameters);
 				void		OnUnload();
 
-				void		Show();
-				void		Hide();
-				void		ToggleVisibility();
-
 				void		Render();
 
 			private:
@@ -51,7 +52,8 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				bool		myShowConsole;
+				Core::UniquePtr<Console>		myConsole;
+				Core::Console::PrintCallbackId	myPrintCallbackId;
 		};
 	}
 }

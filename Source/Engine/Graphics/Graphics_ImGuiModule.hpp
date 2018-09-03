@@ -42,13 +42,24 @@ namespace Alba
 				void				BeginFrame();
 				void				EndFrame();
 
+				#if defined(ALBA_IMGUI_ENABLED)
+				ImFont*				GetDefaultFont() const { return myFonts[static_cast<size_t>(FontType::Default)]; }
+				ImFont*				GetConsoleFont() const { return myFonts[static_cast<size_t>(FontType::Console)]; }
+				#endif
+
 			private:
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
 				#if defined(ALBA_IMGUI_ENABLED)
-				ImFont*				myFont = nullptr;
+				enum class FontType
+				{
+					Default,
+					Console
+				};
+
+				Core::FixedVector<ImFont*, 8> myFonts;
 				#endif
 		};
 	}

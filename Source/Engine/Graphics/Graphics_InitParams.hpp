@@ -21,6 +21,9 @@ namespace Alba
 			int						myWindowWidth	= 800;
 			int						myWindowHeight	= 600;
 			bool					myIsFullScreen	= false;
+			
+			// Misc params
+			bool					myEnableImGui  = true;
 		};
 	}
 }

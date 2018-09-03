@@ -43,6 +43,8 @@ namespace Alba
 					);
 				}
 			}
+			#else
+				#pragma error("Not Implemented");
 			#endif
 
 			return AssertFailBehaviour::DebugBreak;

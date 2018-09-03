@@ -1,16 +1,42 @@
 #include "Graphics_Precompile.hpp"
 #include "Graphics_ConsoleModule.hpp"
-#include "Graphics_ImGui.hpp"
+#include "Graphics_Console.hpp"
+#include "Graphics_Debug.hpp"
+
+#include "Core_ConsoleModule.hpp"
+#include "Core_Memory.hpp"
 
 namespace Alba
 {
 	namespace Graphics
 	{
+		using namespace Alba::BasicTypes;
+
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		bool ConsoleModule::OnLoad(Core::AnyDictionary /*someParameters*/)
 		{
-			myShowConsole = true;
+			// Get console backend
+			Core::ConsoleModule& consoleModule = Core::ConsoleModule::Get();
+			if (!consoleModule.IsLoaded())
+			{
+				ALBA_LOG_ERROR(Graphics, "Failed to load console module - console back-end is not loaded!");
+				return false;
+			}
+
+			// Create console front-end
+			{
+				myConsole.reset(ALBA_NEW(Core::AllocationType::Module, "Graphical Console") Console());
+			}
+
+			// Hook front-end up to back-end
+			{
+				Core::Console& consoleBackend = consoleModule.GetConsole();
+				myPrintCallbackId = consoleBackend.RegisterPrintCallback([this](Alba::Core::ConsoleMessageType aMessageType, Alba::Core::StringView aMessage)
+				{
+					myConsole->Print(aMessageType, aMessage);
+				});
+			}
 
 			return true;
 		}
@@ -19,91 +45,22 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void ConsoleModule::OnUnload()
 		{
-			myShowConsole = false;
+			// Get console backend
+			Core::ConsoleModule& consoleModule = Core::ConsoleModule::Get();
+			if (consoleModule.IsLoaded() && myPrintCallbackId.IsValid())
+			{
+				consoleModule.GetConsole().UnregisterPrintCallback(myPrintCallbackId);
+				myPrintCallbackId = Core::Console::PrintCallbackId::InvalidId;
+			}
+
+			myConsole.reset();
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		void ConsoleModule::Render()
 		{
-			#if defined(ALBA_IMGUI_ENABLED)
-			{
-				//if ( ImGui::IsKeyPressed(ImGui::Key))
-				{
-
-				}
-
-				if (!myShowConsole)
-				{
-					return;
-				}
-
-				//------------------------------------------------------------------------
-				//------------------------------------------------------------------------
-				ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
-				if (!ImGui::Begin("Console", &myShowConsole))
-				{
-					ImGui::End();
-					return;
-				}
-
-				//------------------------------------------------------------------------
-				//------------------------------------------------------------------------
-				if (ImGui::BeginPopupContextItem())
-				{
-					if (ImGui::MenuItem("Close Console"))
-					{
-						myShowConsole = false;
-					}
-
-					ImGui::EndPopup();
-				}
-
-				//------------------------------------------------------------------------
-				// Help text
-				//------------------------------------------------------------------------
-				{
-					ImGui::TextWrapped("Enter 'HELP' for help, press TAB to use text completion.");
-				}
-
-				//------------------------------------------------------------------------
-				// Filter
-				//------------------------------------------------------------------------
-				{
-					ImGui::Separator();
-
-					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-
-					static ImGuiTextFilter filter;
-					filter.Draw("Filter (\"incl,-excl\") (\"error\")", 180);
-					ImGui::PopStyleVar();
-					ImGui::Separator();
-				}
-
-				ImGui::End();
-			}
-			#endif
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		void ConsoleModule::Show()
-		{
-			myShowConsole = true;
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		void ConsoleModule::Hide()
-		{
-			myShowConsole = false;
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		void ConsoleModule::ToggleVisibility()
-		{
-			myShowConsole = !myShowConsole;
+			myConsole->Render();
 		}
 	}
 }
