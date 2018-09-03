@@ -2,43 +2,46 @@
 
 #include "Core.hpp"
 #include "Core_Module.hpp"
-#include "Core_CommandLineParameters.hpp"
+#include "Core_Console.hpp"
 
 namespace Alba
 {
 	namespace Core
 	{
 		//-----------------------------------------------------------------------------------------
-		// Name	:	CommandLineModule
-		// Desc	:	Module that encapsulates the commandline parameters for the application
+		// Name	:	ConsoleModule
+		// Desc	:	Module that implements the logic side of a debug command console
 		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API CommandLineModule final : public Module<CommandLineModule>
+		class ALBA_CORE_API ConsoleModule final : public Module<ConsoleModule>
 		{
 			public:
 
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static const char* GetModuleName() { return "Alba.Core.CommandLine"; }
+				static const char* GetModuleName() { return "Alba.Core.Console"; }
 
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				void	OnRegister();
-				void	OnUnregister();
+				bool		OnLoad(Core::AnyDictionary someParameters);
+				void		OnUnload();
 
-				bool	OnLoad(Core::AnyDictionary someParameters);
-				void	OnUnload();
-
-				const CommandLineParameters& GetParams() const  { return myCommandLineParameters; }
-				CommandLineParameters& GetParamsMutable()		{ return myCommandLineParameters; }
+				inline Console&	GetConsole();
 
 			private:
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				CommandLineParameters myCommandLineParameters;
+				UniquePtr<Console>	myConsole;
 		};
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*inline*/ Console& ConsoleModule::GetConsole()
+		{
+			return *myConsole;
+		}
 	}
 }

@@ -16,6 +16,12 @@ namespace Alba
 	using std::is_rvalue_reference_v;
 	using std::is_integral;
 	using std::is_integral_v;
+	using std::is_floating_point;
+	using std::is_floating_point_v;
+	using std::is_same;
+	using std::is_same_v;
+	using std::common_type;
+	using std::common_type_t;
 
 	namespace Core
 	{

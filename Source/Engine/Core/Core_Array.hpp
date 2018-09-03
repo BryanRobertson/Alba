@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Core.hpp"
+#include "Core_TypeTraits.hpp"
 #include <EASTL/array.h>
 
 namespace Alba

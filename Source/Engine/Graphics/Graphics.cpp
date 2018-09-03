@@ -2,6 +2,7 @@
 #include "Graphics.hpp"
 #include "Graphics_Module.hpp"
 #include "Graphics_ImGuiModule.hpp"
+#include "Graphics_ConsoleModule.hpp"
 
 namespace Alba
 {
@@ -13,6 +14,7 @@ namespace Alba
 		{
 			GraphicsModule::Register();
 			ImGuiModule::Register();
+			ConsoleModule::Register();
 		}
 	}
 }

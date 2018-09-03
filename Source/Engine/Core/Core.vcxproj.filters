@@ -63,6 +63,9 @@
     <ClCompile Include="Core_AssertMutex.cpp">
       <Filter>Threading</Filter>
     </ClCompile>
+    <ClCompile Include="Core_ConsoleModule.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
@@ -273,6 +276,9 @@
     </ClInclude>
     <ClInclude Include="Core_StronglyTypedId.hpp">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_ConsoleModule.hpp">
+      <Filter>Console</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

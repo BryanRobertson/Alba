@@ -4,6 +4,7 @@
 #include "Core_UniquePtr.hpp"
 #include "Core_StringHash.hpp"
 #include "Core_VectorMap.hpp"
+#include "Core_Vector.hpp"
 #include "Core_AnyDictionary.hpp"
 #include "Core_LogCategory.hpp"
 #include "Core_Function.hpp"

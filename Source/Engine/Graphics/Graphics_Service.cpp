@@ -2,6 +2,7 @@
 #include "Graphics_InitParams.hpp"
 #include "Graphics_Service.hpp"
 #include "Graphics_ImGuiModule.hpp"
+#include "Graphics_ConsoleModule.hpp"
 #include "Graphics_DX11RenderBackEnd.hpp"
 
 namespace Alba
@@ -54,6 +55,12 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void GraphicsService::EndFrame()
 		{
+			ConsoleModule consoleModule = ConsoleModule::Get();
+			if (consoleModule.IsLoaded())
+			{
+				consoleModule.Render();
+			}
+
 			ImGuiModule imGuiModule = ImGuiModule::Get();
 			if (imGuiModule.IsLoaded())
 			{

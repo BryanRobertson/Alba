@@ -67,6 +67,13 @@ namespace Alba
 					return true;
 				}
 
+				template <typename TCharType, size_t TCount, OverflowBehavior TOverflowBehavior, typename TOverflowAllocator>
+				static bool Convert(const StringView& aStringView, FixedBasicString<TCharType, TCount, TOverflowBehavior, TOverflowAllocator>& aOutData)
+				{
+					aOutData.assign(aStringView.data(), aStringView.length());
+					return true;
+				}
+
 				static bool Convert(const StringView& aStringView, int8& aOutData)
 				{
 					aOutData = static_cast<int8>(std::atoi(aStringView.data()));

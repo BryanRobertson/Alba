@@ -51,7 +51,12 @@ namespace Alba
 				template <typename TDataType>
 				void AddParameter(const StringView& aName, TDataType& aValue)
 				{
+					static ParamTypeVTable<TDataType> ourVTable;
 
+					ParamData& param = myParams.push_back();
+					param.myName = aName;
+					param.myNameId = NoCaseStringHash32(aName);
+					param.myVTable = &ourVTable;
 				}
 
 			private:
@@ -70,7 +75,6 @@ namespace Alba
 
 					FixedString<16>			myName;
 					NoCaseStringHash32		myNameId;
-
 					ParamTypeVTableBase*	myVTable;
 				};
 

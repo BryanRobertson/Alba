@@ -138,7 +138,6 @@ namespace Alba
 				{
 					private:
 
-						// We test if the type has serialize using decltype and declval.
 						template <typename T2> static constexpr decltype(std::declval<T2>().OnRegister(), bool()) Check(int) { return true; }
 						template <typename T2> static constexpr bool Check(...) { return false; }
 
@@ -153,7 +152,6 @@ namespace Alba
 				{
 					private:
 
-						// We test if the type has serialize using decltype and declval.
 						template <typename T2> static constexpr decltype(std::declval<T2>().OnUnregister(), bool()) Check(int) { return true; }
 						template <typename T2> static constexpr bool Check(...) { return false; }
 
@@ -162,6 +160,19 @@ namespace Alba
 						static constexpr bool Value = Check<T>(int());
 				};
 
+				template<typename T>
+				struct HasDependencies
+				{
+					private:
+
+						// We test if the type has serialize using decltype and declval.
+						template <typename T2> static constexpr decltype(T2::GetDependencies(), bool()) Check(int) { return true; }
+						template <typename T2> static constexpr bool Check(...) { return false; }
+
+					public:
+
+						static constexpr bool Value = Check<T>(int());
+				};
 
 				//=================================================================================
 				// Private Static Data
@@ -176,11 +187,39 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				static bool Load(AnyDictionary someParams)
 				{
+					// Return true if already loaded
+					if (IsLoaded())
+					{
+						return true;
+					}
+
 					ALBA_LOG_INFO(Module, "LoadModule( \"%s\" )", GetName().c_str());
+
+					// Load dependencies if the module has any
+					if constexpr (HasDependencies<TDerived>::Value)
+					{
+						ModuleRepository& moduleRepository = ModuleRepository::Get();
+						for (NoCaseStringHash32 dependencyNameId : TDerived::GetDependencies())
+						{							
+							if (!moduleRepository.LoadModule(dependencyNameId))
+							{
+								ALBA_LOG_ERROR
+								(
+									Module, 
+									"Failed to load module \"%s\" - Dependency \"%s\" failed to load",
+									GetName().c_str(),
+									dependencyNameId.LogString().c_str()
+								);
+
+								return false;
+							}
+						}
+					}
 
 					ALBA_ASSERT(ourInstance != nullptr, "Trying to load unregistered module!");
 					const bool result = static_cast<TDerived*>(ourInstance.get())->OnLoad(std::move(someParams));
 
+					// Check to see if we loaded successfully
 					if (result)
 					{
 						ourInstance->myState = ModuleState::Loaded;

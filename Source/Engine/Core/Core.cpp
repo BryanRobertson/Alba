@@ -5,6 +5,7 @@
 #include "Core_StringHash.hpp"
 #include "Core_String.hpp"
 #include "Core_CommandLineModule.hpp"
+#include "Core_ConsoleModule.hpp"
 
 namespace Alba
 {
@@ -14,7 +15,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void RegisterModules()
 		{
-			
+			ConsoleModule::Register();
 		}
 	}
 }

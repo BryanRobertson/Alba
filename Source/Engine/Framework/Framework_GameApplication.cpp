@@ -96,6 +96,9 @@ namespace Alba
 
 				// Load ImGui module
 				moduleRepository.LoadModule("Alba.Graphics.ImGui"_nocasehash32);
+
+				// Load console module
+				moduleRepository.LoadModule("Alba.Graphics.Console"_nocasehash32);
 			}
 
 			return 0;

@@ -7,6 +7,7 @@
 
 #include "Core.hpp"
 #include <EASTL/string.h>
+#include <EASTL/algorithm.h>
 
 namespace Alba
 {
@@ -21,5 +22,21 @@ namespace Alba
 		typedef BasicStringView<wchar_t>	WStringView;
 		typedef BasicStringView<char16_t>	StringView16;
 		typedef BasicStringView<char32_t>	StringView32;
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		inline int CaseInsensitiveCompare(StringView aLeft, StringView aRight)
+		{
+			const size_t count = eastl::min(aLeft.length(), aRight.length());
+			const int compare = eastl::CompareI(aLeft.data(), aRight.data(), count);
+
+			return compare != 0 
+					? compare
+					: aLeft.length() < aRight.length() 
+					? -1
+					: aLeft.length() > aRight.length() 
+					?  1 
+					: 0;
+		}
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core_Module.hpp"
+#include "Core_Array.hpp"
 #include "Graphics_API.hpp"
 #include "Graphics_ImGui.hpp"
 
@@ -21,7 +22,16 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static const char* GetModuleName() { return "Alba.Graphics.ImGui"; }
+				static constexpr const char* GetModuleName() 
+				{ 
+					return "Alba.Graphics.ImGui"; 
+				}
+
+				static constexpr auto GetDependencies()
+				{
+					using namespace Alba::StringHashLiterals;
+					return Core::Array<Core::NoCaseStringHash32, 1>{ {"Alba.Graphics"_nocasehash32}};
+				}
 	
 				//=================================================================================
 				// Public Methods

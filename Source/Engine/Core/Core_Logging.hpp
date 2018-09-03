@@ -5,17 +5,20 @@
 #include "Core_LogCategory.hpp"
 #include "Core_UniquePtr.hpp"
 #include "Core_StringUtils.hpp"
+#include "Core_Function.hpp"
 
 #ifdef ALBA_DEBUG_LOGGING_ENABLED
 	#define ALBA_GET_LOG_MANAGER()	::Alba::Core::LogManager::GetInstance()
 
 	#define ALBA_LOG(aLogCategory, aLevel, aFormat, ...)								\
 	{																					\
+		const auto logMessage = ::Alba::Core::FormatString<256>(aFormat, __VA_ARGS__);	\
+																						\
 		ALBA_GET_LOG_MANAGER().LogMessage												\
 		(																				\
 			LogCategories::##aLogCategory,												\
 			aLevel,																		\
-			::Alba::Core::FormatString<256>(aFormat, __VA_ARGS__).c_str()				\
+			::Alba::Core::StringView(logMessage.c_str())								\
 		);																				\
 	}
 
@@ -54,6 +57,11 @@ namespace Alba
 			public:
 
 				//=========================================================================================
+				// Public Types
+				//=========================================================================================
+				typedef Core::FixedFunction<void(const LogCategory&, LogLevel, StringView)> LogCallback;
+
+				//=========================================================================================
 				// Public Constructor
 				//=========================================================================================
 				LogManager();
@@ -61,7 +69,7 @@ namespace Alba
 				//=========================================================================================
 				// Public Methods
 				//=========================================================================================
-				void LogMessage(const LogCategory& aCategory, LogLevel aLevel, const char* aMessage);
+				void LogMessage(const LogCategory& aCategory, LogLevel aLevel, StringView aMessage);
 
 				//=========================================================================================
 				// Public Static Methods

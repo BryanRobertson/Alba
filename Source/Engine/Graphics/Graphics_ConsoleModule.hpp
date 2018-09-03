@@ -1,44 +1,57 @@
 #pragma once
 
-#include "Core.hpp"
 #include "Core_Module.hpp"
-#include "Core_CommandLineParameters.hpp"
+#include "Core_Array.hpp"
+#include "Core_StringHash.hpp"
+#include "Graphics_API.hpp"
 
 namespace Alba
 {
-	namespace Core
+	namespace Graphics
 	{
 		//-----------------------------------------------------------------------------------------
-		// Name	:	CommandLineModule
-		// Desc	:	Module that encapsulates the commandline parameters for the application
+		// Name	:	ConsoleModule
+		// Desc	:	Module that implements the logic side of a debug command console
 		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API CommandLineModule final : public Module<CommandLineModule>
+		class ALBA_GRAPHICS_API ConsoleModule final : public Core::Module<ConsoleModule>
 		{
 			public:
 
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static const char* GetModuleName() { return "Alba.Core.CommandLine"; }
+				static constexpr const char* GetModuleName() { return "Alba.Graphics.Console"; }
+
+				// Get dependencies
+				static constexpr auto GetDependencies()
+				{
+					using namespace Alba::StringHashLiterals;
+
+					return Core::Array<Core::NoCaseStringHash32, 2>
+					{{
+						"Alba.Core.Console"_nocasehash32,
+						"Alba.Graphics.ImGui"_nocasehash32
+					}};
+				}
 
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				void	OnRegister();
-				void	OnUnregister();
+				bool		OnLoad(Core::AnyDictionary someParameters);
+				void		OnUnload();
 
-				bool	OnLoad(Core::AnyDictionary someParameters);
-				void	OnUnload();
+				void		Show();
+				void		Hide();
+				void		ToggleVisibility();
 
-				const CommandLineParameters& GetParams() const  { return myCommandLineParameters; }
-				CommandLineParameters& GetParamsMutable()		{ return myCommandLineParameters; }
+				void		Render();
 
 			private:
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				CommandLineParameters myCommandLineParameters;
+				bool		myShowConsole;
 		};
 	}
 }

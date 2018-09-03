@@ -54,7 +54,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void LogManager::LogMessage(const LogCategory& aCategory, LogLevel aLevel, const char* aMessage)
+		void LogManager::LogMessage(const LogCategory& aCategory, LogLevel aLevel, StringView aMessage)
 		{
 			if (aCategory.GetLogLevel() <= aLevel)
 			{
@@ -77,7 +77,7 @@ namespace Alba
 					::OutputDebugString(timeStr.c_str());
 					::OutputDebugString(aCategory.GetName().c_str());
 					::OutputDebugString(" - ");
-					::OutputDebugStringA(aMessage);
+					::OutputDebugStringA(aMessage.data());
 					::OutputDebugStringA("\n");
 				}
 				#endif
