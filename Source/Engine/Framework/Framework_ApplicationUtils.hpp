@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Core.hpp"
 #include "Core_StringHash.hpp"
+#include "Core_PlatformHeader.hpp"
 #include "Framework_API.hpp"
 
 //-----------------------------------------------------------------------------------------
@@ -35,7 +37,11 @@ namespace Alba
 
 			//-----------------------------------------------------------------------------------------
 			//-----------------------------------------------------------------------------------------
-			extern ALBA_FRAMEWORK_API uint32 RunApplication(InitParams&& someInitParams);
+			#if defined(ALBA_PLATFORM_WINDOWS)
+				extern ALBA_FRAMEWORK_API uint32 RunApplication(InitParams&& anInitParams, HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int /*nCmdShow*/);
+			#else
+				extern ALBA_FRAMEWORK_API uint32 RunApplication(InitParams&& anInitParams, int argc, char** argv);
+			#endif
 		}
 	}
 }

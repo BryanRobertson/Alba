@@ -8,6 +8,9 @@
     </ClCompile>
     <ClCompile Include="Framework_GameApplication.cpp" />
     <ClCompile Include="Framework_Debug.cpp" />
+    <ClCompile Include="Framework_ApplicationUtils.cpp">
+      <Filter>DefaultApplication</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.hpp" />
@@ -17,6 +20,9 @@
     <ClInclude Include="Framework_RenderCallback.hpp" />
     <ClInclude Include="Framework_Viewport.hpp" />
     <ClInclude Include="Framework_Debug.hpp" />
+    <ClInclude Include="Framework_ApplicationUtils.hpp">
+      <Filter>DefaultApplication</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Platform">
@@ -24,6 +30,9 @@
     </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{8438a32c-63cf-4ae4-82ce-2fd3ad48c402}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DefaultApplication">
+      <UniqueIdentifier>{3e8d568e-5f03-494f-b35a-c919ed707d49}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
