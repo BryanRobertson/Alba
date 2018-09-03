@@ -22,6 +22,8 @@ namespace Alba
 	using std::is_same_v;
 	using std::common_type;
 	using std::common_type_t;
+	using std::is_base_of;
+	using std::is_base_of_v;
 
 	namespace Core
 	{

@@ -1,5 +1,6 @@
 #include "Core_Precompile.hpp"
 #include "Core_Console.hpp"
+#include "Core_ConsoleCommand.hpp"
 
 namespace Alba
 {
@@ -17,6 +18,28 @@ namespace Alba
 		Console::~Console()
 		{
 
+		}
+
+		//-----------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------
+		void Console::RegisterCommand(ConsoleCommand& aCommand)
+		{
+			ALBA_ASSERT(myConsoleCommands.find(aCommand.GetNameId()) == myConsoleCommands.end(), "Command %s is already registered!", aCommand.GetName());
+			myConsoleCommands.emplace(aCommand.GetNameId(), &aCommand);
+		}
+
+		//-----------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------
+		void Console::UnregisterCommand(NoCaseStringHash32 aCommandName)
+		{
+			myConsoleCommands.erase(aCommandName);
+		}
+
+		//-----------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------
+		void Console::Execute(StringView /*aCommandString*/)
+		{
+			
 		}
 
 		//-----------------------------------------------------------------------------------------------

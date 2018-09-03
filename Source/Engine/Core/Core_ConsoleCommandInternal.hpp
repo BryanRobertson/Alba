@@ -14,13 +14,7 @@ namespace Alba
 		{
 			struct ParamTypeVTableBase
 			{
-				size_t(*FromStringFunc)(const StringView& aStr, void* aValueOut);
-			};
-
-			struct ParseResult
-			{
-				bool		myParseSuccess = false;
-				StringView	mySubString;
+				std::tuple<bool, StringView> (*FromStringFunc)(const StringView& aStr, void* aValueOut);
 			};
 
 			template <typename TDataType>
@@ -58,7 +52,7 @@ namespace Alba
 
 				//-----------------------------------------------------------------------------------------
 				//-----------------------------------------------------------------------------------------
-				static ParseResult ConvertFromString(StringView aStr, void* aValueOut)
+				static std::tuple<bool, StringView> ConvertFromString(StringView aStr, void* aValueOut)
 				{
 					if (aStr.length() == 0)
 					{

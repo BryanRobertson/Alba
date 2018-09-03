@@ -5,6 +5,7 @@
 #include "Core_Any.hpp"
 #include "Core_StringHash.hpp"
 #include "Core_ConsoleCommandInternal.hpp"
+#include "Core_Vector.hpp"
 
 namespace Alba
 {
@@ -51,12 +52,12 @@ namespace Alba
 				template <typename TDataType>
 				void AddParameter(const StringView& aName, TDataType& aValue)
 				{
-					static ParamTypeVTable<TDataType> ourVTable;
-
 					ParamData& param = myParams.push_back();
-					param.myName = aName;
-					param.myNameId = NoCaseStringHash32(aName);
-					param.myVTable = &ourVTable;
+
+					param.myOutputData	= aValue;
+					param.myName		= aName;
+					param.myNameId		= NoCaseStringHash32(aName);
+					param.myVTable		= &GetVTable<TDataType>();
 				}
 
 			private:
@@ -70,23 +71,32 @@ namespace Alba
 				{
 					ParamData()
 						: myVTable(nullptr)
+						, myOutputData(nullptr)
 					{
 					}
 
 					FixedString<16>			myName;
 					NoCaseStringHash32		myNameId;
 					ParamTypeVTableBase*	myVTable;
+					void*					myOutputData;
 				};
 
 				//=================================================================================
 				// Private Methods
 				//=================================================================================
+				template <typename TDataType>
+				static const ParamTypeVTable<TDataType>& GetVTable()
+				{
+					static ParamTypeVTable<TDataType> ourVTable;
+					return ourVTable;
+				}
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
 				FixedString<32>				myName;
 				NoCaseStringHash32			myNameId;
+				FixedVector<ParamData, 4>	myParams;
 		};
 
 		//-----------------------------------------------------------------------------------------

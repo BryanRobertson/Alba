@@ -21,6 +21,8 @@ namespace Alba
 			Error
 		};
 
+		class ConsoleCommand;
+
 		//-----------------------------------------------------------------------------------------
 		// Name	:	Console
 		// Desc :	Standard Quake/style command console
@@ -45,14 +47,26 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				template <typename... TArgs>
-				void Print(ConsoleMessageType aMessageType, StringView aFormat, TArgs&&... someArgs)
-				{
-					const auto outputStr = Core::FormatString<256>(aFormat.data(), std::forward<TArgs>(someArgs)...);
-					Print(aMessageType, StringView(outputStr.c_str()));
-				}
 
-				void Print(ConsoleMessageType aMessageType, StringView aStr);
+				//---------------------------------------------------------------------------------
+				// Register/Unregister commands
+				//---------------------------------------------------------------------------------
+				template <typename TCommandType>
+				inline void		RegisterCommand();
+
+				void			UnregisterCommand(NoCaseStringHash32 aCommandName);
+
+				//---------------------------------------------------------------------------------
+				// Execute command
+				//---------------------------------------------------------------------------------
+				void			Execute(StringView aCommand);
+
+				//---------------------------------------------------------------------------------
+				// Print
+				//---------------------------------------------------------------------------------
+				template <typename... TArgs>
+				inline void		Print(ConsoleMessageType aMessageType, StringView aFormat, TArgs&&... someArgs);
+				void			Print(ConsoleMessageType aMessageType, StringView aStr);
 
 				PrintCallbackId RegisterPrintCallback(const PrintCallback& aCallback);
 				void		    UnregisterPrintCallback(PrintCallbackId anId);
@@ -60,9 +74,33 @@ namespace Alba
 			private:
 
 				//=================================================================================
+				// Private Methods
+				//=================================================================================
+				void			RegisterCommand(ConsoleCommand& aCommand);
+
+				//=================================================================================
 				// Private Data
 				//=================================================================================
-				VectorMap<PrintCallbackId, PrintCallback> myPrintCallbacks;
+				VectorMap<PrintCallbackId, PrintCallback>		myPrintCallbacks;
+				VectorMap<NoCaseStringHash32, ConsoleCommand*>	myConsoleCommands;
 		};
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template <typename TCommandType>
+		/*inline*/ void	Console::RegisterCommand()
+		{
+			static TCommandType ourCommand;
+			RegisterCommand(ourCommand);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template <typename... TArgs>
+		void Console::Print(ConsoleMessageType aMessageType, StringView aFormat, TArgs&&... someArgs)
+		{
+			const auto outputStr = Core::FormatString<256>(aFormat.data(), std::forward<TArgs>(someArgs)...);
+			Print(aMessageType, StringView(outputStr.c_str()));
+		}
 	}
 }

@@ -11,7 +11,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		ConsoleCommand::ConsoleCommand(const StringView& aName)
-			: myName(aName.data(), myName.length())
+			: myName(aName.data(), aName.length())
 			, myNameId()
 		{
 
@@ -34,7 +34,7 @@ namespace Alba
 			const StringView::const_iterator end = aCommandString.end();
 
 			//-------------------------------------------------------------------------------------
-			// Skip command name
+			// Util lambdas
 			//-------------------------------------------------------------------------------------
 			auto locSkipCommandName = [&itr, &end](const StringView& aCommandName) -> bool
 			{
@@ -54,9 +54,6 @@ namespace Alba
 				return true;
 			};
 
-			//-------------------------------------------------------------------------------------
-			// Skip whitespace
-			//-------------------------------------------------------------------------------------
 			auto locSkipWhitespace = [&itr, &end]()
 			{
 				while (itr != end && std::isblank(*itr))
@@ -66,9 +63,38 @@ namespace Alba
 			};
 
 			//-------------------------------------------------------------------------------------
+			// Skip command name
 			//-------------------------------------------------------------------------------------
+			locSkipWhitespace();
+			if ( !locSkipCommandName(myName.c_str()) )
+			{
+				return 1;
+			}
 
-			return false;
+			//-------------------------------------------------------------------------------------
+			// Process arguments
+			//-------------------------------------------------------------------------------------
+			for (auto& param : myParams)
+			{
+				locSkipWhitespace();
+
+				bool parseSuccess = false;
+				StringView tokenOut;
+
+				const Alba::Core::StringView parseState(itr, std::distance(itr, end));
+				std::tie(parseSuccess, tokenOut) = param.myVTable->FromStringFunc(parseState, param.myOutputData);
+
+				if (parseSuccess)
+				{
+					itr += tokenOut.length();
+				}
+				else
+				{
+					return 1;
+				}
+			}
+			
+			return 0;
 		}
 	}
 }
