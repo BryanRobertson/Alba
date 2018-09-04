@@ -85,9 +85,9 @@ namespace Alba
 				// Private Methods
 				//=================================================================================
 				template <typename TDataType>
-				static const ParamTypeVTable<TDataType>& GetVTable()
+				static const ParamTypeVTableBase& GetVTable()
 				{
-					static ParamTypeVTable<TDataType> ourVTable;
+					static ConsoleCommandInternal::ParamTypeVTable<TDataType> ourVTable;
 					return ourVTable;
 				}
 
