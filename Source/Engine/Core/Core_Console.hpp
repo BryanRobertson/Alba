@@ -87,15 +87,6 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template <typename TCommandType>
-		/*inline*/ void	Console::RegisterCommand()
-		{
-			static TCommandType ourCommand;
-			RegisterCommand(ourCommand);
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
 		template <typename... TArgs>
 		void Console::Print(ConsoleMessageType aMessageType, StringView aFormat, TArgs&&... someArgs)
 		{

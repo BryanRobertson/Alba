@@ -1,13 +1,11 @@
 #pragma once
 
+#include "Core_ConsoleCommand.hpp"
+
 namespace Alba
 {
 	namespace Core
 	{
-		//
-		class ALBA_CORE_API 
-		{
-
-		};
+		extern void ALBA_CORE_API RegisterBasicConsoleCommands();
 	}
 }

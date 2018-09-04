@@ -184,6 +184,8 @@ namespace Alba
 						return 0;
 					};
 
+					ImGui::PushFont(ImGuiModule::Get().GetConsoleFont());
+
 					const bool commandLine = ImGui::InputText
 					(
 						"Input",
@@ -192,6 +194,8 @@ namespace Alba
 						ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory,
 						(ImGuiTextEditCallback)&locTextEditCallback, (void*)this
 					);
+
+					ImGui::PopFont();
 
 					if (commandLine)
 					{
