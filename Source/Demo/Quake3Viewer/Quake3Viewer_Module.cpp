@@ -25,9 +25,6 @@ namespace Alba
 
 			console.RegisterCommand("testcommand3"_nocasehash32, [](int aValue1, float aValue2)
 			{
-				/*
-				ALBA_ASSERT(false);
-				*/
 				(void)aValue1;
 				(void)aValue2;
 

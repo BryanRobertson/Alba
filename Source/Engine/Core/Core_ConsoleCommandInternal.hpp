@@ -15,18 +15,34 @@ namespace Alba
 		{
 			struct CommandStorage;
 
+			//-------------------------------------------------------------------------------------
+			// Name	:	theStorageSize
+			// Desc	:	Max size to store directly inside command storage without allocating from
+			//			the heap
+			//-------------------------------------------------------------------------------------
 			constexpr size_t theStorageSize = HardwareConstants::theL1CacheLineSize - sizeof(void*);
+
+			//-------------------------------------------------------------------------------------
+			//-------------------------------------------------------------------------------------
+			typedef uint32 CommandReturnCode;
 
 			//-------------------------------------------------------------------------------------
 			//-------------------------------------------------------------------------------------
 			struct CommandVTableBase
 			{
+				// Store the command in the vTable
 				void (*Store)(CommandStorage& aCommandStorage, void* aValue);
+
+				// Destroy the stored command
 				void (*Destruct)(CommandStorage& aCommandStorage);
+
+				// Invoke the command
 				uint32 (*Invoke)(CommandStorage& aCommandStorage, void* anArgumentTuple);
 			};
 
 			//-------------------------------------------------------------------------------------
+			// Name	:	CommandStorage
+			// Desc	:	Stores a command, along with a vTable that will allow it to be executed
 			//-------------------------------------------------------------------------------------
 			struct CommandStorage
 			{
@@ -62,6 +78,11 @@ namespace Alba
 					Invoke = &CommandVTableDerived<TCommandType, TArgs...>::InvokeFunc;
 				}
 
+				static TCommandType& GetCommandInstance(CommandStorage& aCommandStorage)
+				{
+					return reinterpret_cast<TCommandType&>(aCommandStorage.myData);
+				}
+
 				static void StoreFunc(CommandStorage& aCommandStorage, void* aValue)
 				{
 					new (&aCommandStorage.myData) TCommandType(*reinterpret_cast<TCommandType*>(aValue));
@@ -74,10 +95,23 @@ namespace Alba
 
 				static uint32 InvokeFunc(CommandStorage& aCommandStorage, void* anArgumentTuple)
 				{
-					const std::tuple<TArgs...>& args = *reinterpret_cast<std::tuple<TArgs...>*>(anArgumentTuple);
-					auto& command = reinterpret_cast<TCommandType&>(aCommandStorage.myData);
+					auto& command = GetCommandInstance(aCommandStorage);
 
-					return std::apply(command, args);
+					// We have arguments, pass the arguments tuple to the function
+					// (std::apply will call the function with the correct args)
+					if constexpr (sizeof...(TArgs) > 0)
+					{
+						typedef std::tuple<TArgs...> ArgumentsTuple;
+
+						const auto& args = *reinterpret_cast<ArgumentsTuple*>(anArgumentTuple);
+						return std::apply(command, args);
+					}
+					// Otherwise just call the command, no arguments to pass in
+					else
+					{
+						(void*)anArgumentTuple;
+						command();
+					}
 				}
 			};
 

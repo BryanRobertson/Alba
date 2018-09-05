@@ -63,9 +63,11 @@ namespace Alba
 					storage.myVTable = &vTable;
 					storage.myVTable->Store(storage, (void*)&aCommand);
 
+					// TODO: Remove... this is just a test to make sure this works
 					std::tuple<int, float> test(32, 3.14f);
 					uint32 result=storage.myVTable->Invoke(storage, &test);
 					++result;
+					//
 				}
 
 				template <typename TClassType, typename ...TArgs>
