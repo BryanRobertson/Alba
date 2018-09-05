@@ -5,6 +5,7 @@
 #include "Core_Function.hpp"
 #include "Core_VectorMap.hpp"
 #include "Core_StronglyTypedId.hpp"
+#include "Core_ConsoleCommandInternal.hpp"
 
 namespace Alba
 {
@@ -21,8 +22,6 @@ namespace Alba
 			Error
 		};
 
-		class ConsoleCommand;
-
 		//-----------------------------------------------------------------------------------------
 		// Name	:	Console
 		// Desc :	Standard Quake/style command console
@@ -38,6 +37,8 @@ namespace Alba
 				typedef FixedFunction<void(ConsoleMessageType aMessageType, StringView aStr)> PrintCallback;
 				typedef StronglyTypedId<uint32, PrintCallback> PrintCallbackId;
 
+				typedef uint32 CommandReturnCode;
+
 				//=================================================================================
 				// Public Constructors
 				//=================================================================================
@@ -51,10 +52,45 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				// Register/Unregister commands
 				//---------------------------------------------------------------------------------
-				template <typename TCommandType>
-				inline void		RegisterCommand();
+				template <typename TCommand, typename ...TArgs, class=enable_if<is_invocable_v<CommandReturnCode, TCommand, TArgs...> > >
+				void RegisterCommand(NoCaseStringHash32 aCommandName, TCommand&& aCommand)
+				{
+					const auto& vTable = ConsoleInternal::FunctorVTableLocator<TCommand>::GetVTable();
 
-				void			UnregisterCommand(NoCaseStringHash32 aCommandName);
+					auto itr = myCommands.emplace(aCommandName, CommandStorage());
+					CommandStorage& storage = itr.first->second;
+
+					storage.myVTable = &vTable;
+					storage.myVTable->Store(storage, (void*)&aCommand);
+
+					std::tuple<int, float> test(32, 3.14f);
+					uint32 result=storage.myVTable->Invoke(storage, &test);
+					++result;
+				}
+
+				template <typename TClassType, typename ...TArgs>
+				void RegisterCommand(NoCaseStringHash32 aCommandName, TClassType* anInstance, CommandReturnCode (TClassType::*aCommand)(TArgs...) )
+				{
+					(void)aCommandName;
+					(void)anInstance;
+					(void)aCommand;
+
+					return;
+				}
+
+				template <typename ...TArgs>
+				void RegisterCommand(NoCaseStringHash32 aCommandName, CommandReturnCode(*aCommand)(TArgs...))
+				{
+					typedef ConsoleInternal::CommandVTableDerived<decltype(aCommand)> VTable;
+					static VTable ourVTable;
+				
+					CommandStorage& storage = myCommands.emplace(aCommandName, CommandStorage())->first.second;
+
+					storage.myVTable = &ourVTable;
+					storage.myVTable->Store(aCommand);
+				}
+
+				void UnregisterCommand(NoCaseStringHash32 aCommandName);
 
 				//---------------------------------------------------------------------------------
 				// Execute command
@@ -74,15 +110,19 @@ namespace Alba
 			private:
 
 				//=================================================================================
+				// Private Types
+				//=================================================================================
+				typedef ConsoleInternal::CommandStorage CommandStorage;
+
+				//=================================================================================
 				// Private Methods
 				//=================================================================================
-				void			RegisterCommand(ConsoleCommand& aCommand);
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
 				VectorMap<PrintCallbackId, PrintCallback>		myPrintCallbacks;
-				VectorMap<NoCaseStringHash32, ConsoleCommand*>	myConsoleCommands;
+				VectorMap<NoCaseStringHash32, CommandStorage>	myCommands;
 		};
 
 		//-----------------------------------------------------------------------------------------

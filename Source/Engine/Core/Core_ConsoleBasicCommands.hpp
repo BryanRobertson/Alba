@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core_ConsoleCommand.hpp"
+#include "Core.hpp"
 
 namespace Alba
 {

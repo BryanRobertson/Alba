@@ -24,6 +24,14 @@ namespace Alba
 	using std::common_type_t;
 	using std::is_base_of;
 	using std::is_base_of_v;
+	using std::is_invocable;
+	using std::is_invocable_v;
+	using std::is_move_assignable;
+	using std::is_move_assignable_v;
+	using std::is_move_constructible;
+	using std::is_move_constructible_v;;
+	using std::is_nothrow_invocable;
+	using std::is_nothrow_assignable_v;
 
 	namespace Core
 	{
