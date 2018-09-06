@@ -15,7 +15,7 @@
 //				 since this is handled internally)
 //
 //				Note: 
-//					At the time of writing, this type relies on EnumerationTraits<T>
+//					At the time of writing, this type relies on get_all_enum_values<T>
 //					having been manually specialised for the relevant enumeration type.
 //
 //					In future - this could be automated via code-generation
@@ -27,8 +27,8 @@
 #include "Core.hpp"
 #include "Core_TypeTraits.hpp"
 #include "Core_EnumerationTraits.hpp"
-#include "Core_Bitset.hpp"
 #include "Core_Utils.hpp"
+#include "Core_Bitset.hpp"
 
 namespace Alba
 {
@@ -36,66 +36,132 @@ namespace Alba
 	{
 		namespace Detail
 		{
+			using namespace ::Alba::BasicTypes;
+
 			//-------------------------------------------------------------------------------------
-			// Name	:	BestBitsetElementSize
+			// Name	:	best_bitset_element_size
 			// Desc	:	Based on an input value, return the best size to use for the internal
 			//			values of the bitset
 			//-------------------------------------------------------------------------------------
 			template <size_t TEnumerationEntryCount>
-			struct BestBitsetElementSize
+			struct best_bitset_element_size
 			{
-				static constexpr size_t Value = sizeof(size_t);
-				typedef uint64 ElementType;
+				static constexpr size_t value = sizeof(size_t);
+				typedef uint64 value_type;
 			};
 
 			template <>
-			struct BestBitsetElementSize<1>
+			struct best_bitset_element_size<1>
 			{
-				static constexpr size_t Value = 1;
-				typedef uint8 ElementType;
+				static constexpr size_t value = 1;
+				typedef uint8 value_type;
 			};
 
 			template <>
-			struct BestBitsetElementSize<2>
+			struct best_bitset_element_size<2>
 			{
-				static constexpr size_t Value = 2;
-				typedef uint16 ElementType;
+				static constexpr size_t value = 2;
+				typedef uint16 value_type;
 			};
 
 			template <>
-			struct BestBitsetElementSize<4>
+			struct best_bitset_element_size<4>
 			{
-				static constexpr size_t Value = 4;
-				typedef uint32 ElementType;
+				static constexpr size_t value = 4;
+				typedef uint32 value_type;
 			};
 
 			template <>
-			struct BestBitsetElementSize<8>
+			struct best_bitset_element_size<8>
 			{
-				static constexpr size_t Value = 8;
-				typedef uint64 ElementType;
+				static constexpr size_t value = 8;
+				typedef uint64 value_type;
 			};
-		} 
+
+			template <typename TEnumerationType, class = enable_if_t<is_enum_v<TEnumerationType>> >
+			static constexpr size_t best_bitset_element_size_v = best_bitset_element_size
+			<
+				NextLargestPowerOfTwo(get_enum_entry_count_v<TEnumerationType>)
+			>
+			::value;
+
+			template <typename TEnumerationType, class = enable_if_t<is_enum_v<TEnumerationType>> >
+			using best_bitset_element_type_t = best_bitset_element_size
+			<
+				NextLargestPowerOfTwo(get_enum_entry_count_v<TEnumerationType>)
+			>
+			::value_type;
+		}
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	EnumerationSet
 		//-----------------------------------------------------------------------------------------
-		template <typename TEnumerationType, class=enable_if<is_enum_v<TEnumerationType> >
+		template <typename TEnumerationType, class=enable_if_t<is_enum_v<TEnumerationType>> >
 		class EnumerationSet
 		{
 			public:
 
 				//=================================================================================
+				// Public Constants
+				//=================================================================================
+				static constexpr size_t ElementCount	= get_enum_entry_count_v<TEnumerationType>;
+				static constexpr size_t ElementSize		= Detail::best_bitset_element_size_v<TEnumerationType>;
+
+				//=================================================================================
 				// Public Types
 				//=================================================================================
+				typedef Detail::best_bitset_element_type_t<TEnumerationType> ElementType;
+				typedef BitSet<ElementCount, ElementType>					 BitSetType;
 
 				//=================================================================================
 				// Public Constructors
 				//=================================================================================
+				inline constexpr EnumerationSet();
+				inline constexpr EnumerationSet(TEnumerationType aValue); // Implicit intentionally
+				inline constexpr EnumerationSet(std::initializer_list<TEnumerationType> anInitList);
+
+				inline constexpr EnumerationSet(const EnumerationSet<TEnumerationType>&) = default;
+				inline constexpr EnumerationSet(EnumerationSet<TEnumerationType>&&) = default;
 
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
+
+				//---------------------------------------------------------------------------------
+				// operator~ 
+				//---------------------------------------------------------------------------------
+				inline constexpr EnumerationSet<TEnumerationSet>& operator~ ();
+
+				//---------------------------------------------------------------------------------
+				// operator^=
+				//---------------------------------------------------------------------------------
+				inline constexpr EnumerationSet<TEnumerationSet>& operator^= (const EnumerationSet<TEnumerationType>& aRhs);
+
+				//---------------------------------------------------------------------------------
+				// operator|= 
+				//---------------------------------------------------------------------------------
+				inline constexpr EnumerationSet<TEnumerationSet>& operator|= (const EnumerationSet<TEnumerationType>& aRhs);
+
+				//---------------------------------------------------------------------------------
+				// operator&= 
+				//---------------------------------------------------------------------------------
+				inline constexpr EnumerationSet<TEnumerationSet>& operator&= (const EnumerationSet<TEnumerationType>& aRhs);
+
+				//---------------------------------------------------------------------------------
+				// operator= , operator==
+				//---------------------------------------------------------------------------------
+				inline constexpr EnumerationSet<TEnumerationType>& operator=(const EnumerationSet<TEnumerationType>&) = default;
+				inline constexpr EnumerationSet<TEnumerationType>& operator=(EnumerationSet<TEnumerationType>&&) = default;
+
+				inline constexpr bool operator==(const EnumerationSet<TEnumerationType>&) = default;
+				inline constexpr bool operator!=(const EnumerationSet<TEnumerationType>&) = default;
+
+			private:
+
+				//=================================================================================
+				// Private Data
+				//=================================================================================
+				BitSetType	myData;
 		};
 	}
 }
