@@ -280,6 +280,12 @@
     <ClInclude Include="Core_ConsoleBasicCommands.hpp">
       <Filter>Console</Filter>
     </ClInclude>
+    <ClInclude Include="Core_EnumerationSet.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_EnumerationTraits.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">

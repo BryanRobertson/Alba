@@ -10,6 +10,8 @@ namespace Alba
 {
 	using std::enable_if;
 	using std::enable_if_t;
+	using std::is_enum;
+	using std::is_enum_v;
 	using std::is_lvalue_reference;
 	using std::is_lvalue_reference_v;
 	using std::is_rvalue_reference;

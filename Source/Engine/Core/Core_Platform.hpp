@@ -9,6 +9,9 @@ namespace Alba
 {
 	namespace Core
 	{
+		//-----------------------------------------------------------------------------------------
+		// Hardware constant values
+		//-----------------------------------------------------------------------------------------
 		namespace HardwareConstants
 		{
 			//-----------------------------------------------------------------------------------------
@@ -20,6 +23,6 @@ namespace Alba
 		
 		#if defined(ALBA_PLATFORM_WINDOWS)
 			String GetLastErrorString();
-		#endif	
+		#endif
 	}
 }
