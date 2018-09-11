@@ -65,17 +65,15 @@ namespace Alba
 					return RunApplicationCommon(std::move(anInitParams), std::move(frameworkInitParams));
 				}
 
-			#else
-
-				uint32 RunApplication(InitParams&& someInitParams, int argc, char** argv)
-				{
-					Alba::Framework::FrameworkInitParams frameworkInitParams;
-					frameworkInitParams.myCommandLineParameters = Alba::Core::CommandLineParameters(argc, argv);
-
-					eturn RunApplicationCommon(std::move(anInitParams), std::move(frameworkInitParams));
-				}
-
 			#endif
+
+			uint32 RunApplication(InitParams&& someInitParams, int argc, char** argv)
+			{
+				Alba::Framework::FrameworkInitParams frameworkInitParams;
+				frameworkInitParams.myCommandLineParameters = Alba::Core::CommandLineParameters(argc, argv);
+
+				return RunApplicationCommon(std::move(someInitParams), std::move(frameworkInitParams));
+			}
 
 			//-----------------------------------------------------------------------------------------
 			// Common init code

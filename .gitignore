@@ -21,3 +21,6 @@ Source/Sharpmake/output/*
 
 /Binaries/*
 !/Binaries/.gitkeep
+Source/Sharpmake/sharpmake_debugsolution.vs2017.sln
+Source/Sharpmake/sharpmake_debugsolution.vs2017.sln
+Source/Sharpmake/sharpmake_sharpmake.vs2017.csproj

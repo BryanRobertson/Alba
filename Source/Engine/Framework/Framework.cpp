@@ -75,7 +75,7 @@ namespace Alba
 			ALBA_LOG_INFO(Framework, "Shutdown Framework:");
 			ALBA_LOG_INFO(Framework, "---------------------------------------------------------------");
 
-			// Init module repository
+			// Shut down module repository
 			Alba::Core::ModuleRepository::Destroy();
 
 			// Shut down the logging system

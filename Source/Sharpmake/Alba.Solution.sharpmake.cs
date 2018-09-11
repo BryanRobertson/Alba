@@ -11,6 +11,7 @@ using Sharpmake;
 [module: Sharpmake.Include("Alba.Application.GravityDemoExe.sharpmake.cs")]
 [module: Sharpmake.Include("Alba.Application.Quake3ViewerExe.sharpmake.cs")]
 [module: Sharpmake.Include("Alba.Common.Settings.sharpmake.cs")]
+[module: Sharpmake.Include("Alba.Tests.AlbaTestExe.sharpmake.cs")]
 [module: Sharpmake.Include("External.Solution.sharpmake.cs")]
 
 namespace Alba
@@ -61,6 +62,11 @@ namespace Alba
 			conf.AddProject<Alba.Engine.MathProject>(target);
             conf.AddProject<Alba.Engine.FrameworkProject>(target);
             conf.AddProject<Alba.Engine.GraphicsProject>(target);
+
+			//-------------------------------------------------------------------------------------
+            // Test
+            //-------------------------------------------------------------------------------------
+			conf.AddProject<Alba.Tests.AlbaTestExeProject>(target);
 
             //-------------------------------------------------------------------------------------
             // Demo

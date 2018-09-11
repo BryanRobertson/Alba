@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="AlbaTestExe.cpp" />
+    <ClCompile Include="AlbaTestExe_Precompile.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AlbaTestExe.hpp" />
+    <ClInclude Include="AlbaTestExe_Precompile.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{43282b73-c67e-499b-92d3-7646c4e6b4bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Core">
+      <UniqueIdentifier>{24a2e958-a59b-4f03-923d-1d98d64827ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{9d5468da-0b8f-4ca9-9a99-41957e84fa72}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
