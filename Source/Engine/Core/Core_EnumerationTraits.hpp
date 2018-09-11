@@ -23,7 +23,7 @@ namespace Alba
 		template <typename TEnumerationType, class=enable_if_t<is_enum_v<TEnumerationType>> >
 		struct get_all_enum_values
 		{
-			static inline constexpr std::array<void> value;
+			//static inline constexpr std::array<void, 0> value;
 		};
 
 		template <typename TEnumerationType>
@@ -41,6 +41,40 @@ namespace Alba
 
 		template <typename TEnumerationType>
 		constexpr inline size_t get_enum_entry_count_v = get_enum_entry_count<TEnumerationType>::value;
+
+		//-----------------------------------------------------------------------------------------
+		// Name	:	is_enum_contiguous
+		// Desc	:	True if all enum values are contiguous with no gaps
+		//-----------------------------------------------------------------------------------------
+		template <typename TEnumerationType, class = enable_if_t<is_enum_v<TEnumerationType>> >
+		struct is_enum_contiguous
+		{
+		private:
+
+			static constexpr bool is_contiguous()
+			{
+				TEnumerationType previous = get_all_enum_values_v[0];
+				for (size_t index = 1; index < get_enum_entry_count_v<TEnumerationType>; ++index)
+				{
+					const TEnumerationType current = get_all_enum_values_v[1];
+					if (static_cast<size_t>(current) - static_cast<size_t>(previous) != 1)
+					{
+						return false;
+					}
+
+					previous = current;
+				}
+
+				return true;
+			}
+
+		public:
+
+			static inline constexpr bool value = is_contiguous();
+		};
+
+		template <typename TEnumerationType>
+		constexpr inline size_t is_enum_contiguous_v = is_enum_contiguous<TEnumerationType>::value;
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	get_enum_max_value<T>
