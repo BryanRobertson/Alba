@@ -18,8 +18,22 @@ namespace Alba
 		//------------------------------------------------------------------------------------------------
 		// Name	:	Core::Array<T, N>
 		//------------------------------------------------------------------------------------------------
-		template <typename TValueType, size_t N>
-		using Array = eastl::array<TValueType, N>;
+		template <typename TValueType, size_t TSize>
+		using Array = eastl::array<TValueType, TSize>;
+
+		//------------------------------------------------------------------------------------------------
+		// Name	:	MakeArray
+		// Desc	:	Generate a sized std::array from variadic arguments
+		//------------------------------------------------------------------------------------------------
+		template <typename... TValueType>
+		constexpr auto MakeArray(TValueType&&... anInitList)
+			-> Array<std::decay_t<std::common_type_t<TValueType...> >, sizeof...(anInitList)>
+		{
+			return Array<std::decay_t<std::common_type_t<TValueType...> >, sizeof...(anInitList)>
+			(
+				{ std::forward<std::decay_t<std::common_type_t<TValueType...> > >(anInitList)... }
+			);
+		}
 	}
 }
 

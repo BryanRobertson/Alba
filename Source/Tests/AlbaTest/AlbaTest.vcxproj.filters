@@ -6,6 +6,9 @@
       <Filter>Module</Filter>
     </ClCompile>
     <ClCompile Include="AlbaTest.cpp" />
+    <ClCompile Include="AlbaTest_Core_EnumerationSet.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlbaTest_Precompile.hpp" />
@@ -13,10 +16,16 @@
       <Filter>Module</Filter>
     </ClInclude>
     <ClInclude Include="AlbaTest.hpp" />
+    <ClInclude Include="AlbaTest_Core_EnumerationSet.hpp">
+      <Filter>Tests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Module">
       <UniqueIdentifier>{ace10df2-1f44-40ef-a84b-97ee525fc5f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{8740859b-826e-4c34-8e39-9014fdc8ce0f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

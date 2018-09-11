@@ -81,14 +81,14 @@ namespace Alba
 			template <typename TEnumerationType, class = enable_if_t<is_enum_v<TEnumerationType>> >
 			static constexpr size_t best_bitset_element_size_v = best_bitset_element_size
 			<
-				::Alba::Core::NextLargestPowerOfTwo(::Alba::Core::get_enum_entry_count_v<TEnumerationType>)
+				::Alba::Core::NextLargestPowerOfTwo(get_enum_entry_count_v<TEnumerationType>)
 			>
 			::value;
 
 			template <typename TEnumerationType, class = enable_if_t<is_enum_v<TEnumerationType>> >
 			using best_bitset_element_type_t = typename best_bitset_element_size
 			<
-				::Alba::Core::NextLargestPowerOfTwo(::Alba::Core::get_enum_entry_count_v<TEnumerationType>)
+				::Alba::Core::NextLargestPowerOfTwo(get_enum_entry_count_v<TEnumerationType>)
 			>
 			::value_type;
 		}
@@ -120,8 +120,8 @@ namespace Alba
 				inline constexpr EnumerationSet(TEnumerationType aValue); // Implicit intentionally
 				inline constexpr EnumerationSet(std::initializer_list<TEnumerationType> anInitList);
 
-				inline constexpr EnumerationSet(const EnumerationSet<TEnumerationType>&) = default;
-				inline constexpr EnumerationSet(EnumerationSet<TEnumerationType>&&) = default;
+				inline constexpr EnumerationSet(const EnumerationSet& aCopyFrom) = default;
+				inline constexpr EnumerationSet(EnumerationSet&& aMoveFrom) = default;
 
 				//=================================================================================
 				// Public Methods
@@ -142,33 +142,33 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				// operator~ 
 				//---------------------------------------------------------------------------------
-				inline constexpr EnumerationSet<TEnumerationSet>& operator~ ();
+				inline constexpr EnumerationSet& operator~ ();
 
 				//---------------------------------------------------------------------------------
 				// operator^=
 				//---------------------------------------------------------------------------------
-				inline constexpr EnumerationSet<TEnumerationSet>& operator^= (const EnumerationSet<TEnumerationType, >& aRhs);
+				inline constexpr EnumerationSet& operator^= (const EnumerationSet& aRhs);
 
 				//---------------------------------------------------------------------------------
 				// operator|= 
 				//---------------------------------------------------------------------------------
-				inline constexpr EnumerationSet<TEnumerationSet>& operator|= (const EnumerationSet<TEnumerationType, >& aRhs);
+				inline constexpr EnumerationSet& operator|= (const EnumerationSet& aRhs);
 
 				//---------------------------------------------------------------------------------
 				// operator&= 
 				//---------------------------------------------------------------------------------
-				inline constexpr EnumerationSet<TEnumerationSet>& operator&= (const EnumerationSet<TEnumerationType, >& aRhs);
+				inline constexpr EnumerationSet& operator&= (const EnumerationSet& aRhs);
 
 				//---------------------------------------------------------------------------------
 				// operator= , operator==, operator!=
 				//---------------------------------------------------------------------------------
-				inline constexpr EnumerationSet<TEnumerationType>& operator=(const EnumerationSet<TEnumerationType, >&) = default;
-				inline constexpr EnumerationSet<TEnumerationType>& operator=(EnumerationSet<TEnumerationType, >&&) = default;
+				inline constexpr EnumerationSet& operator=(const EnumerationSet&) = default;
+				inline constexpr EnumerationSet& operator=(EnumerationSet&&) = default;
 
-				inline constexpr EnumerationSet<TEnumerationType>& operator=(std::initializer_list<TEnumerationType> anInitList);
+				inline constexpr EnumerationSet& operator=(std::initializer_list<TEnumerationType> anInitList);
 
-				inline constexpr bool operator==(const EnumerationSet<TEnumerationType>&) = default;
-				inline constexpr bool operator!=(const EnumerationSet<TEnumerationType>&) = default;
+				inline constexpr bool operator==(const EnumerationSet&) const = default;
+				inline constexpr bool operator!=(const EnumerationSet&) const = default;
 
 				//---------------------------------------------------------------------------------
 				// Iterators
@@ -235,7 +235,7 @@ namespace Alba
 				
 				//-------------------------------------------------------------------------
 				//-------------------------------------------------------------------------
-				static constexpr size_t GetIndex(TEnumerationType aValue) const
+				static constexpr size_t GetIndex(TEnumerationType aValue)
 				{
 					if constexpr (is_enum_contiguous_v<TEnumerationType>)
 					{
@@ -270,16 +270,16 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template <typename TEnumerationType, >
-		/*inline*/ constexpr EnumerationSet<TEnumerationType, >::EnumerationSet(TEnumerationType aValue)
+		template <typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType, T>::EnumerationSet(TEnumerationType aValue)
 		{
 			Insert(aValue);
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template <typename TEnumerationType, >
-		/*inline*/ constexpr EnumerationSet<TEnumerationType, >::EnumerationSet(std::initializer_list<TEnumerationType> anInitList)
+		template <typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType, T>::EnumerationSet(std::initializer_list<TEnumerationType> anInitList)
 		{
 			for (TEnumerationType aValue : anInitList)
 			{
@@ -289,8 +289,8 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		/*inline*/ constexpr void EnumerationSet<TEnumerationType, >::Insert(TEnumerationType aValue)
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr void EnumerationSet<TEnumerationType, T>::Insert(TEnumerationType aValue)
 		{
 			const size_t index = GetIndex(aValue);
 			myData.set(index, true);
@@ -298,8 +298,8 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		/*inline*/ constexpr void EnumerationSet<TEnumerationType, >::Insert(std::initializer_list<TEnumerationType> anInitList)
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr void EnumerationSet<TEnumerationType, T>::Insert(std::initializer_list<TEnumerationType> anInitList)
 		{
 			for (TEnumerationType aValue : anInitList)
 			{
@@ -310,8 +310,8 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		/*inline*/ constexpr void EnumerationSet<TEnumerationType, >::Remove(TEnumerationType aValue)
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr void EnumerationSet<TEnumerationType, T>::Remove(TEnumerationType aValue)
 		{
 			const size_t index = GetIndex(aValue);
 			myData.set(index, false);
@@ -319,16 +319,16 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		/*inline*/ constexpr void EnumerationSet<TEnumerationType, >::Clear()
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr void EnumerationSet<TEnumerationType, T>::Clear()
 		{
 			myData.reset();
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		/*inline*/ constexpr bool EnumerationSet<TEnumerationType, >::Contains(TEnumerationType aValue) const
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr bool EnumerationSet<TEnumerationType, T>::Contains(TEnumerationType aValue) const
 		{
 			const size_t index = GetIndex(aValue);
 			return false;
@@ -336,8 +336,8 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		/*inline*/ constexpr size_t EnumerationSet<TEnumerationType, >::Count() const
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr size_t EnumerationSet<TEnumerationType, T>::Count() const
 		{
 			size_t bitSetCount = 0;
 
@@ -357,8 +357,8 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		/*inline*/ constexpr EnumerationSet<TEnumerationSet>& EnumerationSet<TEnumerationType, >::operator~()
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType>& EnumerationSet<TEnumerationType, T>::operator~()
 		{
 			myData = ~myData;
 			return *this;
@@ -366,8 +366,8 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		inline constexpr EnumerationSet<TEnumerationSet>& EnumerationSet<TEnumerationType, >::operator^=(const EnumerationSet<TEnumerationType>& aRhs)
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType>& EnumerationSet<TEnumerationType, T>::operator^=(const EnumerationSet<TEnumerationType>& aRhs)
 		{
 			myData ^= aRHS.myData;
 			return *this;
@@ -375,8 +375,8 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		inline constexpr EnumerationSet<TEnumerationSet>& EnumerationSet<TEnumerationType, >::operator|=(const EnumerationSet<TEnumerationType>& aRhs)
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType>& EnumerationSet<TEnumerationType, T>::operator|=(const EnumerationSet<TEnumerationType>& aRhs)
 		{
 			myData |= aRHS.myData;
 			return *this;
@@ -384,8 +384,8 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		inline constexpr EnumerationSet<TEnumerationSet>& EnumerationSet<TEnumerationType, >::operator&=(const EnumerationSet<TEnumerationType>& aRhs)
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType>& EnumerationSet<TEnumerationType, T>::operator&=(const EnumerationSet<TEnumerationType>& aRhs)
 		{
 			myData &= aRHS.myData;
 			return *this;
@@ -393,8 +393,8 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		inline constexpr EnumerationSet<TEnumerationType>& EnumerationSet<TEnumerationType, >::operator=(std::initializer_list<TEnumerationType> anInitList)
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType>& EnumerationSet<TEnumerationType, T>::operator=(std::initializer_list<TEnumerationType> anInitList)
 		{
 			*this = EnumerationSet<TEnumerationType>(std::forward<std::initializer_set<TEnumerationType>(anInitList));
 			return *this;
@@ -403,10 +403,12 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template <typename TEnumerationType, class T>
-		/*inline*/ EnumerationSet<TEnumerationType, T> operator^(const EnumerationSet<TEnumerationType, T>& aLHS, const EnumerationSet<TEnumerationType, T>& aRHS)
+		/*inline*/ EnumerationSet<TEnumerationType> operator^(const EnumerationSet<TEnumerationType, T>& aLHS, const EnumerationSet<TEnumerationType, T>& aRHS)
 		{
 			EnumerationSet<TEnumerationType> result = aLHS;
 			result ^= aRHS;
+
+			return result;
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -416,6 +418,8 @@ namespace Alba
 		{
 			EnumerationSet<TEnumerationType> result = aLHS;
 			result &= aRHS;
+
+			return result;
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -425,6 +429,8 @@ namespace Alba
 		{
 			EnumerationSet<TEnumerationType> result = aLHS;
 			result |= aRHS;
+
+			return result;
 		}
 
 		//=========================================================================================
@@ -433,17 +439,18 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		inline ConstIterator& EnumerationSet<TEnumerationType, >::ConstIterator::operator++()
+		template<typename TEnumerationType, class T>
+		/*inline*/ EnumerationSet<TEnumerationType, T>::ConstIterator& EnumerationSet<TEnumerationType, T>::ConstIterator::operator++()
 		{
 			Advance();
+
 			return *this;			
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		inline ConstIterator EnumerationSet<TEnumerationType, >::ConstIterator::operator++(int)
+		template<typename TEnumerationType, class T>
+		/*inline*/ EnumerationSet<TEnumerationType, T>::ConstIterator EnumerationSet<TEnumerationType, T>::ConstIterator::operator++(int)
 		{
 			ConstIterator result = *this;
 			Advance();
@@ -453,8 +460,8 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		inline void EnumerationSet<TEnumerationType, >::Advance()
+		template<typename TEnumerationType, class T>
+		/*inline*/ void EnumerationSet<TEnumerationType, T>::Advance()
 		{
 			++myIndex;
 			while (myIndex < get_enum_entry_count_v<TEnumerationType>)
@@ -470,40 +477,40 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		inline bool EnumerationSet<TEnumerationType, >::ConstIterator::operator<(const ConstIterator & aRhs) const
+		template<typename TEnumerationType, class T>
+		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator<(const ConstIterator & aRhs) const
 		{
 			return myIndex < aRhs.myIndex;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		inline bool EnumerationSet<TEnumerationType, >::ConstIterator::operator>(const ConstIterator & aRhs) const
+		template<typename TEnumerationType, class T>
+		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator>(const ConstIterator & aRhs) const
 		{
 			return myIndex > aRhs.myIndex;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		inline bool EnumerationSet<TEnumerationType, >::ConstIterator::operator<=(const ConstIterator & aRhs) const
+		template<typename TEnumerationType, class T>
+		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator<=(const ConstIterator & aRhs) const
 		{
 			return myIndex <= aRhs.myIndex;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		inline bool EnumerationSet<TEnumerationType, >::ConstIterator::operator>=(const ConstIterator & aRhs) const
+		template<typename TEnumerationType, class T>
+		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator>=(const ConstIterator & aRhs) const
 		{
 			return myIndex >= aRhs.myIndex;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, >
-		inline TEnumerationType EnumerationSet<TEnumerationType, >::ConstIterator::operator*() const
+		template<typename TEnumerationType, class T>
+		/*inline*/ TEnumerationType EnumerationSet<TEnumerationType, T>::ConstIterator::operator*() const
 		{
 			return get_all_enum_values_v<TEnumerationType>[myIndex];
 		}
