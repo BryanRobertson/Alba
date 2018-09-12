@@ -21,8 +21,9 @@ namespace Alba
 				ALBA_TEST(Test_CoreEnumerationSet());
 			}
 			ALBA_LOG_INFO(AlbaTest, "-----------------------------------------------------");
-
 			ALBA_LOG_INFO(AlbaTest, "Tests Passed");
+			ALBA_LOG_INFO(AlbaTest, "-----------------------------------------------------");
+
 			return true;
 		}
 

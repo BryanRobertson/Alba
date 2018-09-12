@@ -142,8 +142,17 @@ namespace Alba
 				static const EnumerationSet All;
 
 				//=================================================================================
-				// Public Methods
+				// Public MethodsT
 				//=================================================================================
+
+				//---------------------------------------------------------------------------------
+				// Get the underlying value of the bitset
+				//---------------------------------------------------------------------------------
+				template <class=enable_if_t<BitSetType::kWordCount == 1u>>
+				constexpr ElementType GetBits() const
+				{
+					return myData.data()[0];
+				}
 
 				//---------------------------------------------------------------------------------
 				// Add / Remove / Clear / Contains / Count
@@ -157,25 +166,52 @@ namespace Alba
 				inline constexpr bool	Contains(TEnumerationType aValue) const;
 				inline constexpr size_t Count() const;
 
+				inline constexpr size_t IsEmpty() const;
+
+				//---------------------------------------------------------------------------------
+				// Set Difference / Intersection / Union
+				//---------------------------------------------------------------------------------
+				inline constexpr EnumerationSet Difference(const EnumerationSet& aSet) const;
+				inline constexpr EnumerationSet Intersection(const EnumerationSet& aSet) const;
+				inline constexpr EnumerationSet Union(const EnumerationSet& aSet) const;
+
+				inline constexpr EnumerationSet& SetToDifference(const EnumerationSet& aSet)
+				{
+					*this = Difference(aSet);
+					return *this;
+				}
+
+				inline constexpr EnumerationSet& SetToIntersection(const EnumerationSet& aSet)
+				{
+					*this = Intersection(aSet);
+					return *this;
+				}
+
+				inline constexpr EnumerationSet& SetToUnion(const EnumerationSet& aSet)
+				{
+					*this = Union(aSet);
+					return *this;
+				}
+
 				//---------------------------------------------------------------------------------
 				// operator~ 
 				//---------------------------------------------------------------------------------
-				inline constexpr EnumerationSet& operator~ ();
+				inline constexpr EnumerationSet operator~ () const;
 
 				//---------------------------------------------------------------------------------
 				// operator^=
 				//---------------------------------------------------------------------------------
-				inline constexpr EnumerationSet& operator^= (const EnumerationSet& aRhs);
+				inline constexpr EnumerationSet& operator^= (const EnumerationSet& aRight);
 
 				//---------------------------------------------------------------------------------
 				// operator|= 
 				//---------------------------------------------------------------------------------
-				inline constexpr EnumerationSet& operator|= (const EnumerationSet& aRhs);
+				inline constexpr EnumerationSet& operator|= (const EnumerationSet& aRight);
 
 				//---------------------------------------------------------------------------------
 				// operator&= 
 				//---------------------------------------------------------------------------------
-				inline constexpr EnumerationSet& operator&= (const EnumerationSet& aRhs);
+				inline constexpr EnumerationSet& operator&= (const EnumerationSet& aRight);
 
 				//---------------------------------------------------------------------------------
 				// operator= , operator==, operator!=
@@ -217,12 +253,12 @@ namespace Alba
 						inline ConstIterator& operator=(const ConstIterator& aCopyFrom) = default;
 						inline ConstIterator& operator=(ConstIterator&& aMoveFrom) = default;
 
-						inline bool operator<(const ConstIterator& aRhs) const;
-						inline bool operator>(const ConstIterator& aRhs) const;
-						inline bool operator<=(const ConstIterator& aRhs) const;
-						inline bool operator>=(const ConstIterator& aRhs) const;
-						inline bool operator==(const ConstIterator& aRhs) const;
-						inline bool operator!=(const ConstIterator& aRhs) const;
+						inline bool operator<(const ConstIterator& aRight) const;
+						inline bool operator>(const ConstIterator& aRight) const;
+						inline bool operator<=(const ConstIterator& aRight) const;
+						inline bool operator>=(const ConstIterator& aRight) const;
+						inline bool operator==(const ConstIterator& aRight) const;
+						inline bool operator!=(const ConstIterator& aRight) const;
 
 						TEnumerationType operator*() const;
 
@@ -392,6 +428,7 @@ namespace Alba
 		template<typename TEnumerationType, class T>
 		/*inline*/ constexpr size_t EnumerationSet<TEnumerationType, T>::Count() const
 		{
+			/*
 			size_t bitSetCount = 0;
 
 			for (size_t index = 0; index < BitSetType::kWordCount; ++index)
@@ -405,42 +442,127 @@ namespace Alba
 			}
 
 			return bitSetCount;
-			
+			*/
+
+			return myData.count();
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template<typename TEnumerationType, class T>
-		/*inline*/ constexpr EnumerationSet<TEnumerationType, T>& EnumerationSet<TEnumerationType, T>::operator~()
+		/*inline*/ constexpr size_t EnumerationSet<TEnumerationType, T>::IsEmpty() const
 		{
-			myData = ~myData;
+			return myData.any();
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template <typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType, T> EnumerationSet<TEnumerationType, T>::Difference(const EnumerationSet<TEnumerationType, T>& aSet) const
+		{
+			return *this & (~aSet);
+		}
+
+		template <typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType, T> EnumerationSet<TEnumerationType, T>::Intersection(const EnumerationSet<TEnumerationType, T>& aSet) const
+		{
+			return *this & aSet;
+		}
+
+		template <typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType, T> EnumerationSet<TEnumerationType, T>::Union(const EnumerationSet<TEnumerationType, T>& aSet) const
+		{
+			return *this | aSet;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+#if 0
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType, T>& SetToDifference(const EnumerationSet<TEnumerationType, T>& aSet)
+		{
+			*this = Difference(aSet);
+			return *this;
+		}
+		
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType, T>& SetToIntersection(const EnumerationSet<TEnumerationType, T>& aSet)
+		{
+			*this = Intersection(aSet);
+			return *this;
+		}
+		
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType, T>& SetToUnion(const EnumerationSet<TEnumerationType, T>& aSet)
+		{
+			*this = Union(aSet);
+			return *this;
+		}
+#endif
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template<typename TEnumerationType, class T>
+		constexpr EnumerationSet<TEnumerationType, T> Difference(const EnumerationSet<TEnumerationType, T>& aLeft, const EnumerationSet<TEnumerationType, T>& aRight)
+		{
+			EnumerationSet<TEnumerationType, T> result(aLeft);
+			result.SetToDifference(aRight);
+
+			return result;
+		}
+
+		template<typename TEnumerationType, class T>
+		constexpr EnumerationSet<TEnumerationType, T> Intersection(const EnumerationSet<TEnumerationType, T>& aLeft, const EnumerationSet<TEnumerationType, T>& aRight)
+		{
+			EnumerationSet<TEnumerationType, T> result(aLeft);
+			result.SetToIntersection(aRight);
+
+			return result;
+		}
+
+		template<typename TEnumerationType, class T>
+		constexpr EnumerationSet<TEnumerationType, T> Union(const EnumerationSet<TEnumerationType, T>& aLeft, const EnumerationSet<TEnumerationType, T>& aRight)
+		{
+			EnumerationSet<TEnumerationType, T> result(aLeft);
+			result.SetToUnion(aRight);
+
+			return result;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType, T> EnumerationSet<TEnumerationType, T>::operator~() const
+		{
+			EnumerationSet<TEnumerationType, T> result(*this);
+			result.myData = ~myData;
+
+			return result;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template<typename TEnumerationType, class T>
+		/*inline*/ constexpr EnumerationSet<TEnumerationType, T>& EnumerationSet<TEnumerationType, T>::operator^=(const EnumerationSet<TEnumerationType, T>& aRight)
+		{
+			myData ^= aRight.myData;
 			return *this;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template<typename TEnumerationType, class T>
-		/*inline*/ constexpr EnumerationSet<TEnumerationType, T>& EnumerationSet<TEnumerationType, T>::operator^=(const EnumerationSet<TEnumerationType, T>& aRhs)
+		/*inline*/ constexpr EnumerationSet<TEnumerationType, T>& EnumerationSet<TEnumerationType, T>::operator|=(const EnumerationSet<TEnumerationType, T>& aRight)
 		{
-			myData ^= aRHS.myData;
+			myData |= aRight.myData;
 			return *this;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template<typename TEnumerationType, class T>
-		/*inline*/ constexpr EnumerationSet<TEnumerationType, T>& EnumerationSet<TEnumerationType, T>::operator|=(const EnumerationSet<TEnumerationType, T>& aRhs)
+		/*inline*/ constexpr EnumerationSet<TEnumerationType, T>& EnumerationSet<TEnumerationType, T>::operator&=(const EnumerationSet<TEnumerationType, T>& aRight)
 		{
-			myData |= aRHS.myData;
-			return *this;
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		template<typename TEnumerationType, class T>
-		/*inline*/ constexpr EnumerationSet<TEnumerationType, T>& EnumerationSet<TEnumerationType, T>::operator&=(const EnumerationSet<TEnumerationType, T>& aRhs)
-		{
-			myData &= aRHS.myData;
+			myData &= aRight.myData;
 			return *this;
 		}
 
@@ -456,26 +578,26 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template<typename TEnumerationType, class T>
-		/*inline*/ constexpr bool EnumerationSet<TEnumerationType, T>::operator==(const EnumerationSet<TEnumerationType, T>& aRHS) const
+		/*inline*/ constexpr bool EnumerationSet<TEnumerationType, T>::operator==(const EnumerationSet<TEnumerationType, T>& aRight) const
 		{
-			return myData == aRHS.myData;
+			return myData == aRight.myData;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template<typename TEnumerationType, class T>
-		/*inline*/ constexpr bool EnumerationSet<TEnumerationType, T>::operator!=(const EnumerationSet<TEnumerationType, T>& aRHS) const
+		/*inline*/ constexpr bool EnumerationSet<TEnumerationType, T>::operator!=(const EnumerationSet<TEnumerationType, T>& aRight) const
 		{
-			return myData != aRHS.myData;
+			return myData != aRight.myData;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template <typename TEnumerationType, class T>
-		/*inline*/ EnumerationSet<TEnumerationType> operator^(const EnumerationSet<TEnumerationType, T>& aLHS, const EnumerationSet<TEnumerationType, T>& aRHS)
+		/*inline*/ EnumerationSet<TEnumerationType> operator^(const EnumerationSet<TEnumerationType, T>& aLeft, const EnumerationSet<TEnumerationType, T>& aRight)
 		{
-			EnumerationSet<TEnumerationType> result = aLHS;
-			result ^= aRHS;
+			EnumerationSet<TEnumerationType> result = aLeft;
+			result ^= aRight;
 
 			return result;
 		}
@@ -483,10 +605,10 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template <typename TEnumerationType, class T>
-		/*inline*/ EnumerationSet<TEnumerationType, T> operator&(const EnumerationSet<TEnumerationType, T>& aLHS, const EnumerationSet<TEnumerationType, T>& aRHS)
+		/*inline*/ EnumerationSet<TEnumerationType, T> operator&(const EnumerationSet<TEnumerationType, T>& aLeft, const EnumerationSet<TEnumerationType, T>& aRight)
 		{
-			EnumerationSet<TEnumerationType> result = aLHS;
-			result &= aRHS;
+			EnumerationSet<TEnumerationType> result = aLeft;
+			result &= aRight;
 
 			return result;
 		}
@@ -494,10 +616,10 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template <typename TEnumerationType, class T>
-		/*inline*/ EnumerationSet<TEnumerationType, T> operator|(const EnumerationSet<TEnumerationType, T>& aLHS, const EnumerationSet<TEnumerationType, T>& aRHS)
+		/*inline*/ EnumerationSet<TEnumerationType, T> operator|(const EnumerationSet<TEnumerationType, T>& aLeft, const EnumerationSet<TEnumerationType, T>& aRight)
 		{
-			EnumerationSet<TEnumerationType> result = aLHS;
-			result |= aRHS;
+			EnumerationSet<TEnumerationType> result = aLeft;
+			result |= aRight;
 
 			return result;
 		}
@@ -564,6 +686,8 @@ namespace Alba
 		/*inline*/ constexpr void typename EnumerationSet<TEnumerationType, T>::ConstIterator::Advance()
 		{
 			++myIndex;
+
+			// Keep advancing until we find a valid entry, or we hit the end
 			while (myIndex < get_enum_entry_count_v<TEnumerationType>)
 			{
 				if (myCollection->Contains(get_all_enum_values_v<TEnumerationType>[myIndex]))
@@ -578,49 +702,49 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template<typename TEnumerationType, class T>
-		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator<(const ConstIterator & aRhs) const
+		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator<(const ConstIterator & aRight) const
 		{
-			return myIndex < aRhs.myIndex;
+			return myIndex < aRight.myIndex;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template<typename TEnumerationType, class T>
-		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator>(const ConstIterator & aRhs) const
+		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator>(const ConstIterator & aRight) const
 		{
-			return myIndex > aRhs.myIndex;
+			return myIndex > aRight.myIndex;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template<typename TEnumerationType, class T>
-		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator<=(const ConstIterator & aRhs) const
+		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator<=(const ConstIterator & aRight) const
 		{
-			return myIndex <= aRhs.myIndex;
+			return myIndex <= aRight.myIndex;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template<typename TEnumerationType, class T>
-		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator>=(const ConstIterator & aRhs) const
+		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator>=(const ConstIterator & aRight) const
 		{
-			return myIndex >= aRhs.myIndex;
+			return myIndex >= aRight.myIndex;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template<typename TEnumerationType, class T>
-		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator==(const ConstIterator & aRhs) const
+		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator==(const ConstIterator & aRight) const
 		{
-			return myIndex == aRhs.myIndex;
+			return myIndex == aRight.myIndex;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template<typename TEnumerationType, class T>
-		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator!=(const ConstIterator & aRhs) const
+		/*inline*/ bool EnumerationSet<TEnumerationType, T>::ConstIterator::operator!=(const ConstIterator & aRight) const
 		{
-			return myIndex != aRhs.myIndex;
+			return myIndex != aRight.myIndex;
 		}
 
 		//-----------------------------------------------------------------------------------------
