@@ -55,7 +55,6 @@ namespace Alba
 			using namespace Alba::StringHashLiterals;
 
 			Alba::Core::ModuleRepository& moduleRepository = Alba::Core::ModuleRepository::Get();
-
 			const Alba::Core::CommandLineParameters& commandLine = Alba::Core::CommandLineModule::Get().GetParams();
 
 			//----------------------------------------------------------------------
@@ -73,7 +72,7 @@ namespace Alba
 			}
 
 			//----------------------------------------------------------------------
-			// Initialise application
+			// Create the main application window
 			//----------------------------------------------------------------------
 			{
 				myInitParams = std::move(anInitParams);
@@ -81,7 +80,7 @@ namespace Alba
 			}
 
 			//----------------------------------------------------------------------
-			// Initialise graphics
+			// Initialise graphics system
 			//----------------------------------------------------------------------
 			{
 				Alba::Graphics::InitParams graphicsInitParams;
@@ -95,6 +94,8 @@ namespace Alba
 				
 				graphicsInitParams.myWindowWidth = anInitParams.myWindowInitParams.mySizeX;
 				graphicsInitParams.myWindowHeight = anInitParams.myWindowInitParams.mySizeY;
+
+				// Init platform-specific initialisation parameters (e.g. window handle on Windows)
 				InitGraphicsPlatformData(graphicsInitParams.myPlatformData);
 
 				if ( !moduleRepository.LoadModule("Alba.Graphics"_nocasehash32, std::move(graphicsInitParams)) )
@@ -111,7 +112,7 @@ namespace Alba
 					// Load ImGui module
 					moduleRepository.LoadModule("Alba.Graphics.ImGui"_nocasehash32);
 
-					// Load console module
+					// Load console front-end (graphics-side) module
 					moduleRepository.LoadModule("Alba.Graphics.Console"_nocasehash32);
 				}			
 			}
