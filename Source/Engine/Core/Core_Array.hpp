@@ -9,7 +9,7 @@
 
 #include "Core.hpp"
 #include "Core_TypeTraits.hpp"
-#include <EASTL/array.h>
+#include <array>
 
 namespace Alba
 {
@@ -19,7 +19,7 @@ namespace Alba
 		// Name	:	Core::Array<T, N>
 		//------------------------------------------------------------------------------------------------
 		template <typename TValueType, size_t TSize>
-		using Array = eastl::array<TValueType, TSize>;
+		using Array = std::array<TValueType, TSize>;
 
 		//------------------------------------------------------------------------------------------------
 		// Name	:	MakeArray

@@ -34,6 +34,8 @@ namespace Alba
 	using std::is_move_constructible_v;;
 	using std::is_nothrow_invocable;
 	using std::is_nothrow_assignable_v;
+	using std::extent;
+	using std::extent_v;
 
 	//-----------------------------------------------------------------------------------------
 	// Name	:	is_string

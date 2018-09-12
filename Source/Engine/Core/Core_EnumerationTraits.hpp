@@ -25,7 +25,7 @@ namespace Alba
 	};
 
 	template <typename TEnumerationType>
-	constexpr inline size_t get_all_enum_values_v = get_all_enum_values<TEnumerationType>;
+	constexpr inline auto get_all_enum_values_v = get_all_enum_values<TEnumerationType>::value;
 
 	//-----------------------------------------------------------------------------------------
 	// Name	:	get_enum_entry_count<T>
@@ -34,11 +34,11 @@ namespace Alba
 	template <typename TEnumerationType, class=enable_if_t<is_enum_v<TEnumerationType>> >
 	struct get_enum_entry_count
 	{
-		static inline constexpr size_t value = std::tuple_size_v<get_all_enum_values_v<TEnumerationType> >.size();
+		static inline constexpr size_t value = get_all_enum_values_v<TEnumerationType>.size();
 	};
 
 	template <typename TEnumerationType>
-	constexpr inline size_t get_enum_entry_count_v = get_enum_entry_count<TEnumerationType>::value;
+	constexpr inline auto get_enum_entry_count_v = get_enum_entry_count<TEnumerationType>::value;
 
 	//-----------------------------------------------------------------------------------------
 	// Name	:	is_enum_contiguous
@@ -51,10 +51,10 @@ namespace Alba
 
 		static constexpr bool is_contiguous()
 		{
-			TEnumerationType previous = get_all_enum_values_v[0];
+			TEnumerationType previous = get_all_enum_values_v<TEnumerationType>[0];
 			for (size_t index = 1; index < get_enum_entry_count_v<TEnumerationType>; ++index)
 			{
-				const TEnumerationType current = get_all_enum_values_v[1];
+				const TEnumerationType current = get_all_enum_values_v<TEnumerationType>[1];
 				if (static_cast<size_t>(current) - static_cast<size_t>(previous) != 1)
 				{
 					return false;
