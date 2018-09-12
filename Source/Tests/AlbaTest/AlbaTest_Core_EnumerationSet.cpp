@@ -93,7 +93,7 @@ namespace Alba
 			}
 
 			//----------------------------------------------------------------------
-			// Test iterators / Count / Empty
+			// Test iterators / Count / Empty / Insert / Remove / Clear / Invert
 			//----------------------------------------------------------------------
 			{
 				TestEnumerationSet all2;
@@ -112,6 +112,16 @@ namespace Alba
 					all2.Remove(entry);
 				}
 				ALBA_TEST(all2.IsEmpty());
+
+				all2 = TestEnumerationSet::All;
+				ALBA_TEST(all2 == TestEnumerationSet::All);
+
+				ALBA_TEST(!all2.IsEmpty());
+				all2.Clear();
+				ALBA_TEST(all2.IsEmpty());
+
+				all2.Invert();
+				ALBA_TEST(all2 == TestEnumerationSet::All);
 			}
 
 			//----------------------------------------------------------------------
