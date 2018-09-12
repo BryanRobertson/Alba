@@ -163,6 +163,8 @@ namespace Alba
 				inline constexpr void	Remove(TEnumerationType aValue);
 				inline constexpr void	Clear();
 
+				inline constexpr void	Invert();
+
 				inline constexpr bool	Contains(TEnumerationType aValue) const;
 				inline constexpr size_t Count() const;
 
@@ -416,6 +418,14 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
+		template <typename TEnumerationType, class T>
+		/*inline*/ constexpr void EnumerationSet<TEnumerationType, T>::Invert()
+		{
+			myData = ~myData;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		template<typename TEnumerationType, class T>
 		/*inline*/ constexpr bool EnumerationSet<TEnumerationType, T>::Contains(TEnumerationType aValue) const
 		{
@@ -452,7 +462,7 @@ namespace Alba
 		template<typename TEnumerationType, class T>
 		/*inline*/ constexpr size_t EnumerationSet<TEnumerationType, T>::IsEmpty() const
 		{
-			return myData.any();
+			return !myData.any();
 		}
 
 		//-----------------------------------------------------------------------------------------
