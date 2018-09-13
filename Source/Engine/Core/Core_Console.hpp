@@ -52,44 +52,44 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				// Register/Unregister commands
 				//---------------------------------------------------------------------------------
+
+				// Functor/Lambda
 				template <typename TCommand, typename ...TArgs, class=enable_if<is_invocable_v<CommandReturnCode, TCommand, TArgs...> > >
 				void RegisterCommand(NoCaseStringHash32 aCommandName, TCommand&& aCommand)
 				{
-					const auto& vTable = ConsoleInternal::FunctorVTableLocator<TCommand>::GetVTable();
+					const auto& vTable = ConsoleInternal::MemberFunctionVTableLocator<TCommand>::GetVTable();
 
 					auto itr = myCommands.emplace(aCommandName, CommandStorage());
 					CommandStorage& storage = itr.first->second;
 
 					storage.myVTable = &vTable;
 					storage.myVTable->Store(storage, (void*)&aCommand);
-
-					// TODO: Remove... this is just a test to make sure this works
-					std::tuple<int, float> test(32, 3.14f);
-					uint32 result=storage.myVTable->Invoke(storage, &test);
-					++result;
-					//
 				}
 
+				// Member function pointer
 				template <typename TClassType, typename ...TArgs>
 				void RegisterCommand(NoCaseStringHash32 aCommandName, TClassType* anInstance, CommandReturnCode (TClassType::*aCommand)(TArgs...) )
 				{
-					(void)aCommandName;
-					(void)anInstance;
-					(void)aCommand;
+					const auto& vTable = ConsoleInternal::MemberFunctionVTableLocator<TCommand>::GetVTable(aCommand);
 
-					return;
+					auto itr = myCommands.emplace(aCommandName, CommandStorage());
+					CommandStorage& storage = itr.first->second;
+
+					storage.myVTable = &vTable;
+					storage.myVTable->Store(storage, (void*)&aCommand);
 				}
 
+				// Free function
 				template <typename ...TArgs>
 				void RegisterCommand(NoCaseStringHash32 aCommandName, CommandReturnCode(*aCommand)(TArgs...))
 				{
-					typedef ConsoleInternal::CommandVTableDerived<decltype(aCommand)> VTable;
+					typedef ConsoleInternal::FreeFunctionVTableLocator<decltype(aCommand)> VTable;
 					static VTable ourVTable;
 				
 					CommandStorage& storage = myCommands.emplace(aCommandName, CommandStorage())->first.second;
 
 					storage.myVTable = &ourVTable;
-					storage.myVTable->Store(aCommand);
+					storage.myVTable->Store(storage, (void*)aCommand);
 				}
 
 				void UnregisterCommand(NoCaseStringHash32 aCommandName);

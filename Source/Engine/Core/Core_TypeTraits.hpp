@@ -28,6 +28,8 @@ namespace Alba
 	using std::is_base_of_v;
 	using std::is_invocable;
 	using std::is_invocable_v;
+	using std::is_member_function_pointer;
+	using std::is_member_function_pointer_v;
 	using std::is_move_assignable;
 	using std::is_move_assignable_v;
 	using std::is_move_constructible;

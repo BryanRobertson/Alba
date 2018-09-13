@@ -9,6 +9,9 @@
     <ClCompile Include="AlbaTest_Core_EnumerationSet.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="AlbaTest_Core_ConsoleCommandParser.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlbaTest_Precompile.hpp" />
@@ -17,6 +20,9 @@
     </ClInclude>
     <ClInclude Include="AlbaTest.hpp" />
     <ClInclude Include="AlbaTest_Core_EnumerationSet.hpp">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="AlbaTest_Core_ConsoleCommandParser.hpp">
       <Filter>Tests</Filter>
     </ClInclude>
   </ItemGroup>

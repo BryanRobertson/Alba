@@ -119,78 +119,59 @@ namespace Alba
 			// For any functor (object with one and exactly one operator() method)
 			// Get a VTable for that functor type
 			//-------------------------------------------------------------------------------------
-			template <typename TFunctor>
-			struct FunctorVTableLocator
+			template <typename TCallable>
+			struct MemberFunctionVTableLocator
 			{
-				// We pass operator() into this, so that we can find out what arguments it takes
-				// Not sure if there's a better way to do this, but it seems to work
 				template <typename ...TArgs>
-				static const auto ConstructVTable(uint32(TFunctor::*)(TArgs...))
+				static const auto ConstructVTable(uint32(TCallable::*)(TArgs...))
 				{
-					return CommandVTableDerived<TFunctor, TArgs...>();
+					return CommandVTableDerived<TClass, TArgs...>();
 				}
 
 				template <typename ...TArgs>
-				static const auto ConstructVTable(uint32(TFunctor::*)(TArgs...) const)
+				static const auto ConstructVTable(uint32(TCallable::*)(TArgs...) const)
 				{
-					return CommandVTableDerived<const TFunctor, TArgs...>();
+					return CommandVTableDerived<const TCallable, TArgs...>();
 				}
 
+				// Functor version - use operator()
+				// Assumes there's only one ::operator()
 				template <typename ...TArgs>
 				static const auto& GetVTable()
 				{
-					static auto ourVTable = ConstructVTable(&TFunctor::operator());
+					static auto ourVTable = ConstructVTable(&TCallable::operator());
+					return ourVTable;
+				}
+
+				template <typename ...TArgs>
+				static const auto& GetVTable(uint32(TCallable::*aMemberFunction)(TArgs...))
+				{
+					static auto ourVTable = ConstructVTable(aMemberFunction);
 					return ourVTable;
 				}
 			};
 
-#if 0
-			template 
-			<
-				typename TCommand, 
-				typename ...TArgs, 
-				class = enable_if<is_invocable_v<CommandReturnCode, TCommand, TArgs...>> 
-			>
-			void RegisterCommand
-			(
-				NoCaseStringHash32 aCommandName, 
-				const TCommand& aCommand
-			)
+			//-------------------------------------------------------------------------------------
+			// For any Free function type
+			// Get a VTable for that functor type
+			//-------------------------------------------------------------------------------------
+			struct FreeFunctionVTableLocator
 			{
-				(void)aCommandName;
-				(void)aCommand;
+				// We pass operator() into this, so that we can find out what arguments it takes
+				// Not sure if there's a better way to do this, but it seems to work
+				template <typename ...TArgs>
+				static const auto ConstructVTable(uint32(*)(TArgs...))
+				{
+					return CommandVTableDerived<uint32(*)(TArgs...), TArgs...>();
+				}
 
-				return;
-			}
-
-			template 
-			<
-				typename TClassType, 
-				typename ...TArgs
-			>
-			void RegisterCommand
-			(
-				NoCaseStringHash32 aCommandName, 
-				TClassType* anInstance, 
-				CommandReturnCode(TClassType::*aCommand)(TArgs...)
-			)
-			{
-				(void)aCommandName;
-				(void)anInstance;
-				(void)aCommand;
-
-				return;
-			}
-
-			template <typename ...TArgs>
-			void RegisterCommand(NoCaseStringHash32 aCommandName, CommandReturnCode(*aCommand)(TArgs...))
-			{
-				(void)aCommandName;
-				(void)aCommand;
-
-				return;
-			}
-#endif
+				template <typename ...TArgs>
+				static const auto& GetVTable(uint32(*aFunction)(TArgs...))
+				{
+					static auto ourVTable = ConstructVTable(aFunction);
+					return ourVTable;
+				}
+			};
 		}
 	}
 }
