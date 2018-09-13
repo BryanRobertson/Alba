@@ -65,7 +65,7 @@ namespace Alba
 			//----------------------------------------------------------------------
 			{
 				const TestEnumerationSet appleSet = { TestEnumeration::Apple };
-				const TestEnumerationSet appleSet2 = TestEnumeration::Apple;
+				const TestEnumerationSet appleSet2 = { TestEnumeration::Apple };
 				const TestEnumerationSet bananaSet = { TestEnumeration::Banana };
 
 				ALBA_TEST(emptySet == emptySet);
@@ -136,8 +136,8 @@ namespace Alba
 				const TestEnumerationSet f = { TestEnumeration::Pineapple };
 
 				ALBA_TEST(Intersection(a, c) == d);
-				ALBA_TEST(d.Union(e).Union(f) == c);
-				ALBA_TEST(c.Difference(d).Difference(e) == f);
+				ALBA_TEST(const auto value = Union(d, e, f); value == c);
+				ALBA_TEST(Difference(c, d, e) == f);
 
 				const TestEnumerationSet all =
 				{

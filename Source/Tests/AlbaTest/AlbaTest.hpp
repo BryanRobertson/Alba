@@ -16,7 +16,7 @@ namespace Alba
 				while(0)
 
 		#define ALBA_TEST(aCondition)											\
-				if ((aCondition))												\
+				if (aCondition)													\
 				{																\
 					ALBA_LOG_INFO(AlbaTest, "Test passed: %s", #aCondition);	\
 				}																\
