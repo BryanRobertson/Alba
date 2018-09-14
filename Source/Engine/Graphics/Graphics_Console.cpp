@@ -236,7 +236,7 @@ namespace Alba
 			if (consoleModule.IsLoaded())
 			{
 				Core::Console& consoleBackend = consoleModule.GetConsole();
-				consoleBackend.Print(Alba::Core::ConsoleMessageType::Info, aCommandLine);
+				consoleBackend.Execute(aCommandLine);
 			}
 
 			myHistory.push_back(ConsoleString(aCommandLine.begin(), aCommandLine.end()));

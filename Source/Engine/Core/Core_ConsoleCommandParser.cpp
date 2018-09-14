@@ -26,7 +26,7 @@ namespace Alba
 				return std::isalnum(anInput) || anInput == '.' || anInput == '_';
 			};
 
-			while (match(commandName.Peek()))
+			while (!commandName.IsAtEnd() && match(commandName.Peek()))
 			{
 				commandName.Read();
 			}

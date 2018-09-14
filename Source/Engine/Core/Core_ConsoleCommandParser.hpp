@@ -53,7 +53,7 @@ namespace Alba
 						++myEndIndex;
 					}
 
-					StringView GetToken()
+					StringView GetToken() const
 					{
 						return myInputString.substr(myStartIndex, myEndIndex - myStartIndex);
 					}

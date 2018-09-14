@@ -55,44 +55,41 @@ namespace Alba
 
 				// Functor/Lambda
 				template <typename TCommand, typename ...TArgs, class=enable_if<is_invocable_v<CommandReturnCode, TCommand, TArgs...> > >
-				void RegisterCommand(NoCaseStringHash32 aCommandName, TCommand&& aCommand)
+				void RegisterCommand(StringView aCommandName, TCommand&& aCommand)
 				{
-					const auto& vTable = ConsoleInternal::MemberFunctionVTableLocator<TCommand>::GetVTable();
-
-					auto itr = myCommands.emplace(aCommandName, CommandStorage());
-					CommandStorage& storage = itr.first->second;
-
-					storage.myVTable = &vTable;
-					storage.myVTable->Store(storage, (void*)&aCommand);
+					const auto& ourVTable = ConsoleInternal::MemberFunctionVTableLocator<TCommand>::GetVTable();
+					
+					if (CommandStorage* storage = InsertCommand(aCommandName))
+					{
+						storage->myVTable = &ourVTable;
+						storage->myVTable->Store(*storage, (void*)&aCommand);
+					}
 				}
 
 				// Member function pointer
 				template <typename TClassType, typename ...TArgs>
-				void RegisterCommand(NoCaseStringHash32 aCommandName, TClassType* anInstance, CommandReturnCode (TClassType::*aCommand)(TArgs...) )
+				void RegisterCommand(StringView aCommandName, TClassType* anInstance, CommandReturnCode (TClassType::*aCommand)(TArgs...) )
 				{
-					const auto& vTable = ConsoleInternal::MemberFunctionVTableLocator<TCommand>::GetVTable(aCommand);
-
-					auto itr = myCommands.emplace(aCommandName, CommandStorage());
-					CommandStorage& storage = itr.first->second;
-
-					storage.myVTable = &vTable;
-					storage.myVTable->Store(storage, (void*)&aCommand);
+					// Just use std::bind and call the 
+					RegisterCommand(std::bind(anInstance, aCommand));
 				}
 
 				// Free function
 				template <typename ...TArgs>
-				void RegisterCommand(NoCaseStringHash32 aCommandName, CommandReturnCode(*aCommand)(TArgs...))
+				void RegisterCommand(StringView aCommandName, CommandReturnCode(*aCommand)(TArgs...))
 				{
-					typedef ConsoleInternal::FreeFunctionVTableLocator<decltype(aCommand)> VTable;
-					static VTable ourVTable;
-				
-					CommandStorage& storage = myCommands.emplace(aCommandName, CommandStorage())->first.second;
-
-					storage.myVTable = &ourVTable;
-					storage.myVTable->Store(storage, (void*)aCommand);
+					typedef CommandReturnCode(*FunctionType)(TArgs...);
+					const auto& ourVTable = ConsoleInternal::FreeFunctionVTableLocator<FunctionType>(aCommand);
+						
+					if (CommandStorage* storage = InsertCommand(aCommandName))
+					{
+						storage->myVTable = &ourVTable;
+						storage->myVTable->Store(*storage, (void*)aCommand);
+					}
 				}
 
-				void UnregisterCommand(NoCaseStringHash32 aCommandName);
+				inline void		UnregisterCommand(StringView aCommandName);
+				inline void		UnregisterCommand(NoCaseStringHash32 aCommandNameId);
 
 				//---------------------------------------------------------------------------------
 				// Execute command
@@ -119,12 +116,17 @@ namespace Alba
 				//=================================================================================
 				// Private Methods
 				//=================================================================================
+				CommandStorage*	InsertCommand(StringView aCommandName);
+
+				void			RegisterInternalCommands();
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
 				VectorMap<PrintCallbackId, PrintCallback>		myPrintCallbacks;
+
 				VectorMap<NoCaseStringHash32, CommandStorage>	myCommands;
+				VectorMap<NoCaseStringHash32, String>			myCommandNames;
 		};
 
 		//-----------------------------------------------------------------------------------------
@@ -134,6 +136,22 @@ namespace Alba
 		{
 			const auto outputStr = Core::FormatString<256>(aFormat.data(), std::forward<TArgs>(someArgs)...);
 			Print(aMessageType, StringView(outputStr.c_str()));
+		}
+
+		//-----------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------
+		void Console::UnregisterCommand(StringView aCommandName)
+		{
+			const Core::NoCaseStringHash32 commandNameId{ aCommandName };
+			UnregisterCommand(commandNameId);
+		}
+
+		//-----------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------
+		void Console::UnregisterCommand(NoCaseStringHash32 aCommandNameId)
+		{
+			myCommands.erase(aCommandNameId);
+			myCommandNames.erase(aCommandNameId);
 		}
 	}
 }
