@@ -21,7 +21,7 @@ namespace Alba
 				//=================================================================================
 				struct ParseState
 				{
-					ParseState(StringView anInputString)
+					explicit ParseState(StringView anInputString)
 						: myInputString(anInputString)
 					{
 
@@ -58,6 +58,11 @@ namespace Alba
 						return myInputString.substr(myStartIndex, myEndIndex - myStartIndex);
 					}
 
+					StringView GetRemainingInput() const
+					{
+						return myInputString.substr(myEndIndex, myInputString.length() - myEndIndex);
+					}
+
 					void StartNextToken()
 					{
 						myStartIndex = myEndIndex;
@@ -74,6 +79,17 @@ namespace Alba
 				//=================================================================================
 				static std::tuple<bool, ParseState> ParseCommandName(ParseState anInputState);
 				static std::tuple<bool, ParseState> SkipWhitespace(ParseState anInputState);
+
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
+				template <typename... TArgs>
+				static bool ParseArguments(ParseState anInputState, std::tuple<TArgs...>& someArgumentsOut)
+				{
+					(void)anInputState;
+					(void)someArgumentsOut;
+
+					return false;
+				}
 		};
 	}
 }

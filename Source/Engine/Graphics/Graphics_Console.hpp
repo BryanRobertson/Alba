@@ -7,6 +7,8 @@
 
 #include "Graphics_API.hpp"
 
+struct ImGuiTextEditCallbackData;
+
 namespace Alba
 {
 	namespace Graphics
@@ -30,11 +32,13 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				void		Render();
+				void			Render();
 				
-				void		Show();
-				void		Hide();
-				void		ToggleVisibility();
+				void			Show();
+				void			Hide();
+				void			ToggleVisibility();
+
+				Core::Console&	GetBackEnd();
 
 			private:
 
@@ -43,6 +47,8 @@ namespace Alba
 				//=================================================================================
 				void		ExecCommand(Core::StringView aCommandLine);
 				void		Print(Alba::Core::ConsoleMessageType aMessageType, Alba::Core::StringView aMessage);
+
+				static int	TextEditCallback(ImGuiTextEditCallbackData* aCallbackData);
 
 				//=================================================================================
 				// Private Types
@@ -53,7 +59,6 @@ namespace Alba
 
 				typedef Core::FixedString<ourConsoleStringSize>						ConsoleString;
 				typedef Core::FixedVector<char, ourConsoleStringSize>				ConsoleInputBuffer;
-
 
 				typedef Core::FixedRingBuffer<ConsoleString, ourMaxConsoleItems>	ConsoleItems;
 				typedef Core::FixedRingBuffer<Math::Vector4f, ourMaxConsoleItems>	ConsoleItemColours;

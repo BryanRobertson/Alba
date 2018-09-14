@@ -63,9 +63,6 @@
     <ClCompile Include="Core_ConsoleModule.cpp">
       <Filter>Console</Filter>
     </ClCompile>
-    <ClCompile Include="Core_ConsoleBasicCommands.cpp">
-      <Filter>Console</Filter>
-    </ClCompile>
     <ClCompile Include="Core_ConsoleCommandParser.cpp">
       <Filter>Console</Filter>
     </ClCompile>
@@ -278,9 +275,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Core_ConsoleModule.hpp">
-      <Filter>Console</Filter>
-    </ClInclude>
-    <ClInclude Include="Core_ConsoleBasicCommands.hpp">
       <Filter>Console</Filter>
     </ClInclude>
     <ClInclude Include="Core_EnumerationSet.hpp">

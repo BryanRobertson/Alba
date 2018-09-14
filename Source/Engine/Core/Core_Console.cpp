@@ -22,30 +22,6 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------
-		void Console::RegisterInternalCommands()
-		{
-			using namespace Alba::StringViewLiterals;
-
-			//-----------------------------------------------------------------
-			// Name	:	cmdlist
-			// Desc :	List all registered commands
-			//-----------------------------------------------------------------
-			RegisterCommand("cmdlist", [this]() -> CommandReturnCode
-			{
-				Print(ConsoleMessageType::Info, "Command List:"sv);
-				Print(ConsoleMessageType::Info, "-------------"sv);
-
-				for (auto& command : myCommandNames)
-				{
-					Print(ConsoleMessageType::Info, "    %s"sv, command.second.data());
-				}
-
-				return 0;
-			});
-		}
-
-		//-----------------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------------
 		void Console::Execute(StringView aCommandString)
 		{
 			Print(ConsoleMessageType::Info, aCommandString);
@@ -67,9 +43,19 @@ namespace Alba
 			{
 				Print(ConsoleMessageType::Error, "Unrecognised Command: \"%s\"", commandName.data());
 			}
+
+			// Call the command
+			const StringView argumentString = parseState.GetRemainingInput();
+			const auto result = itr->second.myVTable->Invoke(itr->second, argumentString);
+
+			// Print error message if the command failed
+			if (result != 0)
+			{
+				Print(ConsoleMessageType::Error, "Command \"%s\" returned %u", commandName.data(), result);
+			}
 			else
 			{
-				Print(ConsoleMessageType::Info, "Command - \"%s\"", aCommandString.data());
+				Print(ConsoleMessageType::Info, "Command \"%s\" returned %u", commandName.data(), 0);
 			}
 		}
 
@@ -120,6 +106,58 @@ namespace Alba
 		void Console::UnregisterPrintCallback(Console::PrintCallbackId anId)
 		{
 			myPrintCallbacks.erase(anId);
+		}
+
+		//-----------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------
+		void Console::RegisterInternalCommands()
+		{
+			using namespace Alba::StringViewLiterals;
+
+			// Register commands that come with the console by default
+
+			//-----------------------------------------------------------------
+			// Name	:	cmdlist
+			// Desc :	List all registered commands
+			//-----------------------------------------------------------------
+			RegisterCommand("cmdlist", [this]() -> CommandReturnCode
+			{
+				PrintInfo(""sv);
+				PrintInfo("-------------"sv);
+				PrintInfo("Command List:"sv);
+				PrintInfo("-------------"sv);
+
+				for (auto& command : myCommandNames)
+				{
+					Print(ConsoleMessageType::Info, "    %s"sv, command.second.data());
+				}
+
+				return 0;
+			});
+
+			//-----------------------------------------------------------------
+			// Name :	help
+			// Desc :	Print help text to the console
+			//-----------------------------------------------------------------
+			RegisterCommand("help", [this]() -> CommandReturnCode
+			{
+				PrintInfo("-------------"sv);
+				PrintInfo("Help"sv);
+				PrintInfo("-------------"sv);
+
+				PrintInfo("Type cmdlist for a list of valid commands"sv);
+				PrintInfo(""sv);
+				PrintInfo("-------------"sv);
+				PrintInfo("Command List:"sv);
+				PrintInfo("-------------"sv);
+
+				for (auto& command : myCommandNames)
+				{
+					Print(ConsoleMessageType::Info, "    %s"sv, command.second.data());
+				}
+
+				return 0;
+			});
 		}
 	}
 }

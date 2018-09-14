@@ -100,11 +100,29 @@ namespace Alba
 				// Print
 				//---------------------------------------------------------------------------------
 				template <typename... TArgs>
+				inline void		PrintInfo(StringView aFormat, TArgs&&... someArgs)
+				{
+					Print(ConsoleMessageType::Info, aFormat, std::forward<TArgs>(someArgs)...);
+				}
+
+				template <typename... TArgs>
 				inline void		Print(ConsoleMessageType aMessageType, StringView aFormat, TArgs&&... someArgs);
 				void			Print(ConsoleMessageType aMessageType, StringView aStr);
 
 				PrintCallbackId RegisterPrintCallback(const PrintCallback& aCallback);
 				void		    UnregisterPrintCallback(PrintCallbackId anId);
+
+				//---------------------------------------------------------------------------------
+				// Registered command iterator
+				//---------------------------------------------------------------------------------
+				template <typename TIteratorFunc>
+				void ForEach_RegisteredCommandName(TIteratorFunc& anItrFunc)
+				{
+					for (const auto& itr : myCommandNames)
+					{
+						anItrFunc(StringView(itr.second));
+					}
+				}
 
 			private:
 

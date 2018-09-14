@@ -6,6 +6,7 @@
 #include "Core_StringHash.hpp"
 #include "Core_TypeTraits.hpp"
 #include "Core_Platform.hpp"
+#include "Core_ConsoleCommandParser.hpp"
 
 namespace Alba
 {
@@ -26,6 +27,14 @@ namespace Alba
 			//-------------------------------------------------------------------------------------
 			typedef uint32 CommandReturnCode;
 
+			namespace ErrorCodes
+			{
+				enum Code
+				{
+					ParseError = 1
+				};
+			}
+
 			//-------------------------------------------------------------------------------------
 			//-------------------------------------------------------------------------------------
 			struct CommandVTableBase
@@ -42,8 +51,8 @@ namespace Alba
 				// Destroy the stored command
 				void (*Destruct)(CommandStorage& aCommandStorage);
 
-				// Invoke the command
-				CommandReturnCode (*Invoke)(CommandStorage& aCommandStorage, void* anArgumentTuple);
+				// Invoke the command from a command string
+				CommandReturnCode (*Invoke)(CommandStorage& aCommandStorage, StringView aCommandStr);
 			};
 
 			//-------------------------------------------------------------------------------------
@@ -152,7 +161,7 @@ namespace Alba
 					ptr->~TCommandType();
 				}
 
-				static CommandReturnCode InvokeFunc(CommandStorage& aCommandStorage, void* anArgumentTuple)
+				static CommandReturnCode InvokeFunc(CommandStorage& aCommandStorage, StringView aCommandStr)
 				{
 					auto& command = GetCommandInstance(aCommandStorage);
 
@@ -161,16 +170,32 @@ namespace Alba
 					if constexpr (sizeof...(TArgs) > 0)
 					{
 						typedef std::tuple<TArgs...> ArgumentsTuple;
+						ArgumentsTuple args;
 
-						const auto& args = *reinterpret_cast<ArgumentsTuple*>(anArgumentTuple);
-						return std::apply(command, args);
+						// Attempt to parse arguments, and if successful call the command
+						if (ParseArguments(aCommandStr, args))
+						{
+							return std::apply(command, args);
+						}
+						else
+						{
+							return ErrorCodes::ParseError;
+						}						
 					}
 					// Otherwise just call the command, no arguments to pass in
 					else
 					{
-						(void*)anArgumentTuple;
+						(void)aCommandStr;
+
 						return command();
 					}
+				}
+
+				template <class=enable_if_t<sizeof...(TArgs) != 0> >
+				static bool ParseArguments(StringView aCommandStr, std::tuple<TArgs...>& someArgsOut)
+				{
+					const ConsoleCommandParser::ParseState parseState{ aCommandStr };
+					return ConsoleCommandParser::ParseArguments(parseState, someArgsOut);
 				}
 			};
 
