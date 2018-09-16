@@ -7,6 +7,7 @@
 #include "Math.hpp"
 
 #include <cctype>
+#include <tuple>
 
 namespace Alba
 {
@@ -292,8 +293,52 @@ namespace Alba
 				template <typename... TArgs>
 				static bool ParseArguments(ParseState anInputState, std::tuple<TArgs...>& someArgumentsOut)
 				{
-					(void)anInputState;
-					(void)someArgumentsOut;
+					return ParseArguments<TArgs..., 0>(anInputState, someArgumentsOut);
+				}
+
+			private:
+
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
+				template <size_t TIndex, typename... TArgs>
+				static bool ParseArguments(ParseState& aParseState, std::tuple<TArgs...>& someArgumentsOut)
+				{
+					ParseState parseState = aParseState;
+					const bool success = ParseArgument(parseState, std::get<TIndex>(someArgumentsOut));
+					
+					if constexpr (TIndex + 1 < sizeof...(TArgs))
+					{
+						return success && ParseArguments<TIndex+1, TArgs...>(parseState, someArgumentsOut);
+					}
+					else
+					{
+						return success;
+					}
+				}
+
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
+				template <typename TArgType>
+				static bool ParseArgument(ParseState& anInputState, TArgType&& anArgument)
+				{
+					auto [success, state] = SkipWhitespace(state, anInputState);
+
+					if constexpr (is_integral_v<TArgType>)
+					{
+						auto[success, state] = ParseInt(state, anArgument);
+						if (success)
+						{
+							anInputState = state;
+						}
+					}
+					else if constexpr (is_floating_point_v<TArgType>)
+					{
+						auto[success, state] = ParseFloat(state, anArgument);
+						if (success)
+						{
+							anInputState = state;
+						}
+					}
 
 					return false;
 				}
