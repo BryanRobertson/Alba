@@ -22,6 +22,8 @@ namespace Alba
 	using std::is_floating_point_v;
 	using std::is_same;
 	using std::is_same_v;
+	using std::is_signed;
+	using std::is_signed_v;
 	using std::common_type;
 	using std::common_type_t;
 	using std::is_base_of;

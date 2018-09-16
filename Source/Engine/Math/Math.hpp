@@ -13,12 +13,14 @@ namespace Alba
 		template <>
 		struct Constants<float>
 		{
-			static constexpr float Pi			= M_PI;
-			static constexpr float HalfPi		= M_PI_2;
-			static constexpr float QuarterPi	= M_PI_4;
-			static constexpr float TwoPi		= M_PI * 2.0f;
+			static constexpr float Pi			= 3.14159265358979323846f;
+			static constexpr float HalfPi		= 1.57079632679489661923f;
+			static constexpr float QuarterPi	= 0.785398163397448309616f;
+			static constexpr float TwoPi		= 3.14159265358979323846f * 2.0f;
+			static constexpr float OneOverPi	= 0.318309886183790671538f;
+			static constexpr float TwoOverPi	= 0.636619772367581343076f;
 
-			static constexpr float e			= M_E;
+			static constexpr float e			= 2.71828182845904523536f;
 
 			static constexpr float EpsilonE4	= 1E-4f;
 			static constexpr float EpsilonE5	= 1E-5f;
@@ -28,12 +30,14 @@ namespace Alba
 		template <>
 		struct Constants<double>
 		{
-			static constexpr double Pi			= M_PI;
-			static constexpr double HalfPi		= M_PI_2;
-			static constexpr double QuarterPi	= M_PI_4;
-			static constexpr double TwoPi		= M_PI * 2.0;
+			static constexpr double Pi			= 3.14159265358979323846;
+			static constexpr double HalfPi		= 1.57079632679489661923;
+			static constexpr double QuarterPi	= 0.785398163397448309616;
+			static constexpr double TwoPi		= 3.14159265358979323846 * 2.0;
+			static constexpr double OneOverPi	= 0.318309886183790671538;
+			static constexpr double TwoOverPi	= 0.636619772367581343076;
 
-			static constexpr double e			= M_E;
+			static constexpr double e			= 2.71828182845904523536;
 
 			static constexpr double EpsilonE4	= 1E-4;
 			static constexpr double EpsilonE5	= 1E-5;
@@ -46,6 +50,29 @@ namespace Alba
 		TInputValue Squared(const TInputValue& aValue)
 		{
 			return aValue * aValue;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		inline float Abs(float anInput)
+		{
+			return std::fabsf(anInput);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		inline double Abs(double anInput)
+		{
+			return std::fabs(anInput);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template <typename TInputValue>
+		inline constexpr bool IsNearlyEqual(const TInputValue& aValue1, const TInputValue& aValue2,
+			const TInputValue& anEpsilon = Constants<TInputValue>::EpsilonE5)
+		{
+			return Abs(aValue1 - aValue2) < anEpsilon;
 		}
 
 		//-----------------------------------------------------------------------------------------
