@@ -38,6 +38,8 @@ namespace Alba
 				void			Hide();
 				void			ToggleVisibility();
 
+				void			Clear();
+
 				Core::Console&	GetBackEnd();
 
 			private:
@@ -72,7 +74,8 @@ namespace Alba
 				ConsoleItemColours		myLineColours;
 				ConsoleHistory			myHistory;
 
-				bool					myIsConsoleVisible = true;
+				int						myHistoryIndex		= -1;
+				bool					myIsConsoleVisible	= true;
 		};
 	}
 }

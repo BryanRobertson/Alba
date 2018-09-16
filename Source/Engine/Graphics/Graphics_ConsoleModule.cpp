@@ -5,6 +5,7 @@
 
 #include "Core_ConsoleModule.hpp"
 #include "Core_Memory.hpp"
+#include "Core_StringView.hpp"
 
 namespace Alba
 {
@@ -16,6 +17,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		bool ConsoleModule::OnLoad(Core::AnyDictionary /*someParameters*/)
 		{
+			using namespace Alba::StringViewLiterals;
+
 			// Get console backend
 			Core::ConsoleModule& consoleModule = Core::ConsoleModule::Get();
 			if (!consoleModule.IsLoaded())
@@ -36,6 +39,13 @@ namespace Alba
 				{
 					myConsole->Print(aMessageType, aMessage);
 				});
+
+				// Register commands
+				consoleBackend.RegisterCommand("clear"sv, [this]() -> uint32
+				{
+					myConsole->Clear();
+					return 0;
+				});
 			}
 
 			return true;
@@ -45,12 +55,20 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void ConsoleModule::OnUnload()
 		{
+			using namespace Alba::StringViewLiterals;
+
 			// Get console backend
 			Core::ConsoleModule& consoleModule = Core::ConsoleModule::Get();
 			if (consoleModule.IsLoaded() && myPrintCallbackId.IsValid())
 			{
-				consoleModule.GetConsole().UnregisterPrintCallback(myPrintCallbackId);
+				Core::Console& consoleBackend = consoleModule.GetConsole();
+
+				// Unregister print callback
+				consoleBackend.UnregisterPrintCallback(myPrintCallbackId);
 				myPrintCallbackId = Core::Console::PrintCallbackId::InvalidId;
+
+				// Unregister console commands
+				consoleBackend.UnregisterCommand("clear"sv);
 			}
 
 			myConsole.reset();

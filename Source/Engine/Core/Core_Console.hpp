@@ -116,7 +116,7 @@ namespace Alba
 				// Registered command iterator
 				//---------------------------------------------------------------------------------
 				template <typename TIteratorFunc>
-				void ForEach_RegisteredCommandName(TIteratorFunc& anItrFunc)
+				void ForEach_RegisteredCommandName(TIteratorFunc&& anItrFunc)
 				{
 					for (const auto& itr : myCommandNames)
 					{

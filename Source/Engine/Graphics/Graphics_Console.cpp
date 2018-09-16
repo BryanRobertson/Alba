@@ -5,6 +5,7 @@
 
 #include "Core_ConsoleModule.hpp"
 #include "Core_Console.hpp"
+#include "Core_Vector.hpp"
 
 namespace Alba
 {
@@ -79,7 +80,7 @@ namespace Alba
 					{
 						if (ImGui::SmallButton("Clear"))
 						{
-							//ClearLog(); 
+							Clear(); 
 						}
 						ImGui::SameLine();
 					}
@@ -129,7 +130,7 @@ namespace Alba
 					{
 						if (ImGui::Selectable("Clear"))
 						{
-							//ClearLog();
+							Clear();
 						}
 
 						ImGui::EndPopup();
@@ -243,6 +244,14 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
+		void Console::Clear()
+		{
+			myLines.clear();
+			myLineColours.clear();
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		void Console::Print(Alba::Core::ConsoleMessageType aMessageType, Alba::Core::StringView aMessage)
 		{
 			#if defined(ALBA_IMGUI_ENABLED)
@@ -292,20 +301,17 @@ namespace Alba
 			Console* graphicsConsole = (Console*)data->UserData;
 			Core::Console& consoleBackEnd = graphicsConsole->GetBackEnd();
 
-			(void)consoleBackEnd;
+			using Core::ConsoleMessageType;
 
-#if 0
 			// Handle ImGui events
 			switch (data->EventFlag)
 			{
 				//----------------------------------------------------------------------------------
-				// Callback completion
+				// Completion
 				//----------------------------------------------------------------------------------
 				case ImGuiInputTextFlags_CallbackCompletion:
 				{
-					// Example of text completion
-
-					// Locate beginning of current word
+					// Scan backwards to locate beginning of current word
 					const char* wordEnd = data->Buf + data->CursorPos;
 					const char* wordStart = wordEnd;
 
@@ -320,92 +326,107 @@ namespace Alba
 						wordStart--;
 					}
 
+					const Core::StringView word(wordStart, std::distance(wordStart, wordEnd));
+
 					// Build a list of candidates
-					ImVector<const char*> candidates;
+					Core::FixedVector<Core::StringView, 64> candidates;
 
 					consoleBackEnd.ForEach_RegisteredCommandName([&](Core::StringView aCommandName)
 					{
-						//aCommandName.compare()
+						if (aCommandName.starts_with(word))
+						{
+							candidates.push_back(aCommandName);
+						}
 					});
 
-					for (int i = 0; i < Commands.Size; i++)
-						if (Strnicmp(Commands[i], word_start, (int)(word_end - word_start)) == 0)
-							candidates.push_back(Commands[i]);
-
-					if (candidates.Size == 0)
+					if (candidates.size() == 0)
 					{
 						// No match
-						AddLog("No match for \"%.*s\"!\n", (int)(word_end - word_start), word_start);
 					}
-					else if (candidates.Size == 1)
+					else if (candidates.size() == 1)
 					{
 						// Single match. Delete the beginning of the word and replace it entirely so we've got nice casing
-						data->DeleteChars((int)(word_start - data->Buf), (int)(word_end - word_start));
-						data->InsertChars(data->CursorPos, candidates[0]);
-						data->InsertChars(data->CursorPos, " ");
+						data->DeleteChars((int)(wordStart - data->Buf), (int)(wordEnd - wordStart));
+						data->InsertChars(data->CursorPos, candidates[0].data());
 					}
 					else
 					{
 						// Multiple matches. Complete as much as we can, so inputing "C" will complete to "CL" and display "CLEAR" and "CLASSIFY"
-						int match_len = (int)(word_end - word_start);
+						size_t matchLength = word.length();
 						for (;;)
 						{
 							int c = 0;
-							bool all_candidates_matches = true;
-							for (int i = 0; i < candidates.Size && all_candidates_matches; i++)
-								if (i == 0)
-									c = toupper(candidates[i][match_len]);
-								else if (c == 0 || c != toupper(candidates[i][match_len]))
-									all_candidates_matches = false;
-							if (!all_candidates_matches)
+							bool allCandidatesMatches = true;
+
+							for (size_t index = 0; index < candidates.size() && allCandidatesMatches; ++index)
+							{
+								if (index == 0)
+								{
+									c = std::tolower(candidates[index][matchLength]);
+								}
+								else if (c == 0 || c != std::tolower(candidates[index][matchLength]))
+								{
+									allCandidatesMatches = false;
+								}									
+							}
+
+							if (!allCandidatesMatches)
+							{
 								break;
-							match_len++;
+							}
+
+							++matchLength;
 						}
 
-						if (match_len > 0)
+						if (matchLength > 0)
 						{
-							data->DeleteChars((int)(word_start - data->Buf), (int)(word_end - word_start));
-							data->InsertChars(data->CursorPos, candidates[0], candidates[0] + match_len);
-						}
-
-						// List matches
-						AddLog("Possible matches:\n");
-						for (int i = 0; i < candidates.Size; i++)
-							AddLog("- %s\n", candidates[i]);
+							data->DeleteChars((int)(wordStart - data->Buf), (int)(wordEnd - wordStart));
+							data->InsertChars(data->CursorPos, candidates[0].data(), candidates[0].data() + matchLength);
+						}				
 					}
 				}
 				break;
 
-			case ImGuiInputTextFlags_CallbackHistory:
-			{
-				// Example of HISTORY
-				const int prev_history_pos = HistoryPos;
-				if (data->EventKey == ImGuiKey_UpArrow)
+				//----------------------------------------------------------------------------------
+				// History
+				//----------------------------------------------------------------------------------
+				case ImGuiInputTextFlags_CallbackHistory:
 				{
-					if (HistoryPos == -1)
-						HistoryPos = History.Size - 1;
-					else if (HistoryPos > 0)
-						HistoryPos--;
-				}
-				else if (data->EventKey == ImGuiKey_DownArrow)
-				{
-					if (HistoryPos != -1)
-						if (++HistoryPos >= History.Size)
-							HistoryPos = -1;
-				}
+					//History
+					const int prevHistoryPos = graphicsConsole->myHistoryIndex;
+					if (data->EventKey == ImGuiKey_UpArrow)
+					{
+						if (graphicsConsole->myHistoryIndex == -1)
+						{
+							graphicsConsole->myHistoryIndex = static_cast<int>(graphicsConsole->myHistory.size()) - 1;
+						}
+						else if (graphicsConsole->myHistoryIndex > 0)
+						{
+							--graphicsConsole->myHistoryIndex;
+						}
+					}
+					else if (data->EventKey == ImGuiKey_DownArrow)
+					{
+						if (graphicsConsole->myHistoryIndex != -1)
+						{
+							if (++graphicsConsole->myHistoryIndex >= graphicsConsole->myHistory.size())
+							{
+								graphicsConsole->myHistoryIndex = -1;
+							}
+						}
+					}
 
-				// A better implementation would preserve the data on the current input line along with cursor position.
-				if (prev_history_pos != HistoryPos)
-				{
-					data->CursorPos = data->SelectionStart = data->SelectionEnd = data->BufTextLen = (int)snprintf(data->Buf, (size_t)data->BufSize, "%s", (HistoryPos >= 0) ? History[HistoryPos] : "");
-					data->BufDirty = true;
+					// A better implementation would preserve the data on the current input line along with cursor position.
+					if (prevHistoryPos != graphicsConsole->myHistoryIndex)
+					{
+						data->CursorPos = data->SelectionStart = data->SelectionEnd = data->BufTextLen = (int)snprintf(data->Buf, (size_t)data->BufSize, "%s", (graphicsConsole->myHistoryIndex >= 0) ? graphicsConsole->myHistory[graphicsConsole->myHistoryIndex].c_str() : "");
+						data->BufDirty = true;
+					}
 				}
+				break;
 			}
-			break;
-			}
-#endif
+
 			return 0;
-
 		}
 
 		//-----------------------------------------------------------------------------------------

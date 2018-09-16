@@ -42,6 +42,7 @@ namespace Alba
 			if (itr == myCommands.end())
 			{
 				Print(ConsoleMessageType::Error, "Unrecognised Command: \"%s\"", commandName.data());
+				return;
 			}
 
 			// Call the command
