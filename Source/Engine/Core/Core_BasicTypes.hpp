@@ -13,7 +13,7 @@
 
 namespace Alba
 { 
-	namespace BasicTypes
+	inline namespace BasicTypes
 	{
 		//------------------------------------------------------------------------------------------------
 		// Explicitly sized integers
@@ -70,11 +70,6 @@ namespace Alba
 		//------------------------------------------------------------------------------------------------
 		typedef char					char8_t;
 		typedef unsigned char			uchar8_t;
-	}
-
-	namespace Core
-	{
-		using namespace Alba::BasicTypes;
 	}
 }
 

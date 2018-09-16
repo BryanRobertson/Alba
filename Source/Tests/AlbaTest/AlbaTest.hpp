@@ -4,8 +4,6 @@ namespace Alba
 {
 	namespace Tests
 	{
-		using namespace Alba::BasicTypes;
-
 		ALBA_DECLARE_LOG_CATEGORY(AlbaTest);
 
 		#define ALBA_FAIL_TEST(aCondition, ...)									\

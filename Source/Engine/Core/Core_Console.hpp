@@ -37,8 +37,6 @@ namespace Alba
 				typedef FixedFunction<void(ConsoleMessageType aMessageType, StringView aStr)> PrintCallback;
 				typedef StronglyTypedId<uint32, PrintCallback> PrintCallbackId;
 
-				typedef uint32 CommandReturnCode;
-
 				//=================================================================================
 				// Public Constructors
 				//=================================================================================
@@ -54,7 +52,7 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 
 				// Functor/Lambda
-				template <typename TCommand, typename ...TArgs, class=enable_if<is_invocable_v<CommandReturnCode, TCommand, TArgs...> > >
+				template <typename TCommand, typename ...TArgs, class=enable_if<is_invocable_v<int, TCommand, TArgs...> > >
 				void RegisterCommand(StringView aCommandName, TCommand&& aCommand)
 				{
 					const auto& ourVTable = ConsoleInternal::MemberFunctionVTableLocator<TCommand>::GetVTable();
@@ -68,17 +66,17 @@ namespace Alba
 
 				// Member function pointer
 				template <typename TClassType, typename ...TArgs>
-				void RegisterCommand(StringView aCommandName, TClassType* anInstance, CommandReturnCode (TClassType::*aCommand)(TArgs...) )
+				void RegisterCommand(StringView aCommandName, TClassType* anInstance, int (TClassType::*aCommand)(TArgs...) )
 				{
-					// Just use std::bind and call the 
+					// Just use std::bind and use the functor version
 					RegisterCommand(std::bind(anInstance, aCommand));
 				}
 
 				// Free function
 				template <typename ...TArgs>
-				void RegisterCommand(StringView aCommandName, CommandReturnCode(*aCommand)(TArgs...))
+				void RegisterCommand(StringView aCommandName, int(*aCommand)(TArgs...))
 				{
-					typedef CommandReturnCode(*FunctionType)(TArgs...);
+					typedef int(*FunctionType)(TArgs...);
 					const auto& ourVTable = ConsoleInternal::FreeFunctionVTableLocator<FunctionType>(aCommand);
 						
 					if (CommandStorage* storage = InsertCommand(aCommandName))
@@ -103,6 +101,18 @@ namespace Alba
 				inline void		PrintInfo(StringView aFormat, TArgs&&... someArgs)
 				{
 					Print(ConsoleMessageType::Info, aFormat, std::forward<TArgs>(someArgs)...);
+				}
+
+				template <typename... TArgs>
+				inline void		PrintWarning(StringView aFormat, TArgs&&... someArgs)
+				{
+					Print(ConsoleMessageType::Warning, aFormat, std::forward<TArgs>(someArgs)...);
+				}
+
+				template <typename... TArgs>
+				inline void		PrintError(StringView aFormat, TArgs&&... someArgs)
+				{
+					Print(ConsoleMessageType::Error, aFormat, std::forward<TArgs>(someArgs)...);
 				}
 
 				template <typename... TArgs>

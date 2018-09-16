@@ -14,6 +14,15 @@ namespace Alba
 	namespace Core
 	{
 		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template <typename TArgType>
+		struct console_argument_parse_traits
+		{
+			static constexpr bool is_valid = false;
+			//static bool Parse(ConsoleCommandParser::ParseState& aParseState, TArgType& anArgOutput);
+		};
+
+		//-----------------------------------------------------------------------------------------
 		// Name	:	ConsoleCommandParser
 		// Desc	:	Class to turn a command-line string into a command name and typed arguments
 		//-----------------------------------------------------------------------------------------
@@ -86,6 +95,7 @@ namespace Alba
 				static std::tuple<bool, ParseState> SkipWhitespace(ParseState anInputState);
 
 				//---------------------------------------------------------------------------------
+				// Parse a floating point value
 				//---------------------------------------------------------------------------------
 				template <typename TFloatDataType, class=enable_if_t<is_floating_point_v<TFloatDataType>> >
 				static inline std::tuple<bool, ParseState> ParseFloat(ParseState anInputState, TFloatDataType& aFloatDataOut)
@@ -156,7 +166,7 @@ namespace Alba
 						}
 
 						uint64 fractionalPartDigits = 0;
-						uint16 fractionalPartInvMultiplier = 1;
+						int16 fractionalPartNumDigits = 0;
 
 						while (!parseState.IsAtEnd() && std::isdigit(parseState.Peek()))
 						{
@@ -164,11 +174,14 @@ namespace Alba
 
 							fractionalPartDigits *= 10;
 							fractionalPartDigits += static_cast<uint64>(digitChar - '0');
-							fractionalPartInvMultiplier *= 10;
+
+							++fractionalPartNumDigits;
 						}
 
-						fractionalPart = double(fractionalPartDigits)
-										/ double(fractionalPartInvMultiplier);
+						const double invMultiplier = Math::Pow(10.0, -fractionalPartNumDigits);
+						const double multiplier = Math::Pow(10.0, fractionalPartNumDigits);
+
+						fractionalPart = double(fractionalPartDigits) * invMultiplier;
 					}
 					else if (!hasWholePart)
 					{
@@ -223,10 +236,13 @@ namespace Alba
 
 					aFloatDataOut = static_cast<float>(sign * (wholePart + fractionalPart) * exp);
 
+					parseState.StartNextToken();
+
 					return { true, parseState };
 				}
 
 				//---------------------------------------------------------------------------------
+				// Parse an integer value
 				//---------------------------------------------------------------------------------
 				template <typename TIntDataType, class = enable_if_t<is_integral_v<TIntDataType>> >
 				static inline std::tuple<bool, ParseState> ParseInt(const ParseState anInputState, TIntDataType& anIntDataOut)
@@ -285,7 +301,81 @@ namespace Alba
 					}
 
 					anIntDataOut = digits;
+					parseState.StartNextToken();
+
 					return { true, parseState };
+				}
+
+				//---------------------------------------------------------------------------------
+				// Parse a string value
+				//---------------------------------------------------------------------------------
+				static inline std::tuple<bool, ParseState> ParseString(const ParseState anInputState, StringView& aStringDataOut)
+				{
+					// StringView version just returns a substring from the original command string that was parsed in
+					// (which is safe because the string is guaranteed be valid at the point where the command is executed)
+					auto [skipped, parseState] = SkipWhitespace(anInputState);
+
+					if (parseState.IsAtEnd())
+					{
+						return { false, anInputState };
+					}
+
+					Optional<char> quoteCharacter;
+					if (const char inputChar = parseState.Peek(); (inputChar == '\'' || inputChar == '\"') )
+					{
+						quoteCharacter = inputChar;
+
+						parseState.Skip();
+						parseState.StartNextToken();
+					}
+
+					// Scan until we hit the end of input
+					// or we hit a closing quote (if we found an opening quote)
+					while (!parseState.IsAtEnd() )
+					{
+						const char current = parseState.Peek();
+						if (quoteCharacter.has_value())
+						{
+							if (current == quoteCharacter.value())
+							{
+								break;
+							}							
+						}
+						else if (std::isblank(current))
+						{
+							break;
+						}
+
+						parseState.Read();
+					}
+
+					// Get the token value
+					aStringDataOut = parseState.GetToken();
+
+					// Skip the closing quote
+					if (quoteCharacter.has_value() && !parseState.IsAtEnd())
+					{
+						parseState.Skip();
+					}
+
+					parseState.StartNextToken();
+
+					return { true, parseState };
+				}
+
+				template <typename TStringDataType, class = enable_if_t<is_string_v<TStringDataType>> >
+				static inline std::tuple<bool, ParseState> ParseString(const ParseState anInputState, TStringDataType& aStringDataOut)
+				{
+					StringView aStringView;
+					auto [success, outputState] = ParseString(anInputState, aStringView);
+
+					if (success)
+					{
+						aStringDataOut.reserve(aStringView.length());
+						aStringDataOut.assign(aStringView.begin(), aStringView.end());
+					}
+
+					return { success, outputState };
 				}
 
 				//---------------------------------------------------------------------------------
@@ -293,7 +383,7 @@ namespace Alba
 				template <typename... TArgs>
 				static bool ParseArguments(ParseState anInputState, std::tuple<TArgs...>& someArgumentsOut)
 				{
-					return ParseArguments<TArgs..., 0>(anInputState, someArgumentsOut);
+					return ParseArguments<0, TArgs...>(anInputState, someArgumentsOut);
 				}
 
 			private:
@@ -304,12 +394,18 @@ namespace Alba
 				static bool ParseArguments(ParseState& aParseState, std::tuple<TArgs...>& someArgumentsOut)
 				{
 					ParseState parseState = aParseState;
-					const bool success = ParseArgument(parseState, std::get<TIndex>(someArgumentsOut));
+
+					typedef std::tuple_element_t<TIndex, std::tuple<TArgs...>> TArgType;
+
+					// Parse the argument at the specified index
+					const bool success = ParseArgument<TArgType>(parseState, std::forward<TArgType>(std::get<TIndex>(someArgumentsOut)));
 					
+					// If successful and there are remaining arguments, then recursively parse them too
 					if constexpr (TIndex + 1 < sizeof...(TArgs))
 					{
 						return success && ParseArguments<TIndex+1, TArgs...>(parseState, someArgumentsOut);
 					}
+					// Otherwise just return whether or not we were successful
 					else
 					{
 						return success;
@@ -321,23 +417,49 @@ namespace Alba
 				template <typename TArgType>
 				static bool ParseArgument(ParseState& anInputState, TArgType&& anArgument)
 				{
-					auto [success, state] = SkipWhitespace(state, anInputState);
+					typedef std::remove_reference_t<TArgType> ArgValueType;
 
-					if constexpr (is_integral_v<TArgType>)
+					auto [skippedWhitespace, state] = SkipWhitespace(anInputState);
+
+					// Integral
+					if constexpr (is_integral_v<ArgValueType>)
 					{
-						auto[success, state] = ParseInt(state, anArgument);
+						auto[success, parseState] = ParseInt(state, anArgument);
 						if (success)
 						{
-							anInputState = state;
+							anInputState = parseState;
+							return true;
 						}
 					}
-					else if constexpr (is_floating_point_v<TArgType>)
+					// Floating point
+					else if constexpr (is_floating_point_v<ArgValueType>)
 					{
-						auto[success, state] = ParseFloat(state, anArgument);
+						auto[success, parseState] = ParseFloat(state, anArgument);
 						if (success)
 						{
-							anInputState = state;
+							anInputState = parseState;
+							return true;
 						}
+					}
+					// String, FixedString or StringView
+					else if constexpr (is_string_v<ArgValueType> || is_same_v<ArgValueType, StringView>)
+					{
+						auto[success, parseState] = ParseString(state, anArgument);
+						if (success)
+						{
+							anInputState = parseState;
+							return true;
+						}
+					}
+					// Custom parser
+					else if constexpr (console_argument_parse_traits<ArgValueType>::is_valid)
+					{
+						return console_argument_parse_traits::Parse(state, anArgument);
+					}
+					else
+					{
+						(void)anArgument;
+						static_assert(false, "This type is not supported by the console parser: Specialise console_argument_parse_traits for your type to provide a parsing function");
 					}
 
 					return false;

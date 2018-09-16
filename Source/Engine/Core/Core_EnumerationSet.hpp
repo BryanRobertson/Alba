@@ -36,8 +36,6 @@ namespace Alba
 	{
 		namespace Detail
 		{
-			using namespace ::Alba::BasicTypes;
-
 			//-------------------------------------------------------------------------------------
 			// Name	:	best_bitset_element_size
 			// Desc	:	Based on an input value, return the best size to use for the internal

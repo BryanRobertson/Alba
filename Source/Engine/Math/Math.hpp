@@ -70,8 +70,11 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		template <typename TInputValue>
 		inline constexpr bool IsNearlyEqual(const TInputValue& aValue1, const TInputValue& aValue2,
-			const TInputValue& anEpsilon = Constants<TInputValue>::EpsilonE5)
+			const TInputValue& anEpsilon = Constants<TInputValue>::EpsilonE6)
 		{
+			// TODO: Investigate improving this implementation
+			// https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
+
 			return Abs(aValue1 - aValue2) < anEpsilon;
 		}
 

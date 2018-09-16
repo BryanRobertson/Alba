@@ -59,7 +59,7 @@ namespace Alba
 				{
 					#if defined(ALBA_DEBUG_STRINGHASH)
 					{
-						myDebugString = ourDebugStringTable.Set(myHashValue, aStringView.data());
+						myDebugString = ourDebugStringTable.Set(myHashValue, aStringView);
 					}
 					#endif
 				}
@@ -173,28 +173,33 @@ namespace Alba
 					//-----------------------------------------------------------------------------
 					// Set entry in debug string table
 					//-----------------------------------------------------------------------------
-					const char* Set(THashValueType aHash, const char* aString)
+					const char* Set(THashValueType aHash, StringView aString)
 					{
 						const char* debugStr = nullptr;
 
-						FixedString<256> fixedStr(aString);
-						ScopedWriterMutexLock lock(myDictionaryMutex);
+						FixedString<256> fixedStr(aString.begin(), aString.end());
 
-						auto itr = myDebugStringTable.find(aHash);
-						if (itr == myDebugStringTable.end())
 						{
-							myDebugStringTable.emplace(aHash, String(fixedStr.begin(), fixedStr.end()));
-							debugStr = myDebugStringTable[aHash].c_str();
-						}
-						else
-						{
-							const String& str = itr->second;
-							debugStr = str.c_str();
+							ScopedWriterMutexLock lock(myDictionaryMutex);
 
-							ALBA_ASSERT
-							(
-								str.compare(fixedStr.c_str()) == 0 || str.comparei(fixedStr.c_str()) == 0, ""
-							);
+							auto itr = myDebugStringTable.find(aHash);
+							if (itr == myDebugStringTable.end())
+							{
+								myDebugStringTable.emplace(aHash, String(fixedStr.begin(), fixedStr.end()));
+								debugStr = myDebugStringTable[aHash].c_str();
+							}
+							else
+							{
+								const String& str = itr->second;
+								debugStr = str.c_str();
+
+								ALBA_ASSERT
+								(
+									str.compare(fixedStr.c_str()) == 0 || str.comparei(fixedStr.c_str()) == 0,
+									"Hash collision - %s has the same hash as %s",
+									aString, str.c_str()
+								);
+							}
 						}
 
 						return debugStr;

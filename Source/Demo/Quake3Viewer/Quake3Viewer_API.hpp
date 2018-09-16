@@ -27,16 +27,3 @@
 #if !defined(ALBA_QUAKE3VIEWER_API)
 #   define ALBA_QUAKE3VIEWER_API 
 #endif
-
-namespace Alba
-{
-	namespace BasicTypes
-	{
-
-	}
-
-	namespace Quake3Viewer
-	{
-		using namespace Alba::BasicTypes;
-	}
-}

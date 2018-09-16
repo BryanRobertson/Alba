@@ -11,8 +11,6 @@ namespace Alba
 	namespace Graphics
 	{
 		struct InitParams;
-		using namespace Alba::BasicTypes;
-
 		class RenderBackEnd;
 
 		//-----------------------------------------------------------------------------------------

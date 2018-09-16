@@ -27,16 +27,3 @@
 #if !defined(ALBA_GRAVITY_API)
 #   define ALBA_GRAVITY_API 
 #endif
-
-namespace Alba
-{
-	namespace BasicTypes
-	{
-
-	}
-
-	namespace Gravity
-	{
-		using namespace Alba::BasicTypes;
-	}
-}

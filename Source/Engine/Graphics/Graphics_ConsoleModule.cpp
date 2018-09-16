@@ -11,8 +11,6 @@ namespace Alba
 {
 	namespace Graphics
 	{
-		using namespace Alba::BasicTypes;
-
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		bool ConsoleModule::OnLoad(Core::AnyDictionary /*someParameters*/)
@@ -41,7 +39,7 @@ namespace Alba
 				});
 
 				// Register commands
-				consoleBackend.RegisterCommand("clear"sv, [this]() -> uint32
+				consoleBackend.RegisterCommand("clear"sv, [this]() -> int
 				{
 					myConsole->Clear();
 					return 0;

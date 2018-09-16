@@ -91,10 +91,10 @@ void* ALBA_CDECL operator new(size_t);
 void  ALBA_CDECL operator delete(void*, size_t);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::Core::uint32 line);
+void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::Core::uint32 line);
+void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void ALBA_CDECL operator delete(void* ptr);
@@ -103,10 +103,10 @@ void ALBA_CDECL operator delete(void* ptr);
 void ALBA_CDECL operator delete[](void* ptr);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void ALBA_CDECL operator delete(void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::Core::uint32 line);
+void ALBA_CDECL operator delete(void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void ALBA_CDECL operator delete[](void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::Core::uint32 line);
+void ALBA_CDECL operator delete[](void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line);
 
 //-------------------------------------------------------------------------------------------------
 // For EASTL compatibility

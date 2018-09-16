@@ -4,6 +4,7 @@
 #include "Core_String.hpp"
 #include "Core_FixedString.hpp"
 #include "Core_StringHash.hpp"
+#include "Core_Container.hpp"
 #include <type_traits>
 
 namespace Alba
@@ -56,13 +57,13 @@ namespace Alba
 	};
 
 	template
-	<
-		typename TCharType,
-		size_t	 TCount,
-		Core::OverflowBehavior TOverflowBehavior,
-		typename TOverflowAllocator
+		<
+		typename	TCharType,
+		size_t		TCount,
+		bool		TEnableOverflow,
+		typename	TOverflowAllocator
 	>
-	struct is_string <eastl::fixed_string<TCharType, TCount, TOverflowBehavior, TOverflowAllocator> > : public std::true_type
+	struct is_string <eastl::fixed_string<TCharType, TCount, TEnableOverflow, TOverflowAllocator> > : public std::true_type
 	{
 	};
 

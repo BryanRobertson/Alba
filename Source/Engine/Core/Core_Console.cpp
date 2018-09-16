@@ -46,7 +46,7 @@ namespace Alba
 			}
 
 			// Call the command
-			const StringView argumentString = parseState.GetRemainingInput();
+			const StringView argumentString = commandNameToken.GetRemainingInput();
 			const auto result = itr->second.myVTable->Invoke(itr->second, argumentString);
 
 			// Print error message if the command failed
@@ -121,7 +121,7 @@ namespace Alba
 			// Name	:	cmdlist
 			// Desc :	List all registered commands
 			//-----------------------------------------------------------------
-			RegisterCommand("cmdlist", [this]() -> CommandReturnCode
+			RegisterCommand("cmdlist", [this]() -> int
 			{
 				PrintInfo(""sv);
 				PrintInfo("-------------"sv);
@@ -140,7 +140,7 @@ namespace Alba
 			// Name :	help
 			// Desc :	Print help text to the console
 			//-----------------------------------------------------------------
-			RegisterCommand("help", [this]() -> CommandReturnCode
+			RegisterCommand("help", [this]() -> int
 			{
 				PrintInfo("-------------"sv);
 				PrintInfo("Help"sv);

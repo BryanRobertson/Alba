@@ -25,7 +25,7 @@ namespace Alba
 
 			//-------------------------------------------------------------------------------------
 			//-------------------------------------------------------------------------------------
-			typedef uint32 CommandReturnCode;
+			typedef int CommandReturnCode;
 
 			namespace ErrorCodes
 			{
@@ -124,6 +124,8 @@ namespace Alba
 			template <typename TCommandType, typename ...TArgs>
 			struct CommandVTableDerived : public CommandVTableBase
 			{
+				typedef std::tuple<std::remove_const_t<std::remove_reference_t<TArgs>>...> ArgumentsTuple;
+
 				CommandVTableDerived()
 				{
 					Store = &CommandVTableDerived<TCommandType, TArgs...>::StoreFunc;
@@ -140,6 +142,13 @@ namespace Alba
 
 				static void StoreFunc(CommandStorage& aCommandStorage, void* aValue)
 				{
+					// TODO: Use constexpr if, and store larger objects on the heap
+					static_assert
+					(
+						sizeof(TCommandType) < theStorageSize, 
+						"Command object is too large to fit into storage!"
+					);
+
 					new (&aCommandStorage.myData) TCommandType(*reinterpret_cast<TCommandType*>(aValue));
 				}
 
@@ -169,11 +178,11 @@ namespace Alba
 					// (std::apply will call the function with the correct args)
 					if constexpr (sizeof...(TArgs) > 0)
 					{
-						typedef std::tuple<TArgs...> ArgumentsTuple;
 						ArgumentsTuple args;
 
 						// Attempt to parse arguments, and if successful call the command
-						if (ParseArguments(aCommandStr, args))
+						const ConsoleCommandParser::ParseState parseState{ aCommandStr };
+						if (ConsoleCommandParser::ParseArguments(parseState, args))
 						{
 							return std::apply(command, args);
 						}
@@ -189,13 +198,6 @@ namespace Alba
 
 						return command();
 					}
-				}
-
-				template <class=enable_if_t<sizeof...(TArgs) != 0> >
-				static bool ParseArguments(StringView aCommandStr, std::tuple<TArgs...>& someArgsOut)
-				{
-					const ConsoleCommandParser::ParseState parseState{ aCommandStr };
-					return ConsoleCommandParser::ParseArguments(parseState, someArgsOut);
 				}
 			};
 
@@ -221,7 +223,7 @@ namespace Alba
 				template <typename ...TArgs>
 				static const auto& GetVTable()
 				{
-					static auto ourVTable = ConstructVTable(&TCallable::operator());
+					static auto ourVTable = ConstructVTable( &TCallable::operator() );
 					return ourVTable;
 				}
 			};

@@ -167,6 +167,18 @@ namespace Alba
 				}
 
 				{
+					const Core::StringView strValue{ "3.14159265359" };
+
+					float value = 0.0f;
+					auto[success, parseState] = ConsoleCommandParser::ParseFloat(ParseState{ strValue }, value);
+
+					float value2 = 0.0f;
+					sscanf_s(strValue.data(), "%f", &value2);
+
+					ALBA_TEST(success && Math::IsNearlyEqual(value, value2));
+				}
+
+				{
 					float value = 0.0f;
 					auto[success, parseState] = ConsoleCommandParser::ParseFloat(ParseState{ "elephant+34" }, value);
 

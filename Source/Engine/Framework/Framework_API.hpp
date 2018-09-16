@@ -27,15 +27,3 @@
 #if !defined(ALBA_FRAMEWORK_API)
 #   define ALBA_FRAMEWORK_API 
 #endif
-
-namespace Alba
-{
-	namespace BasicTypes
-	{
-	}
-
-	namespace Framework
-	{
-		using namespace Alba::BasicTypes;
-	}
-}
