@@ -2,8 +2,20 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Input_Precompile.cpp" />
+    <ClCompile Include="Input_Keyboard.cpp">
+      <Filter>Devices</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input_Precompile.hpp" />
+    <ClInclude Include="Input_Keyboard.hpp">
+      <Filter>Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="Input_KeyboardEnumerations.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Devices">
+      <UniqueIdentifier>{e013ca05-3be5-476d-98d1-a2809fb29695}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

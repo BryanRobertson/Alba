@@ -24,7 +24,8 @@ namespace Alba
 		
 		typedef chrono::high_resolution_clock							HighResolutionClock;
 		typedef chrono::time_point<chrono::high_resolution_clock>		TimePoint;
-		typedef chrono::duration<uint64, std::nano>						TimeDuration;
+		typedef chrono::duration<uint64, std::milli>					TimeDurationMilliSeconds;
+		typedef chrono::duration<uint64, std::nano>						TimeDurationNanoSeconds;
 
 		template <typename TStorageType>
 		using TimeSeconds = chrono::duration<TStorageType, std::ratio<1> >;
@@ -65,13 +66,13 @@ namespace Alba
 				// Wall-clock time (i.e. the real time)
 				//-----------------------------------------------------------------------------------------
 				TimePoint					GetWallClockTime() const					{ return mySystemTime;  }
-				TimeDuration				GetWallClockDeltaTime() const				{ return mySystemTimeDelta; }
+				TimeDurationMilliSeconds	GetWallClockDeltaTime() const				{ return mySystemTimeDelta; }
 
 				//-----------------------------------------------------------------------------------------
 				// Game time (stops when paused)
 				//-----------------------------------------------------------------------------------------
 				TimePoint					GetGameTime() const							{ return myGameTime;	}
-				TimeDuration				GetGameDeltaTime() const					{ return myGameTimeDelta; }
+				TimeDurationMilliSeconds	GetGameDeltaTime() const					{ return myGameTimeDelta; }
 
 				//-----------------------------------------------------------------------------------------
 				// Frame Index
@@ -86,8 +87,8 @@ namespace Alba
 				TimePoint					mySystemTime;
 				TimePoint					myGameTime;
 
-				TimeDuration				mySystemTimeDelta;
-				TimeDuration				myGameTimeDelta;
+				TimeDurationMilliSeconds	mySystemTimeDelta;
+				TimeDurationMilliSeconds	myGameTimeDelta;
 
 				FrameIndex					myFrameIndex;
 		};

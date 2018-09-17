@@ -25,6 +25,7 @@ namespace Alba
                 conf.SolutionFolder = "Alba/Engine";
 
                 conf.AddPublicDependency<CoreProject>(target);
+                conf.AddPublicDependency<InputProject>(target);
                 conf.AddPublicDependency<GraphicsProject>(target);
             }
         }
