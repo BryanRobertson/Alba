@@ -3,6 +3,7 @@ using Sharpmake;
 
 [module: Sharpmake.Include("Alba.Base.Project.sharpmake.cs")]
 [module: Sharpmake.Include("Alba.Engine.Core.sharpmake.cs")]
+[module: Sharpmake.Include("Alba.Engine.Input.sharpmake.cs")]
 [module: Sharpmake.Include("Alba.Engine.Math.sharpmake.cs")]
 [module: Sharpmake.Include("Alba.Engine.Graphics.sharpmake.cs")]
 [module: Sharpmake.Include("Alba.Engine.Framework.sharpmake.cs")]
@@ -60,6 +61,7 @@ namespace Alba
             //-------------------------------------------------------------------------------------
             conf.AddProject<Alba.Engine.CoreProject>(target);
 			conf.AddProject<Alba.Engine.MathProject>(target);
+            conf.AddProject<Alba.Engine.InputProject>(target);
             conf.AddProject<Alba.Engine.FrameworkProject>(target);
             conf.AddProject<Alba.Engine.GraphicsProject>(target);
 
