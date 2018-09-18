@@ -1,6 +1,5 @@
 #include "Input_Precompile.hpp"
-#include "Input_Keyboard.hpp"
-#include "Core_Time.hpp"
+#include "Input_Module.hpp"
 
 namespace Alba
 {
@@ -8,22 +7,17 @@ namespace Alba
 	{
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		Keyboard::Keyboard()
+		bool InputModule::OnLoad(Core::AnyDictionary someLoadParams)
 		{
-
+			(void)someLoadParams;
+			return true;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void Keyboard::Update(const Core::Time& /*aTime*/, KeySet somePressedKeys, KeySet someReleasedKeys)
+		void InputModule::OnUnload()
 		{
-			myPressedKeys = somePressedKeys;
-			myReleasedKeys = someReleasedKeys;
 
-			for (Key key : someReleasedKeys)
-			{
-				myKeyHeldDurations.erase(key);
-			}
 		}
 	}
 }

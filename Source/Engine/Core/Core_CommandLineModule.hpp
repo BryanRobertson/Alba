@@ -19,7 +19,10 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static const char* GetModuleName() { return "Alba.Core.CommandLine"; }
+				static constexpr StringView GetModuleName() 
+				{ 
+					return "Alba.Core.CommandLine"; 
+				}
 
 				//=================================================================================
 				// Public Methods

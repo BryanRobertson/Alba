@@ -5,6 +5,10 @@
     <ClCompile Include="Input_Keyboard.cpp">
       <Filter>Devices</Filter>
     </ClCompile>
+    <ClCompile Include="Input_Module.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input_Precompile.hpp" />
@@ -12,10 +16,18 @@
       <Filter>Devices</Filter>
     </ClInclude>
     <ClInclude Include="Input_KeyboardEnumerations.hpp" />
+    <ClInclude Include="Input_Module.hpp">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.hpp" />
+    <ClInclude Include="Input_API.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Devices">
       <UniqueIdentifier>{e013ca05-3be5-476d-98d1-a2809fb29695}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module">
+      <UniqueIdentifier>{0f8d8b5c-fbc2-413b-b56d-b1257b9f8b2d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

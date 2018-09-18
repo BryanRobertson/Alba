@@ -19,7 +19,10 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static const char* GetModuleName() { return "Alba.Quake3Viewer"; }
+				static constexpr Core::StringView GetModuleName() 
+				{ 
+					return "Alba.Quake3Viewer"; 
+				}
 
 				//=================================================================================
 				// Public Methods

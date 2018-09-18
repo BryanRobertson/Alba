@@ -22,7 +22,7 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static constexpr const char* GetModuleName() 
+				static constexpr Core::StringView GetModuleName()
 				{ 
 					return "Alba.Graphics.ImGui"; 
 				}

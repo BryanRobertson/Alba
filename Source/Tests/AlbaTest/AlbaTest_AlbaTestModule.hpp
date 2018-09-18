@@ -21,7 +21,10 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static const char* GetModuleName() { return "Alba.Tests.AlbaTest"; }
+				static constexpr Core::StringView GetModuleName() 
+				{
+					return "Alba.Tests.AlbaTest"; 
+				}
 
 				//=================================================================================
 				// Public Methods

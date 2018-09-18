@@ -2,14 +2,12 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Graphics_Precompile.cpp" />
-    <ClCompile Include="Graphics_Service.cpp" />
     <ClCompile Include="Graphics_DX11RenderBackEnd.cpp">
       <Filter>BackEnd\DirectX</Filter>
     </ClCompile>
     <ClCompile Include="Graphics_RenderBackEnd.cpp">
       <Filter>BackEnd</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics_Module.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Graphics_DX11PointerTypes.cpp">
       <Filter>BackEnd\DirectX</Filter>
@@ -20,7 +18,6 @@
     <ClCompile Include="Graphics_Shader.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics_Debug.cpp" />
     <ClCompile Include="Graphics_ImGuiModule.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
@@ -33,16 +30,23 @@
     <ClCompile Include="Graphics_Console.cpp">
       <Filter>Console</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics_Service.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics_Module.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics_Debug.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics_API.hpp" />
     <ClInclude Include="Graphics_InitParams.hpp" />
     <ClInclude Include="Graphics_Precompile.hpp" />
-    <ClInclude Include="Graphics_Service.hpp" />
     <ClInclude Include="Graphics_DX11RenderBackEnd.hpp">
       <Filter>BackEnd\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics_Module.hpp" />
     <ClInclude Include="Graphics_RenderBackEnd.hpp">
       <Filter>BackEnd</Filter>
     </ClInclude>
@@ -56,7 +60,6 @@
     <ClInclude Include="Graphics_Shader.hpp">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics_Debug.hpp" />
     <ClInclude Include="Graphics_ImGuiModule.hpp">
       <Filter>ImGui</Filter>
     </ClInclude>
@@ -78,6 +81,15 @@
     <ClInclude Include="Graphics_Console.hpp">
       <Filter>Console</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics_Service.hpp">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics_Module.hpp">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics_Debug.hpp">
+      <Filter>Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="BackEnd">
@@ -97,6 +109,15 @@
     </Filter>
     <Filter Include="Console">
       <UniqueIdentifier>{605dd7d7-1e81-480b-99aa-fb89ebaa8b1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Service">
+      <UniqueIdentifier>{ab6d1c56-a8fa-4df8-814c-db2c7191dc1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module">
+      <UniqueIdentifier>{b93b04f3-8377-42ec-a212-ebf08e5b66df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{41de8094-a754-42b5-9929-38c59fc6a40b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

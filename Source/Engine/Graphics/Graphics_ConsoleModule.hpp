@@ -25,7 +25,7 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static constexpr const char* GetModuleName() { return "Alba.Graphics.Console"; }
+				static constexpr Core::StringView GetModuleName() { return "Alba.Graphics.Console"; }
 
 				// Get dependencies
 				static constexpr auto GetDependencies()

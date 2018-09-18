@@ -24,7 +24,10 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static const char* GetModuleName() { return "Alba.Gravity"; }
+				static constexpr Core::StringView GetModuleName() 
+				{ 
+					return "Alba.Gravity"; 
+				}
 
 				//=================================================================================
 				// Public Constructors

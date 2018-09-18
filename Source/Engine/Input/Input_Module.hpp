@@ -1,30 +1,25 @@
 #pragma once
 
-#include "Graphics_API.hpp"
-#include "Graphics_Service.hpp"
+#include "Core.hpp"
 #include "Core_Module.hpp"
-#include "Core_UniquePtr.hpp"
+#include "Input_API.hpp"
 
 namespace Alba
 {
-	namespace Graphics
+	namespace Input
 	{
-		class GraphicsService;
-
 		//-----------------------------------------------------------------------------------------
-		// Name	: GraphicsModule
-		// Desc	: Graphics module
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API GraphicsModule : public Core::Module<GraphicsModule>
+		class ALBA_INPUT_API InputModule : public Core::Module< InputModule>
 		{
 			public:
 
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static constexpr Core::StringView GetModuleName() 
-				{ 
-					return "Alba.Graphics"; 
+				static constexpr Core::StringView GetModuleName()
+				{
+					return "Alba.Input";
 				}
 
 				//=================================================================================
@@ -32,16 +27,6 @@ namespace Alba
 				//=================================================================================
 				bool					OnLoad(Core::AnyDictionary someLoadParams);
 				void					OnUnload();
-
-				GraphicsService&		GetGraphicsServiceMutable();
-				const GraphicsService&	GetGraphicsService() const;
-
-			private:
-
-				//=================================================================================
-				// Private Data
-				//=================================================================================
-				Core::UniquePtr<GraphicsService> myGraphicsService;
 		};
 	}
 }
