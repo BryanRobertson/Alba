@@ -57,6 +57,24 @@ namespace Alba
 					break;
 				}
 
+				//---------------------------------------------------------------------------------
+				// If the window has an input handler - then call it for input-related messages
+				//---------------------------------------------------------------------------------
+				if (anApplication.myWindow)
+				{
+					auto& windowInputHandler = anApplication.myWindow->GetInputHandler();
+					if (windowInputHandler.myHandlerFunc)
+					{
+						const bool isKeyboardMessage = uMsg >= WM_KEYFIRST && uMsg <= WM_KEYLAST;
+						const bool isMouseMessage = uMsg >= WM_MOUSEFIRST && uMsg <= WM_MOUSELAST;
+
+						if (isKeyboardMessage || isMouseMessage)
+						{
+							windowInputHandler.myHandlerFunc(hWnd, uMsg, wParam, lParam);
+						}
+					}
+				}
+
 				return DefWindowProc(hWnd, uMsg, wParam, lParam);
 			}
 		};

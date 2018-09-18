@@ -6,6 +6,7 @@
 #include "Core_String.hpp"
 #include "Core_CommandLineModule.hpp"
 #include "Core_ConsoleModule.hpp"
+#include "Core_WindowModule.hpp"
 
 namespace Alba
 {
@@ -16,6 +17,7 @@ namespace Alba
 		void RegisterModules()
 		{
 			ConsoleModule::Register();
+			WindowModule::Register();
 		}
 	}
 }

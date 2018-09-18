@@ -1,5 +1,6 @@
 #include "Input_Precompile.hpp"
 #include "Input.hpp"
+#include "Input_Module.hpp"
 
 namespace Alba
 {
@@ -9,7 +10,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void RegisterModules()
 		{
-
+			InputModule::Register();
 		}
 	}
 }

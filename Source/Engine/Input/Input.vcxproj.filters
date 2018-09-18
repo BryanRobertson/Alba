@@ -9,6 +9,9 @@
       <Filter>Module</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Input_Service.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input_Precompile.hpp" />
@@ -21,6 +24,10 @@
     </ClInclude>
     <ClInclude Include="Input.hpp" />
     <ClInclude Include="Input_API.hpp" />
+    <ClInclude Include="Input_Service.hpp">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="Input_InitParams.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Devices">
@@ -28,6 +35,9 @@
     </Filter>
     <Filter Include="Module">
       <UniqueIdentifier>{0f8d8b5c-fbc2-413b-b56d-b1257b9f8b2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Service">
+      <UniqueIdentifier>{623c6049-40fd-4864-add7-6f63d88e8ca2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

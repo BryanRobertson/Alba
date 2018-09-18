@@ -9,6 +9,7 @@
 #include "Core_Window.hpp"
 
 #include "Graphics.hpp"
+#include "Input.hpp"
 
 namespace Alba
 {
@@ -105,6 +106,7 @@ namespace Alba
 					//-------------------------------------------------------------------------------------
 					Alba::Core::RegisterModules();
 					Alba::Graphics::RegisterModules();
+					Alba::Input::RegisterModules();
 					Alba::Framework::RegisterModules();
 
 					if (anInitParams.myRegisterModulesCallback)

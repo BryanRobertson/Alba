@@ -4,6 +4,7 @@
 #include "Graphics_InitParams.hpp"
 #include "Graphics_Module.hpp"
 #include "Graphics_Service.hpp"
+#include "Input_InitParams.hpp"
 #include "Core_Memory.hpp"
 #include "Core_Pair.hpp"
 #include "Core_Window.hpp"
@@ -72,11 +73,36 @@ namespace Alba
 			}
 
 			//----------------------------------------------------------------------
+			// Load the window module
+			//----------------------------------------------------------------------
+			{
+				moduleRepository.LoadModule("Alba.Window"_nocasehash32);
+			}
+
+			//----------------------------------------------------------------------
 			// Create the main application window
 			//----------------------------------------------------------------------
 			{
 				myInitParams = std::move(anInitParams);
-				CreateWindow(myInitParams.myWindowInitParams);
+
+				if (CreateWindow(myInitParams.myWindowInitParams) != 0)
+				{
+					ALBA_LOG_ERROR(Framework, "Failed to create main window! Shutting down");
+					return 1;
+				}
+			}
+
+			//----------------------------------------------------------------------
+			// Initialise input system
+			//----------------------------------------------------------------------
+			{
+				Input::InitParams inputInitParams;
+				GetPlatformData(inputInitParams.myPlatformData);
+
+				if (!moduleRepository.LoadModule("Alba.Input"_nocasehash32, std::move(inputInitParams)))
+				{
+					return 1;
+				}
 			}
 
 			//----------------------------------------------------------------------
@@ -96,7 +122,7 @@ namespace Alba
 				graphicsInitParams.myWindowHeight = anInitParams.myWindowInitParams.mySizeY;
 
 				// Init platform-specific initialisation parameters (e.g. window handle on Windows)
-				InitGraphicsPlatformData(graphicsInitParams.myPlatformData);
+				GetPlatformData(graphicsInitParams.myPlatformData);
 
 				if ( !moduleRepository.LoadModule("Alba.Graphics"_nocasehash32, std::move(graphicsInitParams)) )
 				{
@@ -122,7 +148,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void GameApplication::InitGraphicsPlatformData(Core::AnyDictionary& aPlatformDataOut)
+		void GameApplication::GetPlatformData(Core::AnyDictionary& aPlatformDataOut)
 		{
 			aPlatformDataOut = myWindow->GetPlatformData();
 		}

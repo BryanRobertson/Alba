@@ -66,6 +66,9 @@
     <ClCompile Include="Core_ConsoleCommandParser.cpp">
       <Filter>Console</Filter>
     </ClCompile>
+    <ClCompile Include="Core_WindowModule.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
@@ -285,6 +288,9 @@
     </ClInclude>
     <ClInclude Include="Core_ConsoleCommandParser.hpp">
       <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_WindowModule.hpp">
+      <Filter>Window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

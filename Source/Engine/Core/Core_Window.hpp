@@ -74,6 +74,9 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				void				SetEventHandler(const WindowEventHandler& aHandler);
 
+				void				SetInputHandler(const WindowEventHandler& aHandler);
+				const WindowEventHandler& GetInputHandler() const;
+
 				//---------------------------------------------------------------------------------
 				// Platform-specific data
 				//---------------------------------------------------------------------------------

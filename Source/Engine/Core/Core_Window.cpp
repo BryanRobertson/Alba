@@ -3,6 +3,7 @@
 #include "Core_Optional.hpp"
 #include "Core_PlatformHeader.hpp"
 #include "Core_WindowEventHandler.hpp"
+#include "Core_WindowModule.hpp"
 #include "Core_Logging.hpp"
 #include "Core_Platform.hpp"
 
@@ -134,6 +135,8 @@ namespace Alba
 			}
 
 			WindowEventHandler  myEventHandler;
+			WindowEventHandler	myInputHandler;
+
 			HWND				myPlatformWindowHandle = NULL;
 			FixedString<32>		myTitleText;
 
@@ -276,6 +279,16 @@ namespace Alba
 			myPlatformData.Set<HWND>(myImpl->myPlatformWindowHandle);
 
 			//----------------------------------------------------------------------
+			// Register window with window module
+			//----------------------------------------------------------------------
+			{
+				ALBA_ASSERT(WindowModule::IsLoaded());
+				WindowModule& windowModule = WindowModule::Get();
+
+				windowModule.RegisterWindow(*this);
+			}
+
+			//----------------------------------------------------------------------
 			// Show window
 			//----------------------------------------------------------------------
 			if (!aParams.myIsHidden)
@@ -292,6 +305,13 @@ namespace Alba
 		{
 			if (myImpl->myPlatformWindowHandle)
 			{
+				{
+					ALBA_ASSERT(WindowModule::IsLoaded());
+					WindowModule& windowModule = WindowModule::Get();
+
+					windowModule.UnregisterWindow(*this);
+				}
+
 				DestroyWindow(myImpl->myPlatformWindowHandle);
 				UnregisterClass(theWindowClassName, GetModuleHandle(NULL));
 			}			
@@ -323,6 +343,13 @@ namespace Alba
 		void Window::SetEventHandler(const WindowEventHandler& aHandler)
 		{
 			myImpl->myEventHandler = aHandler;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		const WindowEventHandler& Window::GetInputHandler() const
+		{
+			return myImpl->myInputHandler;
 		}
 	}
 }
