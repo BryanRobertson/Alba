@@ -113,6 +113,7 @@ namespace Alba
 				//=================================================================================
 				static constexpr size_t BitSetBitsPerWord	= BitSetType::kBitsPerWord;
 				static constexpr size_t BitSetWordCount		= ElementCount / BitSetBitsPerWord;
+				static constexpr bool	IsContiguousEnum	= is_enum_contiguous_v<TEnumerationType>;
 
 				//=================================================================================
 				// Public Constructors
@@ -331,6 +332,18 @@ namespace Alba
 						return index;
 					}
 				}
+
+#if !defined(ALBA_RETAIL_BUILD)
+
+				//-------------------------------------------------------------------------
+				// Used only for Visual Studio .natvis
+				//-------------------------------------------------------------------------
+				static constexpr TEnumerationType GetValueAtIndex(size_t anIndex)
+				{
+					static constexpr auto& allValues = get_all_enum_values_v<TEnumerationType>;
+					return allValues[anIndex];
+				}
+#endif
 
 				//=================================================================================
 				// Private Data

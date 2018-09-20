@@ -9,7 +9,7 @@
 
 		<Expand>
 	
-			<CustomListItems MaxItemsPerView="256">
+			<CustomListItems MaxItemsPerView="256" Condition="IsContiguousEnum">
 
 				<Variable Name="currentIndex" InitialValue="0" />
 				<Variable Name="bitsPerWord" InitialValue="BitSetBitsPerWord" />

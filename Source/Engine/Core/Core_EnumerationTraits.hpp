@@ -54,8 +54,8 @@ namespace Alba
 			TEnumerationType previous = get_all_enum_values_v<TEnumerationType>[0];
 			for (size_t index = 1; index < get_enum_entry_count_v<TEnumerationType>; ++index)
 			{
-				const TEnumerationType current = get_all_enum_values_v<TEnumerationType>[1];
-				if (static_cast<size_t>(current) - static_cast<size_t>(previous) != 1)
+				const TEnumerationType current = get_all_enum_values_v<TEnumerationType>[index];
+				if ( (static_cast<size_t>(current) - static_cast<size_t>(previous)) != 1)
 				{
 					return false;
 				}
