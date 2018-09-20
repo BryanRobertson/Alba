@@ -5,6 +5,8 @@
 #include "Graphics_Module.hpp"
 #include "Graphics_Service.hpp"
 #include "Input_InitParams.hpp"
+#include "Input_Module.hpp"
+#include "Input_Service.hpp"
 #include "Core_Memory.hpp"
 #include "Core_Pair.hpp"
 #include "Core_Window.hpp"
@@ -199,6 +201,17 @@ namespace Alba
 				{
 					ALBA_PROFILE_SCOPED(WindowUpdate);
 					myWindow->Update();
+				}
+
+				//-----------------------------------------------------------------------------------------
+				// Update Input
+				//-----------------------------------------------------------------------------------------
+				{
+					Alba::Input::InputModule& inputModule = Alba::Input::InputModule::Get();
+					ALBA_ASSERT(inputModule.IsLoaded());
+
+					Input::InputService& inputService = inputModule.GetInputServiceMutable();
+					inputService.Update(myTimer);
 				}
 
 				//-----------------------------------------------------------------------------------------

@@ -9,15 +9,14 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		bool InputModule::OnLoad(Core::AnyDictionary someLoadParams)
 		{
-			(void)someLoadParams;
-			return true;
+			return myInputService.Init(someLoadParams) == 0;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		void InputModule::OnUnload()
 		{
-
+			myInputService.ShutDown();
 		}
 	}
 }

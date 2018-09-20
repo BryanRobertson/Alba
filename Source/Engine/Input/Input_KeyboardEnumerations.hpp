@@ -1,9 +1,12 @@
 #pragma once
 
+#include "Core.hpp"
 #include "Core_EnumerationTraits.hpp"
 #include "Core_EnumerationSet.hpp"
 #include "Core_Array.hpp"
 #include "Core_Vector.hpp"
+
+#include "Input_API.hpp"
 
 namespace Alba
 {
@@ -173,11 +176,8 @@ namespace Alba
 			Undefined_24			= 0x9A,
 			Undefined_25			= 0x9B,
 			Undefined_26			= 0x9C,
-			Undefined_27			= 0x9B,
-			Undefined_28			= 0x9C,
-			Undefined_29			= 0x9D,
-			Undefined_30			= 0x9E,
-			Undefined_31			= 0x9F,
+			Undefined_27			= 0x9E,
+			Undefined_28			= 0x9F,
 			LeftShift				= 0xA0, // Left SHIFT key
 			RightShift				= 0xA1, // Right SHIFT key
 			LeftControl				= 0xA2, // Left CONTROL key
@@ -446,9 +446,6 @@ namespace Alba
 			Key::Undefined_26,
 			Key::Undefined_27,
 			Key::Undefined_28,
-			Key::Undefined_29,
-			Key::Undefined_30,
-			Key::Undefined_31,
 			Key::LeftShift,
 			Key::RightShift,
 			Key::LeftControl,
@@ -546,6 +543,12 @@ namespace Alba
 			Key::OEM_Clear
 		};
 	};
+
+	//-----------------------------------------------------------------------------------------
+	// Name	:	to_string
+	// Desc	:	Convert an Input::Key to a string
+	//-----------------------------------------------------------------------------------------
+	extern ALBA_INPUT_API Core::StringView to_string(Input::Key aKey);
 
 	namespace Input
 	{

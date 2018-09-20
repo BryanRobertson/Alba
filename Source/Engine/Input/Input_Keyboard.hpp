@@ -24,6 +24,8 @@ namespace Alba
 		{
 			public:
 
+				friend class InputService;
+
 				//=================================================================================
 				// Public Constructors
 				//=================================================================================
@@ -32,13 +34,18 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				inline bool		IsKeyHeld(Key aKey) const;
-				inline bool		IsKeyReleased(Key aKey) const;
+				void				UpdateKeyHeldDurations(const Core::Time& aTime);
+
+				inline bool			IsKeyHeld(Key aKey) const;
+				inline bool			IsKeyReleased(Key aKey) const;
 
 				inline const KeySet& GetPressedKeys() const;
 				inline const KeySet& GetReleasedKeys() const;
 
-				void			Update(const Core::Time& aTime, KeySet somePressedKeys, KeySet someReleasedKeys);
+				inline KeySet&		GetPressedKeysMutable();
+				inline KeySet&		GetReleasedKeysMutable();
+
+				Core::TimeDurationMilliSeconds GetKeyHeldDuration(Key aKey) const;
 
 			private:
 
@@ -52,7 +59,7 @@ namespace Alba
 				// Keys that were just released this frame
 				KeySet				myReleasedKeys;
 
-				// For each key that's currently held, how long has it been held for?
+				// For each held key, how long the key has been held for
 				Core::VectorMap<Key, Core::TimeDurationMilliSeconds> myKeyHeldDurations;
 		};
 
@@ -83,5 +90,20 @@ namespace Alba
 		{
 			return myReleasedKeys;
 		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		KeySet& Keyboard::GetPressedKeysMutable()
+		{
+			return myPressedKeys;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		KeySet& Keyboard::GetReleasedKeysMutable()
+		{
+			return myReleasedKeys;
+		}
+
 	}
 }

@@ -12,13 +12,16 @@
     <ClCompile Include="Input_Service.cpp">
       <Filter>Service</Filter>
     </ClCompile>
+    <ClCompile Include="Input_Debug.cpp" />
+    <ClCompile Include="Input_KeyboardEnumerations.cpp">
+      <Filter>Devices</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input_Precompile.hpp" />
     <ClInclude Include="Input_Keyboard.hpp">
       <Filter>Devices</Filter>
     </ClInclude>
-    <ClInclude Include="Input_KeyboardEnumerations.hpp" />
     <ClInclude Include="Input_Module.hpp">
       <Filter>Module</Filter>
     </ClInclude>
@@ -28,6 +31,10 @@
       <Filter>Service</Filter>
     </ClInclude>
     <ClInclude Include="Input_InitParams.hpp" />
+    <ClInclude Include="Input_Debug.hpp" />
+    <ClInclude Include="Input_KeyboardEnumerations.hpp">
+      <Filter>Devices</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Devices">

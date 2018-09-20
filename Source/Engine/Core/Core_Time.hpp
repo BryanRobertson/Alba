@@ -13,14 +13,16 @@
 
 namespace Alba
 {
+	//-------------------------------------------------------------------------------------------------
+	// Use Alba:chrono instead of std::chrono, 
+	// so it can be easily switched out for the EASTL version in future if need be
+	//-------------------------------------------------------------------------------------------------
+	namespace chrono = std::chrono;
+	namespace chrono_literals = std::chrono_literals;
+
 	namespace Core
 	{
-		//-------------------------------------------------------------------------------------------------
-		// Use Core::Chrono instead of std::chrono, 
-		// so it can be easily switched out for the EASTL version in future if need be
-		//-------------------------------------------------------------------------------------------------
-		namespace chrono			= std::chrono;
-		namespace chrono_literals	= std::chrono_literals;
+		
 		
 		typedef chrono::high_resolution_clock							HighResolutionClock;
 		typedef chrono::time_point<chrono::high_resolution_clock>		TimePoint;
@@ -66,13 +68,13 @@ namespace Alba
 				// Wall-clock time (i.e. the real time)
 				//-----------------------------------------------------------------------------------------
 				TimePoint					GetWallClockTime() const					{ return mySystemTime;  }
-				TimeDurationMilliSeconds	GetWallClockDeltaTime() const				{ return mySystemTimeDelta; }
+				TimeDurationNanoSeconds		GetWallClockDeltaTime() const				{ return mySystemTimeDelta; }
 
 				//-----------------------------------------------------------------------------------------
 				// Game time (stops when paused)
 				//-----------------------------------------------------------------------------------------
 				TimePoint					GetGameTime() const							{ return myGameTime;	}
-				TimeDurationMilliSeconds	GetGameDeltaTime() const					{ return myGameTimeDelta; }
+				TimeDurationNanoSeconds		GetGameDeltaTime() const					{ return myGameTimeDelta; }
 
 				//-----------------------------------------------------------------------------------------
 				// Frame Index
@@ -87,8 +89,8 @@ namespace Alba
 				TimePoint					mySystemTime;
 				TimePoint					myGameTime;
 
-				TimeDurationMilliSeconds	mySystemTimeDelta;
-				TimeDurationMilliSeconds	myGameTimeDelta;
+				TimeDurationNanoSeconds		mySystemTimeDelta;
+				TimeDurationNanoSeconds		myGameTimeDelta;
 
 				FrameIndex					myFrameIndex;
 		};

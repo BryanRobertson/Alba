@@ -71,6 +71,19 @@ namespace Alba
 					break;
 				}
 
+				// Call input handler if it's valid
+				auto& inputHandler = myWindow.GetInputHandler();
+				if (inputHandler.myHandlerFunc)
+				{
+					const bool isKeyboardMessage = uMsg >= WM_KEYFIRST && uMsg <= WM_KEYLAST;
+					const bool isMouseMessage = uMsg >= WM_MOUSEFIRST && uMsg <= WM_MOUSELAST;
+
+					if (!inputHandler.myHandlerFunc)
+					{
+						return 0;
+					}
+				}			
+
 				return DefWindowProc(hWnd, uMsg, wParam, lParam);
 			}
 
@@ -343,6 +356,13 @@ namespace Alba
 		void Window::SetEventHandler(const WindowEventHandler& aHandler)
 		{
 			myImpl->myEventHandler = aHandler;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void Window::SetInputHandler(const WindowEventHandler& aHandler)
+		{
+			myImpl->myInputHandler = aHandler;
 		}
 
 		//-----------------------------------------------------------------------------------------

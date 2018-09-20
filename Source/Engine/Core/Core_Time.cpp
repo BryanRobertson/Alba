@@ -29,8 +29,8 @@ namespace Alba
 			auto timeDelta = mySystemTime - lastSystemTime;
 			myGameTime = lastGameTime + timeDelta;
 
-			mySystemTimeDelta = chrono::duration_cast<TimeDurationMilliSeconds>(timeDelta);
-			myGameTimeDelta = chrono::duration_cast<TimeDurationMilliSeconds>(timeDelta);
+			mySystemTimeDelta = chrono::duration_cast<TimeDurationNanoSeconds>(timeDelta);
+			myGameTimeDelta = chrono::duration_cast<TimeDurationNanoSeconds>(timeDelta);
 
 			++myFrameIndex;
 		}
@@ -47,7 +47,7 @@ namespace Alba
 
 			auto timeDelta = mySystemTime - lastSystemTime;
 
-			mySystemTimeDelta = chrono::duration_cast<TimeDurationMilliSeconds>(timeDelta);
+			mySystemTimeDelta = chrono::duration_cast<TimeDurationNanoSeconds>(timeDelta);
 			myGameTimeDelta = 0ms;
 
 			++myFrameIndex;

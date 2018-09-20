@@ -15,15 +15,32 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void Keyboard::Update(const Core::Time& /*aTime*/, KeySet somePressedKeys, KeySet someReleasedKeys)
+		void Keyboard::UpdateKeyHeldDurations(const Core::Time& aTime)
 		{
-			myPressedKeys = somePressedKeys;
-			myReleasedKeys = someReleasedKeys;
-
-			for (Key key : someReleasedKeys)
+			for (Key key : myReleasedKeys)
 			{
 				myKeyHeldDurations.erase(key);
 			}
+
+			const auto deltaTime = chrono::duration_cast<Core::TimeDurationMilliSeconds>(aTime.GetGameDeltaTime());
+			for (auto& itr : myKeyHeldDurations)
+			{
+				itr.second += deltaTime;
+			}
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		Core::TimeDurationMilliSeconds Keyboard::GetKeyHeldDuration(Key aKey) const
+		{
+			using namespace chrono_literals;
+
+			if (auto itr = myKeyHeldDurations.find(aKey); itr != myKeyHeldDurations.end())
+			{
+				return itr->second;
+			}
+
+			return 0ms;
 		}
 	}
 }

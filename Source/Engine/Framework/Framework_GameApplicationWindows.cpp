@@ -5,6 +5,8 @@
 
 #include "Framework_GameApplication.hpp"
 #include "Graphics_ImGuiModule.hpp"
+#include "Input_Module.hpp"
+#include "Input_Service.hpp"
 #include "Core_Memory.hpp"
 #include "Core_Pair.hpp"
 #include "Core_Window.hpp"
@@ -36,10 +38,43 @@ namespace Alba
 			//-----------------------------------------------------------------------------------------
 			static LRESULT EventHandler(GameApplication& anApplication, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
-				if (Graphics::ImGuiModule::IsLoaded())
+				#if defined(ALBA_IMGUI_ENABLED)
 				{
-					ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
-				}				
+					if (Graphics::ImGuiModule::IsLoaded())
+					{
+						ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
+
+						ImGuiIO& io = ImGui::GetIO();
+						
+						//-----------------------------------------------------
+						// Set input flags based on ImGui input state
+						//-----------------------------------------------------
+						ALBA_ASSERT(Input::InputModule::IsLoaded());
+
+						Input::InputModule& inputModule		= Input::InputModule::Get();
+						Input::InputService& inputService	= inputModule.GetInputServiceMutable();
+						auto& inputServiceFlags				= inputService.GetStateFlagsMutable();
+
+						if (io.WantCaptureKeyboard)
+						{
+							inputServiceFlags.Insert(Alba::Input::UIHasExclusiveKeyboardFocus);
+						}
+						else
+						{
+							inputServiceFlags.Remove(Alba::Input::UIHasExclusiveKeyboardFocus);
+						}
+						
+						if (io.WantCaptureMouse)
+						{
+							inputServiceFlags.Insert(Alba::Input::UIHasExclusiveMouseFocus);
+						}
+						else
+						{
+							inputServiceFlags.Remove(Alba::Input::UIHasExclusiveMouseFocus);
+						}
+					}
+				}
+				#endif
 
 				switch (uMsg)
 				{
@@ -70,7 +105,10 @@ namespace Alba
 
 						if (isKeyboardMessage || isMouseMessage)
 						{
-							windowInputHandler.myHandlerFunc(hWnd, uMsg, wParam, lParam);
+							if (!windowInputHandler.myHandlerFunc(hWnd, uMsg, wParam, lParam))
+							{
+								return 0;
+							}
 						}
 					}
 				}
