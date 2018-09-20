@@ -38,7 +38,7 @@ namespace Alba
 	};
 
 	template <typename TEnumerationType>
-	constexpr inline auto get_enum_entry_count_v = get_enum_entry_count<TEnumerationType>::value;
+	constexpr inline size_t get_enum_entry_count_v = get_enum_entry_count<TEnumerationType>::value;
 
 	//-----------------------------------------------------------------------------------------
 	// Name	:	is_enum_contiguous

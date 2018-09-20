@@ -19,6 +19,11 @@ namespace Alba
             return DevEnv.vs2017;
         }
 
+        public static string GetNatvisPath(string relativePath)
+        {
+            return System.IO.Path.Combine(@"[project.SharpmakeCsPath]\..\Debug", relativePath);
+        }
+
         public static string GetExternalLibraryPath(string relativePath)
         {
             return System.IO.Path.Combine(@"[project.SharpmakeCsPath]\..\External", relativePath);

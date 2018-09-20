@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">  
+  
+  <!-- 
+      Alba.natvis
+  -->
+	<Type Name="Alba::Core::EnumerationSet&lt;*&gt;">
+		<!--<DisplayString>BitSetBitsPerWord={BitSetBitsPerWord} BitSetWordCount={BitSetWordCount}</DisplayString>-->
+
+		<Expand>
+	
+			<CustomListItems MaxItemsPerView="256">
+
+				<Variable Name="currentIndex" InitialValue="0" />
+				<Variable Name="bitsPerWord" InitialValue="BitSetBitsPerWord" />
+				<Variable Name="wordCount" InitialValue="BitSetWordCount" />
+
+				<Variable Name="wordItr" InitialValue="0" />  
+				<Variable Name="bitItr" InitialValue="0" />
+
+				<!-- Loop over words in the bitset -->
+				<Loop>
+
+					<Exec>bitItr = 0</Exec>
+
+					<!-- Loop over bits in the current word -->
+					<Loop>  
+						
+						<Break Condition="bitItr >= bitsPerWord" />
+						<Break Condition="currentIndex >= ElementCount" />
+
+						<If Condition="(myData.mWord[wordItr] &amp; (uint64_t)1 &lt;&lt; (uint64_t)bitItr)">
+							<Item Name="{currentIndex}">($T1)currentIndex,en</Item>  
+						</If>
+
+						<Exec>bitItr++</Exec>  
+						<Exec>currentIndex++</Exec>
+
+					</Loop>
+
+					<Exec>wordItr++</Exec>
+					<Break Condition="wordItr >= wordCount" />
+
+				</Loop>
+
+			</CustomListItems>
+
+		</Expand>
+
+	</Type>
+
+</AutoVisualizer>  

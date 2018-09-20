@@ -79,14 +79,14 @@ namespace Alba
 			template <typename TEnumerationType, class = enable_if_t<is_enum_v<TEnumerationType>> >
 			static constexpr size_t best_bitset_element_size_v = best_bitset_element_size
 			<
-				::Alba::Core::NextLargestPowerOfTwo(get_enum_entry_count_v<TEnumerationType>)
+				::Alba::Core::NextLargestPowerOfTwo(get_enum_entry_count_v<TEnumerationType> / 8)
 			>
 			::value;
 
 			template <typename TEnumerationType, class = enable_if_t<is_enum_v<TEnumerationType>> >
 			using best_bitset_element_type_t = typename best_bitset_element_size
 			<
-				::Alba::Core::NextLargestPowerOfTwo(get_enum_entry_count_v<TEnumerationType>)
+				::Alba::Core::NextLargestPowerOfTwo(get_enum_entry_count_v<TEnumerationType> / 8)
 			>
 			::value_type;
 		}
@@ -107,6 +107,12 @@ namespace Alba
 				//=================================================================================
 				typedef Detail::best_bitset_element_type_t<TEnumerationType> ElementType;
 				typedef BitSet<ElementCount, ElementType>					 BitSetType;
+
+				//=================================================================================
+				// Public Static Constants
+				//=================================================================================
+				static constexpr size_t BitSetBitsPerWord	= BitSetType::kBitsPerWord;
+				static constexpr size_t BitSetWordCount		= ElementCount / BitSetBitsPerWord;
 
 				//=================================================================================
 				// Public Constructors
@@ -309,7 +315,9 @@ namespace Alba
 					else
 					{
 						size_t index = 0;
-						for (TEnumerationType entry : get_all_enum_values_v<TEnumerationType>)
+
+						static constexpr auto& allValues = get_all_enum_values_v<TEnumerationType>;
+						for (TEnumerationType entry : allValues)
 						{
 							if (entry == aValue)
 							{

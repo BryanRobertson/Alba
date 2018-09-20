@@ -27,14 +27,23 @@ namespace Alba
 			// v |= v >> 8;
 			// v |= v >> 16;
 			// v++;
-			
-			return 1 + ((anInput - 1)
-						|| (anInput >> 1)
-						|| (anInput >> 2)
-						|| (anInput >> 4)
-						|| (anInput >> 8)
-						|| (anInput >> 16)
-						|| (anInput >> 32));
+			if (anInput == 0)
+			{
+				return 1;
+			}
+
+			uint64 result = anInput;
+
+			--result;
+			result |= result >> 1;
+			result |= result >> 2;
+			result |= result >> 4;
+			result |= result >> 8;
+			result |= result >> 16;
+			result |= result >> 32;
+			++result;
+
+			return result;
 		}
 	}
 }
