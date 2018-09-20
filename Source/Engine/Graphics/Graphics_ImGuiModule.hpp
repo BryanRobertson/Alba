@@ -40,11 +40,16 @@ namespace Alba
 				void				OnUnload();
 
 				void				BeginFrame();
+
+				#if defined(ALBA_IMGUI_ENABLED)
+					void			Update(const Core::Time& aTime);
+				#endif
+
 				void				EndFrame();
 
 				#if defined(ALBA_IMGUI_ENABLED)
-				ImFont*				GetDefaultFont() const { return myFonts[static_cast<size_t>(FontType::Default)]; }
-				ImFont*				GetConsoleFont() const { return myFonts[static_cast<size_t>(FontType::Console)]; }
+					ImFont*			GetDefaultFont() const { return myFonts[static_cast<size_t>(FontType::Default)]; }
+					ImFont*			GetConsoleFont() const { return myFonts[static_cast<size_t>(FontType::Console)]; }
 				#endif
 
 			private:

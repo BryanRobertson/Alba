@@ -178,14 +178,21 @@ namespace Alba
 #if defined(ALBA_IMGUI_ENABLED)
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();	
+#endif
+		}
 
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+#if defined(ALBA_IMGUI_ENABLED)
+		void ImGuiModule::Update(const Core::Time&)
+		{
 			// 2. Show a simple window that we create ourselves.We use a Begin / End pair to created a named window.
 			{
 				static bool ourShowDemoWindow = true;
 				ImGui::ShowDemoWindow(&ourShowDemoWindow);
 			}
-#endif
 		}
+#endif
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
