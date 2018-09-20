@@ -186,7 +186,7 @@ namespace Alba
 						"Input",
 						&myInputBuffer[0],
 						myInputBuffer.size(),
-						ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory,
+						ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory | ImGuiInputTextFlags_CallbackCharFilter,
 						(ImGuiTextEditCallback)&TextEditCallback, (void*)this
 					);
 
@@ -306,6 +306,19 @@ namespace Alba
 			// Handle ImGui events
 			switch (data->EventFlag)
 			{
+				//----------------------------------------------------------------------------------
+				// Filter
+				//----------------------------------------------------------------------------------
+				case ImGuiInputTextFlags_CallbackCharFilter:
+				{
+					// Filter out the ~ key since it's used to toggle the console
+					if (data->EventChar == '~')
+					{
+						return 1;
+					}
+				}
+				break;
+
 				//----------------------------------------------------------------------------------
 				// Completion
 				//----------------------------------------------------------------------------------

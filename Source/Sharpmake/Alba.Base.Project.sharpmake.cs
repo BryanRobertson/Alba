@@ -17,8 +17,6 @@ namespace Alba
                 : base(typeof(Target))
             {
                 IsFileNameToLower = false;
-
-                NatvisFiles.Add(Alba.Settings.GetNatvisPath("Alba.natvis"));
             }
 
             public static Platform GetDefaultPlatforms()

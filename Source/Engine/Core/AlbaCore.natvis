@@ -2,7 +2,7 @@
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">  
   
   <!-- 
-      Alba.natvis
+      AlbaCore.natvis
   -->
 	<Type Name="Alba::Core::EnumerationSet&lt;*&gt;">
 		<!--<DisplayString>BitSetBitsPerWord={BitSetBitsPerWord} BitSetWordCount={BitSetWordCount}</DisplayString>-->

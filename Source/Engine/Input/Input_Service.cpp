@@ -43,13 +43,13 @@ namespace Alba
 					//-----------------------------------------------------------------------------
 					case WM_KEYDOWN:
 					{
+						KeySet& held = aKeyboard.GetHeldKeysMutable();
 						KeySet& pressed = aKeyboard.GetPressedKeysMutable();
-						KeySet& released = aKeyboard.GetReleasedKeysMutable();
 
 						const Key key = static_cast<Key>(wParam);
 
-						pressed.Insert(key);
-						released.Remove(key);
+						held.Insert(key);
+						pressed.Remove(key);
 					}
 					return 0;
 
@@ -58,13 +58,13 @@ namespace Alba
 					//-----------------------------------------------------------------------------
 					case WM_KEYUP:
 					{
+						KeySet& held = aKeyboard.GetHeldKeysMutable();
 						KeySet& pressed = aKeyboard.GetPressedKeysMutable();
-						KeySet& released = aKeyboard.GetReleasedKeysMutable();
 
 						const Key key = static_cast<Key>(wParam);
 
-						pressed.Remove(key);
-						released.Insert(key);
+						held.Remove(key);
+						pressed.Insert(key);
 					}
 					return 0;
 				}
@@ -160,6 +160,14 @@ namespace Alba
 					}
 				}				
 			}			
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void InputService::BeginFrame()
+		{
+			// The released keys 
+			myKeyboard.GetPressedKeysMutable().Clear();
 		}
 
 		//-----------------------------------------------------------------------------------------

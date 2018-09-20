@@ -75,7 +75,7 @@ namespace Alba
 				ConsoleHistory			myHistory;
 
 				int						myHistoryIndex		= -1;
-				bool					myIsConsoleVisible	= true;
+				bool					myIsConsoleVisible	= false;
 		};
 	}
 }

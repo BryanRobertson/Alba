@@ -1,6 +1,5 @@
 #include "Quake3Viewer_Precompile.hpp"
 #include "Quake3Viewer_Module.hpp"
-#include "Core_ConsoleModule.hpp"
 
 namespace Alba
 {

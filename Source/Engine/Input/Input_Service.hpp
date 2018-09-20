@@ -68,6 +68,7 @@ namespace Alba
 				uint32	Init(const Core::AnyDictionary& someParams);
 				void	ShutDown();
 
+				void	BeginFrame();
 				void	Update(const Core::Time& aTime);
 
 				//---------------------------------------------------------------------------------

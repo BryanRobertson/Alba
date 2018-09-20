@@ -4,6 +4,7 @@
 #include "Graphics_InitParams.hpp"
 #include "Graphics_Module.hpp"
 #include "Graphics_Service.hpp"
+#include "Graphics_ConsoleModule.hpp"
 #include "Input_InitParams.hpp"
 #include "Input_Module.hpp"
 #include "Input_Service.hpp"
@@ -105,6 +106,9 @@ namespace Alba
 				{
 					return 1;
 				}
+
+				Alba::Input::InputModule& inputModule = Alba::Input::InputModule::Get();
+				myInputService = &inputModule.GetInputServiceMutable();
 			}
 
 			//----------------------------------------------------------------------
@@ -207,11 +211,24 @@ namespace Alba
 				// Update Input
 				//-----------------------------------------------------------------------------------------
 				{
-					Alba::Input::InputModule& inputModule = Alba::Input::InputModule::Get();
-					ALBA_ASSERT(inputModule.IsLoaded());
+					ALBA_ASSERT(Alba::Input::InputModule::IsLoaded());
 
-					Input::InputService& inputService = inputModule.GetInputServiceMutable();
-					inputService.Update(myTimer);
+					myInputService->Update(myTimer);
+
+					// Toggle console when tilde key (~) is pressed
+					if (Graphics::ConsoleModule::IsLoaded())
+					{
+						const Input::Keyboard& keyboard = myInputService->GetKeyboard();
+						const Input::KeySet releasedKeys = keyboard.GetPressedKeys();
+
+						if (releasedKeys.Contains(Input::Key_Tilde))
+						{
+							Graphics::ConsoleModule& consoleModule = Graphics::ConsoleModule::Get();
+							Graphics::Console& console = consoleModule.GetConsole();
+
+							console.ToggleVisibility();
+						}						
+					}
 				}
 
 				//-----------------------------------------------------------------------------------------
@@ -245,6 +262,8 @@ namespace Alba
 		void GameApplication::BeginFrame()
 		{
 			ALBA_PROFILE_SCOPED(BeginFrame);
+
+			myInputService->BeginFrame();
 			
 			myGraphicsService->BeginFrame();
 			myGraphicsService->ClearBuffer(Math::Vector4f(0.0f, 0.0f, 0.0f, 1.0f));

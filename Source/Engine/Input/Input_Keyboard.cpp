@@ -17,7 +17,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void Keyboard::UpdateKeyHeldDurations(const Core::Time& aTime)
 		{
-			for (Key key : myReleasedKeys)
+			for (Key key : myPressedKeys)
 			{
 				myKeyHeldDurations.erase(key);
 			}

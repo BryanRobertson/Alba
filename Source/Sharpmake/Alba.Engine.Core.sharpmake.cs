@@ -16,6 +16,8 @@ namespace Alba
             {
                 Name = "Core";
                 SourceRootPath = @"[project.SharpmakeCsPath]\..\Engine\Core";
+
+                NatvisFiles.Add(Path.Combine(SourceRootPath,"AlbaCore.natvis"));
             }
 
             [Configure()]

@@ -52,11 +52,15 @@ namespace Alba
 			// Print error message if the command failed
 			if (result != 0)
 			{
+				Print(ConsoleMessageType::Error, "");
 				Print(ConsoleMessageType::Error, "Command \"%s\" returned %u", commandName.data(), result);
+				Print(ConsoleMessageType::Error, "");
 			}
 			else
 			{
+				Print(ConsoleMessageType::Info, "");
 				Print(ConsoleMessageType::Info, "Command \"%s\" returned %u", commandName.data(), 0);
+				Print(ConsoleMessageType::Info, "");
 			}
 		}
 

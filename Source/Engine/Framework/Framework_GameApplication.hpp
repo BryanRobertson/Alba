@@ -18,6 +18,11 @@ namespace Alba
 		class GraphicsService;
 	}
 
+	namespace Input
+	{
+		class InputService;
+	}
+
 	namespace Framework
 	{
 		//-----------------------------------------------------------------------------------------
@@ -84,11 +89,12 @@ namespace Alba
 				// Private Data
 				//=================================================================================
 				Core::UniquePtr<Core::Window>		myWindow;
-				Alba::Graphics::GraphicsService*	myGraphicsService;
+				Alba::Graphics::GraphicsService*	myGraphicsService = nullptr;
+				Alba::Input::InputService*			myInputService = nullptr;
 
 				ApplicationInitParams				myInitParams;
 				Core::Time							myTimer;
-				bool								myQuit;
+				bool								myQuit = false;
 		};
 	}
 }

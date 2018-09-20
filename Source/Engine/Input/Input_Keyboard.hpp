@@ -34,16 +34,17 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				void				UpdateKeyHeldDurations(const Core::Time& aTime);
+				void					UpdateKeyHeldDurations(const Core::Time& aTime);
 
-				inline bool			IsKeyHeld(Key aKey) const;
-				inline bool			IsKeyReleased(Key aKey) const;
+				inline bool				IsKeyHeld(Key aKey) const;
+				inline bool				IsKeyUp(Key aKey) const;
 
-				inline const KeySet& GetPressedKeys() const;
-				inline const KeySet& GetReleasedKeys() const;
+				inline const KeySet&	GetHeldKeys() const;
+				inline KeySet			GetUpKeys() const;
+				inline const KeySet&	GetPressedKeys() const;
 
-				inline KeySet&		GetPressedKeysMutable();
-				inline KeySet&		GetReleasedKeysMutable();
+				inline KeySet&			GetHeldKeysMutable();
+				inline KeySet&			GetPressedKeysMutable();
 
 				Core::TimeDurationMilliSeconds GetKeyHeldDuration(Key aKey) const;
 
@@ -53,11 +54,11 @@ namespace Alba
 				// Private Data
 				//=================================================================================
 
-				// Keys that are down this frame
-				KeySet				myPressedKeys;
+				// Keys that are Held this frame
+				KeySet				myHeldKeys;
 
 				// Keys that were just released this frame
-				KeySet				myReleasedKeys;
+				KeySet				myPressedKeys;
 
 				// For each held key, how long the key has been held for
 				Core::VectorMap<Key, Core::TimeDurationMilliSeconds> myKeyHeldDurations;
@@ -67,14 +68,28 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		bool Keyboard::IsKeyHeld(Key aKey) const
 		{
-			return myPressedKeys.Contains(aKey);
+			return myHeldKeys.Contains(aKey);
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		bool Keyboard::IsKeyReleased(Key aKey) const
+		bool Keyboard::IsKeyUp(Key aKey) const
 		{
-			return myReleasedKeys.Contains(aKey);
+			return !myHeldKeys.Contains(aKey);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		const KeySet& Keyboard::GetHeldKeys() const
+		{
+			return myHeldKeys;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		KeySet Keyboard::GetUpKeys() const
+		{
+			return ~myHeldKeys;
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -86,9 +101,9 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		const KeySet& Keyboard::GetReleasedKeys() const
+		KeySet& Keyboard::GetHeldKeysMutable()
 		{
-			return myReleasedKeys;
+			return myHeldKeys;
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -96,13 +111,6 @@ namespace Alba
 		KeySet& Keyboard::GetPressedKeysMutable()
 		{
 			return myPressedKeys;
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		KeySet& Keyboard::GetReleasedKeysMutable()
-		{
-			return myReleasedKeys;
 		}
 
 	}
