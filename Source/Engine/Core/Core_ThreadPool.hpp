@@ -52,7 +52,7 @@ namespace Alba
 				//================================================================================
 				// Private Data
 				//================================================================================
-				FixedVector<Thread, ourThreadCapacity> myThreads;
+				FixedVector<thread, ourThreadCapacity> myThreads;
 				std::atomic<bool>					   myIsRunning;
 		};
 	}

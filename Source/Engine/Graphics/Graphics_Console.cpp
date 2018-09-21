@@ -447,6 +447,7 @@ namespace Alba
 		void Console::Show()
 		{
 			myIsConsoleVisible = true;
+			myWasConsoleShownThisFrame = true;
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -461,6 +462,7 @@ namespace Alba
 		void Console::ToggleVisibility()
 		{
 			myIsConsoleVisible = !myIsConsoleVisible;
+			myWasConsoleShownThisFrame = myIsConsoleVisible;
 		}
 	}
 }

@@ -54,6 +54,8 @@ namespace Alba
 				//=================================================================================
 				inline Handle				GetResource(NoCaseStringHash32 aResourceNameId);
 				inline bool					HasResource(NoCaseStringHash32 aResourceNameId) const;
+
+				inline Handle				CreateResource();
 				inline Handle				CreateResource(NoCaseStringHash32 aResourceNameId);
 
 			protected:
@@ -153,6 +155,17 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		template <typename TDerived, typename TResourceType>
+		/*inline*/ typename ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::CreateResource()
+		{
+			using namespace Alba::StringHashLiterals
+			static const NoCaseStringHash32 ourNoStringHash("NoStringHash"_nocasehash32);
+
+			return CreateResource(NoCaseStringHash32::ourInvalidHashValue);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template <typename TDerived, typename TResourceType>
 		/*inline*/ typename ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::CreateResource(NoCaseStringHash32 aResourceNameId)
 		{
 			uint64 index = 0;
@@ -199,6 +212,7 @@ namespace Alba
 			myResources[index] = TResourceType(aResourceNameId, id);
 
 			// Set name lookup
+			if ( aResourceNameId.IsValid() )
 			{
 				Core::ScopedWriterMutexLock lock(myModifyNameIdHashToIndex);
 				myNameIdHashToIndex[aResourceNameId] = static_cast<uint32>(index);

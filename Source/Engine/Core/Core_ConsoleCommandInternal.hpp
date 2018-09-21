@@ -61,7 +61,7 @@ namespace Alba
 			//-------------------------------------------------------------------------------------
 			struct CommandStorage
 			{
-				typedef std::aligned_storage<theStorageSize>::type Storage;
+				typedef Core::AlignedStorage<theStorageSize> Storage;
 
 				CommandStorage()
 					: myVTable(nullptr)

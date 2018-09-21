@@ -74,8 +74,9 @@ namespace Alba
 				ConsoleItemColours		myLineColours;
 				ConsoleHistory			myHistory;
 
-				int						myHistoryIndex		= -1;
-				bool					myIsConsoleVisible	= false;
+				int						myHistoryIndex				= -1;
+				bool					myIsConsoleVisible			= false;
+				bool					myWasConsoleShownThisFrame	= false;
 		};
 	}
 }

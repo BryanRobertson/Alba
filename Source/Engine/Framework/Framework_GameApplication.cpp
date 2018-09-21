@@ -10,6 +10,7 @@
 #include "Input_Service.hpp"
 #include "Core_Memory.hpp"
 #include "Core_Pair.hpp"
+#include "Core_ConsoleModule.hpp"
 #include "Core_Window.hpp"
 #include "Core_WindowEventHandler.hpp"
 #include "Core_Profile.hpp"
@@ -147,6 +148,29 @@ namespace Alba
 					// Load console front-end (graphics-side) module
 					moduleRepository.LoadModule("Alba.Graphics.Console"_nocasehash32);
 				}			
+			}
+
+			//-----------------------------------------------------------------------------------------
+			// Init console commands
+			//-----------------------------------------------------------------------------------------
+			if (Core::ConsoleModule::IsLoaded())
+			{
+				using namespace Alba::StringViewLiterals;
+
+				Core::ConsoleModule& consoleModule = Core::ConsoleModule::Get();
+				Core::Console& console = consoleModule.GetConsole();
+
+				console.RegisterCommand("exit"_sv, [this]()
+				{
+					Quit();
+					return 0;
+				});
+
+				console.RegisterCommand("quit"_sv, [this]()
+				{
+					Quit();
+					return 0;
+				});
 			}
 
 			return 0;

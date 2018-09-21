@@ -27,14 +27,14 @@ namespace Alba
 		// Desc	:	Alias for std::thread, so we can switch out STL threads for a compatible
 		//			implementation if necessary
 		//-------------------------------------------------------------------------------------------------
-		typedef std::thread Thread;
+		typedef std::thread thread;
 
 		//-------------------------------------------------------------------------------------------------
 		// Name	:	Core_Atomic
 		// Desc :	Alias for std::atomic
 		//-------------------------------------------------------------------------------------------------
 		template <typename TValueType>
-		using Atomic = std::atomic<TValueType>;
+		using atomic = std::atomic<TValueType>;
 	}
 }
 

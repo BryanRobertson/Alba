@@ -44,13 +44,15 @@ namespace Alba
 		{
 			myRenderBackEnd->BeginFrame();
 
-#if defined(ALBA_IMGUI_ENABLED)
-			ImGuiModule& imGuiModule = ImGuiModule::Get();
-			if (imGuiModule.IsLoaded())
+#			if defined(ALBA_IMGUI_ENABLED)
 			{
-				imGuiModule.BeginFrame();
+				ImGuiModule& imGuiModule = ImGuiModule::Get();
+				if (imGuiModule.IsLoaded())
+				{
+					imGuiModule.BeginFrame();
+				}
 			}
-#endif
+#			endif
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -63,13 +65,15 @@ namespace Alba
 				consoleModule.Render();
 			}
 
-#if defined(ALBA_IMGUI_ENABLED)
-			ImGuiModule& imGuiModule = ImGuiModule::Get();
-			if (imGuiModule.IsLoaded())
+#			if defined(ALBA_IMGUI_ENABLED)
 			{
-				imGuiModule.EndFrame();
+				ImGuiModule& imGuiModule = ImGuiModule::Get();
+				if (imGuiModule.IsLoaded())
+				{
+					imGuiModule.EndFrame();
+				}
 			}
-#endif
+#			endif
 
 			myRenderBackEnd->EndFrame();
 		}
