@@ -19,7 +19,7 @@ namespace Alba
 			struct Fields
 			{
 				uint32	myIndex		: 32;
-				uint32  myNameHash	: 32;
+				uint32  myUniqueId	: 32;
 			};
 
 			Fields myFields;
@@ -72,6 +72,10 @@ namespace Alba
 				inline void					DestroyResource(Handle aHandle);
 			
 			private:
+
+				//=================================================================================
+				// Protected Types
+				//=================================================================================
 
 				//=================================================================================
 				// Private Methods
@@ -157,9 +161,6 @@ namespace Alba
 		template <typename TDerived, typename TResourceType>
 		/*inline*/ typename ResourceRepository<TDerived, TResourceType>::Handle ResourceRepository<TDerived, TResourceType>::CreateResource()
 		{
-			using namespace Alba::StringHashLiterals
-			static const NoCaseStringHash32 ourNoStringHash("NoStringHash"_nocasehash32);
-
 			return CreateResource(NoCaseStringHash32::ourInvalidHashValue);
 		}
 
@@ -201,7 +202,16 @@ namespace Alba
 			// Generate ID
 			ResourceIdInternal idFields;
 			idFields.myFields.myIndex = index;
-			idFields.myFields.myNameHash = aResourceNameId.GetHash();
+
+			if (aResourceNameId.IsValid())
+			{
+				idFields.myFields.myUniqueId = aResourceNameId.GetHash();
+			}
+			else
+			{
+				static uint32 counter = 0;
+				idFields.myFields.myUniqueId = ++counter;
+			}			
 
 			ResourceIdInternal idValue;
 			std::memcpy(&idValue, &idFields, sizeof(idValue));
