@@ -26,6 +26,9 @@ namespace Alba
 		{
 			Print(ConsoleMessageType::Info, aCommandString);
 
+			//-----------------------------------------------------------------
+			// Parse out the command name and try to find it
+			//-----------------------------------------------------------------
 			ConsoleCommandParser::ParseState parseState { aCommandString };
 			const auto [isValid, commandNameToken] = ConsoleCommandParser::ParseCommandName(parseState);
 
@@ -45,11 +48,17 @@ namespace Alba
 				return;
 			}
 
-			// Call the command
+			// Skip the command name so all we have left to parse is the arguments (if the command takes any)
 			const StringView argumentString = commandNameToken.GetRemainingInput();
+
+			//-----------------------------------------------------------------
+			// We found it! Call the command
+			//-----------------------------------------------------------------
 			const auto result = itr->second.myVTable->Invoke(itr->second, argumentString);
 
-			// Print error message if the command failed
+			//-----------------------------------------------------------------
+			// Print result
+			//-----------------------------------------------------------------
 			if (result != 0)
 			{
 				Print(ConsoleMessageType::Error, "");

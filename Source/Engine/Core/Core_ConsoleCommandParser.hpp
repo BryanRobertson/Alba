@@ -383,34 +383,21 @@ namespace Alba
 				template <typename... TArgs>
 				static bool ParseArguments(ParseState anInputState, std::tuple<TArgs...>& someArgumentsOut)
 				{
-					return ParseArguments<0, TArgs...>(anInputState, someArgumentsOut);
+					// Basically what this does, is for each entry in the tuple, call "ParseArgument"
+					// in turn for each element (passing in the tuple as a reference)
+					//
+					// If this call completes successfully then the tuple will contain the parsed argument values
+					return std::apply
+					(
+						[&anInputState](auto&&... someArgs)
+						{
+							return (ParseArgument(anInputState, someArgs) && ...);
+						}, 
+						std::forward<std::tuple<TArgs...>>(someArgumentsOut)
+					);
 				}
 
 			private:
-
-				//---------------------------------------------------------------------------------
-				//---------------------------------------------------------------------------------
-				template <size_t TIndex, typename... TArgs>
-				static bool ParseArguments(ParseState& aParseState, std::tuple<TArgs...>& someArgumentsOut)
-				{
-					ParseState parseState = aParseState;
-
-					typedef std::tuple_element_t<TIndex, std::tuple<TArgs...>> TArgType;
-
-					// Parse the argument at the specified index
-					const bool success = ParseArgument<TArgType>(parseState, std::forward<TArgType>(std::get<TIndex>(someArgumentsOut)));
-					
-					// If successful and there are remaining arguments, then recursively parse them too
-					if constexpr (TIndex + 1 < sizeof...(TArgs))
-					{
-						return success && ParseArguments<TIndex+1, TArgs...>(parseState, someArgumentsOut);
-					}
-					// Otherwise just return whether or not we were successful
-					else
-					{
-						return success;
-					}
-				}
 
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------
