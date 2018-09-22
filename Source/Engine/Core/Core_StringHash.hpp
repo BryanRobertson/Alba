@@ -243,12 +243,38 @@ namespace Alba
 			typename TStringHashBase<THashValueType, THashAlgorithm>::DebugStringTable TStringHashBase<THashValueType, THashAlgorithm>::ourDebugStringTable;
 		#endif
 
+		typedef TStringHashBase<uint16, FNV1a16Hash>		StringHash16;
+		typedef TStringHashBase<uint16, FNV1a16HashNoCase>	NoCaseStringHash16;
 		typedef TStringHashBase<uint32, FNV1a32Hash>		StringHash32;
 		typedef TStringHashBase<uint32, FNV1a32HashNoCase>	NoCaseStringHash32;
 		typedef TStringHashBase<uint64, FNV1a64Hash>		StringHash64;
 		typedef TStringHashBase<uint64, FNV1a64HashNoCase>	NoCaseStringHash64;
+
+		template <typename TFromType, typename TToType>
+		inline constexpr TToType ConvertHash(TFromType aFrom)
+		{
+			ALBA_ASSERT(false, "Not Implemented!");
+			return TToType();
+		}
+
+		template <>
+		inline constexpr NoCaseStringHash16 ConvertHash(NoCaseStringHash32 aFrom)
+		{
+			return NoCaseStringHash16(FNV1a16HashNoCase::Convert(aFrom.GetHash()));
+		}
+
+		template <>
+		inline constexpr StringHash16 ConvertHash(StringHash32 aFrom)
+		{
+			return StringHash16(FNV1a16Hash::Convert(aFrom.GetHash()));
+		}
 	}
 }
+
+template <> struct eastl::hash<Alba::Core::StringHash16>
+{
+	size_t operator()(Alba::Core::StringHash16 val) const { return static_cast<size_t>(val.GetHash()); }
+};
 
 template <> struct eastl::hash<Alba::Core::StringHash32>
 {
@@ -268,6 +294,11 @@ template <> struct eastl::hash<Alba::Core::NoCaseStringHash32>
 template <> struct eastl::hash<Alba::Core::NoCaseStringHash64>
 {
 	size_t operator()(Alba::Core::NoCaseStringHash64 val) const { return static_cast<size_t>(val.GetHash()); }
+};
+
+template <> struct std::hash<Alba::Core::StringHash16>
+{
+	size_t operator()(Alba::Core::StringHash16 val) const { return static_cast<size_t>(val.GetHash()); }
 };
 
 template <> struct std::hash<Alba::Core::StringHash32>
@@ -294,6 +325,11 @@ namespace Alba
 {
 	namespace StringHashLiterals
 	{
+		inline constexpr Alba::Core::StringHash16 operator "" _hash16(const char* aStr, size_t aSize)
+		{
+			return Alba::Core::StringHash16(Alba::Core::StringView(aStr, aSize), Alba::Core::StringHash16::CompileTimeHash());
+		}
+
 		inline constexpr Alba::Core::StringHash32 operator "" _hash32(const char* aStr, size_t aSize)
 		{
 			return Alba::Core::StringHash32(Alba::Core::StringView(aStr, aSize), Alba::Core::StringHash32::CompileTimeHash());
@@ -302,6 +338,11 @@ namespace Alba
 		inline constexpr Alba::Core::StringHash64 operator "" _hash64(const char* aStr, size_t aSize)
 		{
 			return Alba::Core::StringHash64(Alba::Core::StringView(aStr, aSize), Alba::Core::StringHash64::CompileTimeHash());
+		}
+
+		inline constexpr Alba::Core::NoCaseStringHash16 operator "" _nocasehash16(const char* aStr, size_t aSize)
+		{
+			return Alba::Core::NoCaseStringHash16(Alba::Core::StringView(aStr, aSize), Alba::Core::NoCaseStringHash16::CompileTimeHash());
 		}
 
 		inline constexpr Alba::Core::NoCaseStringHash32 operator "" _nocasehash32(const char* aStr, size_t aSize)
