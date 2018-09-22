@@ -160,17 +160,8 @@ namespace Alba
 				Core::ConsoleModule& consoleModule = Core::ConsoleModule::Get();
 				Core::Console& console = consoleModule.GetConsole();
 
-				console.RegisterCommand("exit"_sv, [this]()
-				{
-					Quit();
-					return 0;
-				});
-
-				console.RegisterCommand("quit"_sv, [this]()
-				{
-					Quit();
-					return 0;
-				});
+				console.RegisterCommand("exit"_sv, this, &GameApplication::Quit);
+				console.RegisterCommand("quit"_sv, this, &GameApplication::Quit);
 			}
 
 			return 0;
@@ -327,9 +318,10 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void GameApplication::Quit()
+		int GameApplication::Quit()
 		{
 			myQuit = true;
+			return 0;
 		}
 	}
 }

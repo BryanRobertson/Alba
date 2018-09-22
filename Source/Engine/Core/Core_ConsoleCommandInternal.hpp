@@ -223,7 +223,7 @@ namespace Alba
 				template <typename ...TArgs>
 				static const auto& GetVTable()
 				{
-					static auto ourVTable = ConstructVTable( &TCallable::operator() );
+					static auto ourVTable = ConstructVTable(&TCallable::operator());
 					return ourVTable;
 				}
 			};

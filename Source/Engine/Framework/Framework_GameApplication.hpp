@@ -64,7 +64,7 @@ namespace Alba
 				uint32		Run();
 				uint32		Shutdown();
 
-				void		Quit();
+				int			Quit();
 
 				//---------------------------------------------------------------------------------
 				// Accessors

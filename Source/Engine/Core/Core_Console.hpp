@@ -68,8 +68,10 @@ namespace Alba
 				template <typename TClassType, typename ...TArgs>
 				void RegisterCommand(StringView aCommandName, TClassType* anInstance, int (TClassType::*aCommand)(TArgs...) )
 				{
-					// Just use std::bind and use the functor version
-					RegisterCommand(std::bind(anInstance, aCommand));
+					RegisterCommand(aCommandName, [=](TArgs&&... args) -> int
+					{
+						return std::invoke(aCommand, anInstance, std::forward<TArgs>(args)...);
+					});
 				}
 
 				// Free function
