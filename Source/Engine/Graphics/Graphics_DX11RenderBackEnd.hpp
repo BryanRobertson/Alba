@@ -14,7 +14,7 @@ namespace Alba
 		// Name	:	DX11RenderBackEnd
 		// Desc	:	Base class for renderer implementations using a specific graphics API
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API DX11RenderBackEnd : public RenderBackEnd
+		class ALBA_GRAPHICS_API DX11RenderBackEnd final : public RenderBackEnd
 		{
 			public:
 
@@ -27,21 +27,21 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				virtual uint32	Init(const InitParams& anInitParams) override;
-				virtual void	BeginFrame() override;
-				virtual void	ClearBuffer(const Math::Vector4f& aColour) override;
-				virtual void	Present() override;
-				virtual void	EndFrame() override;
-				virtual void	ShutDown() override;
+				virtual uint32	Init(const InitParams& anInitParams) final override;
+				virtual void	BeginFrame() final override;
+				virtual void	ClearBuffer(const Math::Vector4f& aColour) final override;
+				virtual void	Present() final override;
+				virtual void	EndFrame() final override;
+				virtual void	ShutDown() final override;
 
-				virtual bool	ImGuiInit() override;
-				virtual void	ImGuiShutDown() override;
+				virtual bool	ImGuiInit() final override;
+				virtual void	ImGuiShutDown() final override;
 
-				virtual uint32	CreateVertexShaderFromString(ShaderId aShaderId, Core::StringView aString) override;
-				virtual uint32	CreateVertexShaderFromFile(ShaderId aShaderId, Core::StringView aFileName) override;
+				virtual uint32	CreateVertexShaderFromString(ShaderId aShaderId, Core::StringView aString) final override;
+				virtual uint32	CreateVertexShaderFromFile(ShaderId aShaderId, Core::StringView aFileName) final override;
 
-				virtual uint32	CreatePixelShaderFromString(ShaderId aShaderId, Core::StringView aString) override;
-				virtual uint32	CreatePixelShaderFromFile(ShaderId aShaderId, Core::StringView aFileName) override;
+				virtual uint32	CreatePixelShaderFromString(ShaderId aShaderId, Core::StringView aString) final override;
+				virtual uint32	CreatePixelShaderFromFile(ShaderId aShaderId, Core::StringView aFileName) final override;
 
 			private:
 

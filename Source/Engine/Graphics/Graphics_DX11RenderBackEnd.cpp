@@ -23,6 +23,7 @@ namespace Alba
 			: myFeatureLevel()
 			, myIsImGuiInitialised(false)
 		{
+
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -268,9 +269,20 @@ namespace Alba
 		void DX11RenderBackEnd::ClearBuffer(const Math::Vector4f& aColour)
 		{
 			const float colour[] = { aColour[0], aColour[1], aColour[2], aColour[3] };
-			myDeviceContext->ClearRenderTargetView(myRenderTarget.Get(), colour);
+			
+			myDeviceContext->ClearRenderTargetView
+			(
+				myRenderTarget.Get(), 
+				colour
+			);
 
-			//myDeviceContext->ClearDepthStencilView(myDepthStencilView.Get(), )
+			myDeviceContext->ClearDepthStencilView
+			(
+				myDepthStencilView.Get(), 
+				D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 
+				0.0f, 
+				0
+			);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -300,12 +312,14 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void DX11RenderBackEnd::BeginFrame()
 		{
-#if defined(ALBA_IMGUI_ENABLED)
-			if (ImGuiModule::IsLoaded())
+#			if defined(ALBA_IMGUI_ENABLED)
 			{
-				ImGui_ImplDX11_NewFrame();
+				if (ImGuiModule::IsLoaded())
+				{
+					ImGui_ImplDX11_NewFrame();
+				}
 			}
-#endif
+#			endif
 
 			ID3D11RenderTargetView* renderTarget = myRenderTarget.Get();
 			myDeviceContext->OMSetRenderTargets(1, &renderTarget, myDepthStencilView.Get());
@@ -315,13 +329,15 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void DX11RenderBackEnd::EndFrame()
 		{
-#if defined(ALBA_IMGUI_ENABLED)
-			if (ImGuiModule::IsLoaded())
+#			if defined(ALBA_IMGUI_ENABLED)
 			{
-				ImGui::Render();
-				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+				if (ImGuiModule::IsLoaded())
+				{
+					ImGui::Render();
+					ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+				}
 			}
-#endif
+#			endif
 
 			Present();
 		}
@@ -330,19 +346,21 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		bool DX11RenderBackEnd::ImGuiInit()
 		{
-#if defined(ALBA_IMGUI_ENABLED)
-			if (!ImGui_ImplDX11_Init(myDevice.Get(), myDeviceContext.Get()))
+#			if defined(ALBA_IMGUI_ENABLED)
 			{
-				return false;
-			}
+				if (!ImGui_ImplDX11_Init(myDevice.Get(), myDeviceContext.Get()))
+				{
+					return false;
+				}
 
-			if (!ImGui_ImplDX11_CreateDeviceObjects())
-			{
-				return false;
-			}
+				if (!ImGui_ImplDX11_CreateDeviceObjects())
+				{
+					return false;
+				}
 
-			myIsImGuiInitialised = true;
-#endif
+				myIsImGuiInitialised = true;
+			}
+#			endif
 			return true;
 		}
 
@@ -350,14 +368,16 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void DX11RenderBackEnd::ImGuiShutDown()
 		{
-#if defined(ALBA_IMGUI_ENABLED)
-			ImGuiModule& imGuiModule = ImGuiModule::Get();
-			if (imGuiModule.IsLoaded() && myIsImGuiInitialised)
+#			if defined(ALBA_IMGUI_ENABLED)
 			{
-				ImGui_ImplDX11_Shutdown();
-				myIsImGuiInitialised = false;
+				ImGuiModule& imGuiModule = ImGuiModule::Get();
+				if (imGuiModule.IsLoaded() && myIsImGuiInitialised)
+				{
+					ImGui_ImplDX11_Shutdown();
+					myIsImGuiInitialised = false;
+				}
 			}
-#endif
+#			endif
 		}
 
 		//-----------------------------------------------------------------------------------------
