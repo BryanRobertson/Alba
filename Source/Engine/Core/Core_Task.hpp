@@ -14,7 +14,12 @@ namespace Alba
 			//=====================================================================================
 			// Public Data
 			//=====================================================================================
-			char myBuffer[std::hardware_destructive_interference_size];
+
+			uint32	myId;
+			uint32	myParent;
+			uint32	myDependsOn;
+
+			//char myBuffer[std::hardware_destructive_interference_size];
 		};
 	}
 }
