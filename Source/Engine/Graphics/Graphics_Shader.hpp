@@ -23,29 +23,12 @@ namespace Alba
 		};
 
 		class Shader;
+		class ShaderRepository;
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API ShaderRepository final : public Core::ResourceRepository<ShaderRepository, Shader>
-		{
-			typedef Core::ResourceRepository<ShaderRepository, Shader> Super;
-
-			public:
-
-				//=================================================================================
-				// Public Constructors
-				//=================================================================================
-				ShaderRepository();
-
-				//=================================================================================
-				// Public Methods
-				//=================================================================================
-		};
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		typedef Core::ResourceHandle<Shader, ShaderRepository>	ShaderHandle;
-		typedef Core::ResourceId<Shader>						ShaderId;
+		typedef Core::ResourceHandle<Shader>	ShaderHandle;
+		typedef Core::ResourceId<Shader>		ShaderId;
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	Shader
@@ -87,11 +70,6 @@ namespace Alba
 				void Unload();
 
 			private:			
-
-				//=================================================================================
-				// Private Static Data
-				//=================================================================================
-				static ShaderRepository		ourShaderRepository;
 
 				//=================================================================================
 				// Private Methods

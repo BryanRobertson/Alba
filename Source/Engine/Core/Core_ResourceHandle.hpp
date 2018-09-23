@@ -7,10 +7,13 @@ namespace Alba
 {
 	namespace Core
 	{
+		template <typename TResourceType>
+		class ResourceRepository;
+
 		//-----------------------------------------------------------------------------------------
 		// Name	:	ResourceHandle
 		//-----------------------------------------------------------------------------------------
-		template <typename TResourceType, typename TResourceRepository>
+		template <typename TResourceType>
 		class ResourceHandle
 		{
 			public:
@@ -18,11 +21,11 @@ namespace Alba
 				//=================================================================================
 				// Public Types
 				//=================================================================================
-				typedef ResourceId<TResourceType>	IdType;
-				typedef TResourceType				ResourceType;
-				typedef TResourceRepository			RepositoryType;
+				typedef ResourceId<TResourceType>			IdType;
+				typedef TResourceType						ResourceType;
+				typedef ResourceRepository<TResourceType>	RepositoryType;
 
-				typedef ResourceHandle<TResourceType, TResourceRepository> ThisType;
+				typedef ResourceHandle<TResourceType> ThisType;
 
 				struct ResourceLock
 				{
@@ -163,8 +166,8 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				TResourceRepository* myRepository;
-				IdType				 myResourceId;
+				RepositoryType*		myRepository;
+				IdType				myResourceId;
 		};
 	}
 }

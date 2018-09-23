@@ -10,6 +10,24 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
+		class ALBA_GRAPHICS_API ShaderRepository final : public Core::ResourceRepository<Shader>
+		{
+			typedef Core::ResourceRepository<Shader> Super;
+
+			public:
+
+				//=================================================================================
+				// Public Constructors
+				//=================================================================================
+				ShaderRepository();
+
+				//=================================================================================
+				// Public Methods
+				//=================================================================================
+		};
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		ShaderRepository::ShaderRepository()
 			: Super(ourMaxShaders)
 		{
@@ -18,15 +36,20 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ ShaderRepository	Shader::ourShaderRepository;
+		namespace Detail
+		{
+			static ShaderRepository	ourShaderRepository;
+		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		/*static*/ShaderHandle Shader::Get(ShaderType aShaderType, Core::StringView aFileName)
 		{
+			using namespace Detail;
+
 			const Core::NoCaseStringHash32 resourceNameId(aFileName);
 
-			ShaderHandle handle = ourShaderRepository.GetResource(resourceNameId);
+			ShaderHandle handle = Detail::ourShaderRepository.GetResource(resourceNameId);
 			if (!handle.IsValid())
 			{
 				handle = ourShaderRepository.CreateResource(resourceNameId);
@@ -46,6 +69,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		/*static*/ ShaderHandle Shader::Get(Shader::NameId aResourceNameId)
 		{
+			using namespace Detail;
 			return ourShaderRepository.GetResource(aResourceNameId);
 		}
 
@@ -53,6 +77,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		/*static*/ ShaderHandle Shader::CreateFromFile(ShaderType aShaderType, Core::StringView aFileName)
 		{
+			using namespace Detail;
 			const Core::NoCaseStringHash32 resourceNameId(aFileName);
 
 			ShaderHandle handle = ourShaderRepository.CreateResource(resourceNameId);
@@ -71,6 +96,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		/*static*/ ShaderHandle Shader::CreateFromString(ShaderType aShaderType, NameId aNameId, Core::StringView /*aShaderSource*/)
 		{
+			using namespace Detail;
 			ALBA_ASSERT(!ourShaderRepository.HasResource(aNameId), "Attempting to create duplicate shader \"%s\"", aNameId.LogString().c_str());
 
 			ShaderHandle handle = ourShaderRepository.CreateResource(aNameId);

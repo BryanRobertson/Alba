@@ -9,8 +9,29 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ TextureRepository Texture::ourTextureRepository;
+		class TextureRepository final : public Core::ResourceRepository<Texture>
+		{
+			typedef Core::ResourceRepository<Texture> Super;
 
+			public:
+
+				//=================================================================================
+				// Public Constructors
+				//=================================================================================
+				TextureRepository();
+
+				//=================================================================================
+				// Public Methods
+				//=================================================================================
+		};
+
+		namespace Detail
+		{
+			//-----------------------------------------------------------------------------------------
+			//-----------------------------------------------------------------------------------------
+			static TextureRepository ourTextureRepository;
+		}
+		
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		TextureRepository::TextureRepository()
@@ -23,6 +44,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		/*static*/ TextureHandle Texture::Get(Core::StringView aFileName)
 		{
+			using namespace Detail;
+
 			const Core::NoCaseStringHash32 resourceNameId(aFileName);
 
 			TextureHandle handle = ourTextureRepository.GetResource(resourceNameId);
@@ -42,6 +65,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		/*static*/ TextureHandle Texture::Create(Core::StringView aFileName)
 		{
+			using namespace Detail;
+
 			const Core::NoCaseStringHash32 resourceNameId(aFileName);
 
 			TextureHandle handle = ourTextureRepository.CreateResource(resourceNameId);
@@ -57,6 +82,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		/*static*/ TextureHandle Texture::Get(Core::Resource<Texture>::NameIdType aResourceNameId)
 		{
+			using namespace Detail;
+
 			const TextureHandle handle = ourTextureRepository.GetResource(aResourceNameId);
 			return handle;
 		}

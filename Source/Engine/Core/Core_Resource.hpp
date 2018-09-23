@@ -87,7 +87,7 @@ namespace Alba
 
 				Core::String			myFileName;
 
-				ResourceState			myState;
+				atomic<ResourceState>	myState;
 		};
 
 		//-----------------------------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ namespace Alba
 		template <typename TDerived>
 		/*inline*/ ResourceState Resource<TDerived>::GetState() const
 		{
-			return myState;
+			return myState.load(std::memory_order_acquire);
 		}
 
 		//-----------------------------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ namespace Alba
 		template <typename TDerived>
 		/*inline*/ void Resource<TDerived>::SetResourceState(ResourceState aResourceState)
 		{
-			myState = aResourceState;
+			myState.store(aResourceState, std::memory_order_release);
 		}
 	}
 }
