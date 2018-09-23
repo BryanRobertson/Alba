@@ -9,6 +9,7 @@
 
 #include "Core.hpp"
 #include "Core_AlignedStorage.hpp"
+#include "Core_Platform.hpp"
 #include <EASTL/fixed_function.h>
 //#include <functional>
 
@@ -20,16 +21,12 @@ namespace Alba
 		{
 			struct DefaultBufferSize
 			{
-				static const int Value = 64 - sizeof(void*);
+				static const int Value = Core::HardwareConstants::theL1CacheLineSize - sizeof(void*);
 			};
 		}
 
 		// Function with a fixed-size buffer. Prefer this over Function
-		template <typename T>
-		using FixedFunction = eastl::fixed_function<FunctionInternal::DefaultBufferSize::Value, T>;
-
-		// Fallback for special cases
-		//template <typename T>
-		//using Function = eastl::function<T>;
+		template <typename T, size_t TSize=FunctionInternal::DefaultBufferSize::Value>
+		using FixedFunction = eastl::fixed_function<TSize, T>;
 	}
 }

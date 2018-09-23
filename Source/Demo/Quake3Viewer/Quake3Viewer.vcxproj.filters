@@ -3,12 +3,21 @@
   <ItemGroup>
     <ClCompile Include="Quake3Viewer.cpp" />
     <ClCompile Include="Quake3Viewer_Precompile.cpp" />
-    <ClCompile Include="Quake3Viewer_Module.cpp" />
+    <ClCompile Include="Quake3Viewer_Module.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Quake3Viewer.hpp" />
     <ClInclude Include="Quake3Viewer_API.hpp" />
     <ClInclude Include="Quake3Viewer_Precompile.hpp" />
-    <ClInclude Include="Quake3Viewer_Module.hpp" />
+    <ClInclude Include="Quake3Viewer_Module.hpp">
+      <Filter>Module</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Module">
+      <UniqueIdentifier>{05fad7d8-8e66-495c-a16b-b7836132810e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

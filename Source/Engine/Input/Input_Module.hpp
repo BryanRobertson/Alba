@@ -29,7 +29,7 @@ namespace Alba
 					using namespace Alba::StringHashLiterals;
 					return Core::Array<Core::NoCaseStringHash32, 1>
 					{{
-						"Alba.Window"_nocasehash32
+						"Alba.Core.Window"_nocasehash32
 					}};
 				}
 

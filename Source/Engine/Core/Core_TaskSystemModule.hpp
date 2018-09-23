@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core.hpp"
-#include "Core_ThreadPool.hpp"
 #include "Core_Module.hpp"
+#include "Core_TaskSystem.hpp"
 
 namespace Alba
 {
@@ -17,6 +17,15 @@ namespace Alba
 			public:
 
 				//=================================================================================
+				// Public Static Methods
+				//=================================================================================
+				static constexpr StringView GetModuleName() 
+				{ 
+					using namespace Alba::StringViewLiterals;
+					return "Alba.Core.TaskSystem"sv; 
+				}
+
+				//=================================================================================
 				// Public Methods
 				//=================================================================================
 				bool		OnLoad(Core::AnyDictionary someParameters);
@@ -27,7 +36,7 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				ThreadPool	myThreadPool;
+				TaskSystem	 myTaskSystem;
 		};
 	}
 }

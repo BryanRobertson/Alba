@@ -310,6 +310,9 @@
     <ClInclude Include="Core_Task.hpp">
       <Filter>TaskSystem</Filter>
     </ClInclude>
+    <ClInclude Include="Core_TaskSystemInitParams.hpp">
+      <Filter>TaskSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">

@@ -27,7 +27,7 @@ namespace Alba
 				//=================================================================================
 				static constexpr StringView GetModuleName()
 				{
-					return "Alba.Window";
+					return "Alba.Core.Window";
 				}
 
 				//=================================================================================

@@ -1,5 +1,6 @@
 #include "Core_Precompile.hpp"
 #include "Core_TaskSystemModule.hpp"
+#include "Core_Thread.hpp"
 
 namespace Alba
 {
@@ -9,6 +10,9 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		bool TaskSystemModule::OnLoad(Core::AnyDictionary /*someParameters*/)
 		{
+			const uint hardwareThreads = thread::hardware_concurrency();
+			myTaskSystem.Initialise(hardwareThreads - 1);
+
 			return true;
 		}
 
@@ -16,7 +20,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void TaskSystemModule::OnUnload()
 		{
-			myThreadPool.Stop();
+			myTaskSystem.Shutdown();
 		}
 	}
 }
