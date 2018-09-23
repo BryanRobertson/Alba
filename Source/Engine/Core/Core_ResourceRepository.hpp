@@ -210,7 +210,7 @@ namespace Alba
 
 				idFields.myFields.myIndex = index;
 				idFields.myFields.myHash = Core::ConvertHash<NoCaseStringHash16>(aResourceNameId).GetHash();
-				idFields.myFields.myUniqueId = ++counter;
+				idFields.myFields.myCounter = ++counter;
 			}
 
 			ResourceIdInternal idValue;

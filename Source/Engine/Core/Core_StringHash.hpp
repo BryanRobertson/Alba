@@ -250,7 +250,7 @@ namespace Alba
 		typedef TStringHashBase<uint64, FNV1a64Hash>		StringHash64;
 		typedef TStringHashBase<uint64, FNV1a64HashNoCase>	NoCaseStringHash64;
 
-		template <typename TFromType, typename TToType>
+		template <typename TToType, typename TFromType>
 		inline constexpr TToType ConvertHash(TFromType aFrom)
 		{
 			ALBA_ASSERT(false, "Not Implemented!");

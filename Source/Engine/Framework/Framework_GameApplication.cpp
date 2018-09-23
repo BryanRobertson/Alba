@@ -76,6 +76,8 @@ namespace Alba
 				}
 			}
 
+			ALBA_LOG_INFO(Framework, "System supports %u hardware threads", std::thread::hardware_concurrency());
+
 			//----------------------------------------------------------------------
 			// Load the window module
 			//----------------------------------------------------------------------
