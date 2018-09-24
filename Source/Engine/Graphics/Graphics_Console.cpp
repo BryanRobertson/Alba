@@ -6,6 +6,7 @@
 #include "Core_ConsoleModule.hpp"
 #include "Core_Console.hpp"
 #include "Core_Vector.hpp"
+#include "Core_Profile.hpp"
 
 namespace Alba
 {
@@ -28,6 +29,8 @@ namespace Alba
 		{
 			#if defined(ALBA_IMGUI_ENABLED)
 			{
+				ALBA_PROFILE_SCOPED(GraphicsConsole_Render);
+
 				//------------------------------------------------------------------------
 				//------------------------------------------------------------------------
 				if (!myIsConsoleVisible)

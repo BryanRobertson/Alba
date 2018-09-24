@@ -3,6 +3,7 @@
 #include "Graphics_Module.hpp"
 #include "Graphics_RenderBackEnd.hpp"
 #include "Graphics_Debug.hpp"
+#include "Core_Profile.hpp"
 
 #ifdef ALBA_PLATFORM_WINDOWS
 	#include <Windows.h>
@@ -176,6 +177,9 @@ namespace Alba
 		void ImGuiModule::BeginFrame()
 		{
 #if defined(ALBA_IMGUI_ENABLED)
+
+			ALBA_PROFILE_SCOPED(ImGuiModule_BeginFrame);
+
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();	
 #endif
@@ -186,6 +190,8 @@ namespace Alba
 #if defined(ALBA_IMGUI_ENABLED)
 		void ImGuiModule::Update(const Core::Time&)
 		{
+			ALBA_PROFILE_SCOPED(ImGuiModule_Update);
+
 			// 2. Show a simple window that we create ourselves.We use a Begin / End pair to created a named window.
 			{
 				static bool ourShowDemoWindow = true;
