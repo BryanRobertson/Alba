@@ -27,8 +27,30 @@ namespace Alba
 		{
 			myPlatformData = anInitParams.myPlatformData;
 
-			myRenderBackEnd.reset(ALBA_NEW(Alba::Core::AllocationType::Renderer, "RenderBackEnd") DX11RenderBackEnd());
+			myRenderBackEnd.reset(ALBA_NEW(Alba::Core::AllocationType::Renderer, "RenderBackEnd") RenderBackEndType());
 			return myRenderBackEnd->Init(anInitParams);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void GraphicsService::ShutDown()
+		{
+			myRenderBackEnd->ShutDown();
+			myRenderBackEnd.reset();
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		bool GraphicsService::ImGuiInit()
+		{
+			return myRenderBackEnd->ImGuiInit();
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void GraphicsService::ImGuiShutDown()
+		{
+			myRenderBackEnd->ImGuiShutDown();
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -80,17 +102,16 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		RenderBackEnd& GraphicsService::GetBackEnd()
+		uint32 GraphicsService::CreateShaderFromString(ShaderId aShaderId, ShaderType aShaderType, Core::StringView aString)
+		{
+			return myRenderBackEnd->CreateShaderFromString(aShaderId, aShaderType, aString);
+		}
+		
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		RenderBackEndType& GraphicsService::GetBackEnd()
 		{
 			return *myRenderBackEnd;
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		void GraphicsService::ShutDown()
-		{
-			myRenderBackEnd->ShutDown();
-			myRenderBackEnd.reset();
 		}
 	}
 }

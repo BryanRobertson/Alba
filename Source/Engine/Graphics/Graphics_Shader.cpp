@@ -134,39 +134,13 @@ namespace Alba
 	
 			GraphicsModule& graphicsModule = GraphicsModule::Get();
 			GraphicsService& graphicsService = graphicsModule.GetGraphicsServiceMutable();
-			RenderBackEnd& renderBackEnd = graphicsService.GetBackEnd();
 
-			switch (myShaderType)
-			{
-				//-------------------------------------------------------------
-				// Vertex shader
-				//-------------------------------------------------------------
-				case ShaderType::Vertex:
-					return renderBackEnd.CreateVertexShaderFromString(GetId(), aShaderSourceCode) == 0;
-
-				//-------------------------------------------------------------
-				// Pixel shader
-				//-------------------------------------------------------------
-				case ShaderType::Pixel:
-					return renderBackEnd.CreatePixelShaderFromString(GetId(), aShaderSourceCode) == 0;
-
-				//-------------------------------------------------------------
-				// Not Implemented Yet
-				//-------------------------------------------------------------
-				case ShaderType::Geometry:
-				case ShaderType::Compute:
-				case ShaderType::Hull:
-				case ShaderType::Domain:
-					ALBA_ASSERT(false, "Not implemented");
-					break;
-			}
-
-			return false;
+			return graphicsService.CreateShaderFromString(GetId(), myShaderType, aShaderSourceCode) == 0;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		bool Shader::LoadFromFile(Core::StringView aFileName)
+		bool Shader::LoadFromFile(Core::StringView /*aFileName*/)
 		{
 			Core::FixedString<1024> buffer;
 

@@ -11,37 +11,76 @@ namespace Alba
 	namespace Graphics
 	{
 		struct InitParams;
+		enum class ShaderType : uint8;
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	RenderBackEnd
 		// Desc	:	Base class for renderer implementations using a specific graphics API
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API RenderBackEnd
+		template <typename TImplementation>
+		class RenderBackEnd
 		{
 			public:
 
 				//=================================================================================
 				// Public Constructors / Destructors
 				//=================================================================================
-				RenderBackEnd();
-				virtual ~RenderBackEnd();
+				RenderBackEnd() = default;
 
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				virtual uint32	Init(const InitParams& someInitParams) = 0;
+				ALBA_FORCEINLINE uint32 Init(const InitParams& someInitParams)
+				{
+					return myImplementation.Init(someInitParams);
+				}
 
-				virtual void	BeginFrame() = 0;
-				virtual void	ClearBuffer(const Math::Vector4f& aColour) = 0;
-				virtual void	Present() = 0;
-				virtual void	EndFrame() = 0;
-				virtual void	ShutDown() = 0;
+				ALBA_FORCEINLINE void ShutDown()
+				{
+					return myImplementation.ShutDown();
+				}
 
-				virtual bool	ImGuiInit() = 0;
-				virtual void	ImGuiShutDown() = 0;
+				ALBA_FORCEINLINE void BeginFrame()
+				{
+					return myImplementation.BeginFrame();
+				}
 
-				virtual uint32	CreateVertexShaderFromString(ShaderId aShaderId, Core::StringView aString) = 0;
-				virtual uint32	CreatePixelShaderFromString(ShaderId aShaderId, Core::StringView aString) = 0;
+				ALBA_FORCEINLINE void ClearBuffer(const Math::Vector4f& aColour)
+				{
+					return myImplementation.ClearBuffer(aColour);
+				}
+
+				ALBA_FORCEINLINE void Present()
+				{
+					return myImplementation.Present();
+				}
+
+				ALBA_FORCEINLINE void EndFrame()
+				{
+					return myImplementation.EndFrame();
+				}
+
+				ALBA_FORCEINLINE bool ImGuiInit()
+				{
+					return myImplementation.ImGuiInit();
+				}
+
+				ALBA_FORCEINLINE void ImGuiShutDown()
+				{
+					return myImplementation.ImGuiShutDown();
+				}
+
+				ALBA_FORCEINLINE uint32 CreateShaderFromString(ShaderId aShaderId, ShaderType aShaderType, Core::StringView aString)
+				{
+					return myImplementation.CreateShaderFromString(aShaderId, aShaderType, aString);
+				}
+
+			private:
+
+				//=================================================================================
+				// Private Data
+				//=================================================================================
+				TImplementation myImplementation;
 		};
 	}
 }

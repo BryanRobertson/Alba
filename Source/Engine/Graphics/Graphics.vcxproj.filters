@@ -5,9 +5,6 @@
     <ClCompile Include="Graphics_DX11RenderBackEnd.cpp">
       <Filter>BackEnd\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics_RenderBackEnd.cpp">
-      <Filter>BackEnd</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Graphics_DX11PointerTypes.cpp">
       <Filter>BackEnd\DirectX</Filter>

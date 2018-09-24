@@ -47,7 +47,7 @@ namespace Alba
 					return result;
 				}
 			}
-			
+
 			//-------------------------------------------------------------------------------------
 			// Create Swap chain
 			//-------------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		uint32 DX11RenderBackEnd::CreateDevice(const InitParams& /*anInitParams*/)
 		{
-			D3D_FEATURE_LEVEL levels[] = 
+			D3D_FEATURE_LEVEL levels[] =
 			{
 				D3D_FEATURE_LEVEL_11_1,
 				D3D_FEATURE_LEVEL_11_0
@@ -109,9 +109,9 @@ namespace Alba
 			// from the API default. It is required for compatibility with Direct2D.
 			UINT deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
-			#if defined(ALBA_DEBUG_BUILD) || defined(ALBA_DEBUG_RENDERING_ENABLED)
-				deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-			#endif
+#if defined(ALBA_DEBUG_BUILD) || defined(ALBA_DEBUG_RENDERING_ENABLED)
+			deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
 
 			HRESULT result = D3D11CreateDevice
 			(
@@ -142,14 +142,14 @@ namespace Alba
 			DXGI_SWAP_CHAIN_DESC swapChainDesc;
 
 			ZeroMemory(&swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
-			swapChainDesc.Windowed				= TRUE;							// Sets the initial state of full-screen mode.
-			swapChainDesc.BufferCount			= 2;
-			swapChainDesc.BufferDesc.Format		= DXGI_FORMAT_B8G8R8A8_UNORM;
-			swapChainDesc.BufferUsage			= DXGI_USAGE_RENDER_TARGET_OUTPUT;
-			swapChainDesc.SampleDesc.Count		= 1;							//Multisampling setting
-			swapChainDesc.SampleDesc.Quality	= 0;							//Vendor-specific flag
-			swapChainDesc.SwapEffect			= DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-			swapChainDesc.OutputWindow			= anInitParams.myPlatformData.Get<HWND>();
+			swapChainDesc.Windowed = TRUE;							// Sets the initial state of full-screen mode.
+			swapChainDesc.BufferCount = 2;
+			swapChainDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+			swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+			swapChainDesc.SampleDesc.Count = 1;							//Multisampling setting
+			swapChainDesc.SampleDesc.Quality = 0;							//Vendor-specific flag
+			swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+			swapChainDesc.OutputWindow = anInitParams.myPlatformData.Get<HWND>();
 
 			// Create the DXGI device object to use in other factories, such as Direct2D.
 			Microsoft::WRL::ComPtr<IDXGIDevice3> dxgiDevice;
@@ -250,8 +250,8 @@ namespace Alba
 		{
 			ZeroMemory(&myViewport, sizeof(D3D11_VIEWPORT));
 
-			myViewport.Height	= (float)myBackBufferDesc.Height;
-			myViewport.Width	= (float)myBackBufferDesc.Width;
+			myViewport.Height = (float)myBackBufferDesc.Height;
+			myViewport.Width = (float)myBackBufferDesc.Width;
 			myViewport.MinDepth = 0;
 			myViewport.MaxDepth = 1;
 
@@ -269,18 +269,18 @@ namespace Alba
 		void DX11RenderBackEnd::ClearBuffer(const Math::Vector4f& aColour)
 		{
 			const float colour[] = { aColour[0], aColour[1], aColour[2], aColour[3] };
-			
+
 			myDeviceContext->ClearRenderTargetView
 			(
-				myRenderTarget.Get(), 
+				myRenderTarget.Get(),
 				colour
 			);
 
 			myDeviceContext->ClearDepthStencilView
 			(
-				myDepthStencilView.Get(), 
-				D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 
-				0.0f, 
+				myDepthStencilView.Get(),
+				D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+				0.0f,
 				0
 			);
 		}
@@ -382,14 +382,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		uint32 DX11RenderBackEnd::CreateVertexShaderFromString(ShaderId /*aShaderId*/, Core::StringView /*aString*/)
-		{
-			return 0;
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		uint32 DX11RenderBackEnd::CreatePixelShaderFromString(ShaderId /*aShaderId*/, Core::StringView /*aString*/)
+		uint32 DX11RenderBackEnd::CreateShaderFromString(ShaderId /*aShaderId*/, ShaderType /*aShaderType*/, Core::StringView /*aString*/)
 		{
 			return 0;
 		}

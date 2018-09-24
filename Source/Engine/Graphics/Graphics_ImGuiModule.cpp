@@ -135,8 +135,7 @@ namespace Alba
 				//-------------------------------------------------------------
 				// Init render-backend part of ImGui
 				//-------------------------------------------------------------
-				RenderBackEnd& renderBackEnd = graphicsService.GetBackEnd();
-				if (!renderBackEnd.ImGuiInit())
+				if (!graphicsService.ImGuiInit())
 				{
 					ALBA_LOG_ERROR(Graphics, "Failed to load ImGui module - failed to initialise render backend!");
 					return false;
@@ -163,9 +162,7 @@ namespace Alba
 			if (graphicsModule.IsLoaded())
 			{
 				GraphicsService& graphicsService = graphicsModule.GetGraphicsServiceMutable();
-				RenderBackEnd& renderBackEnd = graphicsService.GetBackEnd();
-
-				renderBackEnd.ImGuiShutDown();
+				graphicsService.ImGuiShutDown();
 			}
 
 			ImGui_ImplWin32_Shutdown();

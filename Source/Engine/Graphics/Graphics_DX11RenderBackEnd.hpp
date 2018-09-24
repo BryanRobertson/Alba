@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Graphics_API.hpp"
-#include "Graphics_RenderBackEnd.hpp"
 #include "Graphics_DX11PointerTypes.hpp"
+#include "Graphics_Shader.hpp"
 #include "Core_Assert.hpp"
 #include "Core_VectorMap.hpp"
 #include "Math_Vector.hpp"
@@ -11,11 +11,13 @@ namespace Alba
 {
 	namespace Graphics
 	{
+		struct InitParams;
+
 		//-----------------------------------------------------------------------------------------
 		// Name	:	DX11RenderBackEnd
 		// Desc	:	Base class for renderer implementations using a specific graphics API
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API DX11RenderBackEnd final : public RenderBackEnd
+		class DX11RenderBackEnd final
 		{
 			public:
 
@@ -28,22 +30,21 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				virtual uint32	Init(const InitParams& anInitParams) final override;
-				virtual void	BeginFrame() final override;
-				virtual void	ClearBuffer(const Math::Vector4f& aColour) final override;
-				virtual void	Present() final override;
-				virtual void	EndFrame() final override;
-				virtual void	ShutDown() final override;
+				uint32	Init(const InitParams& anInitParams);
+				void	BeginFrame() ;
+				void	ClearBuffer(const Math::Vector4f& aColour);
+				void	Present();
+				void	EndFrame();
+				void	ShutDown();
 
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------
-				virtual bool	ImGuiInit() final override;
-				virtual void	ImGuiShutDown() final override;
+				bool	ImGuiInit();
+				void	ImGuiShutDown();
 
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------
-				virtual uint32	CreateVertexShaderFromString(ShaderId aShaderId, Core::StringView aString) final override;
-				virtual uint32	CreatePixelShaderFromString(ShaderId aShaderId, Core::StringView aString) final override;
+				uint32	CreateShaderFromString(ShaderId aShaderId, ShaderType aShaderType, Core::StringView aString);
 
 			private:
 

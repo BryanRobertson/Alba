@@ -2,6 +2,9 @@
 
 #include "Core.hpp"
 #include "Core_TypeTraits.hpp"
+#include <limits>
+
+#undef max
 
 namespace Alba
 {
@@ -12,15 +15,17 @@ namespace Alba
 		// Desc : Strongly typed integer ID type. Can only be assigned to from another ID of the
 		//		  same type, which ensures ID types can never get mixed up
 		//-----------------------------------------------------------------------------------------
-		template <typename TValueType, typename TTagType, class = enable_if<is_integral_v<TValueType> > >
+		template <typename TValueType, typename TTagType>
 		class StronglyTypedId
 		{
 			public:
 
+				static_assert(is_integral_v<TValueType>, "Strongly typed ID must be an integral type!");
+
 				//=================================================================================
 				// Public Constants
 				//=================================================================================
-				static const StronglyTypedId<TValueType, TTagType> InvalidId;
+				static const StronglyTypedId InvalidId;
 
 				//=================================================================================
 				// Public Constructors
@@ -99,7 +104,7 @@ namespace Alba
 				TValueType	myValue;
 		};
 
-		template <typename TValueType, typename TTagType, class _>
-		const StronglyTypedId<TValueType, TTagType, _> StronglyTypedId<TValueType, TTagType, _>::InvalidId(std::numeric_limits<TValueType>::max());
+		template <typename TValueType, typename TTagType>
+		/*static*/ const StronglyTypedId<TValueType, TTagType> StronglyTypedId<TValueType, TTagType>::InvalidId (std::numeric_limits<TValueType>::max());
 	}
 }
