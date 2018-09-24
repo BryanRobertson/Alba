@@ -24,6 +24,7 @@ namespace Alba
 		void TaskSystem::Initialise(uint aThreadCount)
 		{
 			myTaskThreads.reserve(aThreadCount);
+			myLoadingThreads.reserve(2);
 		}
 
 		//-----------------------------------------------------------------------------------------

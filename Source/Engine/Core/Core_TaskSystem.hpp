@@ -31,23 +31,30 @@ namespace Alba
 				void	Initialise(uint aThreadCount);
 				void	Shutdown();
 
-				void	BeginFrame();
-
-				//---------------------------------------------------------------------------------
-				//---------------------------------------------------------------------------------
-				template <typename TFunctor, class=enable_if_t<is_invocable_v<TFunctor, void()>> >
-				Task*	CreateTask(TFunctor&& aFunctor)
-				{
-					const uint32 index = myNextFreeTaskIndex.fetch_add(1, std::memory_order_relaxed);
-					ALBA_ASSERT(index < myTasks.size());
-
-					return myTasks[(index-1) & (ourMaxTasks-1)];
-				}
-
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------
 
 			private:
+
+				//=================================================================================
+				// Private Methods
+				//=================================================================================
+				
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
+				template <typename TFunctor, class = enable_if_t<is_invocable_v<TFunctor, void()>> >
+				Task* AllocateTask(TFunctor&& aFunctor)
+				{
+					const uint32 index = myNextFreeTaskIndex.fetch_add(1, std::memory_order_relaxed);
+					ALBA_ASSERT(index < myTasks.size());
+
+					Task& task = myTasks[(index - 1) & (ourMaxTasks - 1)];
+					task.myId = index;
+					task.myOpenChildCount.store(1, std::memory_order_relaxed);
+					task.myTaskFunction = std::move(aFunctor);
+
+					return &task;
+				}
 
 				//=================================================================================
 				// Private Data

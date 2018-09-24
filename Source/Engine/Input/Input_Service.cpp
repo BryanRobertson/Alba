@@ -8,6 +8,7 @@
 #include "Core_WindowModule.hpp"
 #include "Core_Window.hpp"
 #include "Core_WindowEventHandler.hpp"
+#include "Core_Profile.hpp"
 
 #include "Core_Time.hpp"
 
@@ -166,6 +167,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void InputService::BeginFrame()
 		{
+			ALBA_PROFILE_SCOPED(InputService_BeginFrame);
+
 			// The released keys 
 			myKeyboard.GetPressedKeysMutable().Clear();
 		}
@@ -174,6 +177,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void InputService::Update(const Core::Time& aTime)
 		{
+			ALBA_PROFILE_SCOPED(InputService_Update);
+
 			myKeyboard.UpdateKeyHeldDurations(aTime);
 		}
 	}

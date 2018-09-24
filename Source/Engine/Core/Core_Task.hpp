@@ -28,10 +28,10 @@ namespace Alba
 			uint32			myId			= 0;
 
 			// Id of parent task
-			uint32			myParentId		= 0;
+			int32			myParentId		= -1;
 
 			// Id of task that this task depends on
-			uint32			myDependsOn		= 0;
+			int32			myDependsOn		= -1;
 
 			// Count of tasks that have yet to complete
 			atomic<uint32>	myOpenChildCount = 0;
