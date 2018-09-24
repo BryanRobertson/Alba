@@ -41,10 +41,7 @@ namespace Alba
 				virtual void	ImGuiShutDown() = 0;
 
 				virtual uint32	CreateVertexShaderFromString(ShaderId aShaderId, Core::StringView aString) = 0;
-				virtual uint32	CreateVertexShaderFromFile(ShaderId aShaderId, Core::StringView aFileName) = 0;
-
 				virtual uint32	CreatePixelShaderFromString(ShaderId aShaderId, Core::StringView aString) = 0;
-				virtual uint32	CreatePixelShaderFromFile(ShaderId aShaderId, Core::StringView aFileName) = 0;
 		};
 	}
 }

@@ -39,6 +39,8 @@ namespace Alba
 	using std::is_move_constructible_v;;
 	using std::is_nothrow_invocable;
 	using std::is_nothrow_assignable_v;
+	using std::is_standard_layout;
+	using std::is_standard_layout_v;
 	using std::extent;
 	using std::extent_v;
 	using std::true_type;

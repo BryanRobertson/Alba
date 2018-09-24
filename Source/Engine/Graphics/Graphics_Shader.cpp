@@ -1,5 +1,8 @@
 #include "Graphics_Precompile.hpp"
 #include "Graphics_Shader.hpp"
+#include "Graphics_Module.hpp"
+#include "Graphics_Service.hpp"
+#include "Graphics_RenderBackEnd.hpp"
 #include "Core_Assert.hpp"
 
 namespace Alba
@@ -125,8 +128,49 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		bool Shader::LoadFromString(Core::StringView /*aShaderSourceCode*/)
+		bool Shader::LoadFromString(Core::StringView aShaderSourceCode)
 		{
+			ALBA_ASSERT(GraphicsModule::IsLoaded(), "Trying to load shader, but shader module is not loaded!");
+	
+			GraphicsModule& graphicsModule = GraphicsModule::Get();
+			GraphicsService& graphicsService = graphicsModule.GetGraphicsServiceMutable();
+			RenderBackEnd& renderBackEnd = graphicsService.GetBackEnd();
+
+			switch (myShaderType)
+			{
+				//-------------------------------------------------------------
+				// Vertex shader
+				//-------------------------------------------------------------
+				case ShaderType::Vertex:
+					return renderBackEnd.CreateVertexShaderFromString(GetId(), aShaderSourceCode) == 0;
+
+				//-------------------------------------------------------------
+				// Pixel shader
+				//-------------------------------------------------------------
+				case ShaderType::Pixel:
+					return renderBackEnd.CreatePixelShaderFromString(GetId(), aShaderSourceCode) == 0;
+
+				//-------------------------------------------------------------
+				// Not Implemented Yet
+				//-------------------------------------------------------------
+				case ShaderType::Geometry:
+				case ShaderType::Compute:
+				case ShaderType::Hull:
+				case ShaderType::Domain:
+					ALBA_ASSERT(false, "Not implemented");
+					break;
+			}
+
+			return false;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		bool Shader::LoadFromFile(Core::StringView aFileName)
+		{
+			Core::FixedString<1024> buffer;
+
+
 			return false;
 		}
 

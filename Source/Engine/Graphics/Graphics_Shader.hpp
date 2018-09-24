@@ -75,6 +75,8 @@ namespace Alba
 				// Private Methods
 				//=================================================================================
 				void	SetType(ShaderType aShaderType);
+
+				bool	LoadFromFile(Core::StringView aShaderSourceCode);
 				bool	LoadFromString(Core::StringView aShaderSourceCode);
 
 				//=================================================================================
