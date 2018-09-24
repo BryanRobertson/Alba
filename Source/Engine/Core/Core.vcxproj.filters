@@ -51,9 +51,6 @@
     <ClCompile Include="Core_Profile.cpp">
       <Filter>Profiling</Filter>
     </ClCompile>
-    <ClCompile Include="Core_ThreadPool.cpp">
-      <Filter>Threading</Filter>
-    </ClCompile>
     <ClCompile Include="Core_Console.cpp">
       <Filter>Console</Filter>
     </ClCompile>
@@ -238,9 +235,6 @@
     <ClInclude Include="Core_Profile.hpp">
       <Filter>Profiling</Filter>
     </ClInclude>
-    <ClInclude Include="Core_ThreadPool.hpp">
-      <Filter>Threading</Filter>
-    </ClInclude>
     <ClInclude Include="Core_Console.hpp">
       <Filter>Console</Filter>
     </ClInclude>
@@ -311,6 +305,9 @@
       <Filter>TaskSystem</Filter>
     </ClInclude>
     <ClInclude Include="Core_TaskSystemInitParams.hpp">
+      <Filter>TaskSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_TaskQueue.hpp">
       <Filter>TaskSystem</Filter>
     </ClInclude>
   </ItemGroup>

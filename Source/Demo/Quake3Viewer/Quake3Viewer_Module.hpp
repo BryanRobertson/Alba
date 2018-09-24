@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Quake3Viewer_API.hpp"
+#include "Quake3Viewer_Tasks.hpp"
 #include "Core_Module.hpp"
-
 
 namespace Alba
 {
@@ -36,6 +36,7 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
+				Tasks	myTasks;
 		};
 	}
 }

@@ -23,7 +23,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void TaskSystem::Initialise(uint aThreadCount)
 		{
-			(void)aThreadCount;
+			myTaskThreads.reserve(aThreadCount);
 		}
 
 		//-----------------------------------------------------------------------------------------

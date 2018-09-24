@@ -6,6 +6,9 @@
     <ClCompile Include="Quake3Viewer_Module.cpp">
       <Filter>Module</Filter>
     </ClCompile>
+    <ClCompile Include="Quake3Viewer_Tasks.cpp">
+      <Filter>Tasks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Quake3Viewer.hpp" />
@@ -14,10 +17,16 @@
     <ClInclude Include="Quake3Viewer_Module.hpp">
       <Filter>Module</Filter>
     </ClInclude>
+    <ClInclude Include="Quake3Viewer_Tasks.hpp">
+      <Filter>Tasks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Module">
       <UniqueIdentifier>{05fad7d8-8e66-495c-a16b-b7836132810e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tasks">
+      <UniqueIdentifier>{7581cbc1-0d5c-4508-9b8a-0168a88b9a40}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
