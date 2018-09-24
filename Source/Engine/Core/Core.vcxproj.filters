@@ -75,6 +75,9 @@
     <ClCompile Include="Core_Task.cpp">
       <Filter>TaskSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Core_File.cpp">
+      <Filter>FileSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
@@ -310,6 +313,9 @@
     <ClInclude Include="Core_TaskQueue.hpp">
       <Filter>TaskSystem</Filter>
     </ClInclude>
+    <ClInclude Include="Core_File.hpp">
+      <Filter>FileSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">
@@ -359,6 +365,9 @@
     </Filter>
     <Filter Include="TaskSystem">
       <UniqueIdentifier>{2f7c93e6-c6a0-4e12-9d46-921190194cce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FileSystem">
+      <UniqueIdentifier>{699a36c2-f50e-41f0-8933-9936ca537044}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
