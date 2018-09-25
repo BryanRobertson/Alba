@@ -6,6 +6,7 @@
 #include "Core_StringHash.hpp"
 #include "Core_Container.hpp"
 #include <type_traits>
+#include <EASTL/iterator.h>
 
 namespace Alba
 {
@@ -45,6 +46,8 @@ namespace Alba
 	using std::extent_v;
 	using std::true_type;
 	using std::false_type;
+	using eastl::iterator_traits;
+	using eastl::distance;
 
 	//-----------------------------------------------------------------------------------------
 	// Name	:	is_string

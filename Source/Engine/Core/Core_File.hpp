@@ -4,6 +4,7 @@
 #include "Core_EnumerationSet.hpp"
 #include "Core_Array.hpp"
 #include "Core_TypeTraits.hpp"
+#include "Core_Vector.hpp"
 
 #include <cstdio>
 #include <cstdlib>
@@ -132,6 +133,46 @@ namespace Alba
 				{
 					aDataOut.reserve(aCount);
 					return Read(&aDataOut[0], sizeof(TCharType), aCount);
+				}
+
+				template <size_t TSize>
+				ALBA_FORCEINLINE FixedVector<std::byte, TSize> ReadToEnd()
+				{
+					const size_t position = GetPosition();
+					const size_t size = GetSize();
+					const size_t readCount = size - position;
+
+					FixedVector<std::byte, TSize> out;
+					out.reserve(readCount);
+
+					Read(&out[0], readCount);
+					return out;
+				}
+
+				template <size_t TSize>
+				ALBA_FORCEINLINE size_t ReadToEnd(FixedVector<std::byte, TSize>& someDataOut)
+				{
+					const size_t position = GetPosition();
+					const size_t size = GetSize();
+					const size_t readCount = size - position;
+
+					someDataOut.clear();
+					someDataOut.resize(readCount);
+
+					return Read(&someDataOut[0], readCount);
+				}
+
+				ALBA_FORCEINLINE Vector<std::byte> ReadToEnd()
+				{
+					const size_t position = GetPosition();
+					const size_t size = GetSize();
+
+					Vector<std::byte> out;
+					out.resize(size - position);
+
+					Read(&out[0], size - position);
+
+					return out;
 				}
 
 				//---------------------------------------------------------------------------------
