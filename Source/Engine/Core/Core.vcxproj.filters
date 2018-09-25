@@ -75,9 +75,6 @@
     <ClCompile Include="Core_Task.cpp">
       <Filter>TaskSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Core_File.cpp">
-      <Filter>FileSystem</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
