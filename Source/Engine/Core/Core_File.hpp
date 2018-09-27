@@ -127,7 +127,12 @@ namespace Alba
 						mode.append("x");
 					}
 
-					myFile = std::fopen(aFileName.data(), mode.data());
+#					if defined(ALBA_COMPILER_VISUALSTUDIO)
+						fopen_s(&myFile, aFileName.data(), mode.data());
+#					else
+						myFile = std::fopen(aFileName.data(), mode.data());
+#					endif
+
 					if (myFile)
 					{
 						SetPosition(0, FilePosition::End);
@@ -216,17 +221,26 @@ namespace Alba
 					return Read(&aDataOut[0], sizeof(TCharType), aCount);
 				}
 
-				template <typename TCharType, size_t TCount, OverflowBehavior TOverflow, typename TAllocator>
-				ALBA_FORCEINLINE size_t Read(FixedBasicString<TCharType, TCount, TOverflow, TAllocator>& aDataOut, size_t aCount)
+				template <typename TDataType, typename TAllocator>
+				ALBA_FORCEINLINE size_t Read(Vector<TDataType, TAllocator>& aDataOut, size_t aCount)
 				{
 					ALBA_ASSERT(IsOpen());
 
 					aDataOut.reserve(aCount);
-					return Read(&aDataOut[0], sizeof(TCharType), aCount);
+					return Read(&aDataOut[0], sizeof(TDataType), aCount);
+				}
+
+				template <typename TDataType, size_t TCount, OverflowBehavior TOverflow, typename TAllocator>
+				ALBA_FORCEINLINE size_t Read(FixedVector<TDataType, TCount, TOverflow, TAllocator>& aDataOut, size_t aCount)
+				{
+					ALBA_ASSERT(IsOpen());
+
+					aDataOut.reserve(aCount);
+					return Read(&aDataOut[0], sizeof(TDataType), aCount);
 				}
 
 				template <typename TDataType=std::byte, size_t TSize=128, OverflowBehavior TOverflowBehavior = OverflowBehavior::Allowed, typename TOverflowAllocator = EASTLAllocatorType>
-				ALBA_FORCEINLINE FixedVector<TDataType, TSize> ReadToEnd()
+				ALBA_FORCEINLINE FixedVector<TDataType, TSize, TOverflowBehavior, TOverflowAllocator> ReadToEnd()
 				{
 					ALBA_ASSERT(IsOpen());
 
@@ -234,7 +248,7 @@ namespace Alba
 					const size_t size = GetSize();
 					const size_t readCount = size - position;
 
-					FixedVector<TDataType, TSize, TOverflowAllocator, TAllocator> out;
+					FixedVector<TDataType, TSize, TOverflowBehavior, TOverflowAllocator> out;
 					out.reserve(readCount);
 
 					Read(&out[0], readCount);
@@ -264,7 +278,7 @@ namespace Alba
 					const size_t position = GetPosition();
 					const size_t size = GetSize();
 
-					Vector<TDataType> out;
+					Vector<TDataType, TAllocator> out;
 					out.resize(size - position);
 
 					Read(&out[0], size - position);
@@ -310,11 +324,11 @@ namespace Alba
 					return Write(&someDataIn[0], sizeof(TCharType), std::min(aCount, someDataIn.size()));
 				}
 
-				template <typename TCharType, typename TAllocator>
-				ALBA_FORCEINLINE size_t Write(Vector<TCharType, TAllocator>& someDataIn, size_t aCount = someDataIn.size())
+				template <typename TDataType, typename TAllocator>
+				ALBA_FORCEINLINE size_t Write(Vector<TDataType, TAllocator>& someDataIn, size_t aCount = someDataIn.size())
 				{
 					ALBA_ASSERT(IsOpen());
-					return Write(&someDataIn[0], sizeof(TCharType), std::min(aCount, someDataIn.size());
+					return Write(&someDataIn[0], sizeof(TDataType), std::min(aCount, someDataIn.size()));
 				}
 
 			private:
