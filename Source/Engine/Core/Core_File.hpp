@@ -22,8 +22,8 @@ namespace Alba
 		enum class FileMode : uint8
 		{
 			Read,
-			Append,
 			Write,
+			Append,
 			Create,
 			Text,
 			Binary
@@ -41,8 +41,8 @@ namespace Alba
 		static constexpr auto value = MakeArray
 		(
 			FileMode::Read,
-			FileMode::Append,
 			FileMode::Write,
+			FileMode::Append,
 			FileMode::Create,
 			FileMode::Text,
 			FileMode::Binary
@@ -55,6 +55,15 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
+		enum class FilePosition
+		{
+			Set			= SEEK_SET,
+			Current		= SEEK_CUR,
+			End			= SEEK_END
+		};
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		class File final
 		{
 			public:
@@ -62,7 +71,7 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				File Open(StringView aFileName, FileModeSet someFileModes)
+				static File OpenFile(StringView aFileName, FileModeSet someFileModes = { FileMode::Read, FileMode::Text })
 				{
 					return File(aFileName, someFileModes);
 				}
@@ -70,147 +79,33 @@ namespace Alba
 				//=================================================================================
 				// Public Constructors/Destructors
 				//=================================================================================
+				File() = default;
 				File(const File&) = delete;
 				File(File&&) = default;
+
+				File(StringView aFileName, FileModeSet someFileModes)
+				{
+					Open(aFileName, someFileModes);
+				}
+
+				~File()
+				{
+					if (IsOpen())
+					{
+						Close();
+					}
+				}
 
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-
-				//---------------------------------------------------------------------------------
-				// Accessors
-				//---------------------------------------------------------------------------------
-				ALBA_FORCEINLINE size_t	GetSize() const
+				bool Open(StringView aFileName, FileModeSet someFileModes)
 				{
-					return myFileSize;
-				}
+					ALBA_ASSERT(!IsOpen());
 
-				ALBA_FORCEINLINE size_t	GetPosition() const
-				{
-					return std::ftell(myFile);
-				}
+					myFileName = aFileName;
+					myFileModes = someFileModes;
 
-				ALBA_FORCEINLINE FileModeSet GetOpenMode() const
-				{
-					return myFileModes;
-				}
-
-				ALBA_FORCEINLINE bool IsValid() const
-				{
-					return myFile != nullptr;
-				}
-
-				ALBA_FORCEINLINE void Close()
-				{
-					std::fclose(myFile);
-					myFile = nullptr;
-				}
-
-				//---------------------------------------------------------------------------------
-				// Read
-				//---------------------------------------------------------------------------------
-				template <typename TDataType>
-				ALBA_FORCEINLINE size_t Read(TDataType* aDataOut, size_t aCount)
-				{
-					return Read(aDataOut, sizeof(TDataType), anElementCount);
-				}
-
-				template <typename TDataType, class=enable_if_t<is_standard_layout_v<TDataType> > >
-				ALBA_FORCEINLINE size_t Read(TDataType& aDataOut)
-				{
-					return Read(&aDataOut, 1);
-				}
-
-				template <typename TCharType, size_t TCount, OverflowBehavior TOverflow, typename TAllocator>
-				ALBA_FORCEINLINE size_t Read(FixedBasicString<TCharType, TCount, TOverflow, TAllocator>& aDataOut, size_t aCount)
-				{
-					aDataOut.reserve(aCount);
-					return Read(&aDataOut[0], sizeof(TCharType), aCount);
-				}
-
-				template <typename TCharType, size_t TCount, OverflowBehavior TOverflow, typename TAllocator>
-				ALBA_FORCEINLINE size_t Read(FixedBasicString<TCharType, TCount, TOverflow, TAllocator>& aDataOut, size_t aCount)
-				{
-					aDataOut.reserve(aCount);
-					return Read(&aDataOut[0], sizeof(TCharType), aCount);
-				}
-
-				template <size_t TSize>
-				ALBA_FORCEINLINE FixedVector<std::byte, TSize> ReadToEnd()
-				{
-					const size_t position = GetPosition();
-					const size_t size = GetSize();
-					const size_t readCount = size - position;
-
-					FixedVector<std::byte, TSize> out;
-					out.reserve(readCount);
-
-					Read(&out[0], readCount);
-					return out;
-				}
-
-				template <size_t TSize>
-				ALBA_FORCEINLINE size_t ReadToEnd(FixedVector<std::byte, TSize>& someDataOut)
-				{
-					const size_t position = GetPosition();
-					const size_t size = GetSize();
-					const size_t readCount = size - position;
-
-					someDataOut.clear();
-					someDataOut.resize(readCount);
-
-					return Read(&someDataOut[0], readCount);
-				}
-
-				ALBA_FORCEINLINE Vector<std::byte> ReadToEnd()
-				{
-					const size_t position = GetPosition();
-					const size_t size = GetSize();
-
-					Vector<std::byte> out;
-					out.resize(size - position);
-
-					Read(&out[0], size - position);
-
-					return out;
-				}
-
-				//---------------------------------------------------------------------------------
-				// Write
-				//---------------------------------------------------------------------------------
-				template <typename TDataType>
-				ALBA_FORCEINLINE size_t Write(const TDataType* aDataOut, size_t aCount)
-				{
-					return Write(aDataOut, aCount);
-				}
-
-				template <typename TDataType, class = enable_if_t<is_standard_layout_v<TDataType> > >
-				ALBA_FORCEINLINE size_t Write(const TDataType& aDataOut)
-				{
-					return Write(&aDataOut, 1);
-				}
-
-				template <typename TCharType, size_t TCount, OverflowBehavior TOverflow, typename TAllocator>
-				ALBA_FORCEINLINE size_t Write(FixedBasicString<TCharType, TCount, TOverflow, TAllocator>& aDataOut, size_t aCount=aDataOut.size())
-				{
-					return Write(&aDataOut[0], sizeof(TCharType), aCount);
-				}
-
-				template <typename TCharType, typename TAllocator>
-				ALBA_FORCEINLINE size_t Write(BasicString<TCharType, TAllocator>& aDataOut, size_t aCount=aDataOut.size())
-				{
-					return Write(&aDataOut[0], sizeof(TCharType), aCount);
-				}
-
-			private:
-
-				//=================================================================================
-				// Private Constructors
-				//=================================================================================
-				File(StringView aFileName, FileModeSet someFileModes)
-					: myFileName(aFileName)
-					, myFileModes(someFileModes)
-				{
 					FixedString<8> mode;
 					if (someFileModes.Contains(FileMode::Read))
 					{
@@ -222,25 +117,220 @@ namespace Alba
 						mode.append("w");
 					}
 
+					if (someFileModes.Contains(FileMode::Binary))
+					{
+						mode.append("b");
+					}
+
+					if (someFileModes.Contains(FileMode::Create))
+					{
+						mode.append("x");
+					}
+
 					myFile = std::fopen(aFileName.data(), mode.data());
 					if (myFile)
 					{
-						std::fseek(myFile, 0, SEEK_END);
-						myFileSize = std::ftell(myFile);
-						std::fseek(myFile, 0, SEEK_SET);
+						SetPosition(0, FilePosition::End);
+						myFileSize = GetPosition();
+						SetPosition(0, FilePosition::Set);
+
+						return true;
+					}
+					else
+					{
+						return false;
 					}
 				}
+
+				ALBA_FORCEINLINE int SetPosition(int anOffset, FilePosition aPositionType)
+				{
+					ALBA_ASSERT(IsOpen());
+					return std::fseek(myFile, anOffset, static_cast<int>(aPositionType));
+				}
+
+				//---------------------------------------------------------------------------------
+				// Accessors
+				//---------------------------------------------------------------------------------
+				ALBA_FORCEINLINE size_t	GetSize() const
+				{
+					return myFileSize;
+				}
+
+				ALBA_FORCEINLINE int GetPosition() const
+				{
+					ALBA_ASSERT(IsOpen());
+					return std::ftell(myFile);
+				}
+
+				ALBA_FORCEINLINE FileModeSet GetOpenMode() const
+				{
+					return myFileModes;
+				}
+
+				ALBA_FORCEINLINE bool IsOpen() const
+				{
+					return myFile != nullptr;
+				}
+
+				ALBA_FORCEINLINE void Close()
+				{
+					if (IsOpen())
+					{
+						std::fclose(myFile);
+						myFile = nullptr;
+					}
+				}
+
+				//---------------------------------------------------------------------------------
+				// Read
+				//---------------------------------------------------------------------------------
+				template <typename TDataType>
+				ALBA_FORCEINLINE size_t Read(TDataType* aDataOut, size_t aCount)
+				{
+					ALBA_ASSERT(IsOpen());
+					return Read(aDataOut, sizeof(TDataType), anElementCount);
+				}
+
+				template <typename TDataType, class=enable_if_t<is_standard_layout_v<TDataType> > >
+				ALBA_FORCEINLINE size_t Read(TDataType& aDataOut)
+				{
+					ALBA_ASSERT(IsOpen());
+					return Read(&aDataOut, 1);
+				}
+
+				template <typename TCharType, typename TAllocator>
+				ALBA_FORCEINLINE size_t Read(BasicString<TCharType, TAllocator>& aDataOut, size_t aCount)
+				{
+					ALBA_ASSERT(IsOpen());
+
+					aDataOut.reserve(aCount);
+					return Read(&aDataOut[0], sizeof(TCharType), aCount);
+				}
+
+				template <typename TCharType, size_t TCount, OverflowBehavior TOverflow, typename TAllocator>
+				ALBA_FORCEINLINE size_t Read(FixedBasicString<TCharType, TCount, TOverflow, TAllocator>& aDataOut, size_t aCount)
+				{
+					ALBA_ASSERT(IsOpen());
+
+					aDataOut.reserve(aCount);
+					return Read(&aDataOut[0], sizeof(TCharType), aCount);
+				}
+
+				template <typename TCharType, size_t TCount, OverflowBehavior TOverflow, typename TAllocator>
+				ALBA_FORCEINLINE size_t Read(FixedBasicString<TCharType, TCount, TOverflow, TAllocator>& aDataOut, size_t aCount)
+				{
+					ALBA_ASSERT(IsOpen());
+
+					aDataOut.reserve(aCount);
+					return Read(&aDataOut[0], sizeof(TCharType), aCount);
+				}
+
+				template <typename TDataType=std::byte, size_t TSize=128, OverflowBehavior TOverflowBehavior = OverflowBehavior::Allowed, typename TOverflowAllocator = EASTLAllocatorType>
+				ALBA_FORCEINLINE FixedVector<TDataType, TSize> ReadToEnd()
+				{
+					ALBA_ASSERT(IsOpen());
+
+					const size_t position = GetPosition();
+					const size_t size = GetSize();
+					const size_t readCount = size - position;
+
+					FixedVector<TDataType, TSize, TOverflowAllocator, TAllocator> out;
+					out.reserve(readCount);
+
+					Read(&out[0], readCount);
+					return out;
+				}
+
+				template <typename TDataType, size_t TSize=128, OverflowBehavior TOverflowBehavior=OverflowBehavior::Allowed, typename TOverflowAllocator=EASTLAllocatorType>
+				ALBA_FORCEINLINE size_t ReadToEnd(FixedVector<TDataType, TSize, TOverflowBehavior, TOverflowAllocator>& someDataOut)
+				{
+					ALBA_ASSERT(IsOpen());
+
+					const size_t position = GetPosition();
+					const size_t size = GetSize();
+					const size_t readCount = size - position;
+
+					someDataOut.clear();
+					someDataOut.resize(readCount);
+
+					return Read(&someDataOut[0], readCount);
+				}
+
+				template <typename TDataType=std::byte, typename TAllocator=EASTLAllocatorType>
+				ALBA_FORCEINLINE Vector<TDataType, TAllocator> ReadToEnd()
+				{
+					ALBA_ASSERT(IsOpen());
+
+					const size_t position = GetPosition();
+					const size_t size = GetSize();
+
+					Vector<TDataType> out;
+					out.resize(size - position);
+
+					Read(&out[0], size - position);
+
+					return out;
+				}
+
+				//---------------------------------------------------------------------------------
+				// Write
+				//---------------------------------------------------------------------------------
+				template <typename TDataType>
+				ALBA_FORCEINLINE size_t Write(const TDataType* aDataIn, size_t aCount)
+				{
+					ALBA_ASSERT(IsOpen());
+					return Write(aDataIn, aCount);
+				}
+
+				template <typename TDataType, class = enable_if_t<is_standard_layout_v<TDataType> > >
+				ALBA_FORCEINLINE size_t Write(const TDataType& aDataIn)
+				{
+					ALBA_ASSERT(IsOpen());
+					return Write(&aDataIn, 1);
+				}
+
+				template <typename TCharType, size_t TCount, OverflowBehavior TOverflow, typename TAllocator>
+				ALBA_FORCEINLINE size_t Write(FixedBasicString<TCharType, TCount, TOverflow, TAllocator>& someDataIn, size_t aCount=someDataIn.size())
+				{
+					ALBA_ASSERT(IsOpen());
+					return Write(&someDataIn[0], sizeof(TCharType), aCount);
+				}
+
+				template <typename TCharType, typename TAllocator>
+				ALBA_FORCEINLINE size_t Write(BasicString<TCharType, TAllocator>& someDataIn, size_t aCount=someDataIn.size())
+				{
+					ALBA_ASSERT(IsOpen());
+					return Write(&someDataIn[0], sizeof(TCharType), aCount);
+				}
+
+				template <typename TDataType, size_t TCount, OverflowBehavior TOverflow, typename TAllocator>
+				ALBA_FORCEINLINE size_t Write(FixedVector<TDataType, TCount, TOverflow, TAllocator>& someDataIn, size_t aCount = someDataIn.size())
+				{
+					ALBA_ASSERT(IsOpen());
+					return Write(&someDataIn[0], sizeof(TCharType), std::min(aCount, someDataIn.size()));
+				}
+
+				template <typename TCharType, typename TAllocator>
+				ALBA_FORCEINLINE size_t Write(Vector<TCharType, TAllocator>& someDataIn, size_t aCount = someDataIn.size())
+				{
+					ALBA_ASSERT(IsOpen());
+					return Write(&someDataIn[0], sizeof(TCharType), std::min(aCount, someDataIn.size());
+				}
+
+			private:
 
 				//=================================================================================
 				// Private Methods
 				//=================================================================================
 				size_t Read(void* aDataOut, size_t anElementSize, size_t anElementCount)
 				{
+					ALBA_ASSERT(IsOpen());
 					return std::fread(aDataOut, anElementSize, anElementCount, myFile);
 				}
 
 				size_t Write(void* aDataOut, size_t anElementSize, size_t anElementCount)
 				{
+					ALBA_ASSERT(IsOpen());
 					return std::fwrite(aDataOut, anElementSize, anElementCount, myFile);
 				}
 
@@ -249,8 +339,8 @@ namespace Alba
 				//=================================================================================
 				String			myFileName;
 				FileModeSet		myFileModes;
-				std::FILE*		myFile;
-				size_t			myFileSize;
+				std::FILE*		myFile			= nullptr;
+				size_t			myFileSize		= 0;
 		};
 	}
 }
