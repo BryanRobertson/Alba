@@ -60,6 +60,8 @@ namespace Alba
 				Shader(const Shader& aCopyFrom) = delete;
 				Shader(Shader&& aMoveFrom) = default;
 
+				~Shader();
+
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
@@ -76,7 +78,7 @@ namespace Alba
 				//=================================================================================
 				void	SetType(ShaderType aShaderType);
 
-				bool	LoadFromFile(Core::StringView aShaderSourceCode);
+				bool	LoadFromFile(Core::StringView aFileName);
 				bool	LoadFromString(Core::StringView aShaderSourceCode);
 
 				//=================================================================================

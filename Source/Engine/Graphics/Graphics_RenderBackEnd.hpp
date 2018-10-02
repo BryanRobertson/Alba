@@ -75,6 +75,11 @@ namespace Alba
 					return myImplementation.CreateShaderFromString(aShaderId, aShaderType, aString);
 				}
 
+				ALBA_FORCEINLINE void UnloadShader(ShaderId aShaderId)
+				{
+					return myImplementation.UnloadShader(aShaderId);
+				}
+
 			private:
 
 				//=================================================================================

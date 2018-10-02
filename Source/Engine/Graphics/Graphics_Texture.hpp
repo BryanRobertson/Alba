@@ -21,6 +21,15 @@ namespace Alba
 		typedef Core::ResourceId<Texture>			TextureId;
 
 		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		enum class TextureType
+		{
+			Texture1D,
+			Texture2D,
+			Texture3D
+		};
+
+		//-----------------------------------------------------------------------------------------
 		// Name	:	Texture
 		// Desc	:	Represents a texture
 		//-----------------------------------------------------------------------------------------
@@ -33,9 +42,11 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static TextureHandle Get(Core::StringView aFileName);
-				static TextureHandle Create(Core::StringView aFileName);
-				static TextureHandle Get(Core::Resource<Texture>::NameIdType aResourceNameId);
+				static TextureHandle Get(TextureType aTextureType, Core::StringView aFileName);
+				static TextureHandle Create(TextureType aTextureType, Core::StringView aFileName);
+				static TextureHandle Get(Core::NoCaseStringHash32 aResourceNameId);
+
+				static TextureHandle CreateFromFile(Core::StringView aFileName);
 			
 				//=================================================================================
 				// Public Constructors
@@ -55,8 +66,14 @@ namespace Alba
 			private:
 
 				//=================================================================================
+				// Private Methods
+				//=================================================================================
+				bool	LoadFromFile(Core::StringView aFileName);
+
+				//=================================================================================
 				// Private Data
 				//=================================================================================
+				TextureType myTextureType = TextureType::Texture2D;
 		};
 	}
 }

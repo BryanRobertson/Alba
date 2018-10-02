@@ -20,7 +20,10 @@ namespace Alba
 		typedef ComPtr<IDXGIAdapter>				DXGIAdapterPtr;
 		typedef ComPtr<IDXGIFactory>				DXGIFactoryPtr;
 
+		typedef ComPtr<ID3D11Texture1D>				D3D11Texture1DPtr;
 		typedef ComPtr<ID3D11Texture2D>				D3D11Texture2DPtr;
+		typedef ComPtr<ID3D11Texture3D>				D3D11Texture3DPtr;
+
 		typedef ComPtr<ID3D11RenderTargetView>		D3D11RenderTargetViewPtr;
 
 		typedef ComPtr<ID3D11DepthStencilView>		D3D11DepthStencilViewPtr;

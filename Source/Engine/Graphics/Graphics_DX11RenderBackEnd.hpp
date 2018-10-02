@@ -3,6 +3,7 @@
 #include "Graphics_API.hpp"
 #include "Graphics_DX11PointerTypes.hpp"
 #include "Graphics_Shader.hpp"
+#include "Graphics_Texture.hpp"
 #include "Core_Assert.hpp"
 #include "Core_VectorMap.hpp"
 #include "Math_Vector.hpp"
@@ -45,6 +46,7 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------
 				uint32	CreateShaderFromString(ShaderId aShaderId, ShaderType aShaderType, Core::StringView aString);
+				void	UnloadShader(ShaderId aShaderId);
 
 			private:
 
@@ -75,8 +77,16 @@ namespace Alba
 
 				D3D11RenderTargetViewPtr	myRenderTarget;
 
-				Core::VectorMap<ShaderId, D3D11VertexShaderPtr> myVertexShaders;
-				Core::VectorMap<ShaderId, D3D11PixelShaderPtr>	myPixelShaders;
+				Core::VectorMap<ShaderId, D3D11VertexShaderPtr>		myVertexShaders;
+				Core::VectorMap<ShaderId, D3D11PixelShaderPtr>		myPixelShaders;
+				Core::VectorMap<ShaderId, D3D11GeometryShaderPtr>	myGeometryShaders;
+				Core::VectorMap<ShaderId, D3D11HullShaderPtr>		myHullShaders;
+				Core::VectorMap<ShaderId, D3D11DomainShaderPtr>		myDomainShaders;
+				Core::VectorMap<ShaderId, D3D11ComputeShaderPtr>	myComputeShaders;
+
+				Core::VectorMap<TextureId, D3D11Texture1DPtr>		my1DTextures;
+				Core::VectorMap<TextureId, D3D11Texture2DPtr>		my2DTextures;
+				Core::VectorMap<TextureId, D3D11Texture3DPtr>		my3DTextures;
 
 				D3D11_VIEWPORT				myViewport;
 

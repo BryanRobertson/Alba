@@ -3,7 +3,10 @@
 #include "Graphics_Module.hpp"
 #include "Graphics_Service.hpp"
 #include "Graphics_RenderBackEnd.hpp"
+#include "Graphics_Debug.hpp"
+
 #include "Core_Assert.hpp"
+#include "Core_File.hpp"
 
 namespace Alba
 {
@@ -58,7 +61,7 @@ namespace Alba
 				handle = ourShaderRepository.CreateResource(resourceNameId);
 				ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
 
-				Shader* shader = handle.LockMutable(); 
+				auto& shader = handle.LockMutable(); 
 				shader->SetType(aShaderType);
 				shader->SetFileName(aFileName);
 
@@ -86,7 +89,7 @@ namespace Alba
 			ShaderHandle handle = ourShaderRepository.CreateResource(resourceNameId);
 			ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
 
-			Shader* shader = handle.LockMutable();
+			auto& shader = handle.LockMutable();
 			shader->SetType(aShaderType);
 			shader->SetFileName(aFileName);
 
@@ -105,18 +108,28 @@ namespace Alba
 			ShaderHandle handle = ourShaderRepository.CreateResource(aNameId);
 			ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aNameId.LogString().c_str());
 
-			Shader* shader = handle.LockMutable();
+			auto& shader = handle.LockMutable();
 			shader->SetType(aShaderType);
 
 			return handle;
-
 		}
+
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		Shader::Shader(Core::Resource<Shader>::NameIdType aResourceNameId, ShaderId aShaderId)
 			: Super(aResourceNameId, aShaderId)
 		{
 
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		Shader::~Shader()
+		{
+			if (IsLoaded())
+			{
+				Unload();
+			}
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -140,12 +153,35 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		bool Shader::LoadFromFile(Core::StringView /*aFileName*/)
+		bool Shader::LoadFromFile(Core::StringView aFileName)
 		{
-			Core::FixedString<1024> buffer;
+			ALBA_ASSERT(GraphicsModule::IsLoaded(), "Attempting to load shader, but graphics module is not loaded!");
 
+			using Core::File;
+			using Core::FileMode;
+			
+			File file = File::OpenFile(aFileName, { FileMode::Read, FileMode::Text });
+			if (!file.IsOpen())
+			{
+				ALBA_LOG_ERROR(Graphics, "Failed to open shader file \"%s\"", aFileName.data());
+				return false;
+			}
 
-			return false;
+			const auto buffer = file.ReadToEnd<char, 1024>();
+			if (buffer.size() == 0)
+			{
+				ALBA_LOG_ERROR(Graphics, "Shader file \"%s\" was empty!", aFileName.data());
+				return false;
+			}
+
+			GraphicsModule& graphicsModule = GraphicsModule::Get();
+			GraphicsService& graphicsService = graphicsModule.GetGraphicsServiceMutable();
+
+			const Core::StringView bufferView(buffer.data(), buffer.size());
+			const ShaderId shaderId = GetId();
+
+			const uint32 result = graphicsService.CreateShaderFromString(shaderId, myShaderType, bufferView);
+			return result == 0;
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -166,9 +202,12 @@ namespace Alba
 			{
 				CancelLoad();
 			}
-			else if (IsLoaded())
+			else if (IsLoaded() && GraphicsModule::IsLoaded())
 			{
+				GraphicsModule& graphicsModule = GraphicsModule::Get();
+				GraphicsService& graphicsService = graphicsModule.GetGraphicsServiceMutable();
 
+				graphicsService.UnloadShader(GetId());
 			}
 		}
 	}

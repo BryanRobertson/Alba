@@ -65,6 +65,7 @@ namespace Alba
 				// Resources
 				//---------------------------------------------------------------------------------
 				uint32					CreateShaderFromString(ShaderId aShaderId, ShaderType aShaderType, Core::StringView aString);
+				void					UnloadShader(ShaderId aShaderId);
 
 				//---------------------------------------------------------------------------------
 				// Accessors

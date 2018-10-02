@@ -42,7 +42,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ TextureHandle Texture::Get(Core::StringView aFileName)
+		/*static*/ TextureHandle Texture::Get(TextureType aTextureType, Core::StringView aFileName)
 		{
 			using namespace Detail;
 
@@ -54,7 +54,11 @@ namespace Alba
 				handle = ourTextureRepository.CreateResource(resourceNameId);
 				ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
 
-				handle.LockMutable()->SetFileName(aFileName);
+				auto& lock = handle.LockMutable();
+				
+				lock->SetFileName(aFileName);
+				lock->myTextureType = aTextureType;
+
 				handle.Unlock();
 			}
 
@@ -63,7 +67,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ TextureHandle Texture::Create(Core::StringView aFileName)
+		/*static*/ TextureHandle Texture::Create(TextureType aTextureType, Core::StringView aFileName)
 		{
 			using namespace Detail;
 
@@ -72,7 +76,11 @@ namespace Alba
 			TextureHandle handle = ourTextureRepository.CreateResource(resourceNameId);
 			ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
 
-			handle.LockMutable()->SetFileName(aFileName);
+			auto& lock = handle.LockMutable();
+
+			lock->SetFileName(aFileName);
+			lock->myTextureType = aTextureType;
+
 			handle.Unlock();
 
 			return handle;
@@ -92,6 +100,20 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		Texture::Texture(const Core::NoCaseStringHash32 aResourceNameId, TextureId anId)
 			: Super(aResourceNameId, anId)
+		{
+
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ TextureHandle Texture::CreateFromFile(Core::StringView /*aFileName*/)
+		{
+
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		bool Texture::LoadFromFile(Core::StringView /*aFileName*/)
 		{
 
 		}
