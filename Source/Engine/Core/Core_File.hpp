@@ -193,7 +193,7 @@ namespace Alba
 				ALBA_FORCEINLINE size_t Read(TDataType* aDataOut, size_t aCount)
 				{
 					ALBA_ASSERT(IsOpen());
-					return Read(aDataOut, sizeof(TDataType), anElementCount);
+					return Read(aDataOut, sizeof(TDataType), aCount);
 				}
 
 				template <typename TDataType, class=enable_if_t<is_standard_layout_v<TDataType> > >
