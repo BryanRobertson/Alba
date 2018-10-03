@@ -319,6 +319,9 @@
     <ClInclude Include="Core_Allocators.hpp">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="Core_ArrayView.hpp">
+      <Filter>Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">

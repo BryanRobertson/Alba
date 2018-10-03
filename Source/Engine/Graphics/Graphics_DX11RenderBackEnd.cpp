@@ -2,6 +2,8 @@
 #include "Graphics_DX11RenderBackEnd.hpp"
 #include "Graphics_InitParams.hpp"
 #include "Graphics_ImGuiModule.hpp"
+#include "Core_ArrayView.hpp"
+
 #include <d3d11.h>
 #include <dxgi1_3.h>
 #include <wrl/client.h>
@@ -384,7 +386,14 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		uint32 DX11RenderBackEnd::CreateShaderFromString(Shader& /*aShader*/, Core::StringView /*aString*/)
 		{
-			return 0;
+			return 1;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		uint32 DX11RenderBackEnd::CreateTexture(Texture& /*aTexture*/, Core::ArrayView<std::byte> /*aData*/)
+		{
+			return 1;
 		}
 	}
 }

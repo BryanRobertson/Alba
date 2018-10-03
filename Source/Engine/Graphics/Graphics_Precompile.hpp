@@ -12,4 +12,5 @@
 #include "Core_FixedString.hpp"
 #include "Core_StringView.hpp"
 #include "Core_Vector.hpp"
-#include "Core_Vector.hpp"
+#include "Core_Array.hpp"
+#include "Core_ArrayView.hpp"

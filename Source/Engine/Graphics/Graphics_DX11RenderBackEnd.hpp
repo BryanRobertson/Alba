@@ -6,6 +6,7 @@
 #include "Graphics_Texture.hpp"
 #include "Core_Assert.hpp"
 #include "Core_VectorMap.hpp"
+#include "Core_ArrayView.hpp"
 #include "Math_Vector.hpp"
 
 namespace Alba
@@ -46,6 +47,7 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------
 				uint32	CreateShaderFromString(Shader& aShader, Core::StringView aString);
+				uint32	CreateTexture(Texture& aTexture, Core::ArrayView<std::byte> aData);
 
 			private:
 

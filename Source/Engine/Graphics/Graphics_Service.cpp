@@ -106,6 +106,13 @@ namespace Alba
 		{
 			return myRenderBackEnd->CreateShaderFromString(aShader, aString);
 		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		uint32 GraphicsService::CreateTexture(Texture& aTexture, Core::ArrayView<std::byte> aData)
+		{
+			return myRenderBackEnd->CreateTexture(aTexture, aData);
+		}
 		
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
