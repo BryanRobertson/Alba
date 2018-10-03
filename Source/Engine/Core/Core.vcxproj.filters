@@ -316,6 +316,9 @@
     <ClInclude Include="Core_File.hpp">
       <Filter>FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="Core_Allocators.hpp">
+      <Filter>Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">
