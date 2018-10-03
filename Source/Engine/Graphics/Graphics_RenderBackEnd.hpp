@@ -70,14 +70,9 @@ namespace Alba
 					return myImplementation.ImGuiShutDown();
 				}
 
-				ALBA_FORCEINLINE uint32 CreateShaderFromString(ShaderId aShaderId, ShaderType aShaderType, Core::StringView aString)
+				ALBA_FORCEINLINE uint32 CreateShaderFromString(Shader& aShader, Core::StringView aString)
 				{
-					return myImplementation.CreateShaderFromString(aShaderId, aShaderType, aString);
-				}
-
-				ALBA_FORCEINLINE void UnloadShader(ShaderId aShaderId)
-				{
-					return myImplementation.UnloadShader(aShaderId);
+					return myImplementation.CreateShaderFromString(aShader, aString);
 				}
 
 			private:

@@ -6,6 +6,7 @@
 #include "Core_SharedPtr.hpp"
 #include "Core_Resource.hpp"
 #include "Core_ResourceRepository.hpp"
+#include "Core_Any.hpp"
 
 namespace Alba
 {
@@ -63,6 +64,9 @@ namespace Alba
 				Texture& operator= (const Texture& aCopyFrom) = delete;
 				Texture& operator= (Texture&& aMoveFrom) = default;
 
+				inline const Core::Any&	GetPlatformData() const;
+				inline Core::Any&		GetPlatformDataMutable();
+
 			private:
 
 				//=================================================================================
@@ -74,6 +78,21 @@ namespace Alba
 				// Private Data
 				//=================================================================================
 				TextureType myTextureType = TextureType::Texture2D;
+				Core::Any	myPlatformData;
 		};
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		inline const Core::Any& Texture::GetPlatformData() const
+		{
+			return myPlatformData;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		inline Core::Any& Texture::GetPlatformDataMutable()
+		{
+			return myPlatformData;
+		}
 	}
 }

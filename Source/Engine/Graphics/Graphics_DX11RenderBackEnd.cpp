@@ -382,16 +382,9 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		uint32 DX11RenderBackEnd::CreateShaderFromString(ShaderId /*aShaderId*/, ShaderType /*aShaderType*/, Core::StringView /*aString*/)
+		uint32 DX11RenderBackEnd::CreateShaderFromString(Shader& /*aShader*/, Core::StringView /*aString*/)
 		{
 			return 0;
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		void DX11RenderBackEnd::UnloadShader(ShaderId /*aShaderId*/)
-		{
-
 		}
 	}
 }

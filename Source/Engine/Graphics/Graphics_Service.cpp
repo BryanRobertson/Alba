@@ -102,16 +102,9 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		uint32 GraphicsService::CreateShaderFromString(ShaderId aShaderId, ShaderType aShaderType, Core::StringView aString)
+		uint32 GraphicsService::CreateShaderFromString(Shader& aShader, Core::StringView aString)
 		{
-			return myRenderBackEnd->CreateShaderFromString(aShaderId, aShaderType, aString);
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		void GraphicsService::UnloadShader(ShaderId aShaderId)
-		{
-			return myRenderBackEnd->UnloadShader(aShaderId);
+			return myRenderBackEnd->CreateShaderFromString(aShader, aString);
 		}
 		
 		//-----------------------------------------------------------------------------------------
