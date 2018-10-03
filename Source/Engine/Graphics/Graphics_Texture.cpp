@@ -54,7 +54,7 @@ namespace Alba
 				handle = ourTextureRepository.CreateResource(resourceNameId);
 				ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
 
-				auto& lock = handle.LockMutable();
+				auto lock = handle.LockMutable();
 				
 				lock->SetFileName(aFileName);
 				lock->myTextureType = aTextureType;
@@ -76,7 +76,7 @@ namespace Alba
 			TextureHandle handle = ourTextureRepository.CreateResource(resourceNameId);
 			ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
 
-			auto& lock = handle.LockMutable();
+			auto lock = handle.LockMutable();
 
 			lock->SetFileName(aFileName);
 			lock->myTextureType = aTextureType;
@@ -108,14 +108,14 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		/*static*/ TextureHandle Texture::CreateFromFile(Core::StringView /*aFileName*/)
 		{
-
+			return TextureHandle();
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		bool Texture::LoadFromFile(Core::StringView /*aFileName*/)
 		{
-
+			return false;
 		}
 	}
 }

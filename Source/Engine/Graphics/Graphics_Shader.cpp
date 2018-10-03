@@ -61,7 +61,7 @@ namespace Alba
 				handle = ourShaderRepository.CreateResource(resourceNameId);
 				ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
 
-				auto& shader = handle.LockMutable(); 
+				auto shader = handle.LockMutable(); 
 				shader->SetType(aShaderType);
 				shader->SetFileName(aFileName);
 
@@ -89,7 +89,7 @@ namespace Alba
 			ShaderHandle handle = ourShaderRepository.CreateResource(resourceNameId);
 			ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aFileName.data());
 
-			auto& shader = handle.LockMutable();
+			auto shader = handle.LockMutable();
 			shader->SetType(aShaderType);
 			shader->SetFileName(aFileName);
 
@@ -108,7 +108,7 @@ namespace Alba
 			ShaderHandle handle = ourShaderRepository.CreateResource(aNameId);
 			ALBA_ASSERT(handle.IsValid(), "Failed to create resource \"%s\"", aNameId.LogString().c_str());
 
-			auto& shader = handle.LockMutable();
+			auto shader = handle.LockMutable();
 			shader->SetType(aShaderType);
 
 			return handle;
