@@ -72,9 +72,6 @@
     <ClCompile Include="Core_TaskSystem.cpp">
       <Filter>TaskSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Core_Task.cpp">
-      <Filter>TaskSystem</Filter>
-    </ClCompile>
     <ClCompile Include="Core_File.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
@@ -304,13 +301,7 @@
     <ClInclude Include="Core_TaskSystem.hpp">
       <Filter>TaskSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Core_Task.hpp">
-      <Filter>TaskSystem</Filter>
-    </ClInclude>
     <ClInclude Include="Core_TaskSystemInitParams.hpp">
-      <Filter>TaskSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Core_TaskQueue.hpp">
       <Filter>TaskSystem</Filter>
     </ClInclude>
     <ClInclude Include="Core_File.hpp">
