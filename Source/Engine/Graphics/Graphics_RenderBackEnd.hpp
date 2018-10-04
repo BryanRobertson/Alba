@@ -13,6 +13,9 @@ namespace Alba
 		struct InitParams;
 		enum class ShaderType : uint8;
 
+		class Shader;
+		class Texture;
+
 		//-----------------------------------------------------------------------------------------
 		// Name	:	RenderBackEnd
 		// Desc	:	Base class for renderer implementations using a specific graphics API
@@ -70,14 +73,14 @@ namespace Alba
 					return myImplementation.ImGuiShutDown();
 				}
 
-				ALBA_FORCEINLINE uint32 CreateShaderFromString(ShaderId aShaderId, ShaderType aShaderType, Core::StringView aString)
+				ALBA_FORCEINLINE uint32 CreateShaderFromString(Shader& aShader, Core::StringView aString)
 				{
-					return myImplementation.CreateShaderFromString(aShaderId, aShaderType, aString);
+					return myImplementation.CreateShaderFromString(aShader, aString);
 				}
 
-				ALBA_FORCEINLINE void UnloadShader(ShaderId aShaderId)
+				ALBA_FORCEINLINE uint32	CreateTexture(Texture& aTexture, Core::ArrayView<std::byte> aData)
 				{
-					return myImplementation.UnloadShader(aShaderId);
+					return myImplementation.CreateTexture(aTexture, aData);
 				}
 
 			private:

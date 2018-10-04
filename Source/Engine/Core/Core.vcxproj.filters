@@ -301,16 +301,13 @@
     <ClInclude Include="Core_TaskSystemModule.hpp">
       <Filter>TaskSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Core_TaskSystem.hpp">
-      <Filter>TaskSystem</Filter>
-    </ClInclude>
     <ClInclude Include="Core_Task.hpp">
       <Filter>TaskSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Core_TaskSystemInitParams.hpp">
+    <ClInclude Include="Core_TaskSystem.hpp">
       <Filter>TaskSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Core_TaskQueue.hpp">
+    <ClInclude Include="Core_TaskSystemInitParams.hpp">
       <Filter>TaskSystem</Filter>
     </ClInclude>
     <ClInclude Include="Core_File.hpp">
@@ -318,6 +315,9 @@
     </ClInclude>
     <ClInclude Include="Core_Allocators.hpp">
       <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_ArrayView.hpp">
+      <Filter>Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

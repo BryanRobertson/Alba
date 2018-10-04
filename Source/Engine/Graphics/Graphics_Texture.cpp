@@ -88,7 +88,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ TextureHandle Texture::Get(Core::Resource<Texture>::NameIdType aResourceNameId)
+		/*static*/ TextureHandle Texture::Get(Core::NoCaseStringHash32 aResourceNameId)
 		{
 			using namespace Detail;
 

@@ -5,6 +5,7 @@
 #include "Core_StringHash.hpp"
 #include "Core_Resource.hpp"
 #include "Core_ResourceRepository.hpp"
+#include "Core_Any.hpp"
 
 namespace Alba
 {
@@ -68,8 +69,8 @@ namespace Alba
 				Shader& operator=(const Shader& aCopyFrom) = delete;
 				Shader& operator=(Shader&& aMoveFrom) = default;
 
-				void CancelLoad();
-				void Unload();
+				inline const Core::Any&	GetPlatformData() const;
+				inline Core::Any&		GetPlatformDataMutable();
 
 			private:			
 
@@ -85,6 +86,21 @@ namespace Alba
 				// Private Data
 				//=================================================================================
 				ShaderType					myShaderType;
+				Core::Any					myPlatformData;
 		};
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		inline const Core::Any& Shader::GetPlatformData() const
+		{
+			return myPlatformData;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		inline Core::Any& Shader::GetPlatformDataMutable()
+		{
+			return myPlatformData;
+		}
 	}
 }

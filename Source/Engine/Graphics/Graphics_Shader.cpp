@@ -126,10 +126,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		Shader::~Shader()
 		{
-			if (IsLoaded())
-			{
-				Unload();
-			}
+			
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -148,7 +145,7 @@ namespace Alba
 			GraphicsModule& graphicsModule = GraphicsModule::Get();
 			GraphicsService& graphicsService = graphicsModule.GetGraphicsServiceMutable();
 
-			return graphicsService.CreateShaderFromString(GetId(), myShaderType, aShaderSourceCode) == 0;
+			return graphicsService.CreateShaderFromString(*this, aShaderSourceCode) == 0;
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -174,41 +171,8 @@ namespace Alba
 				return false;
 			}
 
-			GraphicsModule& graphicsModule = GraphicsModule::Get();
-			GraphicsService& graphicsService = graphicsModule.GetGraphicsServiceMutable();
-
 			const Core::StringView bufferView(buffer.data(), buffer.size());
-			const ShaderId shaderId = GetId();
-
-			const uint32 result = graphicsService.CreateShaderFromString(shaderId, myShaderType, bufferView);
-			return result == 0;
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		void Shader::CancelLoad()
-		{
-			if (IsLoading())
-			{
-
-			}
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		void Shader::Unload()
-		{
-			if (IsLoading())
-			{
-				CancelLoad();
-			}
-			else if (IsLoaded() && GraphicsModule::IsLoaded())
-			{
-				GraphicsModule& graphicsModule = GraphicsModule::Get();
-				GraphicsService& graphicsService = graphicsModule.GetGraphicsServiceMutable();
-
-				graphicsService.UnloadShader(GetId());
-			}
+			return LoadFromString(bufferView);
 		}
 	}
 }
