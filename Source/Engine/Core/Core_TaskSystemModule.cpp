@@ -10,8 +10,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		bool TaskSystemModule::OnLoad(Core::AnyDictionary /*someParameters*/)
 		{
-			const uint hardwareThreads = thread::hardware_concurrency();
-			myTaskSystem.Initialise(hardwareThreads - 1);
+			//const uint hardwareThreads = thread::hardware_concurrency();
+			//myTaskSystem.Initialise(hardwareThreads - 1);
 
 			return true;
 		}
@@ -20,7 +20,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void TaskSystemModule::OnUnload()
 		{
-			myTaskSystem.Shutdown();
+			//myTaskSystem.Shutdown();
 		}
 	}
 }

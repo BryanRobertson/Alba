@@ -9,49 +9,93 @@ namespace Alba
 {
 	namespace Core
 	{
+		typedef void(*TaskFunction)(Task& aTask);
+
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		struct Task
+		class Task
 		{
-			//=====================================================================================
-			// Public Constructors
-			//=====================================================================================
-			Task() = default;
-			Task(const Task&) = delete;
-			Task(Task&&) = default;
+			public:
 
-			//=====================================================================================
-			// Public Data
-			//=====================================================================================
+				//=====================================================================================
+				// Public Types
+				//=====================================================================================
+				
+				//=====================================================================================
+				// Public Constructors/Destructors
+				//=====================================================================================
+				Task() = default;
+				Task(TaskFunction aTaskFunction);
+				Task(Task& aParent, TaskFunction aTaskFunction);
 
-			// Task Id
-			uint32			myId			= 0;
+				Task(const Task&) = delete;
+				Task(Task&&) = default;
 
-			// Id of parent task
-			int32			myParentId		= -1;
+				~Task();
 
-			// Id of task that this task depends on
-			int32			myDependsOn		= -1;
+				//=====================================================================================
+				// Public Methods
+				//=====================================================================================
 
-			// Count of tasks that have yet to complete
-			atomic<uint32>	myOpenChildCount = 0;
+				//-------------------------------------------------------------------------------------
+				// Called when the task is run
+				//-------------------------------------------------------------------------------------
+				void Run()
+				{
+					myTaskFunction(*this);
+					OnFinish();
+				}
 
-			// Priority of task
-			uint8			myPriority		= 0;
+				bool IsFinished() const
+				{
+					return myOpenChildCount.load(std::memory_order_acquire) == 0;
+				}
 
-			// Keep this up to date: We want sizeof(Task) to take up at least a whole cache-line
-			static constexpr int64 ourRequiredPaddingSize = HardwareConstants::theL1CacheLineSize
-															- sizeof(myId)
-															- sizeof(myParentId)
-															- sizeof(myDependsOn)
-															- sizeof(myOpenChildCount)
-															- sizeof(myPriority)
-															- sizeof(FixedFunction<void(), 0>);
+			private:
 
-			static_assert(ourRequiredPaddingSize > 0);
+				//=====================================================================================
+				// Private Methods
+				//=====================================================================================
 
-			// Task function - use all remaining size for the function's fixed-size buffer
-			FixedFunction<void(), ourRequiredPaddingSize> myTaskFunction;
+				//-------------------------------------------------------------------------------------
+				// Called when the task finishes
+				//-------------------------------------------------------------------------------------
+				void OnFinish()
+				{
+					myOpenChildCount.fetch_sub(1, std::memory_order_acq_rel);
+
+					if (myParentTask)
+					{
+						if (myParentTask->myOpenChildCount.fetch_sub(1, std::memory_order_acq_rel) == 0)
+						{
+							myParentTask->OnFinish();
+						}
+					}
+
+					// Clear function
+					myTaskFunction = decltype(myTaskFunction)();
+				}
+
+				//=====================================================================================
+				// Private Data
+				//=====================================================================================
+
+				// Parent task
+				Task*			myParentTask		= nullptr;
+
+				// Count of tasks that have yet to complete (including ourselves)
+				atomic<uint32>	myOpenChildCount	= 1;
+
+				// Keep this up to date: We want sizeof(Task) to take up at least a whole cache-line
+				static constexpr int64 ourRequiredPaddingSize = HardwareConstants::theL1CacheLineSize
+																- sizeof(myParentTask)
+																- sizeof(myOpenChildCount)
+																- sizeof(FixedFunction<void(), 0>);
+
+				static_assert(ourRequiredPaddingSize > 0);
+
+				// Task function - use all remaining size for the function's fixed-size buffer
+				FixedFunction<void(Task&), ourRequiredPaddingSize> myTaskFunction;
 		};
 
 		// Note: This can be commented out - it doesn't matter if Task is larger than the cache-line size
