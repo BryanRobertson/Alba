@@ -9,6 +9,8 @@ namespace Alba
 {
 	namespace Core
 	{
+		class Task;
+
 		typedef void(*TaskFunction)(Task& aTask);
 
 		//-----------------------------------------------------------------------------------------

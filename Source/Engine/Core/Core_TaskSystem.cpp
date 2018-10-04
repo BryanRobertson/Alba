@@ -21,7 +21,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void TaskSystem::Initialise(uint aThreadCount)
+		void TaskSystem::Initialise(uint /*aThreadCount*/)
 		{
 			
 		}
