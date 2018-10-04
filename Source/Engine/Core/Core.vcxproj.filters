@@ -319,6 +319,9 @@
     <ClInclude Include="Core_ArrayView.hpp">
       <Filter>Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Core_TaskWrapper.hpp">
+      <Filter>TaskSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">

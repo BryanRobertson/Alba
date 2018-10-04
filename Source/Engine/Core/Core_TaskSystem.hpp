@@ -43,7 +43,7 @@ namespace Alba
 				//---------------------------------------------------------------------------------
 				bool IsTaskPoolFull() const
 				{
-					return myNextFreeTaskIndex.load(std::memory_order_acquire) >= myTaskPool.size();
+					//return myNextFreeTaskIndex.load(std::memory_order_acquire) >= myTaskPool.size();
 				}
 				
 				//---------------------------------------------------------------------------------
@@ -71,11 +71,7 @@ namespace Alba
 
 				// Note: ourMaxTasks must be a power of two
 				static const size_t ourMaxTasks = 2048;
-<<<<<<< HEAD
-				Array<Task, ourMaxTasks>	myTaskPool;
-=======
 				//Array<Task, ourMaxTasks>	myTasks;
->>>>>>> development
 
 				// Task index is never reset, we use the value % ourMaxTasks
 				atomic<uint32>	myNextFreeTaskIndex = 0u;
