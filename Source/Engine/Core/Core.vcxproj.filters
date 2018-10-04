@@ -67,16 +67,19 @@
       <Filter>Window</Filter>
     </ClCompile>
     <ClCompile Include="Core_TaskSystemModule.cpp">
-      <Filter>TaskSystem</Filter>
+      <Filter>Task</Filter>
     </ClCompile>
     <ClCompile Include="Core_TaskSystem.cpp">
-      <Filter>TaskSystem</Filter>
+      <Filter>Task</Filter>
     </ClCompile>
     <ClCompile Include="Core_Task.cpp">
-      <Filter>TaskSystem</Filter>
+      <Filter>Task</Filter>
     </ClCompile>
     <ClCompile Include="Core_File.cpp">
       <Filter>FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_TaskDebug.cpp">
+      <Filter>Task</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -299,16 +302,16 @@
       <Filter>Window</Filter>
     </ClInclude>
     <ClInclude Include="Core_TaskSystemModule.hpp">
-      <Filter>TaskSystem</Filter>
+      <Filter>Task</Filter>
     </ClInclude>
     <ClInclude Include="Core_Task.hpp">
-      <Filter>TaskSystem</Filter>
+      <Filter>Task</Filter>
     </ClInclude>
     <ClInclude Include="Core_TaskSystem.hpp">
-      <Filter>TaskSystem</Filter>
+      <Filter>Task</Filter>
     </ClInclude>
     <ClInclude Include="Core_TaskSystemInitParams.hpp">
-      <Filter>TaskSystem</Filter>
+      <Filter>Task</Filter>
     </ClInclude>
     <ClInclude Include="Core_File.hpp">
       <Filter>FileSystem</Filter>
@@ -320,7 +323,16 @@
       <Filter>Containers</Filter>
     </ClInclude>
     <ClInclude Include="Core_TaskWrapper.hpp">
-      <Filter>TaskSystem</Filter>
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_TaskDebug.hpp">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_ParallelAlgorithm.hpp">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_TaskPool.hpp">
+      <Filter>Task</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -369,11 +381,11 @@
     <Filter Include="Resource">
       <UniqueIdentifier>{1a409d32-6549-4942-885f-21742cc8ef81}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TaskSystem">
-      <UniqueIdentifier>{2f7c93e6-c6a0-4e12-9d46-921190194cce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="FileSystem">
       <UniqueIdentifier>{699a36c2-f50e-41f0-8933-9936ca537044}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Task">
+      <UniqueIdentifier>{2f7c93e6-c6a0-4e12-9d46-921190194cce}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

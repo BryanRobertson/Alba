@@ -4,8 +4,6 @@
 #include "Core_Thread.hpp"
 #include "Core_Function.hpp"
 #include "Core_Platform.hpp"
-#include "Core_Task.hpp"
-#include "Core_TaskSystem.hpp"
 
 namespace Alba
 {
@@ -13,31 +11,61 @@ namespace Alba
 	{
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		class TaskSystem;
+		class Task;
 
 		//-----------------------------------------------------------------------------------------
+		// Name	:	TaskWrapper
+		// Desc	:	Wrapper around Task that
 		//-----------------------------------------------------------------------------------------
+		template <class TTaskSystemType>
 		class TaskWrapper
 		{
-		public:
+			public:
 
-			TaskWrapper StartChild(TaskFunction /*aTaskFunction*/)
-			{
-				//myTaskSystem->CreateTask(*myTask, aTaskFunction);
-			}
+				//=================================================================================
+				// Public Constructors
+				//=================================================================================
 
-			TaskWrapper Then(TaskFunction /*aTaskFunction*/)
-			{
-				//myTaskSystem->CreateTask(*myTask, aTaskFunction);
-			}
+				//=================================================================================
+				// Public Methods
+				//=================================================================================
+			#if 0
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
+				TaskWrapper<TTaskSystemType> While(TaskFunction /*aTaskFunction*/)
+				{
+					//myTaskSystem->CreateTask(*myTask, aTaskFunction);
+				}
 
-			void WaitFor()
-			{
-				//myTaskSystem->WaitFor(*myTask);
-			}
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
+				TaskWrapper<TTaskSystemType> StartChild(TaskFunction /*aTaskFunction*/)
+				{
+					//myTaskSystem->CreateTask(*myTask, aTaskFunction);
+				}
 
-			Task*		myTask = nullptr;
-			TaskSystem* myTaskSystem = nullptr;
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
+				TaskWrapper<TTaskSystemType> Then(TaskFunction /*aTaskFunction*/)
+				{
+					//myTaskSystem->CreateTask(*myTask, aTaskFunction);
+				}
+			#endif
+
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
+				void WaitForAll()
+				{
+					//myTaskSystem->WaitFor(*myTask);
+				}
+
+			private:
+
+				//=================================================================================
+				// Private Data
+				//=================================================================================
+				Task*				myTask = nullptr;
+				TTaskSystemType*	myTaskSystem = nullptr;
 		};
 	}
 }

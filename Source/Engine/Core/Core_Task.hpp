@@ -4,6 +4,7 @@
 #include "Core_Thread.hpp"
 #include "Core_Function.hpp"
 #include "Core_Platform.hpp"
+#include "Core_TypeTraits.hpp"
 
 namespace Alba
 {
@@ -11,7 +12,7 @@ namespace Alba
 	{
 		class Task;
 
-		typedef void(*TaskFunction)(Task& aTask);
+		typedef void(*TaskFunction)();
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
@@ -27,8 +28,23 @@ namespace Alba
 				// Public Constructors/Destructors
 				//=====================================================================================
 				Task() = default;
-				Task(TaskFunction aTaskFunction);
-				Task(Task& aParent, TaskFunction aTaskFunction);
+
+				template <typename TFunctionType, class=enable_if_t<is_invocable_v<void()>> >
+				Task(TFunctionType&& aTaskFunction)
+					: myTaskFunction(aTaskFunction)
+					, myOpenTaskCount(1u)
+				{
+					
+				}
+
+				template <typename TFunctionType, class = enable_if_t<is_invocable_v<void()>> >
+				Task(Task& aParent, TFunctionType&& aTaskFunction)
+					: myTaskFunction(aTaskFunction)
+					, myOpenTaskCount(1u)
+					, myParentTask(&aParent)
+				{
+					aParent.myOpenTaskCount.fetch_add(1, std::memory_order_relaxed);
+				}
 
 				Task(const Task&) = delete;
 				Task(Task&&) = default;
@@ -44,13 +60,16 @@ namespace Alba
 				//-------------------------------------------------------------------------------------
 				void Run()
 				{
-					myTaskFunction(*this);
+					myTaskFunction();
 					OnFinish();
 				}
 
+				//-------------------------------------------------------------------------------------
+				// Return true if task and all children complete
+				//-------------------------------------------------------------------------------------
 				bool IsFinished() const
 				{
-					return myOpenChildCount.load(std::memory_order_acquire) == 0;
+					return myOpenTaskCount.load(std::memory_order_acquire) == 0;
 				}
 
 			private:
@@ -64,11 +83,11 @@ namespace Alba
 				//-------------------------------------------------------------------------------------
 				void OnFinish()
 				{
-					myOpenChildCount.fetch_sub(1, std::memory_order_acq_rel);
+					myOpenTaskCount.fetch_sub(1, std::memory_order_acq_rel);
 
 					if (myParentTask)
 					{
-						if (myParentTask->myOpenChildCount.fetch_sub(1, std::memory_order_acq_rel) == 0)
+						if (myParentTask->myOpenTaskCount.fetch_sub(1, std::memory_order_acq_rel) == 0)
 						{
 							myParentTask->OnFinish();
 						}
@@ -86,18 +105,18 @@ namespace Alba
 				Task*			myParentTask		= nullptr;
 
 				// Count of tasks that have yet to complete (including ourselves)
-				atomic<uint32>	myOpenChildCount	= 1;
+				atomic<uint32>	myOpenTaskCount	= 0u;
 
 				// Keep this up to date: We want sizeof(Task) to take up at least a whole cache-line
 				static constexpr int64 ourRequiredPaddingSize = HardwareConstants::theL1CacheLineSize
 																- sizeof(myParentTask)
-																- sizeof(myOpenChildCount)
+																- sizeof(myOpenTaskCount)
 																- sizeof(FixedFunction<void(), 0>);
 
 				static_assert(ourRequiredPaddingSize > 0);
 
 				// Task function - use all remaining size for the function's fixed-size buffer
-				FixedFunction<void(Task&), ourRequiredPaddingSize> myTaskFunction;
+				FixedFunction<void(), ourRequiredPaddingSize> myTaskFunction;
 		};
 
 		// Note: This can be commented out - it doesn't matter if Task is larger than the cache-line size

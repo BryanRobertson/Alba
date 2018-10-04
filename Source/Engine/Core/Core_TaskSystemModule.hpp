@@ -31,11 +31,21 @@ namespace Alba
 				bool		OnLoad(Core::AnyDictionary someParameters);
 				void		OnUnload();
 
+				inline TaskSystem& GetTaskSystemMutable();
+
 			private:
 
 				//=================================================================================
 				// Private Data
 				//=================================================================================
+				TaskSystem	myTaskSystem;
 		};
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		inline TaskSystem& TaskSystemModule::GetTaskSystemMutable()
+		{
+			return myTaskSystem;
+		}
 	}
 }

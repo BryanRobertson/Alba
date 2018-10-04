@@ -1,6 +1,8 @@
 #include "Core_Precompile.hpp"
 #include "Core_TaskSystemModule.hpp"
 #include "Core_Thread.hpp"
+#include "Core_TaskSystemInitParams.hpp"
+#include "Core_TaskDebug.hpp"
 
 namespace Alba
 {
@@ -8,10 +10,15 @@ namespace Alba
 	{
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		bool TaskSystemModule::OnLoad(Core::AnyDictionary /*someParameters*/)
+		bool TaskSystemModule::OnLoad(Core::AnyDictionary someParameters)
 		{
-			//const uint hardwareThreads = thread::hardware_concurrency();
-			//myTaskSystem.Initialise(hardwareThreads - 1);
+			TaskSystemInitParams initParams;
+			if (someParameters.Has<TaskSystemInitParams>())
+			{
+				initParams = someParameters.Get<TaskSystemInitParams>();
+			}
+			
+			myTaskSystem.Initialise(initParams.myThreadCount);
 
 			return true;
 		}
@@ -20,7 +27,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void TaskSystemModule::OnUnload()
 		{
-			//myTaskSystem.Shutdown();
+			myTaskSystem.Shutdown();
 		}
 	}
 }

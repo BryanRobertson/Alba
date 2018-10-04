@@ -4,7 +4,9 @@
 #include "Core_Thread.hpp"
 #include "Core_Vector.hpp"
 #include "Core_TypeTraits.hpp"
+#include "Core_TaskWrapper.hpp"
 #include "Core_Array.hpp"
+#include "Core_TaskPool.hpp"
 
 namespace Alba
 {
@@ -30,51 +32,20 @@ namespace Alba
 				void	Initialise(uint aThreadCount);
 				void	Shutdown();
 
-				//---------------------------------------------------------------------------------
-				//---------------------------------------------------------------------------------
-
 			private:
 
 				//=================================================================================
 				// Private Methods
 				//=================================================================================
 
-				//---------------------------------------------------------------------------------
-				//---------------------------------------------------------------------------------
-				bool IsTaskPoolFull() const
-				{
-					//return myNextFreeTaskIndex.load(std::memory_order_acquire) >= myTaskPool.size();
-				}
-				
-				//---------------------------------------------------------------------------------
-				//---------------------------------------------------------------------------------
-#if 0
-				template <typename TFunctor, class = enable_if_t<is_invocable_v<TFunctor, void()>> >
-				Task& AllocateTask(TFunctor&& aFunctor)
-				{
-					const uint32 index = myNextFreeTaskIndex.fetch_add(1, std::memory_order_relaxed);
-					ALBA_ASSERT(index < myTaskPool.size());
-
-					Task& task = myTaskPool[(index - 1) & (ourMaxTasks - 1)];
-					task.myId = index;
-					task.myOpenChildCount.store(1, std::memory_order_relaxed);
-					task.myTaskFunction = std::move(aFunctor);
-
-					return task;
-				}
-#endif
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				Vector<thread>	myFrameTaskThreads;
+				Vector<thread>	mySingleFrameTaskThreads;
+				TaskPool<2048>	mySingleFrameTaskPool;
+
+				TaskPool<4096>	myMultiFrameTaskPool;
 				Vector<thread>	myMultiFrameTaskThreads;
-
-				// Note: ourMaxTasks must be a power of two
-				static const size_t ourMaxTasks = 2048;
-				//Array<Task, ourMaxTasks>	myTasks;
-
-				// Task index is never reset, we use the value % ourMaxTasks
-				atomic<uint32>	myNextFreeTaskIndex = 0u;
 		};
 	}
 }
