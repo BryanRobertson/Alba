@@ -26,3 +26,4 @@ Source/Sharpmake/sharpmake_debugsolution.vs2017.sln
 Source/Sharpmake/sharpmake_sharpmake.vs2017.csproj
 Source/Sharpmake/sharpmake_debugsolution.vs2015.sln
 Source/Sharpmake/sharpmake_sharpmake.vs2015.csproj
+Source/Application/Quake3ViewerExe/imgui.ini

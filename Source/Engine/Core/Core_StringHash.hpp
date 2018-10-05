@@ -69,15 +69,19 @@ namespace Alba
 					constexpr CompileTimeHash() {}
 				};
 
-				explicit constexpr TStringHashBase(StringView aStringView, const CompileTimeHash&)
-					: myHashValue(HashAlgorithm::Hash(aStringView))
-				{
-					#if defined(ALBA_DEBUG_STRINGHASH)
+				#if defined(ALBA_DEBUG_STRINGHASH)
+					explicit constexpr TStringHashBase(StringView aStringView, const CompileTimeHash&)
+						: myHashValue(HashAlgorithm::Hash(aStringView))
 					{
 						myDebugString = aStringView.data();
 					}
-					#endif
-				}
+				#else
+					explicit constexpr TStringHashBase(HashValueType aHashValue, const CompileTimeHash&)
+						: myHashValue(aHashValue)
+					{
+
+					}
+				#endif
 
 				explicit constexpr TStringHashBase(THashValueType aHash)
 					: myHashValue(aHash)
@@ -327,32 +331,80 @@ namespace Alba
 	{
 		inline constexpr Alba::Core::StringHash16 operator "" _hash16(const char* aStr, size_t aSize)
 		{
-			return Alba::Core::StringHash16(Alba::Core::StringView(aStr, aSize), Alba::Core::StringHash16::CompileTimeHash());
+			using Alba::Core::StringView;
+			using HashType = Alba::Core::StringHash16;
+
+			#if defined(ALBA_DEBUG_STRINGHASH)
+				return HashType(StringView(aStr, aSize), HashType::CompileTimeHash());
+			#else
+				const HashType::HashValueType hashValue = HashType::HashAlgorithm::Hash(StringView(aStr, aSize));
+				return HashType(hashValue, HashType::CompileTimeHash());
+			#endif
 		}
 
 		inline constexpr Alba::Core::StringHash32 operator "" _hash32(const char* aStr, size_t aSize)
 		{
-			return Alba::Core::StringHash32(Alba::Core::StringView(aStr, aSize), Alba::Core::StringHash32::CompileTimeHash());
+			using Alba::Core::StringView;
+			using HashType = Alba::Core::StringHash32;
+
+			#if defined(ALBA_DEBUG_STRINGHASH)
+				return HashType(StringView(aStr, aSize), HashType::CompileTimeHash());
+			#else
+				const HashType::HashValueType hashValue = HashType::HashAlgorithm::Hash(StringView(aStr, aSize));
+				return HashType(hashValue, HashType::CompileTimeHash());
+			#endif
 		}
 
 		inline constexpr Alba::Core::StringHash64 operator "" _hash64(const char* aStr, size_t aSize)
 		{
-			return Alba::Core::StringHash64(Alba::Core::StringView(aStr, aSize), Alba::Core::StringHash64::CompileTimeHash());
+			using Alba::Core::StringView;
+			using HashType = Alba::Core::StringHash64;
+
+			#if defined(ALBA_DEBUG_STRINGHASH)
+				return HashType(StringView(aStr, aSize), HashType::CompileTimeHash());
+			#else
+				const HashType::HashValueType hashValue = HashType::HashAlgorithm::Hash(StringView(aStr, aSize));
+				return HashType(hashValue, HashType::CompileTimeHash());
+			#endif
 		}
 
 		inline constexpr Alba::Core::NoCaseStringHash16 operator "" _nocasehash16(const char* aStr, size_t aSize)
 		{
-			return Alba::Core::NoCaseStringHash16(Alba::Core::StringView(aStr, aSize), Alba::Core::NoCaseStringHash16::CompileTimeHash());
+			using Alba::Core::StringView;
+			using HashType = Alba::Core::NoCaseStringHash16;
+
+			#if defined(ALBA_DEBUG_STRINGHASH)
+				return HashType(StringView(aStr, aSize), HashType::CompileTimeHash());
+			#else
+				const HashType::HashValueType hashValue = HashType::HashAlgorithm::Hash(StringView(aStr, aSize));
+				return HashType(hashValue, HashType::CompileTimeHash());
+			#endif
 		}
 
 		inline constexpr Alba::Core::NoCaseStringHash32 operator "" _nocasehash32(const char* aStr, size_t aSize)
 		{
-			return Alba::Core::NoCaseStringHash32(Alba::Core::StringView(aStr, aSize), Alba::Core::NoCaseStringHash32::CompileTimeHash());
+			using Alba::Core::StringView;
+			using HashType = Alba::Core::NoCaseStringHash32;
+
+			#if defined(ALBA_DEBUG_STRINGHASH)
+				return HashType(StringView(aStr, aSize), HashType::CompileTimeHash());
+			#else
+				const HashType::HashValueType hashValue = HashType::HashAlgorithm::Hash(StringView(aStr, aSize));
+				return HashType(hashValue, HashType::CompileTimeHash());
+			#endif
 		}
 
 		inline constexpr Alba::Core::NoCaseStringHash64 operator "" _nocasehash64(const char* aStr, size_t aSize)
 		{
-			return Alba::Core::NoCaseStringHash64(Alba::Core::StringView(aStr, aSize), Alba::Core::NoCaseStringHash64::CompileTimeHash());
-		}
+			using Alba::Core::StringView;
+			using HashType = Alba::Core::NoCaseStringHash64;
+
+			#if defined(ALBA_DEBUG_STRINGHASH)
+				return HashType(StringView(aStr, aSize), HashType::CompileTimeHash());
+			#else
+				const HashType::HashValueType hashValue = HashType::HashAlgorithm::Hash(StringView(aStr, aSize));
+				return HashType(hashValue, HashType::CompileTimeHash());
+			#endif
+		}		
 	}
 }

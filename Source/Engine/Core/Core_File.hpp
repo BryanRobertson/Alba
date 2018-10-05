@@ -240,7 +240,7 @@ namespace Alba
 				}
 
 				template <typename TDataType=std::byte, size_t TSize=128, OverflowBehavior TOverflowBehavior = OverflowBehavior::Allowed, typename TOverflowAllocator = EASTLAllocatorType>
-				ALBA_FORCEINLINE FixedVector<TDataType, TSize, TOverflowBehavior, TOverflowAllocator> ReadToEnd()
+				FixedVector<TDataType, TSize, TOverflowBehavior, TOverflowAllocator> ReadToEnd()
 				{
 					ALBA_ASSERT(IsOpen());
 
@@ -256,7 +256,7 @@ namespace Alba
 				}
 
 				template <typename TDataType, size_t TSize=128, OverflowBehavior TOverflowBehavior=OverflowBehavior::Allowed, typename TOverflowAllocator=EASTLAllocatorType>
-				ALBA_FORCEINLINE size_t ReadToEnd(FixedVector<TDataType, TSize, TOverflowBehavior, TOverflowAllocator>& someDataOut)
+				size_t ReadToEnd(FixedVector<TDataType, TSize, TOverflowBehavior, TOverflowAllocator>& someDataOut)
 				{
 					ALBA_ASSERT(IsOpen());
 
@@ -271,7 +271,7 @@ namespace Alba
 				}
 
 				template <typename TDataType=std::byte, typename TAllocator=EASTLAllocatorType>
-				ALBA_FORCEINLINE Vector<TDataType, TAllocator> ReadToEnd()
+				Vector<TDataType, TAllocator> ReadToEnd()
 				{
 					ALBA_ASSERT(IsOpen());
 

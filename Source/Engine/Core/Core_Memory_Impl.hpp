@@ -14,7 +14,11 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void* ALBA_CDECL operator new(size_t size)
 {
-	return Alba::Core::Malloc(size, 0, 0, Alba::Core::TAllocType(Alba::Core::AllocationType::Unknown), "", "", 0);
+	#if defined(ALBA_RETAIL_BUILD)
+		return Alba::Core::Malloc(size, 0, 0, Alba::Core::TAllocType(Alba::Core::AllocationType::Unknown));
+	#else
+		return Alba::Core::Malloc(size, 0, 0, Alba::Core::TAllocType(Alba::Core::AllocationType::Unknown), "", "", 0);
+	#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,15 +28,31 @@ void ALBA_CDECL operator delete(void* ptr, size_t)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line)
+#if defined(ALBA_RETAIL_BUILD)
+	void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType)
+#else
+	void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line)
+#endif
 {
-	return Alba::Core::Malloc(size, alignment, alignmentOffset, allocType, description, file, line);
+	#if defined(ALBA_RETAIL_BUILD)
+		return Alba::Core::Malloc(size, alignment, alignmentOffset, allocType);
+	#else
+		return Alba::Core::Malloc(size, alignment, alignmentOffset, allocType, description, file, line);
+	#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line)
+#if defined(ALBA_RETAIL_BUILD)
+	void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType)
+#else
+	void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line)
+#endif
 {
-	return Alba::Core::Malloc(size, alignment, alignmentOffset, allocType, description, file, line);
+	#if defined(ALBA_RETAIL_BUILD)
+		return Alba::Core::Malloc(size, alignment, alignmentOffset, allocType);
+	#else
+		return Alba::Core::Malloc(size, alignment, alignmentOffset, allocType, description, file, line);
+	#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,14 +74,21 @@ void ALBA_CDECL operator delete[](void* ptr)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void ALBA_CDECL operator delete(void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line)
+#if defined(ALBA_RETAIL_BUILD)
+	void ALBA_CDECL operator delete(void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType)
+#else
+	void ALBA_CDECL operator delete(void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line)
+#endif
 {
 	(void)allocType;
 	(void)alignment;
 	(void)alignmentOffset;
-	(void)description;
-	(void)file;
-	(void)line;
+
+	#if !defined(ALBA_RETAIL_BUILD)
+		(void)description;
+		(void)file;
+		(void)line;
+	#endif
 
 	if (ptr)
 	{
@@ -70,15 +97,22 @@ void ALBA_CDECL operator delete(void* ptr, size_t alignment, size_t alignmentOff
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-void ALBA_CDECL operator delete[](void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line)
+#if defined(ALBA_RETAIL_BUILD)
+	void ALBA_CDECL operator delete[](void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType)
+#else
+	void ALBA_CDECL operator delete[](void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line)
+#endif
 {
 	(void)allocType;
 	(void)alignment;
 	(void)alignmentOffset;
 	(void)allocType;
-	(void)description;
-	(void)file;
-	(void)line;
+
+	#if !defined(ALBA_RETAIL_BUILD)
+		(void)description;
+		(void)file;
+		(void)line;
+	#endif
 
 	if (ptr)
 	{
@@ -96,8 +130,14 @@ void* ALBA_CDECL operator new[](size_t size, const char* pName, int flags, unsig
 	(void)pName;
 	(void)flags;
 	(void)debugFlags;
+	(void)file;
+	(void)line;
 
-	return Alba::Core::Malloc(size, 0, 0, static_cast<Alba::BasicTypes::uint32>(::Alba::Core::AllocationType::EASTLContainer), pName, file, line);
+	#if defined(ALBA_RETAIL_BUILD)
+		return Alba::Core::Malloc(size, 0, 0, static_cast<Alba::BasicTypes::uint32>(::Alba::Core::AllocationType::EASTLContainer));
+	#else
+		return Alba::Core::Malloc(size, 0, 0, static_cast<Alba::BasicTypes::uint32>(::Alba::Core::AllocationType::EASTLContainer), pName, file, line);
+	#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,8 +146,14 @@ void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentO
 	(void)pName;
 	(void)flags;
 	(void)debugFlags;
+	(void)file;
+	(void)line;
 
-	return Alba::Core::Malloc(size, alignment, alignmentOffset, static_cast<Alba::BasicTypes::uint32>(::Alba::Core::AllocationType::EASTLContainer), pName, file, line);
+	#if defined(ALBA_RETAIL_BUILD)
+		return Alba::Core::Malloc(size, alignment, alignmentOffset, static_cast<Alba::BasicTypes::uint32>(::Alba::Core::AllocationType::EASTLContainer));
+	#else
+		return Alba::Core::Malloc(size, alignment, alignmentOffset, static_cast<Alba::BasicTypes::uint32>(::Alba::Core::AllocationType::EASTLContainer), pName, file, line);
+	#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

@@ -8,7 +8,7 @@ namespace Alba
 	// Name	:	to_string
 	// Desc	:	Convert an Input::Key to a string
 	//-----------------------------------------------------------------------------------------
-	Core::StringView to_string(Input::Key aKey)
+	Core::StringView to_string([[maybe_unused]] Input::Key aKey)
 	{
 #if !defined(ALBA_RETAIL_BUILD)
 		switch (aKey)

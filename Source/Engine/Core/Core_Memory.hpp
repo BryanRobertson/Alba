@@ -38,16 +38,25 @@ namespace Alba
 		//-------------------------------------------------------------------------------------------------
 		// New/Delete macros
 		//-------------------------------------------------------------------------------------------------
-		#define ALBA_NEW(AllocType, Description)							new(size_t(0), ::Alba::Core::DefaultAlignment, static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
-		#define ALBA_NEW_ARRAY(ClassType, AllocType, Description)			new[](size_t(0), ::Alba::Core::DefaultAlignment, static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
+		#if defined(ALBA_RETAIL_BUILD)
+			#define ALBA_NEW(AllocType, Description)							new(size_t(0), ::Alba::Core::DefaultAlignment, static_cast<uint32>(AllocType))
+			#define ALBA_NEW_ARRAY(ClassType, AllocType, Description)			new[](size_t(0), ::Alba::Core::DefaultAlignment, static_cast<uint32>(AllocType))
+			#define ALBA_NEW_ALIGNED(AllocType, Description)					new(size_t(0), ::Alba::Core::DefaultAlignment, size_t(0), static_cast<uint32>(AllocType))
+			#define ALBA_NEW_ARRAY_ALIGNED(ClassType, AllocType, Description)	new[](size_t(0), ::Alba::Core::DefaultAlignment, size_t(0), static_cast<uint32>(AllocType))
+			#define ALBA_MALLOC(Size, AllocType, Description)					Alba::Core::Malloc(Size, ::Alba::Core::DefaultAlignment, size_t(0), AllocType)
+			#define ALBA_REALLOC(Pointer, Size)									Alba::Core::Realloc(Pointer, Size)
+		#else
+			#define ALBA_NEW(AllocType, Description)							new(size_t(0), ::Alba::Core::DefaultAlignment, static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
+			#define ALBA_NEW_ARRAY(ClassType, AllocType, Description)			new[](size_t(0), ::Alba::Core::DefaultAlignment, static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
+			#define ALBA_NEW_ALIGNED(AllocType, Description)					new(size_t(0), ::Alba::Core::DefaultAlignment, size_t(0), static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
+			#define ALBA_NEW_ARRAY_ALIGNED(ClassType, AllocType, Description)	new[](size_t(0), ::Alba::Core::DefaultAlignment, size_t(0), static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
+			#define ALBA_MALLOC(Size, AllocType, Description)					Alba::Core::Malloc(Size, ::Alba::Core::DefaultAlignment, size_t(0), AllocType, Description, __FILE__, __LINE__)
+			#define ALBA_REALLOC(Pointer, Size)									Alba::Core::Realloc(Pointer, Size, __FILE__, __LINE__)
+		#endif
+
 		#define ALBA_DELETE(Object)											delete Object
 		#define ALBA_DELETE_ARRAY(Object)									delete[] Object
 
-		#define ALBA_NEW_ALIGNED(AllocType, Description)					new(size_t(0), ::Alba::Core::DefaultAlignment, size_t(0), static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
-		#define ALBA_NEW_ARRAY_ALIGNED(ClassType, AllocType, Description)	new[](size_t(0), ::Alba::Core::DefaultAlignment, size_t(0), static_cast<uint32>(AllocType), Description, __FILE__, __LINE__)
-
-		#define ALBA_MALLOC(Size, AllocType, Description)					Alba::Core::Malloc(Size, ::Alba::Core::DefaultAlignment, size_t(0), AllocType, Description, __FILE__, __LINE__)
-		#define ALBA_REALLOC(Pointer, Size)									Alba::Core::Realloc(Pointer, Size, __FILE__, __LINE__)
 		#define ALBA_FREE(Pointer)											Alba::Core::Free(Pointer)
 
 		//-------------------------------------------------------------------------------------------------
@@ -55,8 +64,14 @@ namespace Alba
 		//-------------------------------------------------------------------------------------------------
 		typedef uint32 TAllocType;
 
-		ALBA_CORE_API void* Malloc(size_t size, size_t alignment, size_t alignmentOffset, TAllocType allocType, const char* description, const char* file, uint32 line);
-		ALBA_CORE_API void* Realloc(void* pointer, size_t size, const char* file, uint32 line);
+		#if defined(ALBA_RETAIL_BUILD)
+			ALBA_CORE_API void* Malloc(size_t size, size_t alignment, size_t alignmentOffset, TAllocType allocType);
+			ALBA_CORE_API void* Realloc(void* pointer, size_t size);
+		#else
+			ALBA_CORE_API void* Malloc(size_t size, size_t alignment, size_t alignmentOffset, TAllocType allocType, const char* description, const char* file, uint32 line);
+			ALBA_CORE_API void* Realloc(void* pointer, size_t size, const char* file, uint32 line);
+		#endif
+		
 		ALBA_CORE_API void  Free(void* pointer);
 
 		struct ALBA_CORE_API AllocatorHelper
@@ -90,11 +105,36 @@ void* ALBA_CDECL operator new(size_t);
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void  ALBA_CDECL operator delete(void*, size_t);
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line);
+#if defined(ALBA_RETAIL_BUILD)
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line);
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType);
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType);
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	void ALBA_CDECL operator delete(void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType);
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	void ALBA_CDECL operator delete[](void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType);
+
+#else
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	void* ALBA_CDECL operator new(size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line);
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	void* ALBA_CDECL operator new[](size_t size, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line);
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	void ALBA_CDECL operator delete(void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line);
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	void ALBA_CDECL operator delete[](void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line);
+
+#endif
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void ALBA_CDECL operator delete(void* ptr);
@@ -102,11 +142,6 @@ void ALBA_CDECL operator delete(void* ptr);
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 void ALBA_CDECL operator delete[](void* ptr);
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-void ALBA_CDECL operator delete(void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line);
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-void ALBA_CDECL operator delete[](void* ptr, size_t alignment, size_t alignmentOffset, Alba::Core::TAllocType allocType, const char* description, const char* file, Alba::uint32 line);
 
 //-------------------------------------------------------------------------------------------------
 // For EASTL compatibility

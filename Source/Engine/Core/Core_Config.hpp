@@ -55,8 +55,16 @@
 #	define ALBA_FORCEINLINE
 #endif
 
+//-----------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------
+#if defined(ALBA_RETAIL_BUILD)
+	#define ALBA_CONSTEXPR_IN_RETAIL constexpr
+#else
+	#define ALBA_CONSTEXPR_IN_RETAIL const
+#endif
+
 //-------------------------------------------------------------------------------------------------
-// Render backend
+// Render backend selection
 //-------------------------------------------------------------------------------------------------
 #if defined(ALBA_PLATFORM_WINDOWS)
 #	define ALBA_GRAPHICS_DX11

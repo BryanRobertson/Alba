@@ -48,7 +48,7 @@ namespace Alba
 				Alba::Core::CommandLineModule::Register();
 				Alba::Core::ModuleRepository::Get().LoadModule
 				(
-					"Alba.Core.CommandLine"_nocasehash32, 
+					"Alba.Core.CommandLine"_nocasehash32,
 					std::move(aInitParams.myCommandLineParameters)
 				);
 			}
