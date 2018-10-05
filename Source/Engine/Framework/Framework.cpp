@@ -30,7 +30,9 @@ namespace Alba
 			//----------------------------------------------------------------------
 			// Initialise logging
 			//----------------------------------------------------------------------
-			Alba::Core::LogManager::CreateInstance();
+			#if defined(ALBA_DEBUG_LOGGING_ENABLED)
+				Alba::Core::LogManager::CreateInstance();
+			#endif
 
 			ALBA_LOG_INFO(Framework, "---------------------------------------------------------------");
 			ALBA_LOG_INFO(Framework, "Init Framework:");
@@ -79,7 +81,9 @@ namespace Alba
 			Alba::Core::ModuleRepository::Destroy();
 
 			// Shut down the logging system
-			Alba::Core::LogManager::DestroyInstance();
+			#if defined(ALBA_DEBUG_LOGGING_ENABLED)
+				Alba::Core::LogManager::DestroyInstance();
+			#endif
 
 			ALBA_PROFILE_SHUTDOWN();
 
