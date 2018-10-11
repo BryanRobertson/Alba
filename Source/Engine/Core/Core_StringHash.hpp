@@ -33,8 +33,8 @@ namespace Alba
 				//=================================================================================
 				// Public Types
 				//=================================================================================
-				typedef THashValueType	HashValueType;
-				typedef THashAlgorithm	HashAlgorithm;
+				using HashValueType = THashValueType;
+				using HashAlgorithm = THashAlgorithm;
 
 				struct CompileTimeHash{};
 				
@@ -247,12 +247,12 @@ namespace Alba
 			typename TStringHashBase<THashValueType, THashAlgorithm>::DebugStringTable TStringHashBase<THashValueType, THashAlgorithm>::ourDebugStringTable;
 		#endif
 
-		typedef TStringHashBase<uint16, FNV1a16Hash>		StringHash16;
-		typedef TStringHashBase<uint16, FNV1a16HashNoCase>	NoCaseStringHash16;
-		typedef TStringHashBase<uint32, FNV1a32Hash>		StringHash32;
-		typedef TStringHashBase<uint32, FNV1a32HashNoCase>	NoCaseStringHash32;
-		typedef TStringHashBase<uint64, FNV1a64Hash>		StringHash64;
-		typedef TStringHashBase<uint64, FNV1a64HashNoCase>	NoCaseStringHash64;
+		using StringHash16			= TStringHashBase<uint16, FNV1a16Hash>;
+		using NoCaseStringHash16	= TStringHashBase<uint16, FNV1a16HashNoCase>;
+		using StringHash32			= TStringHashBase<uint32, FNV1a32Hash>;
+		using NoCaseStringHash32	= TStringHashBase<uint32, FNV1a32HashNoCase>;
+		using StringHash64			= TStringHashBase<uint64, FNV1a64Hash>;
+		using NoCaseStringHash64	= TStringHashBase<uint64, FNV1a64HashNoCase>;
 
 		template <typename TToType, typename TFromType>
 		inline constexpr TToType ConvertHash(TFromType aFrom)

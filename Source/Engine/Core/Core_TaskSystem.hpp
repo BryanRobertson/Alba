@@ -27,10 +27,29 @@ namespace Alba
 				~TaskSystem();
 
 				//=================================================================================
+				// Public Static Methods
+				//=================================================================================
+				static TaskSystem& GetMutable();
+
+				//=================================================================================
 				// Public Methods
 				//=================================================================================
 				void	Initialise(uint aThreadCount);
 				void	Shutdown();
+
+				void	BeginFrame();
+				void	EndFrame();
+
+				template <typename... TArgs>
+				Task& CreateTask(TArgs&&... someArgs)
+				{
+					return *myTaskPool.CreateTask(std::forward<TArgs>(someArgs)...);
+				}
+
+				void QueueTask(Task& aTask)
+				{
+					(void) aTask;
+				}
 
 			private:
 
@@ -41,11 +60,25 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				Vector<thread>	mySingleFrameTaskThreads;
-				TaskPool<2048>	mySingleFrameTaskPool;
-
-				TaskPool<4096>	myMultiFrameTaskPool;
-				Vector<thread>	myMultiFrameTaskThreads;
+				Vector<thread>	myTaskThreads;
+				TaskPool<2048>	myTaskPool;
 		};
+
+		//-----------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------
+		template <typename... TArgs>
+		Task& CreateTask(TArgs&&... someArgs)
+		{
+			TaskSystem& taskSystem = TaskSystem::GetMutable();
+			return taskSystem.CreateTask(std::forward<TArgs>(someArgs)...):
+		}
+
+		//-----------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------
+		void QueueTask(Task& aTask)
+		{
+			TaskSystem& taskSystem = TaskSystem::GetMutable();
+			taskSystem.QueueTask(aTask);
+		}
 	}
 }

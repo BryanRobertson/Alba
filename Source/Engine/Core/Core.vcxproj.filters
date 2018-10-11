@@ -79,7 +79,7 @@
       <Filter>FileSystem</Filter>
     </ClCompile>
     <ClCompile Include="Core_TaskDebug.cpp">
-      <Filter>Task</Filter>
+      <Filter>Task\Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -325,14 +325,11 @@
     <ClInclude Include="Core_TaskWrapper.hpp">
       <Filter>Task</Filter>
     </ClInclude>
-    <ClInclude Include="Core_TaskDebug.hpp">
-      <Filter>Task</Filter>
-    </ClInclude>
-    <ClInclude Include="Core_ParallelAlgorithm.hpp">
-      <Filter>Task</Filter>
-    </ClInclude>
     <ClInclude Include="Core_TaskPool.hpp">
       <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_TaskDebug.hpp">
+      <Filter>Task\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -386,6 +383,9 @@
     </Filter>
     <Filter Include="Task">
       <UniqueIdentifier>{2f7c93e6-c6a0-4e12-9d46-921190194cce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Task\Debug">
+      <UniqueIdentifier>{f42152c0-8bac-46a3-96e0-71afb0ea7797}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

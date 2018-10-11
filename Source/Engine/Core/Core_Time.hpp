@@ -21,18 +21,17 @@ namespace Alba
 	namespace chrono_literals = std::chrono_literals;
 
 	namespace Core
-	{
-		
-		
-		typedef chrono::high_resolution_clock							HighResolutionClock;
-		typedef chrono::time_point<chrono::high_resolution_clock>		TimePoint;
-		typedef chrono::duration<uint64, std::milli>					TimeDurationMilliSeconds;
-		typedef chrono::duration<uint64, std::nano>						TimeDurationNanoSeconds;
+	{		
+		using HighResolutionClock		= chrono::high_resolution_clock;
+		using TimePoint					= chrono::time_point<chrono::high_resolution_clock>;
+		using TimeDurationMilliSeconds	= chrono::duration<uint64, std::milli>;
+		using TimeDurationNanoSeconds	= chrono::duration<uint64, std::nano>;
+		using TimeDurationSeconds		= chrono::duration<float>;
 
 		template <typename TStorageType>
 		using TimeSeconds = chrono::duration<TStorageType, std::ratio<1> >;
 
-		typedef uint64 FrameIndex;
+		using FrameIndex = uint64;
 
 		//-------------------------------------------------------------------------------------------------
 		// Name	:	Core::Time
@@ -46,7 +45,7 @@ namespace Alba
 				//=========================================================================================
 				// Public Types
 				//=========================================================================================
-				typedef HighResolutionClock	ClockType;
+				using ClockType = HighResolutionClock;
 
 				//=========================================================================================
 				// Public Static Methods

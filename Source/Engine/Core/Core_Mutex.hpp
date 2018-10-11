@@ -19,8 +19,8 @@ namespace Alba
 		using TimedMutex			= std::timed_mutex;
 		using ReadWriteTimedMutex	= std::shared_timed_mutex;
 
-		typedef std::lock_guard<std::mutex>			ScopedMutexLock;
-		typedef std::shared_lock<std::shared_mutex>	ScopedReaderMutexLock;
-		typedef std::unique_lock<std::shared_mutex> ScopedWriterMutexLock;
+		using ScopedMutexLock		= std::lock_guard<std::mutex>;
+		using ScopedReaderMutexLock	= std::shared_lock<std::shared_mutex>;
+		using ScopedWriterMutexLock = std::unique_lock<std::shared_mutex> ;
 	}
 }

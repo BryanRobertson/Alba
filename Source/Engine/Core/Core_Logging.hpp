@@ -59,7 +59,7 @@ namespace Alba
 				//=========================================================================================
 				// Public Types
 				//=========================================================================================
-				typedef Core::FixedFunction<void(const LogCategory&, LogLevel, StringView)> LogCallback;
+				using LogCallback = Core::FixedFunction<void(const LogCategory&, LogLevel, StringView)>;
 
 				//=========================================================================================
 				// Public Constructor

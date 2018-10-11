@@ -51,7 +51,7 @@ namespace Alba
 
 	namespace Core
 	{
-		typedef EnumerationSet<FileMode> FileModeSet;
+		using FileModeSet = EnumerationSet<FileMode>;
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------

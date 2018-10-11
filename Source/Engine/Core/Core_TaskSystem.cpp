@@ -1,10 +1,18 @@
 #include "Core_Precompile.hpp"
 #include "Core_TaskSystem.hpp"
+#include "Core_TaskSystemModule.hpp"
 
 namespace Alba
 {
 	namespace Core
 	{
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ TaskSystem& TaskSystem::GetMutable()
+		{
+			return TaskSystemModule::GetTaskSystemMutable();
+		}
+
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		TaskSystem::TaskSystem()

@@ -32,13 +32,6 @@ namespace Alba
 			#if 0
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------
-				TaskWrapper<TTaskSystemType> While(TaskFunction /*aTaskFunction*/)
-				{
-					//myTaskSystem->CreateTask(*myTask, aTaskFunction);
-				}
-
-				//---------------------------------------------------------------------------------
-				//---------------------------------------------------------------------------------
 				TaskWrapper<TTaskSystemType> StartChild(TaskFunction /*aTaskFunction*/)
 				{
 					//myTaskSystem->CreateTask(*myTask, aTaskFunction);

@@ -18,10 +18,10 @@ namespace Alba
 		template <typename TCharType>
 		using BasicStringView = eastl::basic_string_view<TCharType>;
 
-		typedef BasicStringView<char>		StringView;
-		typedef BasicStringView<wchar_t>	WStringView;
-		typedef BasicStringView<char16_t>	StringView16;
-		typedef BasicStringView<char32_t>	StringView32;
+		using StringView	= BasicStringView<char>;
+		using WStringView	= BasicStringView<wchar_t>;
+		using StringView16	= BasicStringView<char16_t>;
+		using StringView32	= BasicStringView<char32_t>;
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------

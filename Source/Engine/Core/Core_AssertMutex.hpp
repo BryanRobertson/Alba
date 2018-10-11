@@ -45,6 +45,6 @@ namespace Alba
 				std::mutex			myMutex;
 		};
 
-		typedef std::lock_guard<AssertMutex>	ScopedAssertMutexLock;
+		using ScopedAssertMutexLock = std::lock_guard<AssertMutex>;
 	}
 }

@@ -31,7 +31,7 @@ namespace Alba
 				bool		OnLoad(Core::AnyDictionary someParameters);
 				void		OnUnload();
 
-				inline TaskSystem& GetTaskSystemMutable();
+				inline static TaskSystem& GetTaskSystemMutable();
 
 			private:
 
@@ -45,7 +45,10 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		inline TaskSystem& TaskSystemModule::GetTaskSystemMutable()
 		{
-			return myTaskSystem;
+			ALBA_ASSERT(IsLoaded());
+			TaskSystemModule& taskModule = Get();
+
+			return taskModule.myTaskSystem;
 		}
 	}
 }

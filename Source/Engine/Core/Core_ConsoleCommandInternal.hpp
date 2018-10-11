@@ -25,7 +25,7 @@ namespace Alba
 
 			//-------------------------------------------------------------------------------------
 			//-------------------------------------------------------------------------------------
-			typedef int CommandReturnCode;
+			using CommandReturnCode = int;
 
 			namespace ErrorCodes
 			{
@@ -61,7 +61,7 @@ namespace Alba
 			//-------------------------------------------------------------------------------------
 			struct CommandStorage
 			{
-				typedef Core::AlignedStorage<theStorageSize> Storage;
+				using Storage = Core::AlignedStorage<theStorageSize>;
 
 				CommandStorage()
 					: myVTable(nullptr)
@@ -124,7 +124,7 @@ namespace Alba
 			template <typename TCommandType, typename ...TArgs>
 			struct CommandVTableDerived : public CommandVTableBase
 			{
-				typedef std::tuple<std::remove_const_t<std::remove_reference_t<TArgs>>...> ArgumentsTuple;
+				using ArgumentsTuple = std::tuple<std::remove_const_t<std::remove_reference_t<TArgs>>...>;
 
 				CommandVTableDerived()
 				{

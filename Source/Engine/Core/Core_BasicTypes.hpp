@@ -18,58 +18,58 @@ namespace Alba
 		//------------------------------------------------------------------------------------------------
 		// Explicitly sized integers
 		//------------------------------------------------------------------------------------------------
-		typedef std::uint8_t			uint8;
-		typedef std::int8_t				int8;
+		using uint8		= std::uint8_t;
+		using int8		= std::int8_t;
+		
+		using uint16	= std::uint16_t;
+		using int16		= std::int16_t;
 
-		typedef std::uint16_t			uint16;
-		typedef std::int16_t			int16;
+		using uint32	= std::uint32_t;
+		using int32		= std::int32_t;
 
-		typedef std::int32_t			int32;
-		typedef std::uint32_t			uint32;
-
-		typedef std::int64_t			int64;
-		typedef std::uint64_t			uint64;
-
-		//------------------------------------------------------------------------------------------------
-		// Fastest integers for the requested size
-		//------------------------------------------------------------------------------------------------
-		typedef std::uint_fast8_t		fastuint8;
-		typedef std::int_fast8_t		fastint8;
-
-		typedef std::uint_fast16_t		fastuint16;
-		typedef std::int_fast16_t		fastint16;
-
-		typedef std::uint_fast32_t		fastint32;
-		typedef std::int_fast32_t		fastuint32;
-
-		typedef std::uint_fast64_t		fastint64;
-		typedef std::int_fast64_t		fastuint64;
+		using uint64	= std::uint64_t;
+		using int64		= std::int64_t;
 
 		//------------------------------------------------------------------------------------------------
-		// Smallest integers for the requested size
+		// Most efficient types that are at least some specified size
 		//------------------------------------------------------------------------------------------------
-		typedef std::uint_least8_t		leastuint8;
-		typedef std::int_least8_t		leastint8;
+		using uint8fast	 = std::uint_fast8_t;
+		using int8fast	 = std::int_fast8_t;
+		
+		using uint16fast = std::uint_fast16_t;
+		using int16fast	 = std::int_fast16_t;
 
-		typedef std::uint_least16_t		leastuint16;
-		typedef std::int_least16_t		leastint16;
+		using uint32fast = std::uint_fast32_t;
+		using int32fast  = std::int_fast32_t;
 
-		typedef std::uint_least32_t		leastuint32;
-		typedef std::int_least32_t		leastint32;
+		using uint64fast = std::uint_fast64_t;
+		using int64fast	 = std::int_fast64_t;
 
-		typedef std::uint_least64_t		lastint64;
-		typedef std::int_least64_t		lastuint64;
+		//------------------------------------------------------------------------------------------------
+		// Smallest types that can hold at least specified size
+		//------------------------------------------------------------------------------------------------
+		using uint8least  = std::uint_least8_t;
+		using int8least   = std::int_least8_t;
+
+		using uint16least = std::uint_least16_t;
+		using int16least  = std::int_least16_t;
+
+		using uint32least = std::uint_least32_t;
+		using int32least  = std::int_least32_t;
+
+		using uint64least = std::uint_least64_t;
+		using int64least  = std::int_least64_t;
 
 		//------------------------------------------------------------------------------------------------
 		// Platform-defined integers
 		//------------------------------------------------------------------------------------------------
-		typedef unsigned int			uint;
+		using uint		= unsigned int;
 
 		//------------------------------------------------------------------------------------------------
 		// Characters
 		//------------------------------------------------------------------------------------------------
-		typedef char					char8_t;
-		typedef unsigned char			uchar8_t;
+		using char8_t	= char;
+		using uchar8_t	= unsigned char;
 	}
 }
 

@@ -404,7 +404,7 @@ namespace Alba
 				template <typename TArgType>
 				static bool ParseArgument(ParseState& anInputState, TArgType&& anArgument)
 				{
-					typedef std::remove_reference_t<TArgType> ArgValueType;
+					using ArgValueType = std::remove_reference_t<TArgType>;
 
 					auto [skippedWhitespace, state] = SkipWhitespace(anInputState);
 

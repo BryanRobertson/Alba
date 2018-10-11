@@ -21,9 +21,9 @@ namespace Alba
 				//=================================================================================
 				// Public Types
 				//=================================================================================
-				typedef ResourceId<TResourceType>			IdType;
-				typedef TResourceType						ResourceType;
-				typedef ResourceRepository<TResourceType>	RepositoryType;
+				using IdType			= ResourceId<TResourceType>;
+				using ResourceType		= TResourceType;
+				using RepositoryType	= ResourceRepository<TResourceType>;
 
 				typedef ResourceHandle<TResourceType> ThisType;
 

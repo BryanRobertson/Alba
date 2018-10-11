@@ -161,7 +161,7 @@ namespace Alba
 					}
 				};
 
-				typedef VectorMap<NoCaseStringHash32, ParamData> ParamDataCollection;
+				using ParamDataCollection = VectorMap<NoCaseStringHash32, ParamData>;
 
 				//=================================================================================
 				// Private Methods

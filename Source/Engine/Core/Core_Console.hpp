@@ -34,8 +34,8 @@ namespace Alba
 				//=================================================================================
 				// Public Types
 				//=================================================================================
-				typedef FixedFunction<void(ConsoleMessageType aMessageType, StringView aStr)> PrintCallback;
-				typedef StronglyTypedId<uint32, PrintCallback> PrintCallbackId;
+				using PrintCallback		= FixedFunction<void(ConsoleMessageType aMessageType, StringView aStr)>;
+				using PrintCallbackId	= StronglyTypedId<uint32, PrintCallback> ;
 
 				//=================================================================================
 				// Public Constructors
@@ -78,8 +78,8 @@ namespace Alba
 				template <typename ...TArgs>
 				void RegisterCommand(StringView aCommandName, int(*aCommand)(TArgs...))
 				{
-					typedef int(*FunctionType)(TArgs...);
-					const auto& ourVTable = ConsoleInternal::FreeFunctionVTableLocator<FunctionType>(aCommand);
+					using FunctionPointerType = int()(TArgs...);
+					const auto& ourVTable = ConsoleInternal::FreeFunctionVTableLocator<FunctionPointerType>(aCommand);
 						
 					if (CommandStorage* storage = InsertCommand(aCommandName))
 					{
@@ -141,7 +141,7 @@ namespace Alba
 				//=================================================================================
 				// Private Types
 				//=================================================================================
-				typedef ConsoleInternal::CommandStorage CommandStorage;
+				using CommandStorage = ConsoleInternal::CommandStorage;
 
 				//=================================================================================
 				// Private Methods

@@ -99,10 +99,10 @@ namespace Alba
 					UnloadFunc		myUnloadFunc		= nullptr;
 				};
 
-				typedef FixedFunction<void(const Time& aTime)> UpdateFunc;
+				using UpdateFunc = FixedFunction<void(const Time& aTime)>;
 
-				typedef VectorMap<NoCaseStringHash32, ModuleInfo> Modules;
-				typedef VectorMap<NoCaseStringHash32, UpdateFunc> ModuleUpdaters;
+				using Modules = VectorMap<NoCaseStringHash32, ModuleInfo> ;
+				using ModuleUpdaters = VectorMap<NoCaseStringHash32, UpdateFunc>;
 
 				//=================================================================================
 				// Private Constructors

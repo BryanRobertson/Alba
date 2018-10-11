@@ -1,5 +1,6 @@
 #include "Core_Precompile.hpp"
 #include "Core_Task.hpp"
+#include "Core_TaskSystemModule.hpp"
 
 namespace Alba
 {

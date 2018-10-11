@@ -12,13 +12,13 @@ namespace Alba
 	{
 		class Task;
 
-		typedef void(*TaskFunction)();
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------------
 		class Task
 		{
 			public:
+
+				friend class TaskSystem;
 
 				//=====================================================================================
 				// Public Types
@@ -29,18 +29,31 @@ namespace Alba
 				//=====================================================================================
 				Task() = default;
 
-				template <typename TFunctionType, class=enable_if_t<is_invocable_v<void()>> >
+				template <typename TFunctionType>
 				Task(TFunctionType&& aTaskFunction)
 					: myTaskFunction(aTaskFunction)
-					, myOpenTaskCount(1u)
 				{
 					
 				}
 
-				template <typename TFunctionType, class = enable_if_t<is_invocable_v<void()>> >
+				template <typename TObjectType>
+				Task(TObjectType* anInstance, void (TObjectType::*TaskFunction)(Task&))
+					: myTaskFunction(std::bind(anInstance, TaskFunction))
+				{
+
+				}
+
+				template <typename TFunctionType>
 				Task(Task& aParent, TFunctionType&& aTaskFunction)
 					: myTaskFunction(aTaskFunction)
-					, myOpenTaskCount(1u)
+					, myParentTask(&aParent)
+				{
+					aParent.myOpenTaskCount.fetch_add(1, std::memory_order_relaxed);
+				}
+
+				template <typename TObjectType>
+				Task(Task& aParent, TObjectType* anInstance, void (TObjectType::*TaskFunction)(Task&))
+					: myTaskFunction(std::bind(anInstance, TaskFunction))
 					, myParentTask(&aParent)
 				{
 					aParent.myOpenTaskCount.fetch_add(1, std::memory_order_relaxed);
@@ -56,15 +69,6 @@ namespace Alba
 				//=====================================================================================
 
 				//-------------------------------------------------------------------------------------
-				// Called when the task is run
-				//-------------------------------------------------------------------------------------
-				void Run()
-				{
-					myTaskFunction();
-					OnFinish();
-				}
-
-				//-------------------------------------------------------------------------------------
 				// Return true if task and all children complete
 				//-------------------------------------------------------------------------------------
 				bool IsFinished() const
@@ -72,11 +76,25 @@ namespace Alba
 					return myOpenTaskCount.load(std::memory_order_acquire) == 0;
 				}
 
+				//-------------------------------------------------------------------------------------
+				//-------------------------------------------------------------------------------------
+				Task& operator=(Task&) = delete;
+				Task& operator=(Task&&) = default;
+
 			private:
 
 				//=====================================================================================
 				// Private Methods
 				//=====================================================================================
+
+				//-------------------------------------------------------------------------------------
+				// Called when the task is run
+				//-------------------------------------------------------------------------------------
+				void Execute(Task& aTask)
+				{
+					myTaskFunction(aTask);
+					OnFinish();
+				}
 
 				//-------------------------------------------------------------------------------------
 				// Called when the task finishes
@@ -102,10 +120,10 @@ namespace Alba
 				//=====================================================================================
 
 				// Parent task
-				Task*			myParentTask		= nullptr;
+				Task*			myParentTask			= nullptr;
 
 				// Count of tasks that have yet to complete (including ourselves)
-				atomic<uint32>	myOpenTaskCount	= 0u;
+				atomic<int32>	myOpenTaskCount			= 1;
 
 				// Keep this up to date: We want sizeof(Task) to take up at least a whole cache-line
 				static constexpr int64 ourRequiredPaddingSize = HardwareConstants::theL1CacheLineSize
@@ -116,7 +134,7 @@ namespace Alba
 				static_assert(ourRequiredPaddingSize > 0);
 
 				// Task function - use all remaining size for the function's fixed-size buffer
-				FixedFunction<void(), ourRequiredPaddingSize> myTaskFunction;
+				FixedFunction<void(Task& aTask), ourRequiredPaddingSize> myTaskFunction;
 		};
 
 		// Note: This can be commented out - it doesn't matter if Task is larger than the cache-line size

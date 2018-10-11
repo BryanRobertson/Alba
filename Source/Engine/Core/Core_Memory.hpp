@@ -62,7 +62,7 @@ namespace Alba
 		//-------------------------------------------------------------------------------------------------
 		// Malloc/Realloc/Free
 		//-------------------------------------------------------------------------------------------------
-		typedef uint32 TAllocType;
+		using TAllocType = uint32;
 
 		#if defined(ALBA_RETAIL_BUILD)
 			ALBA_CORE_API void* Malloc(size_t size, size_t alignment, size_t alignmentOffset, TAllocType allocType);

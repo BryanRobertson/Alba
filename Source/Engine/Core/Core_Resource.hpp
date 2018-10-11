@@ -27,7 +27,7 @@ namespace Alba
 		{
 			public:
 
-				typedef NoCaseStringHash32 NameIdType;
+				using NameIdType = NoCaseStringHash32;
 
 				//=============================================================================================
 				// Public Constructors

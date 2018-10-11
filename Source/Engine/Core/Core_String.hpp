@@ -15,10 +15,10 @@ namespace Alba
 		template <typename TCharType, typename TAllocator = EASTLAllocatorType>
 		using BasicString = eastl::basic_string<TCharType, TAllocator>;
 
-		typedef BasicString<char>		String;
-		typedef BasicString<wchar_t>	WString;
-		typedef BasicString<char16_t>	String16;
-		typedef BasicString<char32_t>	String32;
+		using String	= BasicString<char>;
+		using WString	= BasicString<wchar_t>;
+		using String16	= BasicString<char16_t>;
+		using String32  = BasicString<char32_t>;
 	}
 }
 

@@ -30,7 +30,7 @@ namespace Alba
 	template <>
 	struct get_all_enum_values<::Alba::Tests::TestEnumeration>
 	{
-		typedef ::Alba::Tests::TestEnumeration TestEnumeration;
+		using TestEnumeration = ::Alba::Tests::TestEnumeration;
 
 		static constexpr auto value = Core::MakeArray
 		(
@@ -46,7 +46,7 @@ namespace Alba
 
 	namespace Tests
 	{
-		typedef Core::EnumerationSet<TestEnumeration> TestEnumerationSet;
+		using TestEnumerationSet = Core::EnumerationSet<TestEnumeration>;
 	}
 
 	namespace Tests

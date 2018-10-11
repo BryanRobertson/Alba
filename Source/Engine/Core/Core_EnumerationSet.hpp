@@ -45,35 +45,35 @@ namespace Alba
 			struct best_bitset_element_size
 			{
 				static constexpr size_t value = sizeof(size_t);
-				typedef uint64 value_type;
+				using value_type = uint64;
 			};
 
 			template <>
 			struct best_bitset_element_size<1>
 			{
 				static constexpr size_t value = 1;
-				typedef uint8 value_type;
+				using value_type = uint8;
 			};
 
 			template <>
 			struct best_bitset_element_size<2>
 			{
 				static constexpr size_t value = 2;
-				typedef uint16 value_type;
+				using value_type = uint16;
 			};
 
 			template <>
 			struct best_bitset_element_size<4>
 			{
 				static constexpr size_t value = 4;
-				typedef uint32 value_type;
+				using value_type = uint32;
 			};
 
 			template <>
 			struct best_bitset_element_size<8>
 			{
 				static constexpr size_t value = 8;
-				typedef uint64 value_type;
+				using value_type = uint64;
 			};
 
 			template <typename TEnumerationType, class = enable_if_t<is_enum_v<TEnumerationType>> >
@@ -105,8 +105,8 @@ namespace Alba
 				//=================================================================================
 				// Public Types
 				//=================================================================================
-				typedef Detail::best_bitset_element_type_t<TEnumerationType> ElementType;
-				typedef BitSet<ElementCount, ElementType>					 BitSetType;
+				using ElementType	=  Detail::best_bitset_element_type_t<TEnumerationType>;
+				using BitSetType	=  BitSet<ElementCount, ElementType>;
 
 				//=================================================================================
 				// Public Static Constants

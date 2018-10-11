@@ -53,7 +53,7 @@ namespace Alba
 				//===============================================================================================
 				// Public Types
 				//===============================================================================================
-				typedef const FixedString < 64, OverflowBehavior::Allowed > CategoryName;
+				using CategoryName = const FixedString < 64, OverflowBehavior::Allowed >;
 
 				//===============================================================================================
 				// Public Constructors

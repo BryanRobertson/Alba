@@ -44,7 +44,7 @@ namespace Alba
 				//=================================================================================
 				// Public Types
 				//=================================================================================
-				typedef ResourceHandle<TResourceType>	Handle;
+				using Handle = ResourceHandle<TResourceType>;
 				
 				//=================================================================================
 				// Public Constructors/Destructors
@@ -78,7 +78,7 @@ namespace Alba
 				//=================================================================================
 				// Protected Types
 				//=================================================================================
-				typedef AlignedStorage<sizeof(TResourceType), alignof(TResourceType)> StorageType;
+				using StorageType = AlignedStorage<sizeof(TResourceType), alignof(TResourceType)>;
 
 				//=================================================================================
 				// Private Methods

@@ -4,6 +4,8 @@
 #include "Core_Thread.hpp"
 #include "Core_Array.hpp"
 #include "Core_Task.hpp"
+#include "Core_AlignedStorage.hpp"
+#include "Core_Platform.hpp"
 
 namespace Alba
 {
@@ -29,32 +31,44 @@ namespace Alba
 				//================================================================================
 				// Public Constructors
 				//================================================================================
-				TaskPool() = default;
+				TaskPool()
+				{
+					
+				}
 
 				//================================================================================
 				// Public Methods
 				//================================================================================
-
+				
 				//--------------------------------------------------------------------------------
 				//--------------------------------------------------------------------------------
-				template <typename... TArgs>
-				Task& CreateTask(TArgs&&... someArgs)
+				void Reset()
 				{
-					Task& task = AllocateTask();
-					task = std::move(Task(std::forward<Task>(someArgs)...));
+					for (uint32 index = myFrameStartIndex; index != myFrameEndIndex; index=(index+1) & ourMask)
+					{
+						DeallocateTask(&myTaskStorage[index]);
+					}
 
-					return task;
+					myFrameStartIndex = myFrameEndIndex = myNextFreeTaskIndex = 0u;
 				}
 
 				//--------------------------------------------------------------------------------
 				//--------------------------------------------------------------------------------
-				Task& AllocateTask()
+				template <typename... TArgs>
+				Task* CreateTask(TArgs&&... someArgs)
 				{
-					const uint32 index = myNextFreeTaskIndex.fetch_add(1, std::memory_order_relaxed);
-					ALBA_ASSERT(index < myTaskPool.size());
+					TaskStorage* taskStorage = AllocateTask();
+					new (taskStorage) Task(std::forward<TArgs>(someArgs)...);
+				}
 
-					Task& task = myTaskPool[(index - 1) & (ourMaxTasks - 1)];
-					return task;
+				//--------------------------------------------------------------------------------
+				//--------------------------------------------------------------------------------
+				void DestructTask(Task& aTask)
+				{
+					TaskStorage* storage = reinterpret_cast<TaskStorage*>(&task);
+					aTask.~Task();
+
+					DeallocateTask(storage);
 				}
 
 			private:
@@ -62,17 +76,46 @@ namespace Alba
 				//================================================================================
 				// Private Constants
 				//================================================================================
-				static const size_t ourMaxTasks = Core::NextLargestPowerOfTwo(TMaxSize);
+				static constexpr size_t ourMaxTasks = Core::NextLargestPowerOfTwo(TMaxSize);
+				static constexpr size_t ourMask = ourMaxTasks - 1;
 
 				//================================================================================
 				// Private Types
 				//================================================================================
+				using TaskStorage = AlignedStorage<sizeof(Task), Core::HardwareConstants::theL1CacheLineSize>;
+
+				//================================================================================
+				// Private Methods
+				//================================================================================
+
+				//--------------------------------------------------------------------------------
+				//--------------------------------------------------------------------------------
+				TaskStorage* AllocateTask()
+				{
+					const uint32 index = ++myNextFreeTaskIndex;
+					ALBA_ASSERT(index < myTaskPool.size());
+
+					const uint32 aModIndex = (index - 1) & (ourMaxTasks - 1);
+					myFrameEndIndex = aModIndex;
+
+					ALBA_ASSERT(myFrameEndIndex != myFrameStartIndex, "Max tasks exceeded! Task pool has wrapped around!");
+					return &myTaskPool[aModIndex];
+				}
+
+				void DeallocateTask(TaskStorage* aStorage)
+				{
+					ALBA_ASSERT(std::distance(aStorage, &myTasks[0]) >= 0 && std::distance(aStorage, &myTasks[0]) < TMaxSize);
+					(void)aStorage;
+				}
 
 				//================================================================================
 				// Private Data
 				//================================================================================
-				Array<Task, TMaxSize>	myTasks;
-				atomic<uint32>			myNextFreeTaskIndex = 0u;
+				thread_local Array<TaskStorage, TMaxSize>	myTasks;
+
+				thread_local uint32							myNextFreeTaskIndex = 0u;
+				thread_local uint32							myFrameStartIndex = 0u;
+				thread_local uint32							myFrameEndIndex = 0u;
 		};
 	}
 }

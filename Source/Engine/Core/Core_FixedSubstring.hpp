@@ -14,11 +14,11 @@ namespace Alba
 		//-------------------------------------------------------------------------------------------------
 		// Name	:	Core::FixedSubstring
 		//-------------------------------------------------------------------------------------------------
-		typedef eastl::fixed_substring<char>		FixedSubstring;
+		using FixedSubstring = eastl::fixed_substring<char>;
 
 		//-------------------------------------------------------------------------------------------------
 		// Name	:	Core::FixedWSubstring
 		//-------------------------------------------------------------------------------------------------
-		typedef eastl::fixed_substring<wchar_t>		FixedWSubstring;
+		using FixedWSubstring = eastl::fixed_substring<wchar_t>;
 	}
 }

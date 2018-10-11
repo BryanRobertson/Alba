@@ -18,7 +18,7 @@ namespace Alba
 			using namespace Alba::StringViewLiterals;
 			using Core::ConsoleCommandParser;
 			
-			typedef Core::ConsoleCommandParser::ParseState ParseState;
+			using ParseState = Core::ConsoleCommandParser::ParseState;
 
 			//-------------------------------------------------------------------------------------
 			// Test parsing command name
