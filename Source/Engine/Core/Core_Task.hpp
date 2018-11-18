@@ -12,6 +12,15 @@ namespace Alba
 	{
 		class Task;
 
+		using TaskFunction = void(Task&);
+		using TaskFunctionPtr = TaskFunction*;
+
+		template <typename TObjectType>
+		using TaskMemberFunctionPtr = void (TObjectType::*)(Task&);
+
+		template <typename TFunctor>
+		using enable_if_taskfunction = enable_if_t<is_invocable_v<TFunctor, TaskFunction>>;
+	
 		//-----------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------
 		class Task
@@ -29,39 +38,54 @@ namespace Alba
 				//=====================================================================================
 				Task() = default;
 
-				template <typename TFunctionType>
-				Task(TFunctionType&& aTaskFunction)
-					: myTaskFunction(aTaskFunction)
+				//-------------------------------------------------------------------------------------
+				// Create Task
+				//-------------------------------------------------------------------------------------
+				template <typename TFunctionType, class=enable_if_taskfunction<TFunctionType> >
+				static Task Create(TFunctionType&& aTaskFunction)
 				{
-					
+					return Task{ nullptr, aTaskFunction };
 				}
 
+				//-------------------------------------------------------------------------------------
+				// Create Task
+				//-------------------------------------------------------------------------------------
 				template <typename TObjectType>
-				Task(TObjectType* anInstance, void (TObjectType::*TaskFunction)(Task&))
-					: myTaskFunction(std::bind(anInstance, TaskFunction))
-				{
-
-				}
-
-				template <typename TFunctionType>
-				Task(Task& aParent, TFunctionType&& aTaskFunction)
-					: myTaskFunction(aTaskFunction)
-					, myParentTask(&aParent)
+				static Task Create(TObjectType* anInstance, TaskMemberFunctionPtr<TObjectType> aMemberFuncPtr)
 				{
 					aParent.myOpenTaskCount.fetch_add(1, std::memory_order_relaxed);
+					return Task{ nullptr, std::bind(anInstance, aMemberFuncPtr) };
 				}
 
-				template <typename TObjectType>
-				Task(Task& aParent, TObjectType* anInstance, void (TObjectType::*TaskFunction)(Task&))
-					: myTaskFunction(std::bind(anInstance, TaskFunction))
-					, myParentTask(&aParent)
+				//-------------------------------------------------------------------------------------
+				// Create Child Task
+				//-------------------------------------------------------------------------------------
+				template <typename TFunctionType, class= enable_if_taskfunction<TFunctionType> >
+				static Task CreateChild(Task& aParent, TFunctionType&& aTaskFunction)
 				{
 					aParent.myOpenTaskCount.fetch_add(1, std::memory_order_relaxed);
+					return Task{ &aParent, aTaskFunction };
 				}
 
+				//-------------------------------------------------------------------------------------
+				// Create Child Task
+				//-------------------------------------------------------------------------------------
+				template <typename TObjectType>
+				static Task CreateChild(Task& aParent, TObjectType* anInstance, TaskMemberFunctionPtr<TObjectType> aMemberFuncPtr)
+				{
+					aParent.myOpenTaskCount.fetch_add(1, std::memory_order_relaxed);
+					return Task{ &aParent, std::bind(anInstance, aMemberFuncPtr) };
+				}
+
+				//-------------------------------------------------------------------------------------
+				// Copy / Move Constructors
+				//-------------------------------------------------------------------------------------
 				Task(const Task&) = delete;
 				Task(Task&&) = default;
 
+				//-------------------------------------------------------------------------------------
+				// Destructor
+				//-------------------------------------------------------------------------------------
 				~Task();
 
 				//=====================================================================================
@@ -127,14 +151,24 @@ namespace Alba
 
 				// Keep this up to date: We want sizeof(Task) to take up at least a whole cache-line
 				static constexpr int64 ourRequiredPaddingSize = HardwareConstants::theL1CacheLineSize
-																- sizeof(myParentTask)
-																- sizeof(myOpenTaskCount)
-																- sizeof(FixedFunction<void(), 0>);
+															  - sizeof(myParentTask)
+															  - sizeof(myOpenTaskCount)
+															  - sizeof(FixedFunction<TaskFunction, 0>);
 
 				static_assert(ourRequiredPaddingSize > 0);
 
 				// Task function - use all remaining size for the function's fixed-size buffer
-				FixedFunction<void(Task& aTask), ourRequiredPaddingSize> myTaskFunction;
+				FixedFunction<TaskFunction, ourRequiredPaddingSize> myTaskFunction;
+
+				//=====================================================================================
+				// Private Constructors
+				//=====================================================================================
+				Task(Task* aParent, FixedFunction<TaskFunction, ourRequiredPaddingSize>&& aFunction)
+					: myParentTask(aParent)
+					, myTaskFunction(aFunction)
+				{
+
+				}
 		};
 
 		// Note: This can be commented out - it doesn't matter if Task is larger than the cache-line size

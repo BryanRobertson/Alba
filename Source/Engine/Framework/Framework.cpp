@@ -12,6 +12,7 @@
 #include "Core_Any.hpp"
 #include "Core_StringHash.hpp"
 #include "Core_Profile.hpp"
+#include "Core_TaskSystem.hpp"
 
 namespace Alba
 {
@@ -55,6 +56,17 @@ namespace Alba
 				);
 			}
 
+			//----------------------------------------------------------------------
+			// Initialise the task system
+			//----------------------------------------------------------------------
+			{
+				const int hardwareThreads = std::thread::hardware_concurrency();
+				ALBA_LOG_INFO(Framework, "System supports %u hardware threads", hardwareThreads);
+
+				const int threadCount = std::max(1, hardwareThreads - 1);
+				Core::TaskSystem::Initialise(threadCount);
+			}
+
 			//ALBA_LOG_ERROR(Framework, "Error initialising Framework: %u", result);
 
 			return 0;
@@ -76,6 +88,13 @@ namespace Alba
 			ALBA_LOG_INFO(Framework, "---------------------------------------------------------------");
 			ALBA_LOG_INFO(Framework, "Shutdown Framework:");
 			ALBA_LOG_INFO(Framework, "---------------------------------------------------------------");
+
+			//----------------------------------------------------------------------
+			// Shut down the task system
+			//----------------------------------------------------------------------
+			{
+				Core::TaskSystem::Shutdown();
+			}
 
 			// Shut down module repository
 			Alba::Core::ModuleRepository::Destroy();

@@ -6,7 +6,6 @@
 #include "Core_CommandLineModule.hpp"
 #include "Core_ConsoleModule.hpp"
 #include "Core_WindowModule.hpp"
-#include "Core_TaskSystemModule.hpp"
 
 namespace Alba
 {
@@ -16,7 +15,6 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void RegisterModules()
 		{
-			TaskSystemModule::Register();
 			ConsoleModule::Register();
 			WindowModule::Register();
 		}

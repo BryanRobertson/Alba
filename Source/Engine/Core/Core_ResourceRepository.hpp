@@ -78,7 +78,7 @@ namespace Alba
 				//=================================================================================
 				// Protected Types
 				//=================================================================================
-				using StorageType = AlignedStorage<sizeof(TResourceType), alignof(TResourceType)>;
+				using StorageType = AlignedStorageT<TResourceType>;
 
 				//=================================================================================
 				// Private Methods

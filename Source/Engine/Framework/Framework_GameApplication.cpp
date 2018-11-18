@@ -16,7 +16,7 @@
 #include "Core_Profile.hpp"
 #include "Core_CommandLineModule.hpp"
 #include "Core_CommandLineParameters.hpp"
-#include "Core_TaskSystemInitParams.hpp"
+#include "Core_TaskSystem.hpp"
 
 #ifdef CreateWindow
 	#undef CreateWindow
@@ -75,19 +75,6 @@ namespace Alba
 
 					ALBA_LOG_INFO(Framework, "Profiler initialised");
 				}
-			}
-
-			//----------------------------------------------------------------------
- 			// Initialise the task system
-			//----------------------------------------------------------------------
-			{
-				const uint32 hardwareThreads = std::thread::hardware_concurrency();
-				ALBA_LOG_INFO(Framework, "System supports %u hardware threads", hardwareThreads);
-
-				Core::TaskSystemInitParams initParams;
-				initParams.myThreadCount = hardwareThreads - 1;
-
-				moduleRepository.LoadModule("Alba.Core.TaskSystem"_nocasehash32, std::move(initParams));
 			}
 
 			//----------------------------------------------------------------------

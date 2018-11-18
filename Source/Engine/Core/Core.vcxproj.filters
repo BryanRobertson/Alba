@@ -66,9 +66,6 @@
     <ClCompile Include="Core_WindowModule.cpp">
       <Filter>Window</Filter>
     </ClCompile>
-    <ClCompile Include="Core_TaskSystemModule.cpp">
-      <Filter>Task</Filter>
-    </ClCompile>
     <ClCompile Include="Core_TaskSystem.cpp">
       <Filter>Task</Filter>
     </ClCompile>
@@ -80,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="Core_TaskDebug.cpp">
       <Filter>Task\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_TaskPool.cpp">
+      <Filter>Task</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -301,16 +301,10 @@
     <ClInclude Include="Core_WindowModule.hpp">
       <Filter>Window</Filter>
     </ClInclude>
-    <ClInclude Include="Core_TaskSystemModule.hpp">
-      <Filter>Task</Filter>
-    </ClInclude>
     <ClInclude Include="Core_Task.hpp">
       <Filter>Task</Filter>
     </ClInclude>
     <ClInclude Include="Core_TaskSystem.hpp">
-      <Filter>Task</Filter>
-    </ClInclude>
-    <ClInclude Include="Core_TaskSystemInitParams.hpp">
       <Filter>Task</Filter>
     </ClInclude>
     <ClInclude Include="Core_File.hpp">
@@ -321,9 +315,6 @@
     </ClInclude>
     <ClInclude Include="Core_ArrayView.hpp">
       <Filter>Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="Core_TaskWrapper.hpp">
-      <Filter>Task</Filter>
     </ClInclude>
     <ClInclude Include="Core_TaskPool.hpp">
       <Filter>Task</Filter>

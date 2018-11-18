@@ -15,47 +15,29 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	TaskPool
-		// Desc	:	Contains a fixed-size pool of task instances stored as a circular buffer
+		// Desc	:	Represents a global fixed-size pool of task instances stored as a circular buffer
 		//			As tasks are allocated, the buffer will eventually wrap around
 		//			so a large enough size must be chosen to ensure that we don't overwrite tasks
 		//			that are in progress
-		//
-		//			Note: that for efficiency reasons, TMaxSize will be rounded up to the next
-		//				  largest power of two
 		//-----------------------------------------------------------------------------------------
-		template <size_t TMaxSize>
 		class TaskPool final
 		{
 			public:
 
 				//================================================================================
-				// Public Constructors
+				// Public Types
 				//================================================================================
-				TaskPool()
-				{
-					
-				}
+				using TaskStorage = AlignedStorageT<Task>;
 
 				//================================================================================
-				// Public Methods
+				// Public Static Methods
 				//================================================================================
-				
-				//--------------------------------------------------------------------------------
-				//--------------------------------------------------------------------------------
-				void Reset()
-				{
-					for (uint32 index = myFrameStartIndex; index != myFrameEndIndex; index=(index+1) & ourMask)
-					{
-						DeallocateTask(&myTaskStorage[index]);
-					}
-
-					myFrameStartIndex = myFrameEndIndex = myNextFreeTaskIndex = 0u;
-				}
+				static void Init();
 
 				//--------------------------------------------------------------------------------
 				//--------------------------------------------------------------------------------
 				template <typename... TArgs>
-				Task* CreateTask(TArgs&&... someArgs)
+				static Task* CreateTask(TArgs&&... someArgs)
 				{
 					TaskStorage* taskStorage = AllocateTask();
 					new (taskStorage) Task(std::forward<TArgs>(someArgs)...);
@@ -63,9 +45,9 @@ namespace Alba
 
 				//--------------------------------------------------------------------------------
 				//--------------------------------------------------------------------------------
-				void DestructTask(Task& aTask)
+				static void DestructTask(Task& aTask)
 				{
-					TaskStorage* storage = reinterpret_cast<TaskStorage*>(&task);
+					TaskStorage* storage = reinterpret_cast<TaskStorage*>(&aTask);
 					aTask.~Task();
 
 					DeallocateTask(storage);
@@ -74,48 +56,10 @@ namespace Alba
 			private:
 
 				//================================================================================
-				// Private Constants
-				//================================================================================
-				static constexpr size_t ourMaxTasks = Core::NextLargestPowerOfTwo(TMaxSize);
-				static constexpr size_t ourMask = ourMaxTasks - 1;
-
-				//================================================================================
-				// Private Types
-				//================================================================================
-				using TaskStorage = AlignedStorage<sizeof(Task), Core::HardwareConstants::theL1CacheLineSize>;
-
-				//================================================================================
 				// Private Methods
 				//================================================================================
-
-				//--------------------------------------------------------------------------------
-				//--------------------------------------------------------------------------------
-				TaskStorage* AllocateTask()
-				{
-					const uint32 index = ++myNextFreeTaskIndex;
-					ALBA_ASSERT(index < myTaskPool.size());
-
-					const uint32 aModIndex = (index - 1) & (ourMaxTasks - 1);
-					myFrameEndIndex = aModIndex;
-
-					ALBA_ASSERT(myFrameEndIndex != myFrameStartIndex, "Max tasks exceeded! Task pool has wrapped around!");
-					return &myTaskPool[aModIndex];
-				}
-
-				void DeallocateTask(TaskStorage* aStorage)
-				{
-					ALBA_ASSERT(std::distance(aStorage, &myTasks[0]) >= 0 && std::distance(aStorage, &myTasks[0]) < TMaxSize);
-					(void)aStorage;
-				}
-
-				//================================================================================
-				// Private Data
-				//================================================================================
-				thread_local Array<TaskStorage, TMaxSize>	myTasks;
-
-				thread_local uint32							myNextFreeTaskIndex = 0u;
-				thread_local uint32							myFrameStartIndex = 0u;
-				thread_local uint32							myFrameEndIndex = 0u;
+				static TaskStorage*		AllocateTask();
+				static void				DeallocateTask(TaskStorage* aStorage);
 		};
 	}
 }
