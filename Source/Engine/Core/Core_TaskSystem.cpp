@@ -8,6 +8,11 @@ namespace Alba
 	{
 		TaskSystem theTaskSystem;
 
+		namespace Detail
+		{
+			thread_local TaskThreadId theLocalThreadId;
+		}
+
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		/*static*/ TaskSystem& TaskSystem::GetMutable()
@@ -19,6 +24,9 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		/*static*/ void TaskSystem::Initialise(uint aThreadCount)
 		{
+			// Set main thread id
+			Detail::theLocalThreadId = theMainThreadId;
+
 			theTaskSystem.InitialiseInternal(aThreadCount);
 		}
 
@@ -34,6 +42,23 @@ namespace Alba
 		/*static*/ void TaskSystem::QueueTask(Task& /*aTask*/)
 		{
 
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ TaskPool& TaskSystem::GetCurrentThreadPool()
+		{
+			const TaskThreadId threadId = GetCurrentThreadId();
+			ALBA_ASSERT(threadId.IsValid());
+
+			return GetMutable().myTaskPools[threadId.GetValue()];
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ TaskThreadId	TaskSystem::GetCurrentThreadId()
+		{
+			return Detail::theLocalThreadId;
 		}
 
 		//-----------------------------------------------------------------------------------------

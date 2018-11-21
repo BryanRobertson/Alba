@@ -7,69 +7,57 @@ namespace Alba
 	namespace Core
 	{
 		//-----------------------------------------------------------------------------------------
-		// Size of global task pool
 		//-----------------------------------------------------------------------------------------
-		namespace TaskPoolDetail
+		TaskPool::TaskPool()
 		{
-			static constexpr size_t theTaskPoolSize = 4096;
-			static constexpr size_t theTaskPoolMask = theTaskPoolSize - 1;
-
-			thread_local Array<TaskPool::TaskStorage, theTaskPoolSize> theTaskPool;
-
-			thread_local uint32	theNextFreeTaskIndex = 0u;
-			thread_local uint32 theFrameStartIndex	 = 0u;
-			thread_local uint32	theFrameEndIndex	 = 0u;
+			myTaskStorage.fill(TaskPool::TaskStorage());
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ void TaskPool::Init()
+		TaskPool::~TaskPool()
 		{
-			using namespace TaskPoolDetail;
 
-			theTaskPool.fill(TaskPool::TaskStorage());
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		#if 0
-		/*static*/ void TaskPool::Reset()
+		void TaskPool::Reset()
 		{
-			using namespace TaskPoolDetail;
-
-			for (uint32 index = theFrameStartIndex; index != theFrameEndIndex; index = (index + 1) & theTaskPoolMask)
-			{
-				DeallocateTask(&theTaskPool[index]);
-			}
-
-			theFrameStartIndex = theFrameEndIndex = theNextFreeTaskIndex = 0u;
-		}
-		#endif
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		/*static*/ void* TaskPool::AllocateTask()
-		{
-			using namespace TaskPoolDetail;
-
-			const uint32 index = ++theNextFreeTaskIndex;
-			ALBA_ASSERT(index < theTaskPool.size());
-
-			const uint32 aModIndex = (index - 1) & theTaskPoolMask;
-			theFrameEndIndex = aModIndex;
-
-			ALBA_ASSERT(theFrameEndIndex != theFrameStartIndex, "Max tasks exceeded! Task pool has wrapped around!");
-			return &theTaskPool[aModIndex];
+			myNextFreeTaskIndex = 0;
+			ALBA_ASSERT(myOpenTaskCount == 0, "Resetting task pool with tasks still active!");
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ void TaskPool::DeallocateTask(TaskStorage* aStorage)
+		void* TaskPool::AllocateTask()
 		{
-			using namespace TaskPoolDetail;
+			static constexpr size_t ourTaskStorageMask = ourTaskPoolSize - 1;
 
-			ALBA_ASSERT(std::distance(aStorage, &theTaskPool[0]) >= 0 && std::distance(aStorage, &theTaskPool[0]) < theTaskPoolSize);
-			(void) aStorage;
+			const uint32 index = ++myNextFreeTaskIndex;
+			++myOpenTaskCount;
+
+			// For now, we don't allow this
+			ALBA_ASSERT(index < myTaskStorage.size(), "Task pool has wrapped around!");
+
+			const size_t aModIndex = (index - 1) & ourTaskStorageMask;
+			return &myTaskStorage[aModIndex];
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ void TaskPool::DeallocateTask(Task& aTask)
+		{
+			TaskStorage* taskStorage = reinterpret_cast<TaskStorage*>(&aTask);
+
+			ALBA_ASSERT
+			(
+				taskStorage >= &(*myTaskStorage.begin()) && taskStorage < &(*myTaskStorage.end()),
+				"Attempted to free task that doesn't belong to this task pool!"
+			);
+			
+			aTask.~Task();
+			--myOpenTaskCount;
 		}
 	}
 }

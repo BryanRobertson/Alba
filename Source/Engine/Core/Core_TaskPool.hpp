@@ -30,38 +30,44 @@ namespace Alba
 				using TaskStorage = AlignedStorageT<Task>;
 
 				//================================================================================
-				// Public Static Methods
+				// Public Constructors / Destructors
 				//================================================================================
-				static void Init();
+				TaskPool();
+				~TaskPool();
+
+				//================================================================================
+				// Public Methods
+				//================================================================================
+				void	Reset();
 
 				//--------------------------------------------------------------------------------
+				// Allocate/Deallocate Task
 				//--------------------------------------------------------------------------------
-				/*
-				template <typename... TArgs>
-				static Task* CreateTask(TArgs&&... someArgs)
-				{
-					TaskStorage* taskStorage = AllocateTask();
-					new (taskStorage) Task(std::forward<TArgs>(someArgs)...);
-				}
-				*/
-
-				//--------------------------------------------------------------------------------
-				//--------------------------------------------------------------------------------
-				static void DestructTask(Task& aTask)
-				{
-					TaskStorage* storage = reinterpret_cast<TaskStorage*>(&aTask);
-					aTask.~Task();
-
-					DeallocateTask(storage);
-				}
+				void*	AllocateTask();
+				void	DeallocateTask(Task& aTask);
 
 			private:
 
 				//================================================================================
+				// Private Static Constants
+				//================================================================================
+				static constexpr size_t ourTaskPoolSize = 4096;
+
+				//================================================================================
+				// Private Types
+				//================================================================================
+				using TaskStorageArray = Array<TaskStorage, ourTaskPoolSize>;
+
+				//================================================================================
 				// Private Methods
 				//================================================================================
-				static void*		AllocateTask();
-				static void			DeallocateTask(TaskStorage* aStorage);
+				
+				//================================================================================
+				// Private Data
+				//================================================================================
+				TaskStorageArray	myTaskStorage;
+				uint32				myNextFreeTaskIndex = 0;
+				uint32				myOpenTaskCount = 0;
 		};
 	}
 }
