@@ -24,23 +24,13 @@ namespace Alba
 		{
 			UIHasExclusiveKeyboardFocus,
 			UIHasExclusiveMouseFocus,
-			UIHasExclusiveGamepadFocus
-		};
-	}
+			UIHasExclusiveGamepadFocus,
 
-	template <>
-	struct get_all_enum_values<Input::InputServiceStateFlag>
-	{
-		static constexpr auto value = Core::Array<Input::InputServiceStateFlag, 3>
-		{
-			Input::UIHasExclusiveKeyboardFocus,
-			Input::UIHasExclusiveMouseFocus,
-			Input::UIHasExclusiveGamepadFocus
+			enum_traits_end_value,
+			enum_traits_start_value = UIHasExclusiveKeyboardFocus,
+			enum_traits_is_contiguous = 1,
 		};
-	};
 
-	namespace Input
-	{
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		typedef Core::EnumerationSet<InputServiceStateFlag> InputServiceStateFlags;

@@ -26,31 +26,13 @@ namespace Alba
 			Append,
 			Create,
 			Text,
-			Binary
+			Binary,
+
+			enum_traits_end_value,
+			enum_traits_start_value = Read,
+			enum_traits_is_contiguous = 1,
 		};
-	}
 
-	//-----------------------------------------------------------------------------------------
-	// Traits for Core::FileMode (used for Core::EnumerationSet<FileMode>)
-	//-----------------------------------------------------------------------------------------
-	template <>
-	struct get_all_enum_values<Core::FileMode>
-	{
-		using FileMode = Core::FileMode;
-
-		static constexpr auto value = MakeArray
-		(
-			FileMode::Read,
-			FileMode::Write,
-			FileMode::Append,
-			FileMode::Create,
-			FileMode::Text,
-			FileMode::Binary
-		);
-	};
-
-	namespace Core
-	{
 		using FileModeSet = EnumerationSet<FileMode>;
 
 		//-----------------------------------------------------------------------------------------

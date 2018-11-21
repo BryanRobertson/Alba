@@ -17,11 +17,38 @@ namespace Alba
 	//-----------------------------------------------------------------------------------------
 	// Name	:	get_all_enum_values<T>
 	// Desc	:	Return a static array containing all valid entries of an enumeration
+	//			This default version makes the following assumptions:
+	//			Your enumeration contains the following members:
+	//
+	//			enum_traits_start_value = Lowest possible enum value
+	//			enum_traits_end_value = Highest possible enum value + 1
+	//			enum_traits_is_contiguous = 1
 	//-----------------------------------------------------------------------------------------
 	template <typename TEnumerationType, class=enable_if_t<is_enum_v<TEnumerationType>> >
 	struct get_all_enum_values
 	{
-		//static inline constexpr std::array<void, 0> value;
+		private:
+
+			static constexpr auto get_value()
+			{
+				constexpr int start = (int)TEnumerationType::enum_traits_start_value;
+				constexpr int end = (int)TEnumerationType::enum_traits_end_value;
+				
+				static_assert((int)TEnumerationType::enum_traits_is_contiguous == 1);
+				static_assert(end >= start);
+
+				std::array<TEnumerationType, end - start> out = { (TEnumerationType) 0 };
+				for (int index = 0, count=end-start; index < count; ++index)
+				{
+					out[index] = static_cast<TEnumerationType>(start + index);
+				}
+
+				return out;
+			}
+
+		public:
+
+			static inline constexpr auto value = get_value();
 	};
 
 	template <typename TEnumerationType>
@@ -47,28 +74,28 @@ namespace Alba
 	template <typename TEnumerationType, class = enable_if_t<is_enum_v<TEnumerationType>> >
 	struct is_enum_contiguous
 	{
-	private:
+		private:
 
-		static constexpr bool is_contiguous()
-		{
-			TEnumerationType previous = get_all_enum_values_v<TEnumerationType>[0];
-			for (size_t index = 1; index < get_enum_entry_count_v<TEnumerationType>; ++index)
+			static constexpr bool is_contiguous()
 			{
-				const TEnumerationType current = get_all_enum_values_v<TEnumerationType>[index];
-				if ( (static_cast<size_t>(current) - static_cast<size_t>(previous)) != 1)
+				TEnumerationType previous = get_all_enum_values_v<TEnumerationType>[0];
+				for (size_t index = 1; index < get_enum_entry_count_v<TEnumerationType>; ++index)
 				{
-					return false;
+					const TEnumerationType current = get_all_enum_values_v<TEnumerationType>[index];
+					if ( (static_cast<size_t>(current) - static_cast<size_t>(previous)) != 1)
+					{
+						return false;
+					}
+
+					previous = current;
 				}
 
-				previous = current;
+				return true;
 			}
 
-			return true;
-		}
+		public:
 
-	public:
-
-		static inline constexpr bool value = is_contiguous();
+			static inline constexpr bool value = is_contiguous();
 	};
 
 	template <typename TEnumerationType>

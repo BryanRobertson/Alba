@@ -48,7 +48,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ TaskPool::TaskStorage* TaskPool::AllocateTask()
+		/*static*/ void* TaskPool::AllocateTask()
 		{
 			using namespace TaskPoolDetail;
 

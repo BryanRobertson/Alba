@@ -62,6 +62,8 @@ namespace Alba
 				Vector<TaskPool>	myTaskPools;
 		};
 
+		#if 0
+
 		//-----------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------
 		inline Task& CreateTask(TaskFunctionPtr aFunctionPtr)
@@ -115,5 +117,7 @@ namespace Alba
 			TaskSystem& taskSystem = TaskSystem::GetMutable();
 			taskSystem.QueueTask(aTask);
 		}
+
+		#endif
 	}
 }

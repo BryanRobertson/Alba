@@ -36,12 +36,14 @@ namespace Alba
 
 				//--------------------------------------------------------------------------------
 				//--------------------------------------------------------------------------------
+				/*
 				template <typename... TArgs>
 				static Task* CreateTask(TArgs&&... someArgs)
 				{
 					TaskStorage* taskStorage = AllocateTask();
 					new (taskStorage) Task(std::forward<TArgs>(someArgs)...);
 				}
+				*/
 
 				//--------------------------------------------------------------------------------
 				//--------------------------------------------------------------------------------
@@ -58,8 +60,8 @@ namespace Alba
 				//================================================================================
 				// Private Methods
 				//================================================================================
-				static TaskStorage*		AllocateTask();
-				static void				DeallocateTask(TaskStorage* aStorage);
+				static void*		AllocateTask();
+				static void			DeallocateTask(TaskStorage* aStorage);
 		};
 	}
 }
