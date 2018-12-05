@@ -6,8 +6,6 @@ namespace Alba
 {
 	namespace Core
 	{
-		ALBA_IMPLEMENT_LOG_CATEGORY(Critical);
-
 		#if defined(ALBA_DEBUG_ASSERTS_ENABLED)
 
 		//-------------------------------------------------------------------------------------------------

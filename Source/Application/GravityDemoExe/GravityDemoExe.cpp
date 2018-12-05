@@ -14,8 +14,6 @@
 
 #include "Gravity_Module.hpp"
 
-ALBA_IMPLEMENT_LOG_CATEGORY(GravityDemo);
-
 namespace
 {
 	//-------------------------------------------------------------------------------------------------

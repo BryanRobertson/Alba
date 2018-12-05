@@ -11,14 +11,6 @@
 #include "Core_LogCategory.hpp"
 #include <cstdlib>
 
-namespace Alba
-{
-	namespace Core
-	{
-		ALBA_DECLARE_LOG_CATEGORY(Critical);
-	}
-}
-
 #if defined(ALBA_DEBUG_ASSERTS_ENABLED)
 namespace Alba
 {

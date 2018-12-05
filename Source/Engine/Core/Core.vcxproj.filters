@@ -322,6 +322,12 @@
     <ClInclude Include="Core_TaskDebug.hpp">
       <Filter>Task\Debug</Filter>
     </ClInclude>
+    <ClInclude Include="Core_TaskWorker.hpp">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_TaskIdTypes.hpp">
+      <Filter>Task</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">

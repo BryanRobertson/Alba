@@ -5,6 +5,5 @@ namespace Alba
 {
 	namespace Input
 	{
-		ALBA_IMPLEMENT_LOG_CATEGORY(Input);
 	}
 }

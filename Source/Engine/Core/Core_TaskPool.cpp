@@ -49,6 +49,7 @@ namespace Alba
 		/*static*/ void TaskPool::DeallocateTask(Task& aTask)
 		{
 			TaskStorage* taskStorage = reinterpret_cast<TaskStorage*>(&aTask);
+			(void) taskStorage;
 
 			ALBA_ASSERT
 			(

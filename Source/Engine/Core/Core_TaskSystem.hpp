@@ -6,18 +6,14 @@
 #include "Core_TypeTraits.hpp"
 #include "Core_Array.hpp"
 #include "Core_TaskPool.hpp"
+#include "Core_TaskWorker.hpp"
 #include "Core_UniquePtr.hpp"
-#include "Core_StronglyTypedId.hpp"
+#include "Core_TaskIdTypes.hpp"
 
 namespace Alba
 {
 	namespace Core
 	{
-		struct TaskThreadId_Tag {};
-		typedef StronglyTypedId<uint32, TaskThreadId_Tag> TaskThreadId;
-
-		inline constexpr TaskThreadId theMainThreadId(0);
-
 		//-----------------------------------------------------------------------------------------
 		// Name	:	TaskSystem
 		// Desc	:	Multithreaded task system, executes a tree of tasks over several threads
@@ -61,7 +57,7 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				Vector<thread>		myTaskThreads;
+				Vector<TaskWorker>	myTaskThreads;
 				Vector<TaskPool>	myTaskPools;
 		};
 

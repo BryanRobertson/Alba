@@ -10,9 +10,7 @@
 namespace Alba
 {
 	namespace Core
-	{
-		ALBA_IMPLEMENT_LOG_CATEGORY(Module);
-
+	{;
 		UniquePtr<ModuleRepository> ModuleRepository::ourInstance;
 
 		//-----------------------------------------------------------------------------------------

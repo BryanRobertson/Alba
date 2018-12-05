@@ -42,39 +42,44 @@ namespace Alba
 				// Create Task
 				//-------------------------------------------------------------------------------------
 				template <typename TFunctionType, class=enable_if_taskfunction<TFunctionType> >
-				static Task Create(TFunctionType&& aTaskFunction)
+				explicit Task(TFunctionType&& aTaskFunction)
+					: myTaskFunction(aTaskFunction)
 				{
-					return Task{ nullptr, aTaskFunction };
+
 				}
 
 				//-------------------------------------------------------------------------------------
-				// Create Task
+				// Create Task (member function pointer)
 				//-------------------------------------------------------------------------------------
 				template <typename TObjectType>
-				static Task Create(TObjectType* anInstance, TaskMemberFunctionPtr<TObjectType> aMemberFuncPtr)
+				explicit Task(TObjectType* anInstance, TaskMemberFunctionPtr<TObjectType> aMemberFuncPtr)
 				{
-					aParent.myOpenTaskCount.fetch_add(1, std::memory_order_relaxed);
-					return Task{ nullptr, std::bind(anInstance, aMemberFuncPtr) };
+					myTaskFunction = [anInstance](Task& aTask)
+					{
+						std::invoke(anInstance, aMemberFuncPtr, aTask);
+					};
 				}
 
 				//-------------------------------------------------------------------------------------
 				// Create Child Task
 				//-------------------------------------------------------------------------------------
-				template <typename TFunctionType, class= enable_if_taskfunction<TFunctionType> >
-				static Task CreateChild(Task& aParent, TFunctionType&& aTaskFunction)
+				template <typename TFunctionType, class=enable_if_taskfunction<TFunctionType> >
+				explicit Task(Task& aParent, TFunctionType&& aTaskFunction)
+					: Task(aTaskFunction)
+					, myParentTask(&aParent)
 				{
-					aParent.myOpenTaskCount.fetch_add(1, std::memory_order_relaxed);
-					return Task{ &aParent, aTaskFunction };
+					myParentTask->myOpenTaskCount.fetch_add(1, std::memory_order_relaxed);
 				}
 
 				//-------------------------------------------------------------------------------------
-				// Create Child Task
+				// Create Child Task (member function pointer)
 				//-------------------------------------------------------------------------------------
 				template <typename TObjectType>
-				static Task CreateChild(Task& aParent, TObjectType* anInstance, TaskMemberFunctionPtr<TObjectType> aMemberFuncPtr)
+				explicit Task(Task& aParent, TObjectType* anInstance, TaskMemberFunctionPtr<TObjectType> aMemberFuncPtr)
+					: Task(anInstance, aMemberFuncPtr)
+					, myParentTask(&aParent)
 				{
-					aParent.myOpenTaskCount.fetch_add(1, std::memory_order_relaxed);
-					return Task{ &aParent, std::bind(anInstance, aMemberFuncPtr) };
+					myParentTask->myOpenTaskCount.fetch_add(1, std::memory_order_relaxed);
 				}
 
 				//-------------------------------------------------------------------------------------

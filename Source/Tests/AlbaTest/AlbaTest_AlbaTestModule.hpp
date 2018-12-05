@@ -8,8 +8,6 @@ namespace Alba
 {
 	namespace Tests
 	{
-		ALBA_DECLARE_LOG_CATEGORY(AlbaTest);
-
 		//-----------------------------------------------------------------------------------------
 		// Name	:	AlbaTestModule
 		// Desc	:	Alba test module

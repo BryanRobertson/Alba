@@ -8,35 +8,37 @@ namespace Alba
 {
 	namespace Core
 	{
-		//-----------------------------------------------------------------------------------------
-		// Name	:	WindowEventHandler
-		// Desc	:	Allows applications to handle events in the window event handler function
-		//-----------------------------------------------------------------------------------------
-		struct WindowEventHandler
-		{
-			//=====================================================================================
-			// Public Types
-			//=====================================================================================
-			using HandlerFunc = FixedFunction<LRESULT(HWND, UINT, WPARAM, LPARAM)>;
+		#if defined(ALBA_PLATFORM_WINDOWS)
 
-			//=====================================================================================
-			// Public Methods
-			//=====================================================================================
-			template <typename TObject>
-			void Bind(TObject* anObject, LRESULT (TObject::*Handler)(HWND, UINT, WPARAM, LPARAM))
+			//-----------------------------------------------------------------------------------------
+			// Name	:	WindowEventHandler
+			// Desc	:	Allows applications to handle events in the window event handler function
+			//-----------------------------------------------------------------------------------------
+			struct WindowEventHandler
 			{
-				using std::placeholders::_1;
-				using std::placeholders::_2;
-				using std::placeholders::_3;
-				using std::placeholders::_4;
+				//=====================================================================================
+				// Public Types
+				//=====================================================================================
+				using HandlerFunc = FixedFunction<LRESULT(HWND, UINT, WPARAM, LPARAM)>;
 
-				myHandlerFunc = std::bind(Handler, anObject, _1, _2, _3, _4);
-			}
+				//=====================================================================================
+				// Public Methods
+				//=====================================================================================
+				template <typename TObject>
+				void Bind(TObject* anObject, LRESULT (TObject::*Handler)(HWND, UINT, WPARAM, LPARAM))
+				{
+					myHandlerFunc = [anObject, Handler](HWND aHwnd, UINT aMessage, WPARAM aWParam, LPARAM aLParam)
+					{
+						return (*anObject.*Handler)(aHwnd, aMessage, aWParam, aLParam);
+					};
+				}
 
-			//=====================================================================================
-			// Public Data Members
-			//=====================================================================================
-			HandlerFunc myHandlerFunc;
-		};
+				//=====================================================================================
+				// Public Data Members
+				//=====================================================================================
+				HandlerFunc myHandlerFunc;
+			};
+
+		#endif
 	}
 }

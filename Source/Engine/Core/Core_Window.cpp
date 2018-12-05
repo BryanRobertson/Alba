@@ -17,9 +17,11 @@ namespace Alba
 			Failed = 0 
 		};
 
+		ALBA_DECLARE_LOG_CATEGORY(Window);
+
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		ALBA_IMPLEMENT_LOG_CATEGORY(Window);
+		#if defined(ALBA_PLATFORM_WINDOWS)
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	WindowImpl
@@ -371,5 +373,7 @@ namespace Alba
 		{
 			return myImpl->myInputHandler;
 		}
+
+		#endif
 	}
 }
