@@ -81,6 +81,9 @@
     <ClCompile Include="Core_TaskPool.cpp">
       <Filter>Task</Filter>
     </ClCompile>
+    <ClCompile Include="Core_TaskWorker.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />

@@ -10,6 +10,8 @@ namespace Alba
 {
 	namespace Core
 	{
+		class TaskPool;
+
 		//-----------------------------------------------------------------------------------------------
 		// Name	:	TaskWorker
 		// Desc	:	Worker thread for the task system
@@ -21,7 +23,12 @@ namespace Alba
 				//=======================================================================================
 				// Public Constructors
 				//=======================================================================================
-				explicit TaskWorker(TaskThreadId anId);
+				template <typename TFunc, class=std::is_invocable<TFunc, int(TaskWorker&)> >
+				explicit TaskWorker(TaskThreadId anId, TFunc&& aFunc)
+					: myThread(aFunc, *this)
+				{
+
+				}
 
 				TaskWorker(TaskWorker& aCopyFrom) = delete;
 				TaskWorker(TaskWorker&& aMoveFrom) = default;
@@ -30,8 +37,13 @@ namespace Alba
 				// Public Methods
 				//=======================================================================================
 				ALBA_FORCEINLINE TaskThreadId GetId() const;
+				int				 Join();
 
 			private:
+
+				//=======================================================================================
+				// Private Methods
+				//=======================================================================================
 
 				//=======================================================================================
 				// Private Data
