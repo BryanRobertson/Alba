@@ -127,7 +127,7 @@ namespace Alba
 		template <typename TDerived>
 		/*inline*/ ResourceState Resource<TDerived>::GetState() const
 		{
-			return myState.load(std::memory_order_acquire);
+			return myState.load(std::memory_order_relaxed);
 		}
 
 		//-----------------------------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ namespace Alba
 		template <typename TDerived>
 		/*inline*/ void Resource<TDerived>::SetResourceState(ResourceState aResourceState)
 		{
-			myState.store(aResourceState, std::memory_order_release);
+			myState.store(aResourceState, std::memory_order_relaxed);
 		}
 	}
 }

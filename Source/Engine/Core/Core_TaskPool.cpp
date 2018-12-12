@@ -32,6 +32,11 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void* TaskPool::AllocateTask()
 		{
+			if (IsFull())
+			{
+				return nullptr;
+			}
+
 			static constexpr size_t ourTaskStorageMask = ourTaskPoolSize - 1;
 
 			const uint32 index = ++myNextFreeTaskIndex;

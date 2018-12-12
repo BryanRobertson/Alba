@@ -23,12 +23,7 @@ namespace Alba
 				//=======================================================================================
 				// Public Constructors
 				//=======================================================================================
-				template <typename TFunc, class=std::is_invocable<TFunc, int(TaskWorker&)> >
-				explicit TaskWorker(TaskThreadId anId, TFunc&& aFunc)
-					: myThread(aFunc, *this)
-				{
-
-				}
+				explicit TaskWorker(TaskThreadId anId, TaskPool& aTaskPool);
 
 				TaskWorker(TaskWorker& aCopyFrom) = delete;
 				TaskWorker(TaskWorker&& aMoveFrom) = default;
@@ -37,7 +32,9 @@ namespace Alba
 				// Public Methods
 				//=======================================================================================
 				ALBA_FORCEINLINE TaskThreadId GetId() const;
-				int				 Join();
+
+				void			Run();
+				int				Join();
 
 			private:
 
@@ -48,9 +45,11 @@ namespace Alba
 				//=======================================================================================
 				// Private Data
 				//=======================================================================================
-				TaskThreadId	myThreadId			= TaskThreadId::InvalidId;
-				TaskPool*		myThreadTaskPool	= nullptr;
-				std::thread		myThread;
+				TaskThreadId		myThreadId			= TaskThreadId::InvalidId;
+				TaskPool*			myThreadTaskPool	= nullptr;
+				std::atomic<bool>	myQuit				= false;
+
+				Thread				myThread;
 		};
 
 		//-----------------------------------------------------------------------------------------------

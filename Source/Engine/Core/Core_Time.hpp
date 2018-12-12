@@ -22,14 +22,15 @@ namespace Alba
 
 	namespace Core
 	{		
-		using HighResolutionClock		= chrono::high_resolution_clock;
-		using TimePoint					= chrono::time_point<chrono::high_resolution_clock>;
-		using TimeDurationMilliSeconds	= chrono::duration<uint64, std::milli>;
-		using TimeDurationNanoSeconds	= chrono::duration<uint64, std::nano>;
-		using TimeDurationSeconds		= chrono::duration<float>;
+		using HighResolutionClock	= chrono::high_resolution_clock;
+		using TimePoint				= chrono::time_point<chrono::high_resolution_clock>;
 
-		template <typename TStorageType>
-		using TimeSeconds = chrono::duration<TStorageType, std::ratio<1> >;
+		template <typename TUnits, typename TRatio>
+		using Duration = chrono::duration<TUnits, TRatio>;
+
+		using DurationMilliSeconds	=	Duration<uint64, std::milli>;
+		using DurationNanoSeconds	=	Duration<uint64, std::nano>;
+		using DurationSeconds		=	Duration<float, std::ratio<1> >;
 
 		using FrameIndex = uint64;
 
@@ -67,13 +68,13 @@ namespace Alba
 				// Wall-clock time (i.e. the real time)
 				//-----------------------------------------------------------------------------------------
 				TimePoint					GetWallClockTime() const					{ return mySystemTime;  }
-				TimeDurationNanoSeconds		GetWallClockDeltaTime() const				{ return mySystemTimeDelta; }
+				DurationNanoSeconds			GetWallClockDeltaTime() const				{ return mySystemTimeDelta; }
 
 				//-----------------------------------------------------------------------------------------
 				// Game time (stops when paused)
 				//-----------------------------------------------------------------------------------------
 				TimePoint					GetGameTime() const							{ return myGameTime;	}
-				TimeDurationNanoSeconds		GetGameDeltaTime() const					{ return myGameTimeDelta; }
+				DurationNanoSeconds			GetGameDeltaTime() const					{ return myGameTimeDelta; }
 
 				//-----------------------------------------------------------------------------------------
 				// Frame Index
@@ -88,8 +89,8 @@ namespace Alba
 				TimePoint					mySystemTime;
 				TimePoint					myGameTime;
 
-				TimeDurationNanoSeconds		mySystemTimeDelta;
-				TimeDurationNanoSeconds		myGameTimeDelta;
+				DurationNanoSeconds		mySystemTimeDelta;
+				DurationNanoSeconds		myGameTimeDelta;
 
 				FrameIndex					myFrameIndex;
 		};

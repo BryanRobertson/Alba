@@ -23,7 +23,7 @@ namespace Alba
 	
 		//-----------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------
-		class Task
+		class alignas(HardwareConstants::theL1CacheLineSize) Task
 		{
 			public:
 
@@ -102,7 +102,8 @@ namespace Alba
 				//-------------------------------------------------------------------------------------
 				bool IsFinished() const
 				{
-					return myOpenTaskCount.load(std::memory_order_acquire) == 0;
+					const int32 count = myOpenTaskCount.load(std::memory_order_acquire);
+					return count == 0;
 				}
 
 				//-------------------------------------------------------------------------------------
@@ -176,8 +177,6 @@ namespace Alba
 				}
 		};
 
-		// Note: This can be commented out - it doesn't matter if Task is larger than the cache-line size
-		//		 I just want to know when it happens
-		static_assert(sizeof(Task) == HardwareConstants::theL1CacheLineSize, "sizeof(Task) > cache line size");
+		static_assert(sizeof(Task) >= HardwareConstants::theL1CacheLineSize, "sizeof(Task) must be >= cache line size");
 	}
 }
