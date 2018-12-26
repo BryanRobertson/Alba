@@ -22,7 +22,7 @@ namespace Alba
 				myKeyHeldDurations.erase(key);
 			}
 
-			const auto deltaTime = chrono::duration_cast<Core::TimeDurationMilliSeconds>(aTime.GetGameDeltaTime());
+			const auto deltaTime = chrono::duration_cast<Core::DurationNanoSeconds>(aTime.GetGameDeltaTime());
 			for (auto& itr : myKeyHeldDurations)
 			{
 				itr.second += deltaTime;
@@ -31,7 +31,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		Core::TimeDurationMilliSeconds Keyboard::GetKeyHeldDuration(Key aKey) const
+		Core::DurationNanoSeconds Keyboard::GetKeyHeldDuration(Key aKey) const
 		{
 			using namespace chrono_literals;
 

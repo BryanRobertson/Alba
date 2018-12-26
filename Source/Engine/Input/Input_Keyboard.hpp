@@ -46,7 +46,7 @@ namespace Alba
 				inline KeySet&			GetHeldKeysMutable();
 				inline KeySet&			GetPressedKeysMutable();
 
-				Core::TimeDurationMilliSeconds GetKeyHeldDuration(Key aKey) const;
+				Core::DurationNanoSeconds GetKeyHeldDuration(Key aKey) const;
 
 			private:
 
@@ -61,7 +61,7 @@ namespace Alba
 				KeySet				myPressedKeys;
 
 				// For each held key, how long the key has been held for
-				Core::VectorMap<Key, Core::TimeDurationMilliSeconds> myKeyHeldDurations;
+				Core::VectorMap<Key, Core::DurationNanoSeconds> myKeyHeldDurations;
 		};
 
 		//-----------------------------------------------------------------------------------------

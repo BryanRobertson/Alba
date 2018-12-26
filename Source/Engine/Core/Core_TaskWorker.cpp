@@ -28,7 +28,7 @@ namespace Alba
 			{
 				while (!myQuit.load(std::memory_order_acquire))
 				{
-					ThreadYield();
+					Yield();
 				}
 			});
 		}

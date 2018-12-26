@@ -39,7 +39,7 @@ namespace Alba
 
 		//-------------------------------------------------------------------------------------------------
 		//-------------------------------------------------------------------------------------------------
-		void Yield()
+		inline void Yield()
 		{
 			ThisThread::yield();
 		}
@@ -47,14 +47,14 @@ namespace Alba
 		//-------------------------------------------------------------------------------------------------
 		//-------------------------------------------------------------------------------------------------
 		template <typename TUnits, typename TRatio>
-		void Sleep(Duration<TUnits, TRatio> aDuration)
+		inline void Sleep(Duration<TUnits, TRatio> aDuration)
 		{
 			ThisThread::sleep_for(aDuration);
 		}
 
 		//-------------------------------------------------------------------------------------------------
 		//-------------------------------------------------------------------------------------------------
-		void SleepUntil(TimePoint aTimePoint)
+		inline void SleepUntil(TimePoint aTimePoint)
 		{
 			ThisThread::sleep_until(aTimePoint);
 		}
