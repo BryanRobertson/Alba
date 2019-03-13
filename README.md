@@ -12,6 +12,8 @@ Alba is written in C++17, as I wanted to get some hands-on experience writing C+
 
 ## Syncing
 
+I'm sure no one will actually want to do this when there's much better tech out there, but I might as well document this in case I forget myself.
+
 Clone the project from git, and then run the following commands from the root directory
 
     git submodule init
