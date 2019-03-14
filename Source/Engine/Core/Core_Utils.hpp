@@ -45,5 +45,33 @@ namespace Alba
 
 			return result;
 		}
+
+		constexpr uint32 NextLargestPowerOfTwo(uint32 anInput)
+		{
+			// From http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
+			// v--;
+			// v |= v >> 1;
+			// v |= v >> 2;
+			// v |= v >> 4;
+			// v |= v >> 8;
+			// v |= v >> 16;
+			// v++;
+			if (anInput == 0)
+			{
+				return 1;
+			}
+
+			uint64 result = anInput;
+
+			--result;
+			result |= result >> 1;
+			result |= result >> 2;
+			result |= result >> 4;
+			result |= result >> 8;
+			result |= result >> 16;
+			++result;
+
+			return result;
+		}
 	}
 }

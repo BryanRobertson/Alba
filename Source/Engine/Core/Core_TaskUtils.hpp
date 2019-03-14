@@ -1,15 +1,17 @@
-#include "Core_Precompile.hpp"
-#include "Core_Task.hpp"
+#pragma once
+
+#include "Core.hpp"
 
 namespace Alba
 {
 	namespace Core
 	{
 		//-----------------------------------------------------------------------------------------
+		// 
 		//-----------------------------------------------------------------------------------------
-		Task::~Task()
+		inline void CreateTask()
 		{
-			ALBA_ASSERT(IsFinished(), "Aborting task before it has completed!");
+
 		}
 	}
 }

@@ -5,7 +5,6 @@
 #include "Core_Vector.hpp"
 #include "Core_TypeTraits.hpp"
 #include "Core_Array.hpp"
-#include "Core_TaskPool.hpp"
 #include "Core_TaskWorker.hpp"
 #include "Core_UniquePtr.hpp"
 #include "Core_TaskIdTypes.hpp"
@@ -29,7 +28,7 @@ namespace Alba
 				static void			Shutdown();
 				static TaskSystem&	GetMutable();
 
-				static void			QueueTask(Task& aTask);
+				//static void			QueueTask(Task& aTask);
 
 				static TaskPool&	GetCurrentThreadPool();
 				static TaskThreadId	GetCurrentThreadId();
