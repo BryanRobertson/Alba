@@ -335,6 +335,9 @@
     <ClInclude Include="Core_TaskTypes.hpp">
       <Filter>Task</Filter>
     </ClInclude>
+    <ClInclude Include="Core_TaskPool.hpp">
+      <Filter>Task</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">

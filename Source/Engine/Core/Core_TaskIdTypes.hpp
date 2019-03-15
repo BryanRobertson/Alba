@@ -15,7 +15,7 @@ namespace Alba
 		{
 		};
 
-		typedef StronglyTypedId<uint32, TaskThreadId_Tag> TaskThreadId;
+		typedef StronglyTypedId<uint16, TaskThreadId_Tag> TaskThreadId;
 
 		//-----------------------------------------------------------------------------------------
 		// Main Thread Id

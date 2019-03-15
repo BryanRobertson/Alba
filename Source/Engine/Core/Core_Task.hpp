@@ -16,15 +16,16 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		struct alignas(HardwareConstants::L1CacheLineSize) Task final
 		{
-			TaskId						myTaskId;
-			TaskId						myParentId;
+			TaskFunction*				myFunction	= nullptr;
+			TaskId						myTaskId	= TaskId::InvalidId;
+			TaskId						myParentId	= TaskId::InvalidId;
 			std::atomic<uint32>			myOpenTasks	= 1;
 
 			static constexpr size_t ourStorageSize = HardwareConstants::L1CacheLineSize
+													- sizeof(myFunction)
 													- sizeof(myTaskId)
 													- sizeof(myParentId)
-													- sizeof(myOpenTasks)
-													;
+													- sizeof(myOpenTasks);
 
 			Core::AlignedStorage<ourStorageSize> myTaskData;
 		};

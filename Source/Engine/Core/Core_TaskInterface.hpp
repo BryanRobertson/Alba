@@ -44,6 +44,15 @@ namespace Alba
 			//===========================================================================================
 			TaskId myTaskId;
 		};
+
+		namespace Internal
+		{
+			//-------------------------------------------------------------------------------------------
+			// Internal Task-Creation function
+			//-------------------------------------------------------------------------------------------
+			extern Core::Task* CreateTask(Core::TaskFunction* aTaskFunction);
+			extern Core::Task* CreateTask(Core::TaskFunction* aTaskFunction, TaskId aParentTask);
+		}
 	}
 
 	//===================================================================================================

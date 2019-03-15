@@ -14,7 +14,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		struct TaskExecutionContext
 		{
-			Task& myTask;
+			Task&			myTask;
+			TaskThreadId	myExecutionThreadId;
 		};
 
 		//-----------------------------------------------------------------------------------------

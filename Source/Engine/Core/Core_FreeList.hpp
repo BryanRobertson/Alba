@@ -53,14 +53,19 @@ namespace Alba
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
+
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
 				void* Allocate()
 				{
-					void* entry = myNext;
+					void* next = myNext;
+					myNext = next ? next->myNext : nullptr;
 
-					myNext = myNext ? myNext->myNext : nullptr;
-					return entry;
+					return next;
 				}
 
+				//---------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------
 				void Free(void* aPtr)
 				{
 					#if !defined(ALBA_RETAIL_BUILD)
@@ -84,8 +89,8 @@ namespace Alba
 				#if !defined(ALBA_RETAIL_BUILD)
 					struct DebugData
 					{
-						void*	myStart = nullptr;
-						void*	myEnd = nullptr;
+						void* myStart	= nullptr;
+						void* myEnd		= nullptr;
 					};
 
 					DebugData myDebugData;
