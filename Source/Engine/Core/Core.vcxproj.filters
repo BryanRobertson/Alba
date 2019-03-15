@@ -69,19 +69,16 @@
     <ClCompile Include="Core_TaskSystem.cpp">
       <Filter>Task</Filter>
     </ClCompile>
-    <ClCompile Include="Core_Task.cpp">
-      <Filter>Task</Filter>
-    </ClCompile>
     <ClCompile Include="Core_File.cpp">
       <Filter>FileSystem</Filter>
     </ClCompile>
     <ClCompile Include="Core_TaskDebug.cpp">
       <Filter>Task\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Core_TaskPool.cpp">
+    <ClCompile Include="Core_TaskWorker.cpp">
       <Filter>Task</Filter>
     </ClCompile>
-    <ClCompile Include="Core_TaskWorker.cpp">
+    <ClCompile Include="Core_TaskInterface.cpp">
       <Filter>Task</Filter>
     </ClCompile>
   </ItemGroup>
@@ -319,9 +316,6 @@
     <ClInclude Include="Core_ArrayView.hpp">
       <Filter>Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Core_TaskPool.hpp">
-      <Filter>Task</Filter>
-    </ClInclude>
     <ClInclude Include="Core_TaskDebug.hpp">
       <Filter>Task\Debug</Filter>
     </ClInclude>
@@ -329,6 +323,16 @@
       <Filter>Task</Filter>
     </ClInclude>
     <ClInclude Include="Core_TaskIdTypes.hpp">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_BitUtils.hpp" />
+    <ClInclude Include="Core_FreeList.hpp">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_TaskInterface.hpp">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_TaskTypes.hpp">
       <Filter>Task</Filter>
     </ClInclude>
   </ItemGroup>

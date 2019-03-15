@@ -17,11 +17,11 @@ namespace Alba
 			struct CommandStorage;
 
 			//-------------------------------------------------------------------------------------
-			// Name	:	theStorageSize
+			// Name	:	StorageSize
 			// Desc	:	Max size to store directly inside command storage without allocating from
 			//			the heap
 			//-------------------------------------------------------------------------------------
-			constexpr size_t theStorageSize = HardwareConstants::theL1CacheLineSize - sizeof(void*);
+			constexpr size_t StorageSize = HardwareConstants::L1CacheLineSize - sizeof(void*);
 
 			//-------------------------------------------------------------------------------------
 			//-------------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ namespace Alba
 			//-------------------------------------------------------------------------------------
 			struct CommandStorage
 			{
-				using Storage = Core::AlignedStorage<theStorageSize>;
+				using Storage = Core::AlignedStorage<StorageSize>;
 
 				CommandStorage()
 					: myVTable(nullptr)
@@ -145,7 +145,7 @@ namespace Alba
 					// TODO: Use constexpr if, and store larger objects on the heap
 					static_assert
 					(
-						sizeof(TCommandType) < theStorageSize, 
+						sizeof(TCommandType) < StorageSize, 
 						"Command object is too large to fit into storage!"
 					);
 

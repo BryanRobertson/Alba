@@ -5,6 +5,7 @@
 #include "Core_Any.hpp"
 #include "Core_AlignedStorage.hpp"
 #include "Core_Thread.hpp"
+#include "Core_TaskIdTypes.hpp"
 
 namespace Alba
 {
@@ -12,14 +13,20 @@ namespace Alba
 	{
 		//-----------------------------------------------------------------------------------------
 		// Name : Task
-		// Desc : 
 		//-----------------------------------------------------------------------------------------
-		struct alignas(HardwareConstants::theL1CacheLineSize) Task final
+		struct alignas(HardwareConstants::L1CacheLineSize) Task final
 		{
-			std::atomic<uint32>			myOpenTasks;
-			
+			TaskId						myTaskId;
+			TaskId						myParentId;
+			std::atomic<uint32>			myOpenTasks	= 1;
 
-			Core::AlignedStorage<32>	myTaskData;
+			static constexpr size_t ourStorageSize = HardwareConstants::L1CacheLineSize
+													- sizeof(myTaskId)
+													- sizeof(myParentId)
+													- sizeof(myOpenTasks)
+													;
+
+			Core::AlignedStorage<ourStorageSize> myTaskData;
 		};
 	}
 }

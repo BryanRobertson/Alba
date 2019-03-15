@@ -1,35 +1,37 @@
-#pragma once
-
-#include "Core.hpp"
-#include "Core_StronglyTypedId.hpp"
+#include "Core_Precompile.hpp"
+#include "Core_TaskInterface.hpp"
+#include "Core_Task.hpp"
 
 namespace Alba
 {
 	namespace Core
 	{
 		//-----------------------------------------------------------------------------------------
-		// Name	:	TaskThreadId
-		// Desc	:	Uniquely identifies a worker thread
 		//-----------------------------------------------------------------------------------------
-		struct TaskThreadId_Tag
+		TaskWrapper TaskWrapper::CreateDependentTask(TaskFunction* /*aTaskFunction*/)
 		{
-		};
-
-		typedef StronglyTypedId<uint32, TaskThreadId_Tag> TaskThreadId;
-
-		//-----------------------------------------------------------------------------------------
-		// Main Thread Id
-		//-----------------------------------------------------------------------------------------
-		inline constexpr TaskThreadId theMainThreadId(0);
+			return TaskWrapper{};
+		}
 
 		//-----------------------------------------------------------------------------------------
-		// Name	:	TaskThreadId
-		// Desc	:	Uniquely identifies a worker thread
 		//-----------------------------------------------------------------------------------------
-		struct TaskId_Tag
+		void TaskWrapper::WaitForAll()
 		{
-		};
 
-		typedef StronglyTypedId<uint32, TaskId_Tag> TaskId;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void TaskWrapper::QueueTask()
+		{
+
+		}
+	}
+
+	//---------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
+	Core::TaskWrapper CreateTask(Core::TaskFunction* /*aTaskFunction*/)
+	{
+		return Core::TaskWrapper{};
 	}
 }

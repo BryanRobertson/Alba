@@ -61,7 +61,7 @@ namespace Alba
 				return 1;
 			}
 
-			uint64 result = anInput;
+			uint32 result = anInput;
 
 			--result;
 			result |= result >> 1;

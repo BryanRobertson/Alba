@@ -21,7 +21,7 @@ namespace Alba
 		{
 			struct DefaultBufferSize
 			{
-				static const int Value = Core::HardwareConstants::theL1CacheLineSize - sizeof(void*);
+				static const int Value = Core::HardwareConstants::L1CacheLineSize - sizeof(void*);
 			};
 		}
 

@@ -1,6 +1,5 @@
 #include "Core_Precompile.hpp"
 #include "Core_TaskSystem.hpp"
-#include "Core_TaskPool.hpp"
 
 namespace Alba
 {
@@ -42,16 +41,6 @@ namespace Alba
 		/*static*/ void TaskSystem::QueueTask(Task& /*aTask*/)
 		{
 
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		/*static*/ TaskPool& TaskSystem::GetCurrentThreadPool()
-		{
-			const TaskThreadId threadId = GetCurrentThreadId();
-			ALBA_ASSERT(threadId.IsValid());
-
-			return GetMutable().myTaskPools[threadId.GetValue()];
 		}
 
 		//-----------------------------------------------------------------------------------------

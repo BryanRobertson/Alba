@@ -13,6 +13,8 @@ namespace Alba
 {
 	namespace Core
 	{
+		struct Task;
+
 		//-----------------------------------------------------------------------------------------
 		// Name	:	TaskSystem
 		// Desc	:	Multithreaded task system, executes a tree of tasks over several threads
@@ -28,9 +30,8 @@ namespace Alba
 				static void			Shutdown();
 				static TaskSystem&	GetMutable();
 
-				//static void			QueueTask(Task& aTask);
+				static void			QueueTask(Task& aTask);
 
-				static TaskPool&	GetCurrentThreadPool();
 				static TaskThreadId	GetCurrentThreadId();
 
 				//=================================================================================
@@ -57,7 +58,6 @@ namespace Alba
 				// Private Data
 				//=================================================================================
 				Vector<TaskWorker>	myTaskThreads;
-				Vector<TaskPool>	myTaskPools;
 		};
 
 		#if 0

@@ -6,7 +6,7 @@ namespace Alba
 {
 	namespace Core
 	{
-		class Task;
+		struct Task;
 
 		//-----------------------------------------------------------------------------------------
 		// Name	:	TaskExecutionContext

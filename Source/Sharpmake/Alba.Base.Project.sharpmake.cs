@@ -112,8 +112,10 @@ namespace Alba
 
                 // C4127 - Conditional expression is constant
                 conf.Options.Add(new Sharpmake.Options.Vc.Compiler.DisableSpecificWarnings("4127"));
-                
+
+                // C4324 - struct_name' : structure was padded due to __declspec(align())
+                conf.Options.Add(new Sharpmake.Options.Vc.Compiler.DisableSpecificWarnings("4324"));
             }
-		}
+        }
 	}
 }

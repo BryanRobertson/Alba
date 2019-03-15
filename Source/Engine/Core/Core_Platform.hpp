@@ -15,10 +15,10 @@ namespace Alba
 		namespace HardwareConstants
 		{
 			//-----------------------------------------------------------------------------------------
-			// Name: theL1CacheLineSize
+			// Name: L1CacheLineSize
 			// Desc: Constant that provides a good approximation the cache-line size on the current platform
 			//-----------------------------------------------------------------------------------------
-			constexpr size_t theL1CacheLineSize = std::hardware_destructive_interference_size;
+			constexpr size_t L1CacheLineSize = std::hardware_destructive_interference_size;
 		}
 		
 		#if defined(ALBA_PLATFORM_WINDOWS)
