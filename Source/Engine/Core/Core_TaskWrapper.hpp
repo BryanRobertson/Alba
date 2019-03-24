@@ -4,6 +4,7 @@
 #include "Core_TaskIdTypes.hpp"
 #include "Core_TypeTraits.hpp"
 #include "Core_TaskTypes.hpp"
+#include "Core_TupleUtils.hpp"
 
 namespace Alba
 {
@@ -22,11 +23,26 @@ namespace Alba
 			// Create
 			//-------------------------------------------------------------------------------------------
 			TaskWrapper CreateDependentTask(TaskFunction* aTaskFunction);
+			static uint val; // REMOVE_ME
 
-			template <typename TFunctionType, typename = enable_if_t<is_invocable_v<Core::TaskFunction>>>
-			TaskWrapper CreateDependentTask(const TFunctionType& aTask)
+			template <typename TFunctionType, class = enable_if_t<IsTaskFunction_V<TFunctionType>>>
+			TaskWrapper CreateDependentTask(TFunctionType&& aTask)
 			{
-				return TaskWrapper{};
+				(void) aTask;
+				const TaskId id(++val);
+
+				return TaskWrapper{id};
+			}
+
+			template <typename... TArgs>
+			auto CreateDependentTasks(TArgs&&... someTaskFunctions)
+			{
+				auto func = [this](auto&& anArg)
+				{
+					return CreateDependentTask(std::forward<decltype(anArg)>(anArg));
+				};
+
+				return Invoke_ForEach(func, std::forward<TArgs>(someTaskFunctions)...);
 			}
 
 			//-------------------------------------------------------------------------------------------
@@ -60,7 +76,7 @@ namespace Alba
 	//===================================================================================================
 	extern Core::TaskWrapper CreateTask(Core::TaskFunction* aTaskFunction);
 
-	template <typename TFunctionType, typename=enable_if_t<is_invocable_v<Core::TaskFunction>>>
+	template <typename TFunctionType, typename=enable_if_t<is_invocable_v<TFunctionType, Core::TaskFunction>>>
 	Core::TaskWrapper CreateTask(const TFunctionType& aTask)
 	{
 		return Core::TaskWrapper{};

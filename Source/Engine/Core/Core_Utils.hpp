@@ -12,7 +12,7 @@
 namespace Alba
 {
 	namespace Core
-	{		
+	{
 		//----------------------------------------------------------------------------------------
 		// Name	:	NextLargestPowerOfTwo
 		// Desc	:	Return the smallest power of two that's >= the input value 

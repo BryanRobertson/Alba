@@ -78,7 +78,7 @@
     <ClCompile Include="Core_TaskWorker.cpp">
       <Filter>Task</Filter>
     </ClCompile>
-    <ClCompile Include="Core_TaskInterface.cpp">
+    <ClCompile Include="Core_TaskWrapper.cpp">
       <Filter>Task</Filter>
     </ClCompile>
   </ItemGroup>
@@ -325,18 +325,23 @@
     <ClInclude Include="Core_TaskIdTypes.hpp">
       <Filter>Task</Filter>
     </ClInclude>
-    <ClInclude Include="Core_BitUtils.hpp" />
     <ClInclude Include="Core_FreeList.hpp">
       <Filter>Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="Core_TaskInterface.hpp">
-      <Filter>Task</Filter>
     </ClInclude>
     <ClInclude Include="Core_TaskTypes.hpp">
       <Filter>Task</Filter>
     </ClInclude>
     <ClInclude Include="Core_TaskPool.hpp">
       <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_BitUtils.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_TaskWrapper.hpp">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_TupleUtils.hpp">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

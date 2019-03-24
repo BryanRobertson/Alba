@@ -1,16 +1,21 @@
 #include "Core_Precompile.hpp"
-#include "Core_TaskInterface.hpp"
+#include "Core_TaskWrapper.hpp"
 #include "Core_Task.hpp"
 
 namespace Alba
 {
 	namespace Core
 	{
+		uint TaskWrapper::val = 0;
+
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		TaskWrapper TaskWrapper::CreateDependentTask(TaskFunction* /*aTaskFunction*/)
+		TaskWrapper TaskWrapper::CreateDependentTask(TaskFunction* aTaskFunction)
 		{
-			return TaskWrapper{};
+			(void) aTaskFunction;
+
+			const TaskId id(++val);
+			return TaskWrapper{ id };
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -40,6 +45,9 @@ namespace Alba
 			//-----------------------------------------------------------------------------------------
 			Task* CreateTask(Core::TaskFunction* aTaskFunction, TaskId aParentTask)
 			{
+				(void) aTaskFunction;
+				(void) aParentTask;
+
 				return nullptr;
 			}
 		}

@@ -2,7 +2,7 @@
 
 #include "Core_Platform.hpp"
 #include "Core_TaskTypes.hpp"
-#include "Core_Any.hpp"
+#include "Core_Array.hpp"
 #include "Core_AlignedStorage.hpp"
 #include "Core_Thread.hpp"
 #include "Core_TaskIdTypes.hpp"
@@ -14,20 +14,40 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		// Name : Task
 		//-----------------------------------------------------------------------------------------
-		struct alignas(HardwareConstants::L1CacheLineSize) Task final
+		struct Task final
 		{
-			TaskFunction*				myFunction	= nullptr;
-			TaskId						myTaskId	= TaskId::InvalidId;
-			TaskId						myParentId	= TaskId::InvalidId;
-			std::atomic<uint32>			myOpenTasks	= 1;
+			//-----------------------------------------------------------------
+			// Function that will be called when the task runs
+			//-----------------------------------------------------------------
+			TaskFunction*			myFunction	= nullptr;
 
-			static constexpr size_t ourStorageSize = HardwareConstants::L1CacheLineSize
+			//-----------------------------------------------------------------
+			// ID of the task
+			//-----------------------------------------------------------------
+			TaskId					myTaskId	= TaskId::InvalidId;
+
+			//-----------------------------------------------------------------
+			// Number of tasks still to run (including ourselves)
+			//-----------------------------------------------------------------
+			std::atomic<uint32>		myOpenTasks	= 1;
+
+			//-----------------------------------------------------------------
+			// Storage for the task
+			//-----------------------------------------------------------------
+			static constexpr uint32 ourStorageSize = HardwareConstants::L1CacheLineSize
 													- sizeof(myFunction)
 													- sizeof(myTaskId)
-													- sizeof(myParentId)
 													- sizeof(myOpenTasks);
 
 			Core::AlignedStorage<ourStorageSize> myTaskData;
+
+			static constexpr uint32 ourChildTaskCount = 15;
+
+			//-----------------------------------------------------------------
+			// Child task IDs
+			//-----------------------------------------------------------------
+			Array<TaskId, ourChildTaskCount> myChildTaskIds[ourChildTaskCount];
+			std::atomic<uint32>		myChildTaskCount;
 		};
 	}
 }

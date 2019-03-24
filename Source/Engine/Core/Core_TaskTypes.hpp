@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core_TaskTypes.hpp"
+#include "Core_TypeTraits.hpp"
 
 namespace Alba
 {
@@ -21,6 +22,14 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		// Task function
 		//-----------------------------------------------------------------------------------------
-		using TaskFunction = void(TaskExecutionContext& aTask);
+		using TaskFunction = void(const TaskExecutionContext&);
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		template <typename TFunc>
+		using IsTaskFunction = is_invocable<TFunc, const TaskExecutionContext&>;
+
+		template <typename TFunc>
+		static constexpr bool IsTaskFunction_V = IsTaskFunction<TFunc>::value;
 	}
 }

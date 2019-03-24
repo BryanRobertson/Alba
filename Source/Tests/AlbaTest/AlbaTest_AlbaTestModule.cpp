@@ -4,6 +4,7 @@
 #include "AlbaTest_Core_EnumerationSet.hpp"
 #include "AlbaTest_Core_ConsoleCommandParser.hpp"
 #include "AlbaTest_Core_ConsoleCommands.hpp"
+#include "AlbaTest_Core_Task.hpp"
 #include "AlbaTest.hpp"
 
 #include "Core_Logging.hpp"
@@ -35,7 +36,14 @@ namespace Alba
 			ALBA_LOG_INFO(AlbaTest, "-----------------------------------------------------");
 			{
 				ALBA_TEST(Test_CoreConsoleCommands());
-			}	
+			}
+
+			ALBA_LOG_INFO(AlbaTest, "-----------------------------------------------------");
+			ALBA_LOG_INFO(AlbaTest, "Test Core::Task");
+			ALBA_LOG_INFO(AlbaTest, "-----------------------------------------------------");
+			{
+				ALBA_TEST(Test_CoreTask());
+			}
 
 			ALBA_LOG_INFO(AlbaTest, "-----------------------------------------------------");
 			ALBA_LOG_INFO(AlbaTest, "Tests Passed");

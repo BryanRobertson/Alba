@@ -15,6 +15,9 @@
     <ClCompile Include="AlbaTest_Core_ConsoleCommands.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="AlbaTest_Core_Task.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlbaTest_Precompile.hpp" />
@@ -29,6 +32,9 @@
       <Filter>Tests</Filter>
     </ClInclude>
     <ClInclude Include="AlbaTest_Core_ConsoleCommands.hpp">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="AlbaTest_Core_Task.hpp">
       <Filter>Tests</Filter>
     </ClInclude>
   </ItemGroup>
