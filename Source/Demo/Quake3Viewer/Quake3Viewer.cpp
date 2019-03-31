@@ -6,7 +6,7 @@ namespace Alba
 {
 	namespace Quake3Viewer
 	{
-		ALBA_QUAKE3VIEWER_API void RegisterModules()
+		void RegisterModules()
 		{
 			Quake3ViewerModule::Register();
 		}

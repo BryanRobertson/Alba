@@ -343,6 +343,9 @@
     <ClInclude Include="Core_TupleUtils.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Core_ChronoLiterals.hpp">
+      <Filter>Time</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">

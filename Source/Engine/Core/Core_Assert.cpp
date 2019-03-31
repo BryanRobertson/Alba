@@ -11,7 +11,7 @@ namespace Alba
 		//-------------------------------------------------------------------------------------------------
 		// Global assert handler 
 		//-------------------------------------------------------------------------------------------------
-		ALBA_CORE_API AlbaAssertHandler theGlobalAssertHandler = &DefaultAssertHandler;
+		AlbaAssertHandler theGlobalAssertHandler = &DefaultAssertHandler;
 
 		//-------------------------------------------------------------------------------------------------
 		// Default assert handler

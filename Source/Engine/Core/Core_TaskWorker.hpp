@@ -23,7 +23,7 @@ namespace Alba
 				//=======================================================================================
 				// Public Constructors
 				//=======================================================================================
-				explicit TaskWorker(TaskThreadId anId, TaskPool& aTaskPool);
+				explicit TaskWorker(TaskThreadId anId);
 
 				TaskWorker(TaskWorker& aCopyFrom) = delete;
 				TaskWorker(TaskWorker&& aMoveFrom) = default;

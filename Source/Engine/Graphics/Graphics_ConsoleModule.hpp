@@ -18,7 +18,7 @@ namespace Alba
 		// Name	:	ConsoleModule
 		// Desc	:	Module that implements the logic side of a debug command console
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API ConsoleModule final : public Core::Module<ConsoleModule>
+		class ConsoleModule final : public Core::Module<ConsoleModule>
 		{
 			public:
 

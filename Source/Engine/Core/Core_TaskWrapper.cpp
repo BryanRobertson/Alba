@@ -1,12 +1,23 @@
 #include "Core_Precompile.hpp"
 #include "Core_TaskWrapper.hpp"
 #include "Core_Task.hpp"
+#include "Core_TaskSystem.hpp"
 
 namespace Alba
 {
 	namespace Core
 	{
-		uint TaskWrapper::val = 0;
+		/*static*/ uint32 TaskWrapper::ourTaskIdCounter = 0;
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		/*static*/ TaskId TaskWrapper::CreateTaskId()
+		{
+			const uint8 threadId = static_cast<uint8>(TaskSystem::GetCurrentThreadId().GetValue());
+			const uint32 id = (threadId << 24) | (++ourTaskIdCounter & 0xFFFFFF);
+
+			return TaskId(id);
+		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
@@ -14,7 +25,7 @@ namespace Alba
 		{
 			(void) aTaskFunction;
 
-			const TaskId id(++val);
+			const TaskId id = CreateTaskId();
 			return TaskWrapper{ id };
 		}
 

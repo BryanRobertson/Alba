@@ -1,5 +1,6 @@
 #include "Core_Precompile.hpp"
 #include "Core_TaskSystem.hpp"
+#include "Core_Memory.hpp"
 
 namespace Alba
 {
@@ -66,16 +67,25 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void TaskSystem::InitialiseInternal(uint /*aThreadCount*/)
+		void TaskSystem::InitialiseInternal(uint aThreadCount)
 		{
+			myTaskThreads.reserve(aThreadCount);
 
+			for (uint i = 0; i < aThreadCount; ++i)
+			{
+				TaskThreadId id{ static_cast<uint16>(i+1) };
+				myTaskThreads.emplace_back(ALBA_NEW(AllocationType::TaskSystem, "WorkerThread") TaskWorker{ id });
+			}
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		void TaskSystem::ShutdownInternal()
 		{
-
+			for (auto& taskWorker : myTaskThreads)
+			{
+				taskWorker->Join();
+			}
 		}
 
 		//-----------------------------------------------------------------------------------------

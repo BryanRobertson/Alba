@@ -1,6 +1,7 @@
 #include "Input_Precompile.hpp"
 #include "Input_Keyboard.hpp"
 #include "Core_Time.hpp"
+#include "Core_ChronoLiterals.hpp"
 
 namespace Alba
 {
@@ -33,14 +34,14 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		Core::DurationNanoSeconds Keyboard::GetKeyHeldDuration(Key aKey) const
 		{
-			using namespace chrono_literals;
+			using namespace ChronoLiterals;
 
 			if (auto itr = myKeyHeldDurations.find(aKey); itr != myKeyHeldDurations.end())
 			{
 				return itr->second;
 			}
 
-			return 0ms;
+			return 0_milliseconds;
 		}
 	}
 }

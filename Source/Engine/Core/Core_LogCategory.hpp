@@ -40,7 +40,7 @@ namespace Alba
 		// Author    : Bryan Robertson
 		// Date      : 2016/12/22
 		//-------------------------------------------------------------------------------------------------
-		class ALBA_CORE_API LogCategory
+		class LogCategory
 		{
 			public:
 

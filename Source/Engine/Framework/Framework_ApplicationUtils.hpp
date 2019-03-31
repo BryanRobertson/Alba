@@ -23,7 +23,7 @@ namespace Alba
 
 			//-----------------------------------------------------------------------------------------
 			//-----------------------------------------------------------------------------------------
-			struct ALBA_FRAMEWORK_API InitParams
+			struct InitParams
 			{
 				// NameId of the main module of the application
 				Core::NoCaseStringHash32			myMainApplicationModuleNameId;
@@ -38,9 +38,9 @@ namespace Alba
 			//-----------------------------------------------------------------------------------------
 			//-----------------------------------------------------------------------------------------
 			#if defined(ALBA_PLATFORM_WINDOWS)
-				extern ALBA_FRAMEWORK_API uint32 RunApplication(InitParams&& anInitParams, HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int /*nCmdShow*/);
+				extern uint32 RunApplication(InitParams&& anInitParams, HINSTANCE /*hInstance*/, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int /*nCmdShow*/);
 			#else
-				extern ALBA_FRAMEWORK_API uint32 RunApplication(InitParams&& anInitParams, int argc, char** argv);
+				extern uint32 RunApplication(InitParams&& anInitParams, int argc, char** argv);
 			#endif
 		}
 	}

@@ -16,7 +16,7 @@ namespace Alba
 		// Desc	:	Module that allows the application windows to be accessed from other parts
 		//			of the application
 		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API WindowModule final : public Core::Module<WindowModule>
+		class WindowModule final : public Core::Module<WindowModule>
 		{
 			public:
 

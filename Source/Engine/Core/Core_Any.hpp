@@ -21,7 +21,7 @@ namespace Alba
 		// Name	:	Any
 		// Desc	:	Class that can store an object of any type
 		//-----------------------------------------------------------------------------------------------------
-		class ALBA_CORE_API Any final
+		class Any final
 		{
 			public:
 

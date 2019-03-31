@@ -18,7 +18,6 @@ namespace Alba
 	// so it can be easily switched out for the EASTL version in future if need be
 	//-------------------------------------------------------------------------------------------------
 	namespace chrono = std::chrono;
-	namespace chrono_literals = std::chrono_literals;
 
 	namespace Core
 	{		
@@ -39,7 +38,7 @@ namespace Alba
 		// Desc	:	Time related functions
 		//			e.g. Getting current game time, getting current wall-clock time, etc
 		//-------------------------------------------------------------------------------------------------
-		class ALBA_CORE_API Time final
+		class Time final
 		{
 			public:
 
@@ -89,8 +88,8 @@ namespace Alba
 				TimePoint					mySystemTime;
 				TimePoint					myGameTime;
 
-				DurationNanoSeconds		mySystemTimeDelta;
-				DurationNanoSeconds		myGameTimeDelta;
+				DurationNanoSeconds			mySystemTimeDelta;
+				DurationNanoSeconds			myGameTimeDelta;
 
 				FrameIndex					myFrameIndex;
 		};

@@ -16,7 +16,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API ShaderRepository final : public Core::ResourceRepository<Shader>
+		class ShaderRepository final : public Core::ResourceRepository<Shader>
 		{
 			typedef Core::ResourceRepository<Shader> Super;
 

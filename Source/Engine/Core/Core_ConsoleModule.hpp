@@ -12,7 +12,7 @@ namespace Alba
 		// Name	:	ConsoleModule
 		// Desc	:	Module that implements the logic side of a debug command console
 		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API ConsoleModule final : public Module<ConsoleModule>
+		class ConsoleModule final : public Module<ConsoleModule>
 		{
 			public:
 

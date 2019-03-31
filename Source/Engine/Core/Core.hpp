@@ -17,6 +17,6 @@ namespace Alba
 {
 	namespace Core
 	{
-		void ALBA_CORE_API RegisterModules();
+		void RegisterModules();
 	}
 }

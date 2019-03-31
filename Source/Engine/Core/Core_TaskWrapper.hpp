@@ -23,15 +23,12 @@ namespace Alba
 			// Create
 			//-------------------------------------------------------------------------------------------
 			TaskWrapper CreateDependentTask(TaskFunction* aTaskFunction);
-			static uint val; // REMOVE_ME
 
 			template <typename TFunctionType, class = enable_if_t<IsTaskFunction_V<TFunctionType>>>
-			TaskWrapper CreateDependentTask(TFunctionType&& aTask)
+			TaskWrapper CreateDependentTask(TFunctionType&& /*aTask*/)
 			{
-				(void) aTask;
-				const TaskId id(++val);
-
-				return TaskWrapper{id};
+				const TaskId id = CreateTaskId();
+				return TaskWrapper{ id };
 			}
 
 			template <typename... TArgs>
@@ -59,6 +56,13 @@ namespace Alba
 			// Public Data
 			//===========================================================================================
 			TaskId myTaskId;
+
+			private:
+
+				//---------------------------------------------------------------------------------------
+				//---------------------------------------------------------------------------------------
+				static TaskId CreateTaskId();
+				static uint32 ourTaskIdCounter;
 		};
 
 		namespace Internal
@@ -76,6 +80,8 @@ namespace Alba
 	//===================================================================================================
 	extern Core::TaskWrapper CreateTask(Core::TaskFunction* aTaskFunction);
 
+	//---------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------
 	template <typename TFunctionType, typename=enable_if_t<is_invocable_v<TFunctionType, Core::TaskFunction>>>
 	Core::TaskWrapper CreateTask(const TFunctionType& aTask)
 	{

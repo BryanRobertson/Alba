@@ -34,7 +34,7 @@ namespace Alba
 		// Name	:	Texture
 		// Desc	:	Represents a texture
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API Texture final : public Core::Resource<Texture>
+		class Texture final : public Core::Resource<Texture>
 		{
 			typedef Core::Resource<Texture> Super;
 

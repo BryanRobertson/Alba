@@ -27,7 +27,7 @@ namespace Alba
 		// Desc :	Standard Quake/style command console
 		//			Executes commands and registers config variables that can be modified at runtime
 		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API Console final
+		class Console final
 		{
 			public:
 

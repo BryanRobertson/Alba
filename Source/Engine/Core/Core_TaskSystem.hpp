@@ -57,7 +57,7 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				Vector<TaskWorker>	myTaskThreads;
+				Vector<UniquePtr<TaskWorker>>	myTaskThreads;
 		};
 
 		#if 0

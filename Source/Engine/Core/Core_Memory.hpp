@@ -25,10 +25,11 @@ namespace Alba
 			Unknown				= 0,
 			EASTLContainer		= 1,
 			CoreDebug			= 2,
-			Module				= 3,
-			Window				= 4,
-			Framework			= 5,
-			Renderer			= 6,
+			TaskSystem			= 3,
+			Module				= 4,
+			Window				= 6,
+			Framework			= 7,
+			Renderer			= 8,
 			
 			Count
 		};
@@ -65,16 +66,16 @@ namespace Alba
 		using TAllocType = uint32;
 
 		#if defined(ALBA_RETAIL_BUILD)
-			ALBA_CORE_API void* Malloc(size_t size, size_t alignment, size_t alignmentOffset, TAllocType allocType);
-			ALBA_CORE_API void* Realloc(void* pointer, size_t size);
+			void* Malloc(size_t size, size_t alignment, size_t alignmentOffset, TAllocType allocType);
+			void* Realloc(void* pointer, size_t size);
 		#else
-			ALBA_CORE_API void* Malloc(size_t size, size_t alignment, size_t alignmentOffset, TAllocType allocType, const char* description, const char* file, uint32 line);
-			ALBA_CORE_API void* Realloc(void* pointer, size_t size, const char* file, uint32 line);
+			void* Malloc(size_t size, size_t alignment, size_t alignmentOffset, TAllocType allocType, const char* description, const char* file, uint32 line);
+			void* Realloc(void* pointer, size_t size, const char* file, uint32 line);
 		#endif
 		
-		ALBA_CORE_API void  Free(void* pointer);
+		void  Free(void* pointer);
 
-		struct ALBA_CORE_API AllocatorHelper
+		struct AllocatorHelper
 		{
 			template <typename T>
 			AllocatorHelper& Delete(T* ptr)

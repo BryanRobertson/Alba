@@ -104,11 +104,11 @@
 		{
 			namespace ProfileInternal
 			{
-				extern ALBA_CORE_API bool IsProfilerEnabled();
-				extern ALBA_CORE_API void InitProfiling();
-				extern ALBA_CORE_API void ShutDownProfiling();
+				extern bool IsProfilerEnabled();
+				extern void InitProfiling();
+				extern void ShutDownProfiling();
 
-				ALBA_CORE_API extern uint32 theProfilerFrameIndex;
+				extern uint32 theProfilerFrameIndex;
 			}
 		}
 	}

@@ -35,7 +35,7 @@ namespace Alba
 		// Name	:	Shader
 		// Desc	:	Represents a shader program (vertex shader, pixel shader, geometry shader, etc)
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API Shader final : public Core::Resource<Shader>
+		class Shader final : public Core::Resource<Shader>
 		{
 			typedef Core::Resource<Shader> Super;
 

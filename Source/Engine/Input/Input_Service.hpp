@@ -39,7 +39,7 @@ namespace Alba
 		// Name	:	InputService
 		// Desc	:	Provides access to input devices, and updates their state every frame
 		//-----------------------------------------------------------------------------------------
-		class ALBA_INPUT_API InputService final
+		class InputService final
 		{
 			public:
 
