@@ -47,7 +47,7 @@ namespace Alba
 			// Child task IDs
 			//-----------------------------------------------------------------
 			Array<TaskId, ourChildTaskCount> myChildTaskIds[ourChildTaskCount];
-			std::atomic<uint32>		myChildTaskCount;
+			uint32							 myChildTaskCount;
 		};
 	}
 }

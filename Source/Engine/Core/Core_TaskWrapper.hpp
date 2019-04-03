@@ -4,6 +4,7 @@
 #include "Core_TaskIdTypes.hpp"
 #include "Core_TypeTraits.hpp"
 #include "Core_TaskTypes.hpp"
+#include "Core_Task.hpp"
 #include "Core_TupleUtils.hpp"
 
 namespace Alba
@@ -27,7 +28,7 @@ namespace Alba
 			template <typename TFunctionType, class = enable_if_t<IsTaskFunction_V<TFunctionType>>>
 			TaskWrapper CreateDependentTask(TFunctionType&& /*aTask*/)
 			{
-				const TaskId id = CreateTaskId();
+				const TaskId id;
 				return TaskWrapper{ id };
 			}
 
@@ -55,24 +56,9 @@ namespace Alba
 			//===========================================================================================
 			// Public Data
 			//===========================================================================================
-			TaskId myTaskId;
-
-			private:
-
-				//---------------------------------------------------------------------------------------
-				//---------------------------------------------------------------------------------------
-				static TaskId CreateTaskId();
-				static uint32 ourTaskIdCounter;
+			TaskId	myTaskId;
+			Task*	myTask = nullptr;
 		};
-
-		namespace Internal
-		{
-			//-------------------------------------------------------------------------------------------
-			// Internal Task-Creation function
-			//-------------------------------------------------------------------------------------------
-			extern Core::Task* CreateTask(Core::TaskFunction* aTaskFunction);
-			extern Core::Task* CreateTask(Core::TaskFunction* aTaskFunction, TaskId aParentTask);
-		}
 	}
 
 	//===================================================================================================
@@ -85,6 +71,16 @@ namespace Alba
 	template <typename TFunctionType, typename=enable_if_t<is_invocable_v<TFunctionType, Core::TaskFunction>>>
 	Core::TaskWrapper CreateTask(const TFunctionType& aTask)
 	{
+		auto taskFunc = [](const Core::TaskExecutionContext& aContext)
+		{
+			// Call function
+			TFunctionType* func = reinterpret_cast<TFunctionType*>(&aContext.myTask.myTaskData.mCharData);
+			(func)(aContext);
+
+			// Destruct task data
+			func->~TFunctionType();
+		};
+
 		return Core::TaskWrapper{};
 	}
 }

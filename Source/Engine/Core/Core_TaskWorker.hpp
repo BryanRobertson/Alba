@@ -20,21 +20,28 @@ namespace Alba
 		{
 			public:
 
+				friend class TaskSystem;
+
 				//=======================================================================================
 				// Public Constructors
 				//=======================================================================================
-				explicit TaskWorker(TaskThreadId anId);
+				explicit TaskWorker();
 
-				TaskWorker(TaskWorker& aCopyFrom) = delete;
-				TaskWorker(TaskWorker&& aMoveFrom) = default;
+				TaskWorker(const TaskWorker& aCopyFrom) = delete;
+				TaskWorker(TaskWorker&& aMoveFrom) = delete;
 
 				//=======================================================================================
 				// Public Methods
 				//=======================================================================================
 				ALBA_FORCEINLINE TaskThreadId GetId() const;
 
+				void			Init(TaskThreadId aTaskThreadId);
+
 				void			Run();
 				int				Join();
+
+				TaskWorker& operator=(const TaskWorker&) = delete;
+				TaskWorker& operator=(TaskWorker&&) = delete;
 
 			private:
 

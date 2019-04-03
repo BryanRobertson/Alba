@@ -1,35 +1,29 @@
-#pragma once
-
-#include "Core_TaskIdTypes.hpp"
-#include "Core_TypeTraits.hpp"
+#include "Core_Precompile.hpp"
+#include "Core_TaskPool.hpp"
 
 namespace Alba
 {
 	namespace Core
 	{
-		struct Task;
-
 		//-----------------------------------------------------------------------------------------
-		// Name	:	TaskExecutionContext
-		// Desc :	Input Data that's passed to a task execution function
 		//-----------------------------------------------------------------------------------------
-		struct TaskExecutionContext
+		TaskPool::TaskPool()
 		{
-			Task&			myTask;
-			TaskThreadId	myExecutionThreadId;
-		};
 
-		//-----------------------------------------------------------------------------------------
-		// Task function
-		//-----------------------------------------------------------------------------------------
-		using TaskFunction = void(const TaskExecutionContext&);
+		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		template <typename TFunc>
-		using IsTaskFunction = is_invocable<TFunc, const TaskExecutionContext&>;
+		TaskPool::~TaskPool()
+		{
+			
+		}
 
-		template <typename TFunc>
-		static constexpr bool IsTaskFunction_V = IsTaskFunction<TFunc>::value;
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		void TaskPool::Init(TaskThreadId anId)
+		{
+			myThreadId = anId;
+		}
 	}
 }
