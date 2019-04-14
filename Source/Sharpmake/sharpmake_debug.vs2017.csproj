@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <PlatformTarget Condition=" '$(Platform)' == '' ">AnyCPU</PlatformTarget>
+    <ProjectGuid>{80E33F98-2022-1164-9379-5F92E85987BB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>sharpmake_debug</RootNamespace>
+    <AssemblyName>sharpmake_debug</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>output\anycpu\debug</OutputPath>
+    <IntermediateOutputPath>obj\anycpu\debug</IntermediateOutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>5</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Sharpmake">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>SharpmakeExe\Sharpmake.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sharpmake.Generators">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>SharpmakeExe\Sharpmake.Generators.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Alba.Application.GravityDemoExe.sharpmake.cs" />
+    <Compile Include="Alba.Application.Quake3ViewerExe.sharpmake.cs" />
+    <Compile Include="Alba.Base.ExecutableProject.sharpmake.cs" />
+    <Compile Include="Alba.Base.LibraryProject.sharpmake.cs" />
+    <Compile Include="Alba.Base.Project.sharpmake.cs" />
+    <Compile Include="Alba.Common.Settings.sharpmake.cs" />
+    <Compile Include="Alba.Demo.Gravity.sharpmake.cs" />
+    <Compile Include="Alba.Demo.Quake3Viewer.sharpmake.cs" />
+    <Compile Include="Alba.Engine.Core.sharpmake.cs" />
+    <Compile Include="Alba.Engine.Framework.sharpmake.cs" />
+    <Compile Include="Alba.Engine.Graphics.sharpmake.cs" />
+    <Compile Include="Alba.Engine.Input.sharpmake.cs" />
+    <Compile Include="Alba.Engine.Math.sharpmake.cs" />
+    <Compile Include="Alba.Solution.sharpmake.cs" />
+    <Compile Include="Alba.Tests.AlbaTest.sharpmake.cs" />
+    <Compile Include="Alba.Tests.AlbaTestExe.sharpmake.cs" />
+    <Compile Include="External.EASTL.sharpmake.cs" />
+    <Compile Include="External.ProjectBase.sharpmake.cs" />
+    <Compile Include="External.Solution.sharpmake.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

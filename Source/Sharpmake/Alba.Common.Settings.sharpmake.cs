@@ -53,7 +53,7 @@ namespace Alba
         {
             get
             {
-                return Options.Vc.General.WindowsTargetPlatformVersion.v10_0_15063_0;
+                return Options.Vc.General.WindowsTargetPlatformVersion.v10_0_17763_0;
             }
         }
     }
