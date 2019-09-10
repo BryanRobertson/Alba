@@ -46,7 +46,7 @@ namespace Alba
 				//================================================================================
 				void				BeginFrame();
 				void				EndFrame();
-				//Task*				AllocateTask();
+				Task*				AllocateTask();
 
 			private:
 

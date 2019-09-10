@@ -3,6 +3,7 @@
 #include "Core.hpp"
 #include "Core_TaskTypes.hpp"
 #include "Core_TaskIdTypes.hpp"
+#include "Core_Task.hpp"
 
 namespace Alba
 {
@@ -33,6 +34,8 @@ namespace Alba
 				TaskPool& operator=(TaskPool&&) = delete;
 
 				void Init(TaskThreadId aThreadId);
+
+				Task* AllocateTask();
 
 			private:
 
