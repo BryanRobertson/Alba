@@ -29,6 +29,7 @@ namespace External
         {
             conf.SolutionFolder = "External Libraries";
             conf.Options.Add(Alba.Settings.WindowsTargetPlatformVersion);
+            conf.Options.Add(Alba.Settings.Toolset);
         }
     }
 
