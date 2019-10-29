@@ -84,6 +84,12 @@
     <ClCompile Include="Core_TaskPool.cpp">
       <Filter>Task</Filter>
     </ClCompile>
+    <ClCompile Include="Core_Thread.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="Core_ThreadId.cpp">
+      <Filter>Threading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.hpp" />
@@ -348,6 +354,21 @@
     </ClInclude>
     <ClInclude Include="Core_ChronoLiterals.hpp">
       <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_TaskPtr.hpp">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_SpinLockMutex.hpp">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_ThreadId.hpp">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_Atomic.hpp">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="Core_ReadWriteSpinLockMutex.hpp">
+      <Filter>Threading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

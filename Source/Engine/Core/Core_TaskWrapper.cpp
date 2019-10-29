@@ -26,8 +26,8 @@ namespace Alba
 		{
 			(void) aTaskFunction;
 
-			const TaskId id = CreateTaskId();
-			return TaskWrapper{ id };
+			//const TaskId id = CreateTaskId();
+			return TaskWrapper(); // { id };
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -49,6 +49,7 @@ namespace Alba
 	//---------------------------------------------------------------------------------------------
 	Core::TaskWrapper CreateTask(Core::TaskFunction* /*aTaskFunction*/)
 	{
+		const Core::TaskId id = Core::CreateTaskId();
 		return Core::TaskWrapper{};
 	}
 }

@@ -60,9 +60,14 @@ namespace Alba
 				&TaskFunc1, &TaskFunc2, &TaskFunc3
 			);
 
-			auto test = std::get<0>(result2);
-			auto test1 = std::get<1>(result2);
-			auto test2 = std::get<2>(result2);
+			[[maybe_unused]]
+			auto& test = std::get<0>(result2);
+			
+			[[maybe_unused]]
+			auto& test1 = std::get<1>(result2);
+			
+			[[maybe_unused]]
+			auto& test2 = std::get<2>(result2);
 
 			//-------------------------------------------------------------------------------------
 			//-------------------------------------------------------------------------------------

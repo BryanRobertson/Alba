@@ -29,7 +29,7 @@ namespace Alba
 			//-----------------------------------------------------------------
 			// Number of tasks still to run (including ourselves)
 			//-----------------------------------------------------------------
-			std::atomic<uint32>		myOpenTasks	= 1;
+			Atomic<uint32>			myOpenTasks	= 1;
 
 			//-----------------------------------------------------------------
 			// Storage for the task

@@ -9,6 +9,7 @@
 
 #include "Core.hpp"
 #include <EASTL/shared_ptr.h>
+#include <memory>
 
 namespace Alba
 {

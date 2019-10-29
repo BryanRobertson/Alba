@@ -55,6 +55,13 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
+		TaskThreadId GetMainThreadId()
+		{
+			return theMainThreadId;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		TaskSystem::TaskSystem()
 		{
 
@@ -77,7 +84,7 @@ namespace Alba
 		void TaskSystem::InitialiseInternal(uint aThreadCount)
 		{
 			ALBA_LOG_INFO(Task, "--------------------------------------------------");
-			ALBA_LOG_INFO(Task, "Initialising Task System with %u worker threads...");
+			ALBA_LOG_INFO(Task, "Initialising Task System with %u worker threads...", aThreadCount);
 			ALBA_LOG_INFO(Task, "--------------------------------------------------");
 
 			ALBA_ASSERT(myTaskPools == nullptr);
@@ -131,6 +138,23 @@ namespace Alba
 			}			
 
 			myThreadCount = 0;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		TaskPool& TaskSystem::GetCurrentThreadTaskPool()
+		{
+			return GetTaskPool(GetCurrentThreadId());
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		TaskPool& TaskSystem::GetTaskPool(TaskThreadId aTaskThreadId)
+		{
+			const uint16 index = aTaskThreadId.GetValue();
+			ALBA_ASSERT(index < TaskSystem::GetMutable().myThreadCount, "Thread index %u out of range", static_cast<uint>(index));
+
+			return TaskSystem::GetMutable().myTaskPools[aTaskThreadId.GetValue()];
 		}
 
 		//-----------------------------------------------------------------------------------------

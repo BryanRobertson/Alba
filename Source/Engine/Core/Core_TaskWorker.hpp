@@ -2,6 +2,7 @@
 
 #include "Core.hpp"
 #include "Core_Thread.hpp"
+#include "Core_Atomic.hpp"
 #include "Core_TaskIdTypes.hpp"
 
 #include <thread>
@@ -54,7 +55,7 @@ namespace Alba
 				//=======================================================================================
 				TaskThreadId		myThreadId			= TaskThreadId::InvalidId;
 				TaskPool*			myThreadTaskPool	= nullptr;
-				std::atomic<bool>	myQuit				= false;
+				Atomic<bool>		myQuit;
 
 				Thread				myThread;
 		};

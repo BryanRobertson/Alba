@@ -5,6 +5,7 @@
 #include "Core_TypeTraits.hpp"
 #include "Core_TaskTypes.hpp"
 #include "Core_Task.hpp"
+#include "Core_TaskPtr.hpp"
 #include "Core_TupleUtils.hpp"
 
 namespace Alba
@@ -14,51 +15,84 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------------
 		// Name	:	TaskWrapper
 		//-----------------------------------------------------------------------------------------------
-		struct TaskWrapper
+		class TaskWrapper
 		{
-			//===========================================================================================
-			// Public Methods
-			//===========================================================================================
+			public:
+
+				//===========================================================================================
+				// Public Constructors
+				//===========================================================================================
+				TaskWrapper() = default;
+				TaskWrapper(const TaskWrapper&) = delete;
+				TaskWrapper(TaskWrapper&&) = default;
+
+				//===========================================================================================
+				// Public Methods
+				//===========================================================================================
+				TaskWrapper& operator=(const TaskWrapper&) = delete;
+				TaskWrapper& operator=(TaskWrapper&&) = default;
 			
-			//-------------------------------------------------------------------------------------------
-			// Create
-			//-------------------------------------------------------------------------------------------
-			TaskWrapper CreateDependentTask(TaskFunction* aTaskFunction);
+				//-------------------------------------------------------------------------------------------
+				// Create
+				//-------------------------------------------------------------------------------------------
+				TaskWrapper CreateDependentTask(TaskFunction* aTaskFunction);
 
-			template <typename TFunctionType, class = enable_if_t<IsTaskFunction_V<TFunctionType>>>
-			TaskWrapper CreateDependentTask(TFunctionType&& /*aTask*/)
-			{
-				const TaskId id;
-				return TaskWrapper{ id };
-			}
-
-			template <typename... TArgs>
-			auto CreateDependentTasks(TArgs&&... someTaskFunctions)
-			{
-				auto func = [this](auto&& anArg)
+				template <typename TFunctionType, class = enable_if_t<IsTaskFunction_V<TFunctionType>>>
+				TaskWrapper CreateDependentTask(TFunctionType&& /*aTask*/)
 				{
-					return CreateDependentTask(std::forward<decltype(anArg)>(anArg));
-				};
+					const TaskId id;
+					return TaskWrapper();//{ id };
+				}
 
-				return Invoke_ForEach(func, std::forward<TArgs>(someTaskFunctions)...);
-			}
+				template <typename... TArgs>
+				auto CreateDependentTasks(TArgs&&... someTaskFunctions)
+				{
+					static_assert
+					(
+						sizeof...(someTaskFunctions) <= Task::ourChildTaskCount,
+						"Exceeding the max number of child tasks is not yet supported"
+					);
 
-			//-------------------------------------------------------------------------------------------
-			// Wait
-			//-------------------------------------------------------------------------------------------
-			void WaitForAll();
+					//ALBA_ASSERT()
 
-			//-------------------------------------------------------------------------------------------
-			// Queue
-			//-------------------------------------------------------------------------------------------
-			void QueueTask();
+					auto func = [this](auto&& anArg)
+					{
+						return CreateDependentTask(std::forward<decltype(anArg)>(anArg));
+					};
 
-			//===========================================================================================
-			// Public Data
-			//===========================================================================================
-			TaskId	myTaskId;
-			Task*	myTask = nullptr;
+					return Invoke_ForEach(func, std::forward<TArgs>(someTaskFunctions)...);
+				}
+
+				//-------------------------------------------------------------------------------------------
+				// Wait
+				//-------------------------------------------------------------------------------------------
+				void WaitForAll();
+
+				//-------------------------------------------------------------------------------------------
+				// Queue
+				//-------------------------------------------------------------------------------------------
+				void QueueTask();
+
+				//-------------------------------------------------------------------------------------------
+				// Accessors
+				//-------------------------------------------------------------------------------------------
+				inline TaskId GetTaskId() const;
+
+			private:
+
+				//===========================================================================================
+				// Private Data
+				//===========================================================================================
+				TaskPtr	myTask;
+				TaskId	myTaskId;
 		};
+
+		//---------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------------------------------
+		TaskId TaskWrapper::GetTaskId() const
+		{
+			return myTaskId;
+		}
 	}
 
 	//===================================================================================================
@@ -71,6 +105,9 @@ namespace Alba
 	template <typename TFunctionType, typename=enable_if_t<is_invocable_v<TFunctionType, Core::TaskFunction>>>
 	Core::TaskWrapper CreateTask(const TFunctionType& aTask)
 	{
+		// TODO: Probably need to account for alignment here
+		static_assert(sizeof(aTask) < Task::ourStorageSize, "Functor too large to store in a Task");
+
 		auto taskFunc = [](const Core::TaskExecutionContext& aContext)
 		{
 			// Call function
@@ -81,6 +118,6 @@ namespace Alba
 			func->~TFunctionType();
 		};
 
-		return Core::TaskWrapper{};
+		return CreateTask(static_cast<Core::TaskFunction*>(&taskFunc));
 	}
 }

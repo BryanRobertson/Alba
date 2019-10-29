@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.hpp"
+#include "Core_AssertMutex.hpp"
 
 namespace Alba
 {
@@ -56,8 +57,12 @@ namespace Alba
 
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------
-				void* Allocate()
+				ALBA_FORCEINLINE void* Allocate()
 				{
+					#if !defined(ALBA_RETAIL_BUILD)
+						ScopedAssertMutexLock lock(myAssertMutex);
+					#endif
+
 					void* next = myNext;
 					myNext = next ? next->myNext : nullptr;
 
@@ -70,6 +75,7 @@ namespace Alba
 				{
 					#if !defined(ALBA_RETAIL_BUILD)
 						ALBA_ASSERT(aPtr >= myStart && aPtr < myEnd);
+						ScopedAssertMutexLock lock(myAssertMutex);
 					#endif
 
 					FreeList* asFreeList;
@@ -94,6 +100,8 @@ namespace Alba
 					};
 
 					DebugData myDebugData;
+
+					AssertMutex myAssertMutex;
 				#endif
 		};
 	}
