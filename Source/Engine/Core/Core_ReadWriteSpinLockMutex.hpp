@@ -48,6 +48,12 @@ namespace Alba
 			private:
 
 				//=======================================================================================
+				// Private Static Data
+				//=======================================================================================
+				static constexpr uint32 ourReaderMask = 0x7fffff;
+				static constexpr uint32 ourWriterValue = ourReaderMask + 1;
+
+				//=======================================================================================
 				// Private Data
 				//=======================================================================================
 				Atomic<int32>	myLockValue;
@@ -59,10 +65,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------------
 		void ReadWriteSpinLockMutex::lock()
 		{
-			for (;;)
-			{
-				
-			}
+			
 		}
 
 		//-----------------------------------------------------------------------------------------------
@@ -82,21 +85,52 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------------
 		void ReadWriteSpinLockMutex::lock_shared()
 		{
+			ALBA_PROFILE_SCOPED(ReadWriteSpinLockMutex_LockRead);
 
+			for (;;)
+			{
+				if ((myLockValue.load(std::memory_order_relaxed) & ~ourReaderMask) != 0)
+				{
+					YieldProcessor();
+					continue;
+				}
+
+				// Can get reader lock as long as none of the writer bits are set
+				if ((myLockValue.fetch_add(1, std::memory_order_acq_rel) & ~ourReaderMask) != 0)
+				{
+					myLockValue.fetch_sub(1, std::memory_order_acq_rel);
+					continue;
+				}
+
+				// Gained lock successfully
+				break;
+			}
 		}
 
 		//-----------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------
 		bool ReadWriteSpinLockMutex::try_lock_shared()
 		{
+			ALBA_PROFILE_SCOPED(ReadWriteSpinLockMutex_LockRead);
 
+			if ((myLockValue.fetch_add(1, std::memory_order_acq_rel) & ourReaderMask) != 0)
+			{
+				myLockValue.fetch_sub(1, std::memory_order_acq_rel);
+				return false;
+			}
+
+			// Gained lock successfully
+			return true;
 		}
 
 		//-----------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------
 		void ReadWriteSpinLockMutex::unlock_shared()
 		{
+			ALBA_ASSERT(myLockValue.load(std::memory_order_relaxed) > 0);
 
+			// Release the lock
+			myLockValue.fetch_sub(1, std::memory_order_acq_rel);
 		}
 	}
 }

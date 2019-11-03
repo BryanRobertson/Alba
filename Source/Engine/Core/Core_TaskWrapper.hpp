@@ -12,6 +12,8 @@ namespace Alba
 {
 	namespace Core
 	{
+		class TaskPool;
+
 		//-----------------------------------------------------------------------------------------------
 		// Name	:	TaskWrapper
 		//-----------------------------------------------------------------------------------------------
@@ -20,30 +22,39 @@ namespace Alba
 			public:
 
 				//===========================================================================================
-				// Public Constructors
+				// Public Constructors/Destructors
 				//===========================================================================================
 				TaskWrapper() = default;
 				TaskWrapper(const TaskWrapper&) = delete;
 				TaskWrapper(TaskWrapper&&) = default;
+
+				explicit TaskWrapper(Task* aTask);
+
+				~TaskWrapper();
 
 				//===========================================================================================
 				// Public Methods
 				//===========================================================================================
 				TaskWrapper& operator=(const TaskWrapper&) = delete;
 				TaskWrapper& operator=(TaskWrapper&&) = default;
+
+				bool IsCompleted() const;
 			
 				//-------------------------------------------------------------------------------------------
 				// Create
 				//-------------------------------------------------------------------------------------------
+
+				//-------------------------------------------------------------------------------------------
+				//-------------------------------------------------------------------------------------------
 				TaskWrapper CreateDependentTask(TaskFunction* aTaskFunction);
 
+				//-------------------------------------------------------------------------------------------
+				//-------------------------------------------------------------------------------------------
 				template <typename TFunctionType, class = enable_if_t<IsTaskFunction_V<TFunctionType>>>
-				TaskWrapper CreateDependentTask(TFunctionType&& /*aTask*/)
-				{
-					const TaskId id;
-					return TaskWrapper();//{ id };
-				}
+				inline TaskWrapper CreateDependentTask(TFunctionType&& aTask);
 
+				//-------------------------------------------------------------------------------------------
+				//-------------------------------------------------------------------------------------------
 				template <typename... TArgs>
 				auto CreateDependentTasks(TArgs&&... someTaskFunctions)
 				{
@@ -53,14 +64,27 @@ namespace Alba
 						"Exceeding the max number of child tasks is not yet supported"
 					);
 
-					//ALBA_ASSERT()
-
 					auto func = [this](auto&& anArg)
 					{
 						return CreateDependentTask(std::forward<decltype(anArg)>(anArg));
 					};
 
 					return Invoke_ForEach(func, std::forward<TArgs>(someTaskFunctions)...);
+				}
+
+				//-------------------------------------------------------------------------------------------
+				//-------------------------------------------------------------------------------------------
+				TaskWrapper Then(TaskFunction* /*aTaskFunction*/)
+				{
+					return TaskWrapper();
+				}
+
+				//-------------------------------------------------------------------------------------------
+				//-------------------------------------------------------------------------------------------
+				template <typename TFunctionType, class = enable_if_t<IsTaskFunction_V<TFunctionType>>>
+				TaskWrapper Then(TaskFunction* /*aTaskFunction*/)
+				{
+					return TaskWrapper();
 				}
 
 				//-------------------------------------------------------------------------------------------
@@ -81,10 +105,15 @@ namespace Alba
 			private:
 
 				//===========================================================================================
+				// Private Methods
+				//===========================================================================================
+				TaskPool& GetTaskPoolMutable() const;
+
+				//===========================================================================================
 				// Private Data
 				//===========================================================================================
-				TaskPtr	myTask;
-				TaskId	myTaskId;
+				Task*	myTask		= nullptr;
+				TaskId	myTaskId	= TaskId::InvalidId;
 		};
 
 		//---------------------------------------------------------------------------------------------
@@ -103,9 +132,8 @@ namespace Alba
 	//---------------------------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------
 	template <typename TFunctionType, typename=enable_if_t<is_invocable_v<TFunctionType, Core::TaskFunction>>>
-	Core::TaskWrapper CreateTask(const TFunctionType& aTask)
+	Core::TaskWrapper CreateTask(TFunctionType&& aTask)
 	{
-		// TODO: Probably need to account for alignment here
 		static_assert(sizeof(aTask) < Task::ourStorageSize, "Functor too large to store in a Task");
 
 		auto taskFunc = [](const Core::TaskExecutionContext& aContext)
@@ -118,6 +146,38 @@ namespace Alba
 			func->~TFunctionType();
 		};
 
-		return CreateTask(static_cast<Core::TaskFunction*>(&taskFunc));
+		Core::TaskWrapper taskWrapper = CreateTask(static_cast<Core::TaskFunction*>(&taskFunc));
+		if (taskWrapper.myTask)
+		{
+			new (&taskWrapper.myTask->myTaskData.mCharData)TFunctionType(std::move(aTask));
+		}
+
+		return taskWrapper;
+	}
+
+	//---------------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------
+	template <typename TFunctionType, typename>
+	inline Core::TaskWrapper Core::TaskWrapper::CreateDependentTask(TFunctionType&& aTask)
+	{
+		static_assert(sizeof(aTask) < Task::ourStorageSize, "Functor too large to store in a Task");
+
+		auto taskFunc = [](const Core::TaskExecutionContext& aContext)
+		{
+			// Call function
+			TFunctionType* func = reinterpret_cast<TFunctionType*>(&aContext.myTask.myTaskData.mCharData);
+			(func)(aContext);
+
+			// Destruct task data
+			func->~TFunctionType();
+		};
+
+		Core::TaskWrapper taskWrapper = CreateDependentTask(static_cast<Core::TaskFunction*>(&taskFunc));
+		if (taskWrapper.myTask)
+		{
+			new (&taskWrapper.myTask->myTaskData.mCharData)TFunctionType(std::move(aTask));
+		}
+
+		return taskWrapper;
 	}
 }

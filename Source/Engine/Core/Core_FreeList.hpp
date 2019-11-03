@@ -20,9 +20,20 @@ namespace Alba
 				//=================================================================================
 				// Public Constructors
 				//=================================================================================
-				FreeList(void* aStart, void* anEnd)
+				FreeList()
+					: myNext(nullptr)
 				{
+
+				}
+
+				//=================================================================================
+				// Public Methods
+				//=================================================================================
+				void Init(void* aStart, void* anEnd)
+				{
+					ALBA_ASSERT(myNext == nullptr);
 					ALBA_ASSERT(aStart < anEnd);
+
 					const size_t count = (anEnd - aStart) / TElementSize;
 
 					ALBA_ASSERT(count > 0);
@@ -34,7 +45,7 @@ namespace Alba
 					myNext = static_cast<FreeList*>(aStart);
 					FreeList* current = myNext;
 
-					for (size_t i = 0; i < count-1; ++i)
+					for (size_t i = 0; i < count - 1; ++i)
 					{
 						// Convert to byte so that we can advance the pointer
 						// by the element size
@@ -51,9 +62,6 @@ namespace Alba
 					current->myNext = nullptr;
 				}
 
-				//=================================================================================
-				// Public Methods
-				//=================================================================================
 
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------

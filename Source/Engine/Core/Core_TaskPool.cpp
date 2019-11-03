@@ -21,23 +21,33 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void TaskPool::Init(TaskThreadId anId)
+		void TaskPool::Init(uint aPoolSize)
 		{
-			myThreadId = anId;
+			myTasks.resize(aPoolSize);
+			myTaskFreeList.Init(myTasks.begin(), myTasks.end());
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		TaskPtr TaskPool::AllocateTask(TaskId /*aTaskId*/)
+		Task* TaskPool::AllocateTask()
 		{
-			return nullptr;
+			Task* task = nullptr;
+			{
+				ScopedSpinlockMutexLock lock(myAllocFreeMutex);
+				task = (Task*)myTaskFreeList.Allocate();
+			}
+			
+			return task;
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void TaskPool::FreeTask(Task* /*aTask*/)
+		void TaskPool::FreeTask(Task* aTask)
 		{
-
+			{
+				ScopedSpinlockMutexLock lock(myAllocFreeMutex);
+				myTaskFreeList.Free(aTask);
+			}			
 		}
 	}
 }

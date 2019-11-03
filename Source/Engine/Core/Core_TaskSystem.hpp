@@ -34,7 +34,11 @@ namespace Alba
 				static void			QueueTask(Task& aTask);
 
 				static TaskPool&	GetCurrentThreadTaskPool();
-				static TaskPool&	GetTaskPool(TaskThreadId aTaskThreadId);
+
+				static TaskPool&	GetTaskPoolMutable(TaskId aTaskId);
+				static TaskPool&	GetTaskPoolMutable(TaskThreadId aTaskThreadId);
+
+				static TaskThreadId GetOriginatingThreadId(TaskId aTaskId);
 
 				static TaskThreadId	GetCurrentThreadId();
 				static TaskThreadId GetMainThreadId();

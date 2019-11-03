@@ -17,6 +17,20 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
+		static TaskId CreateTaskId(TaskThreadId aThreadId)
+		{
+			static Atomic<uint32> ourTaskIdCounter = 0;
+
+			const uint32 counter = ourTaskIdCounter.fetch_add(1, std::memory_order_acq_rel);
+
+			const uint8 threadId = static_cast<uint8>(aThreadId.GetValue());
+			const uint32 id = (threadId << 24) | (counter & 0xFFFFFF);
+
+			return TaskId(id);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		/*static*/ TaskSystem& TaskSystem::GetMutable()
 		{
 			return theTaskSystem;
@@ -55,7 +69,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		TaskThreadId GetMainThreadId()
+		TaskThreadId TaskSystem::GetMainThreadId()
 		{
 			return theMainThreadId;
 		}
@@ -96,7 +110,6 @@ namespace Alba
 			myTaskPools = new TaskPool[aThreadCount + 1];
 			for (uint index = 0; index < aThreadCount + 1; ++index)
 			{
-				TaskThreadId id{ static_cast<uint16>(index) };
 				myTaskPools[index].Init(id);
 			}
 
@@ -144,17 +157,46 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		TaskPool& TaskSystem::GetCurrentThreadTaskPool()
 		{
-			return GetTaskPool(GetCurrentThreadId());
+			return GetTaskPoolMutable(GetCurrentThreadId());
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		TaskPool& TaskSystem::GetTaskPool(TaskThreadId aTaskThreadId)
+		TaskThreadId TaskSystem::GetOriginatingThreadId(TaskId aTaskId)
+		{
+			const uint16 threadId = aTaskId.GetValue() >> 24;
+			return TaskThreadId(threadId);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		TaskPool& TaskSystem::GetTaskPoolMutable(TaskId aTaskId)
+		{
+			ALBA_ASSERT(aTaskId.IsValid());;
+			return GetTaskPoolMutable(GetOriginatingThreadId(aTaskId));
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		TaskPool& TaskSystem::GetTaskPoolMutable(TaskThreadId aTaskThreadId)
 		{
 			const uint16 index = aTaskThreadId.GetValue();
 			ALBA_ASSERT(index < TaskSystem::GetMutable().myThreadCount, "Thread index %u out of range", static_cast<uint>(index));
 
 			return TaskSystem::GetMutable().myTaskPools[aTaskThreadId.GetValue()];
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		Task* TaskSystem::AllocateTask()
+		{
+			const TaskThreadId threadId = GetCurrentThreadId();
+			ALBA_ASSERT(threadId.IsValid());
+
+			Task* task = GetTaskPoolMutable(threadId).AllocateTask();
+			task->myTaskId = CreateTaskId(threadId);
+
+			return task;
 		}
 
 		//-----------------------------------------------------------------------------------------

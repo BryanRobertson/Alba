@@ -54,7 +54,6 @@ namespace Alba
 				// Private Data
 				//=======================================================================================
 				TaskThreadId		myThreadId			= TaskThreadId::InvalidId;
-				TaskPool*			myThreadTaskPool	= nullptr;
 				Atomic<bool>		myQuit;
 
 				Thread				myThread;
