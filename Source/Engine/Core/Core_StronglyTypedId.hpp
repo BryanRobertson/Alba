@@ -93,7 +93,7 @@ namespace Alba
 
 				void Invalidate()
 				{
-					myValue = InvalidId;
+					myValue = InvalidId.GetValue();
 				}
 
 			private:

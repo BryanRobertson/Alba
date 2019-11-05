@@ -37,12 +37,13 @@ namespace Alba
 				TaskPool& operator=(const TaskPool&) = delete;
 				TaskPool& operator=(TaskPool&&) = delete;
 
-				void	Init(uint aPoolSize);
+				void	Init(TaskThreadId aThreadId, uint aPoolSize);
 
 				Task*	AllocateTask();
 				void	FreeTask(Task* aTask);
 
-				Task*	GetTask(TaskId aTaskId);
+				const Task*	GetTask(TaskId aTaskId) const;
+				Task*	GetTaskMutable(TaskId aTaskId);
 
 			private:
 
@@ -55,6 +56,9 @@ namespace Alba
 				//=================================================================================
 				FreeList<sizeof(AlignedStorageT<Task>)>		myTaskFreeList;
 				Vector<AlignedStorageT<Task>>				myTaskBuffer;
+
+				TaskThreadId	myThreadId;
+				uint8			myCounter = 0;
 
 				SpinLockMutex	myAllocFreeMutex;
 		};

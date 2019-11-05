@@ -65,15 +65,37 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------------
 		void ReadWriteSpinLockMutex::lock()
 		{
-			
+			ALBA_PROFILE_SCOPED(ReadWriteSpinLockMutex_LockWrite);
 		}
 
 		//-----------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------
 		bool ReadWriteSpinLockMutex::try_lock()
 		{
+			ALBA_PROFILE_SCOPED(ReadWriteSpinLockMutex_LockWrite);
 
+			/*
+			for (;;)
+			{
+				if ((myLockValue.load(std::memory_order_relaxed) & error ~ourReaderMask) != 0)
+				{
+					YieldCPU();
+					continue;
+				}
+
+				// Can get reader lock as long as none of the writer bits are set
+				if ((myLockValue.fetch_add(1, std::memory_order_acq_rel) & ~ourReaderMask) != 0)
+				{
+					myLockValue.fetch_sub(1, std::memory_order_acq_rel);
+					continue;
+				}
+
+				// Gained lock successfully
+				break;
+			}
+			*/
 		}
+
 		//-----------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------
 		void ReadWriteSpinLockMutex::unlock()

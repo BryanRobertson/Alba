@@ -1,6 +1,7 @@
 #include "Core_Precompile.hpp"
 #include "Core_TaskSystem.hpp"
 #include "Core_TaskDebug.hpp"
+#include "Core_TaskInternal.hpp"
 #include "Core_Logging.hpp"
 #include "Core_Memory.hpp"
 
@@ -13,20 +14,6 @@ namespace Alba
 		namespace Detail
 		{
 			thread_local TaskThreadId theLocalThreadId;
-		}
-
-		//-----------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------
-		TaskId CreateTaskId(TaskThreadId aThreadId)
-		{
-			static Atomic<uint32> ourTaskIdCounter = 0;
-
-			const uint32 counter = ourTaskIdCounter.fetch_add(1, std::memory_order_acq_rel);
-
-			const uint8 threadId = static_cast<uint8>(aThreadId.GetValue());
-			const uint32 id = (threadId << 24) | (counter & 0xFFFFFF);
-
-			return TaskId(id);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -112,7 +99,7 @@ namespace Alba
 			myTaskPools = new TaskPool[aThreadCount + 1];
 			for (uint index = 0; index < aThreadCount + 1; ++index)
 			{
-				myTaskPools[index].Init(ourTasksPerThread);
+				myTaskPools[index].Init(TaskThreadId(static_cast<uint16>(index)), ourTasksPerThread);
 			}
 
 			// Create a worker for all threads
@@ -166,8 +153,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		TaskThreadId TaskSystem::GetOriginatingThreadId(TaskId aTaskId)
 		{
-			const uint16 threadId = aTaskId.GetValue() >> 24;
-			return TaskThreadId(threadId);
+			return TaskInternal::GetThreadId(aTaskId);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -196,7 +182,6 @@ namespace Alba
 			ALBA_ASSERT(threadId.IsValid());
 
 			Task* task = GetTaskPoolMutable(threadId).AllocateTask();
-			task->myTaskId = CreateTaskId(threadId);
 
 			return task;
 		}

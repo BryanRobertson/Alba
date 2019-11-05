@@ -370,6 +370,9 @@
     <ClInclude Include="Core_ReadWriteSpinLockMutex.hpp">
       <Filter>Threading</Filter>
     </ClInclude>
+    <ClInclude Include="Core_TaskInternal.hpp">
+      <Filter>Task</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Containers">
