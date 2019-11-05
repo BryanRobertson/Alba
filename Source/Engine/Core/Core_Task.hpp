@@ -54,11 +54,18 @@ namespace Alba
 			static constexpr uint32 ourStorageSize = HardwareConstants::L1CacheLineSize
 													- sizeof(myFunction)
 													- sizeof(myTaskId)
-													- sizeof(myOpenTasks);
+													- sizeof(myOpenTasks)
+													- sizeof(Atomic<uint32>); // Last uint32 is for reference count;
 
 			Core::AlignedStorage<ourStorageSize> myTaskData;
 
-			static constexpr uint32 ourChildTaskCount = 14;
+			//-----------------------------------------------------------------
+			// Ensure that we don't delete the task while
+			// someone is holding onto a pointer to it
+			//-----------------------------------------------------------------
+			Atomic<uint32>			myReferenceCount = 1;
+
+			static constexpr uint32 ourChildTaskCount = 13;
 
 			//-----------------------------------------------------------------
 			// Child task IDs

@@ -20,16 +20,14 @@ namespace Alba
 				//=================================================================================
 				// Public Constructors
 				//=================================================================================
-				FreeList()
-					: myNext(nullptr)
-				{
-
-				}
+				FreeList() = default;
+				FreeList(const FreeList&) = delete;
+				FreeList(FreeList&&) = default;
 
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
-				void Init(void* aStart, void* anEnd)
+				void Init(byte* aStart, byte* anEnd)
 				{
 					ALBA_ASSERT(myNext == nullptr);
 					ALBA_ASSERT(aStart < anEnd);
@@ -42,8 +40,8 @@ namespace Alba
 						return;
 					}
 
-					myNext = static_cast<FreeList*>(aStart);
-					FreeList* current = myNext;
+					std::memcpy(&myNext, &aStart, sizeof(myNext));
+					FreeListNode* current = myNext;
 
 					for (size_t i = 0; i < count - 1; ++i)
 					{
@@ -71,7 +69,7 @@ namespace Alba
 						ScopedAssertMutexLock lock(myAssertMutex);
 					#endif
 
-					void* next = myNext;
+					FreeListNode* next = myNext;
 					myNext = next ? next->myNext : nullptr;
 
 					return next;
@@ -82,11 +80,11 @@ namespace Alba
 				void Free(void* aPtr)
 				{
 					#if !defined(ALBA_RETAIL_BUILD)
-						ALBA_ASSERT(aPtr >= myStart && aPtr < myEnd);
+						ALBA_ASSERT(aPtr >= myDebugData.myStart && aPtr < myDebugData.myEnd);
 						ScopedAssertMutexLock lock(myAssertMutex);
 					#endif
 
-					FreeList* asFreeList;
+					FreeListNode* asFreeList;
 					std::memcpy(&asFreeList, aPtr, sizeof(asFreeList));
 					
 					asFreeList->myNext = myNext;
@@ -98,7 +96,12 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				FreeList* myNext = nullptr;
+				struct FreeListNode
+				{
+					FreeListNode* myNext = nullptr;
+				};
+
+				FreeListNode* myNext = nullptr;
 
 				#if !defined(ALBA_RETAIL_BUILD)
 					struct DebugData
@@ -108,7 +111,6 @@ namespace Alba
 					};
 
 					DebugData myDebugData;
-
 					AssertMutex myAssertMutex;
 				#endif
 		};

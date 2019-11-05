@@ -17,7 +17,7 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		static TaskId CreateTaskId(TaskThreadId aThreadId)
+		TaskId CreateTaskId(TaskThreadId aThreadId)
 		{
 			static Atomic<uint32> ourTaskIdCounter = 0;
 
@@ -106,11 +106,13 @@ namespace Alba
 
 			myThreadCount = aThreadCount;
 
+			constexpr uint32 ourTasksPerThread = 512;
+
 			// Create a task pool for all threads (plus an extra one for the main thread)
 			myTaskPools = new TaskPool[aThreadCount + 1];
 			for (uint index = 0; index < aThreadCount + 1; ++index)
 			{
-				myTaskPools[index].Init(id);
+				myTaskPools[index].Init(ourTasksPerThread);
 			}
 
 			// Create a worker for all threads

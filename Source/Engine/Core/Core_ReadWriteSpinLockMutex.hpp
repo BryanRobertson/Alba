@@ -91,7 +91,7 @@ namespace Alba
 			{
 				if ((myLockValue.load(std::memory_order_relaxed) & ~ourReaderMask) != 0)
 				{
-					YieldProcessor();
+					YieldCPU();
 					continue;
 				}
 

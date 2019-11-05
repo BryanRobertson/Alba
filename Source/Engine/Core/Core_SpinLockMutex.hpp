@@ -64,7 +64,7 @@ namespace Alba
 			{
 				if (myLockValue.load(std::memory_order_relaxed) > 0)
 				{
-					YieldProcessor();
+					YieldCPU();
 					continue;
 				}
 

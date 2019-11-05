@@ -23,8 +23,8 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void TaskPool::Init(uint aPoolSize)
 		{
-			myTasks.resize(aPoolSize);
-			myTaskFreeList.Init(myTasks.begin(), myTasks.end());
+			myTaskBuffer.resize(aPoolSize);
+			myTaskFreeList.Init((byte*)myTaskBuffer.begin(), (byte*)myTaskBuffer.end());
 		}
 
 		//-----------------------------------------------------------------------------------------

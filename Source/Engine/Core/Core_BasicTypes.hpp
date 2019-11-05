@@ -9,12 +9,15 @@
 
 #pragma warning( push, 3 )  
 #include <cstdint>
+#include <cstddef>
 #pragma warning( pop )  
 
 namespace Alba
 { 
 	inline namespace BasicTypes
 	{
+		using byte		= std::byte;
+
 		//------------------------------------------------------------------------------------------------
 		// Explicitly sized integers
 		//------------------------------------------------------------------------------------------------

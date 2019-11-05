@@ -74,9 +74,31 @@ namespace Alba
 
 				//-------------------------------------------------------------------------------------------
 				//-------------------------------------------------------------------------------------------
-				TaskWrapper Then(TaskFunction* /*aTaskFunction*/)
+				TaskWrapper Then(TaskFunction* aTaskFunction)
 				{
-					return TaskWrapper();
+					ALBA_ASSERT(myTask);					
+					TaskWrapper taskWrapper = CreateTask(aTaskFunction);
+
+					if (taskWrapper.myTaskId.IsValid())
+					{
+						TaskId invalid(TaskId::InvalidId);
+
+						const bool result = myTask->myNextTask.compare_exchange_strong
+						(
+							invalid,
+							taskWrapper.myTaskId, 
+							std::memory_order_acq_rel
+						);
+
+						ALBA_ASSERT(result);
+
+						if (!result)
+						{
+							
+						}
+					}
+
+					return taskWrapper;
 				}
 
 				//-------------------------------------------------------------------------------------------
@@ -108,6 +130,8 @@ namespace Alba
 				// Private Methods
 				//===========================================================================================
 				TaskPool& GetTaskPoolMutable() const;
+
+				Core::TaskWrapper CreateTask(Core::TaskFunction* aTaskFunction);
 
 				//===========================================================================================
 				// Private Data
@@ -166,13 +190,15 @@ namespace Alba
 		{
 			// Call function
 			TFunctionType* func = reinterpret_cast<TFunctionType*>(&aContext.myTask.myTaskData.mCharData);
-			(func)(aContext);
+			(*func)(aContext);
 
 			// Destruct task data
 			func->~TFunctionType();
 		};
 
-		Core::TaskWrapper taskWrapper = CreateDependentTask(static_cast<Core::TaskFunction*>(&taskFunc));
+		Core::TaskFunction* taskFunction(taskFunc);
+
+		Core::TaskWrapper taskWrapper = CreateDependentTask(taskFunction);
 		if (taskWrapper.myTask)
 		{
 			new (&taskWrapper.myTask->myTaskData.mCharData)TFunctionType(std::move(aTask));

@@ -13,12 +13,19 @@ namespace Alba
 		TaskWrapper::TaskWrapper(Task* aTask)
 			: myTask(aTask)
 		{
+			ALBA_ASSERT(myTask);
+			myTask->myReferenceCount.fetch_add(1, std::memory_order_relaxed);
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		TaskWrapper::~TaskWrapper()
 		{
+			const uint refCount = myTask->myReferenceCount.fetch_sub(1, std::memory_order_relaxed);
+			if (refCount == 0)
+			{
+				GetTaskPoolMutable().FreeTask(myTask);
+			}
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -41,6 +48,13 @@ namespace Alba
 		TaskPool& TaskWrapper::GetTaskPoolMutable() const
 		{
 			return TaskSystem::GetTaskPoolMutable(myTaskId);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		TaskWrapper TaskWrapper::CreateTask(Core::TaskFunction* aTaskFunction)
+		{
+			return Alba::CreateTask(aTaskFunction);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -96,6 +110,6 @@ namespace Alba
 		Task* task = TaskSystem::GetMutable().AllocateTask();
 		task->myFunction = aTaskFunction;
 
-		return TaskWrapper{ task }
+		return TaskWrapper{ task };
 	}
 }

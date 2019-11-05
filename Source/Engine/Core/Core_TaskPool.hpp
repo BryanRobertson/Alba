@@ -53,10 +53,10 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				FreeList<sizeof(Task)>  myTaskFreeList;
-				Vector<Task>			myTasks;
+				FreeList<sizeof(AlignedStorageT<Task>)>		myTaskFreeList;
+				Vector<AlignedStorageT<Task>>				myTaskBuffer;
 
-				SpinLockMutex			myAllocFreeMutex;
+				SpinLockMutex	myAllocFreeMutex;
 		};
 	}
 }
