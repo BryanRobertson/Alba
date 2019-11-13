@@ -206,4 +206,16 @@ namespace Alba
 
 		return taskWrapper;
 	}
+
+	//---------------------------------------------------------------------------------------------------
+	// Name : CreateEmptyTaskFunction
+	// Desc : Create a task with an empty task function
+	//
+	//		  This is useful for creating a set of tasks that will get queued at once, but don't 
+	//		  necessarily depend on a single task
+	//---------------------------------------------------------------------------------------------------
+	inline Core::TaskWrapper CreateEmptyTask()
+	{
+		return CreateTask(&Core::EmptyTaskFunction);
+	}
 }

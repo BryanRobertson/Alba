@@ -27,7 +27,7 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static void			Initialise(uint aThreadCount);
+				static void			Initialise(Optional<uint> aThreadCount=nullopt);
 				static void			Shutdown();
 				static TaskSystem&	GetMutable();
 

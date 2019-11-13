@@ -25,12 +25,20 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ void TaskSystem::Initialise(uint aThreadCount)
+		/*static*/ void TaskSystem::Initialise(Optional<uint> aThreadCount)
 		{
+			if (!aThreadCount.has_value())
+			{
+				const int hardwareThreads = std::thread::hardware_concurrency();
+				const int threadCount = std::max(1, hardwareThreads - 1);
+
+				aThreadCount = threadCount;
+			}
+
 			// Set main thread id
 			Detail::theLocalThreadId = theMainThreadId;
 
-			theTaskSystem.InitialiseInternal(aThreadCount);
+			theTaskSystem.InitialiseInternal(*aThreadCount);
 		}
 
 		//-----------------------------------------------------------------------------------------

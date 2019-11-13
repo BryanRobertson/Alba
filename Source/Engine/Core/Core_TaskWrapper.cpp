@@ -10,6 +10,13 @@ namespace Alba
 	{
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
+		void EmptyTaskFunction(const TaskExecutionContext&)
+		{
+
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		TaskWrapper::TaskWrapper(Task* aTask)
 			: myTask(aTask)
 		{
@@ -78,7 +85,7 @@ namespace Alba
 			task->myFunction = aTaskFunction;
 
 			// Store task ID in child task array
-			myTask->myChildTaskIds[count - 1] = task->myTaskId;
+			myTask->myChildTaskIds[count] = task->myTaskId;
 
 			// Increment open tasks for our task
 			myTask->myOpenTasks.fetch_add(1, std::memory_order_release);			

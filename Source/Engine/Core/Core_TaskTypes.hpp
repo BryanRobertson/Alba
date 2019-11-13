@@ -31,5 +31,9 @@ namespace Alba
 
 		template <typename TFunc>
 		static constexpr bool IsTaskFunction_V = IsTaskFunction<TFunc>::value;
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		extern void EmptyTaskFunction(const TaskExecutionContext&);
 	}
 }

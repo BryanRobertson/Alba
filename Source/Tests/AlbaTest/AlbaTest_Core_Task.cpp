@@ -31,14 +31,12 @@ namespace Alba
 			//-------------------------------------------------------------------------------------
 			//-------------------------------------------------------------------------------------
 			{
-				const int hardwareThreads = std::thread::hardware_concurrency();
-				const int threadCount = std::max(1, hardwareThreads - 1);
-
-				Core::TaskSystem::Initialise(threadCount);
+				Core::TaskSystem::Initialise();
 			}
 			//-------------------------------------------------------------------------------------
 			
-			Core::TaskWrapper wrapper;
+			Core::TaskWrapper wrapper = CreateEmptyTask();
+
 			auto result = wrapper.CreateDependentTasks
 			(
 				[](const Core::TaskExecutionContext&)
