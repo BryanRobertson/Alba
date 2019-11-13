@@ -12,7 +12,6 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		void EmptyTaskFunction(const TaskExecutionContext&)
 		{
-
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -44,10 +43,7 @@ namespace Alba
 				return false;
 			}
 			
-			ALBA_ASSERT(false, "Not Implemented Yet");
-
-			// TODO: Implement
-			return false;
+			return myTask->myChildTaskCount.load(std::memory_order_acquire) == 0;
 		}
 
 		//-----------------------------------------------------------------------------------------
