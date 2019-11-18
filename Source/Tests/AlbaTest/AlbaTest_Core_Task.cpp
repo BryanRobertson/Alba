@@ -2,6 +2,7 @@
 #include "AlbaTest_Core_Task.hpp"
 #include "AlbaTest.hpp"
 
+#include "Core_TaskSystem.hpp"
 #include "Core_TaskWrapper.hpp"
 
 namespace Alba
@@ -23,14 +24,24 @@ namespace Alba
 
 		}
 
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		bool Test_CoreTask()
 		{
-			Core::TaskWrapper wrapper;
+			//-------------------------------------------------------------------------------------
+			//-------------------------------------------------------------------------------------
+			{
+				Core::TaskSystem::Initialise();
+			}
+			//-------------------------------------------------------------------------------------
+			
+			Core::TaskWrapper wrapper = CreateEmptyTask();
+
 			auto result = wrapper.CreateDependentTasks
 			(
 				[](const Core::TaskExecutionContext&)
 				{
-
+					
 				},
 				[](const Core::TaskExecutionContext&)
 				{
@@ -47,9 +58,21 @@ namespace Alba
 				&TaskFunc1, &TaskFunc2, &TaskFunc3
 			);
 
-			auto test = std::get<0>(result2);
-			auto test1 = std::get<1>(result2);
-			auto test2 = std::get<2>(result2);
+			[[maybe_unused]]
+			auto& test = std::get<0>(result2);
+			
+			[[maybe_unused]]
+			auto& test1 = std::get<1>(result2);
+			
+			[[maybe_unused]]
+			auto& test2 = std::get<2>(result2);
+
+			//-------------------------------------------------------------------------------------
+			//-------------------------------------------------------------------------------------
+			{
+				Core::TaskSystem::Shutdown();
+			}
+			//-------------------------------------------------------------------------------------
 
 			return true;
 		}

@@ -12,7 +12,7 @@ namespace Alba
 	{
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		class ALBA_INPUT_API InputModule : public Core::Module< InputModule>
+		class InputModule : public Core::Module< InputModule>
 		{
 			public:
 

@@ -28,7 +28,7 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		// Name	:	ApplicationInitParams
 		//-----------------------------------------------------------------------------------------
-		struct ALBA_FRAMEWORK_API ApplicationInitParams
+		struct ApplicationInitParams
 		{
 			Alba::Core::WindowInitParams myWindowInitParams;
 		};
@@ -40,7 +40,7 @@ namespace Alba
 		// Desc	:	Game application class. 
 		//			Encapsulates initialisation, update, shutdown, etc.
 		//-----------------------------------------------------------------------------------------
-		class ALBA_FRAMEWORK_API GameApplication final
+		class GameApplication final
 		{
 			public:
 

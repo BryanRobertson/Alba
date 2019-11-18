@@ -8,7 +8,7 @@ namespace Alba
 {
 	namespace Core
 	{
-		struct ALBA_CORE_API Impl
+		struct Impl
 		{
 			static int Vsnprintf(char8_t* ALBA_RESTRICT aDestination, size_t count, const char8_t* ALBA_RESTRICT aFormat, va_list someArgs);
 			static int Vsnprintf(char16_t* ALBA_RESTRICT aDestination, size_t count, const char16_t* ALBA_RESTRICT aFormat, va_list someArgs);

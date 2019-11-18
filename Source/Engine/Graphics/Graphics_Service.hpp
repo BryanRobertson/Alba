@@ -25,7 +25,7 @@ namespace Alba
 		// Name	: GraphicsService
 		// Desc	: Class that wraps the graphics API
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API GraphicsService final
+		class GraphicsService final
 		{
 			public:
 

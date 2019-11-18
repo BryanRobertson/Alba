@@ -42,6 +42,9 @@ namespace Alba
 
 				}
 
+				constexpr StronglyTypedId(const StronglyTypedId&) = default;
+				constexpr StronglyTypedId(StronglyTypedId&&) = default;
+
 				//=================================================================================
 				// Public Methods
 				//=================================================================================
@@ -55,45 +58,42 @@ namespace Alba
 					return myValue != InvalidId.GetValue();
 				}
 
-				constexpr StronglyTypedId<TValueType, TTagType>& operator=(StronglyTypedId<TValueType, TTagType> aRhs)
-				{
-					myValue = aRhs.myValue;
-					return *this;
-				}
+				constexpr StronglyTypedId& operator=(const StronglyTypedId&) = default;
+				constexpr StronglyTypedId& operator=(StronglyTypedId&&) = default;
 
-				constexpr bool operator == (StronglyTypedId<TValueType, TTagType> aRhs) const
+				constexpr bool operator == (StronglyTypedId aRhs) const
 				{
 					return myValue == aRhs.myValue;
 				}
 
-				constexpr bool operator != (StronglyTypedId<TValueType, TTagType> aRhs) const
+				constexpr bool operator != (StronglyTypedId aRhs) const
 				{
 					return myValue != aRhs.myValue;
 				}
 
-				constexpr bool operator <= (StronglyTypedId<TValueType, TTagType> aRhs) const
+				constexpr bool operator <= (StronglyTypedId aRhs) const
 				{
 					return myValue <= aRhs.myValue;
 				}
 
-				constexpr bool operator < (StronglyTypedId<TValueType, TTagType> aRhs) const
+				constexpr bool operator < (StronglyTypedId aRhs) const
 				{
 					return myValue < aRhs.myValue;
 				}
 
-				constexpr bool operator >= (StronglyTypedId<TValueType, TTagType> aRhs) const
+				constexpr bool operator >= (StronglyTypedId aRhs) const
 				{
 					return myValue >= aRhs.myValue;
 				}
 
-				constexpr bool operator > (StronglyTypedId<TValueType, TTagType> aRhs) const
+				constexpr bool operator > (StronglyTypedId aRhs) const
 				{
 					return myValue > aRhs.myValues;
 				}
 
 				void Invalidate()
 				{
-					myValue = InvalidId;
+					myValue = InvalidId.GetValue();
 				}
 
 			private:

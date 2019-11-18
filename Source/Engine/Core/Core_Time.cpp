@@ -1,5 +1,6 @@
 #include "Core_Precompile.hpp"
 #include "Core_Time.hpp"
+#include "Core_ChronoLiterals.hpp"
 
 namespace Alba
 {
@@ -38,7 +39,7 @@ namespace Alba
 		///////////////////////////////////////////////////////////////////////////////////////////////////
 		void Time::UpdatePaused()
 		{
-			using namespace std::chrono_literals;
+			using namespace ChronoLiterals;
 
 			const TimePoint lastSystemTime = mySystemTime;
 			const TimePoint lastGameTime = myGameTime;
@@ -48,7 +49,7 @@ namespace Alba
 			auto timeDelta = mySystemTime - lastSystemTime;
 
 			mySystemTimeDelta = chrono::duration_cast<DurationNanoSeconds>(timeDelta);
-			myGameTimeDelta = 0ms;
+			myGameTimeDelta = 0_milliseconds;
 
 			++myFrameIndex;
 		}

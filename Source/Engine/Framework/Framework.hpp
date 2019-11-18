@@ -19,7 +19,7 @@ namespace Alba
 		// Name	:	InitParams
 		// Desc:	Initialisation parameters for the framework
 		//-----------------------------------------------------------------------------------------------
-		struct ALBA_FRAMEWORK_API FrameworkInitParams
+		struct FrameworkInitParams
 		{
 			Core::CommandLineParameters myCommandLineParameters;
 		};
@@ -27,16 +27,16 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		// Init Framework
 		//-----------------------------------------------------------------------------------------
-		ALBA_FRAMEWORK_API uint32 Init(FrameworkInitParams& aParams);
+		uint32 Init(FrameworkInitParams& aParams);
 
 		//-----------------------------------------------------------------------------------------
 		// Register Modules Framework
 		//-----------------------------------------------------------------------------------------
-		ALBA_FRAMEWORK_API uint32 RegisterModules();
+		uint32 RegisterModules();
 
 		//-----------------------------------------------------------------------------------------
 		// Shutdown Framework
 		//-----------------------------------------------------------------------------------------
-		ALBA_FRAMEWORK_API uint32 Shutdown();
+		uint32 Shutdown();
 	}
 }

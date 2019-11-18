@@ -12,6 +12,6 @@ namespace Alba
 {
 	namespace Quake3Viewer
 	{
-		extern ALBA_QUAKE3VIEWER_API void RegisterModules();
+		extern void RegisterModules();
 	}
 }

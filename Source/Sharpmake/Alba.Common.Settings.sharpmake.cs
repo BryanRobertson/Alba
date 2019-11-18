@@ -16,7 +16,7 @@ namespace Alba
 
         public static DevEnv GetDefaultDevEnvs()
         {
-            return DevEnv.vs2017;
+            return DevEnv.vs2019;
         }
 
         public static string GetNatvisPath(string relativePath)
@@ -53,7 +53,15 @@ namespace Alba
         {
             get
             {
-                return Options.Vc.General.WindowsTargetPlatformVersion.v10_0_17763_0;
+                return Options.Vc.General.WindowsTargetPlatformVersion.v10_0_18362_0;
+            }
+        }
+
+        public static Options.Vc.General.PlatformToolset Toolset
+        {
+            get
+            {
+                return Options.Vc.General.PlatformToolset.v142;
             }
         }
     }

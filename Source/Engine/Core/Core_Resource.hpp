@@ -87,7 +87,7 @@ namespace Alba
 
 				Core::String			myFileName;
 
-				atomic<ResourceState>	myState;
+				Atomic<ResourceState>	myState;
 		};
 
 		//-----------------------------------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.hpp"
+#include "Core_AssertMutex.hpp"
 
 namespace Alba
 {
@@ -19,9 +20,18 @@ namespace Alba
 				//=================================================================================
 				// Public Constructors
 				//=================================================================================
-				FreeList(void* aStart, void* anEnd)
+				FreeList() = default;
+				FreeList(const FreeList&) = delete;
+				FreeList(FreeList&&) = default;
+
+				//=================================================================================
+				// Public Methods
+				//=================================================================================
+				void Init(byte* aStart, byte* anEnd)
 				{
+					ALBA_ASSERT(myNext == nullptr);
 					ALBA_ASSERT(aStart < anEnd);
+
 					const size_t count = (anEnd - aStart) / TElementSize;
 
 					ALBA_ASSERT(count > 0);
@@ -30,10 +40,10 @@ namespace Alba
 						return;
 					}
 
-					myNext = static_cast<FreeList*>(aStart);
-					FreeList* current = myNext;
+					std::memcpy(&myNext, &aStart, sizeof(myNext));
+					FreeListNode* current = myNext;
 
-					for (size_t i = 0; i < count-1; ++i)
+					for (size_t i = 0; i < count - 1; ++i)
 					{
 						// Convert to byte so that we can advance the pointer
 						// by the element size
@@ -50,15 +60,16 @@ namespace Alba
 					current->myNext = nullptr;
 				}
 
-				//=================================================================================
-				// Public Methods
-				//=================================================================================
 
 				//---------------------------------------------------------------------------------
 				//---------------------------------------------------------------------------------
-				void* Allocate()
+				ALBA_FORCEINLINE void* Allocate()
 				{
-					void* next = myNext;
+					#if !defined(ALBA_RETAIL_BUILD)
+						ScopedAssertMutexLock lock(myAssertMutex);
+					#endif
+
+					FreeListNode* next = myNext;
 					myNext = next ? next->myNext : nullptr;
 
 					return next;
@@ -69,10 +80,11 @@ namespace Alba
 				void Free(void* aPtr)
 				{
 					#if !defined(ALBA_RETAIL_BUILD)
-						ALBA_ASSERT(aPtr >= myStart && aPtr < myEnd);
+						ALBA_ASSERT(aPtr >= myDebugData.myStart && aPtr < myDebugData.myEnd);
+						ScopedAssertMutexLock lock(myAssertMutex);
 					#endif
 
-					FreeList* asFreeList;
+					FreeListNode* asFreeList;
 					std::memcpy(&asFreeList, aPtr, sizeof(asFreeList));
 					
 					asFreeList->myNext = myNext;
@@ -84,7 +96,12 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				FreeList* myNext = nullptr;
+				struct FreeListNode
+				{
+					FreeListNode* myNext = nullptr;
+				};
+
+				FreeListNode* myNext = nullptr;
 
 				#if !defined(ALBA_RETAIL_BUILD)
 					struct DebugData
@@ -94,6 +111,7 @@ namespace Alba
 					};
 
 					DebugData myDebugData;
+					AssertMutex myAssertMutex;
 				#endif
 		};
 	}

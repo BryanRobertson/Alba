@@ -12,7 +12,7 @@ namespace Alba
 		// Name	:	CommandLineModule
 		// Desc	:	Module that encapsulates the commandline parameters for the application
 		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API CommandLineModule final : public Module<CommandLineModule>
+		class CommandLineModule final : public Module<CommandLineModule>
 		{
 			public:
 

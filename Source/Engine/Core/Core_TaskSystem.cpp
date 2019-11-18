@@ -1,5 +1,9 @@
 #include "Core_Precompile.hpp"
 #include "Core_TaskSystem.hpp"
+#include "Core_TaskDebug.hpp"
+#include "Core_TaskInternal.hpp"
+#include "Core_Logging.hpp"
+#include "Core_Memory.hpp"
 
 namespace Alba
 {
@@ -21,12 +25,20 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		/*static*/ void TaskSystem::Initialise(uint aThreadCount)
+		/*static*/ void TaskSystem::Initialise(Optional<uint> aThreadCount)
 		{
+			if (!aThreadCount.has_value())
+			{
+				const int hardwareThreads = std::thread::hardware_concurrency();
+				const int threadCount = std::max(1, hardwareThreads - 1);
+
+				aThreadCount = threadCount;
+			}
+
 			// Set main thread id
 			Detail::theLocalThreadId = theMainThreadId;
 
-			theTaskSystem.InitialiseInternal(aThreadCount);
+			theTaskSystem.InitialiseInternal(*aThreadCount);
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -52,6 +64,13 @@ namespace Alba
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
+		TaskThreadId TaskSystem::GetMainThreadId()
+		{
+			return theMainThreadId;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
 		TaskSystem::TaskSystem()
 		{
 
@@ -61,21 +80,118 @@ namespace Alba
 		//-----------------------------------------------------------------------------------------
 		TaskSystem::~TaskSystem()
 		{
+			ALBA_ASSERT(myThreadCount == 0, "Quitting, but task system is still running!");
 
+			if (myThreadCount > 0)
+			{
+				ShutdownInternal();
+			}			
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void TaskSystem::InitialiseInternal(uint /*aThreadCount*/)
+		void TaskSystem::InitialiseInternal(uint aThreadCount)
 		{
+			ALBA_LOG_INFO(Task, "--------------------------------------------------");
+			ALBA_LOG_INFO(Task, "Initialising Task System with %u worker threads...", aThreadCount);
+			ALBA_LOG_INFO(Task, "--------------------------------------------------");
 
+			ALBA_ASSERT(myTaskPools == nullptr);
+			ALBA_ASSERT(myTaskWorkers == nullptr);
+
+			myThreadCount = aThreadCount;
+
+			constexpr uint32 ourTasksPerThread = 512;
+
+			// Create a task pool for all threads (plus an extra one for the main thread)
+			myTaskPools = new TaskPool[aThreadCount + 1];
+			for (uint index = 0; index < aThreadCount + 1; ++index)
+			{
+				myTaskPools[index].Init(TaskThreadId(static_cast<uint16>(index)), ourTasksPerThread);
+			}
+
+			// Create a worker for all threads
+			if (aThreadCount > 0)
+			{
+				myTaskWorkers = new TaskWorker[aThreadCount];
+				for (uint index = 0; index < aThreadCount; ++index)
+				{
+					TaskThreadId id{ static_cast<uint16>(index + 1) };
+
+					myTaskWorkers[index].Init(id);
+					myTaskWorkers[index].Run();
+				}
+			}			
 		}
 
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
 		void TaskSystem::ShutdownInternal()
 		{
+			ALBA_LOG_INFO(Task, "--------------------------------------------------");
+			ALBA_LOG_INFO(Task, "Shutting down task system...");
+			ALBA_LOG_INFO(Task, "--------------------------------------------------");
 
+			// Join all threads
+			for (uint index=0; index < myThreadCount; ++index)
+			{
+				myTaskWorkers[index].Join();
+			}
+
+			delete[] myTaskPools;
+			myTaskPools = nullptr;
+
+			if (myThreadCount > 0)
+			{
+				delete[] myTaskWorkers;
+				myTaskWorkers = nullptr;
+			}			
+
+			myThreadCount = 0;
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		TaskPool& TaskSystem::GetCurrentThreadTaskPool()
+		{
+			return GetTaskPoolMutable(GetCurrentThreadId());
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		TaskThreadId TaskSystem::GetOriginatingThreadId(TaskId aTaskId)
+		{
+			return TaskInternal::GetThreadId(aTaskId);
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		TaskPool& TaskSystem::GetTaskPoolMutable(TaskId aTaskId)
+		{
+			ALBA_ASSERT(aTaskId.IsValid());;
+			return GetTaskPoolMutable(GetOriginatingThreadId(aTaskId));
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		TaskPool& TaskSystem::GetTaskPoolMutable(TaskThreadId aTaskThreadId)
+		{
+			const uint16 index = aTaskThreadId.GetValue();
+			ALBA_ASSERT(index < TaskSystem::GetMutable().myThreadCount, "Thread index %u out of range", static_cast<uint>(index));
+
+			return TaskSystem::GetMutable().myTaskPools[aTaskThreadId.GetValue()];
+		}
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		Task* TaskSystem::AllocateTask()
+		{
+			const TaskThreadId threadId = GetCurrentThreadId();
+			ALBA_ASSERT(threadId.IsValid());
+
+			Task* task = GetTaskPoolMutable(threadId).AllocateTask();
+
+			return task;
 		}
 
 		//-----------------------------------------------------------------------------------------

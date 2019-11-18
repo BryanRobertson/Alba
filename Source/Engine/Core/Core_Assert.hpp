@@ -37,12 +37,12 @@ namespace Alba
 		//-------------------------------------------------------------------------------------------------
 		// Default assert handler function
 		//-------------------------------------------------------------------------------------------------
-		ALBA_CORE_API AssertFailBehaviour DefaultAssertHandler(const char* aConditionStr, const char* anErrorMessage, const char* aFile, const uint32 aLine);
+		AssertFailBehaviour DefaultAssertHandler(const char* aConditionStr, const char* anErrorMessage, const char* aFile, const uint32 aLine);
 
 		//-------------------------------------------------------------------------------------------------
 		// AssertHandlerWrapper
 		//-------------------------------------------------------------------------------------------------
-		struct ALBA_CORE_API AssertHandlerWrapper
+		struct AssertHandlerWrapper
 		{
 			static AlbaAssertHandler ourGlobalAssertHandler;
 		};

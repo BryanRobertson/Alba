@@ -10,7 +10,7 @@ namespace Alba
 	{
 		//-----------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------
-		void ALBA_GRAPHICS_API RegisterModules()
+		void RegisterModules()
 		{
 			GraphicsModule::Register();
 			ImGuiModule::Register();

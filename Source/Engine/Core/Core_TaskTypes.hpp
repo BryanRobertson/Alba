@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core_TaskTypes.hpp"
+#include "Core_TaskIdTypes.hpp"
 #include "Core_TypeTraits.hpp"
 
 namespace Alba
@@ -31,5 +31,9 @@ namespace Alba
 
 		template <typename TFunc>
 		static constexpr bool IsTaskFunction_V = IsTaskFunction<TFunc>::value;
+
+		//-----------------------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------------------
+		extern void EmptyTaskFunction(const TaskExecutionContext&);
 	}
 }

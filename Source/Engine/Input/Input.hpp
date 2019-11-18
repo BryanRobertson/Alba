@@ -7,6 +7,6 @@ namespace Alba
 {
 	namespace Input
 	{
-		extern ALBA_INPUT_API void RegisterModules();
+		extern void RegisterModules();
 	}
 }

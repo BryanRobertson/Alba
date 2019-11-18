@@ -20,7 +20,7 @@ namespace Alba
 		// Name	:	Keyboard
 		// Desc	:	Wraps a keyboard input device
 		//-----------------------------------------------------------------------------------------
-		class ALBA_INPUT_API Keyboard final
+		class Keyboard final
 		{
 			public:
 

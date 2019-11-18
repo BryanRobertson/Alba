@@ -2,6 +2,7 @@
 
 #include "Core.hpp"
 #include "Core_Thread.hpp"
+#include "Core_Atomic.hpp"
 #include "Core_TaskIdTypes.hpp"
 
 #include <thread>
@@ -20,21 +21,28 @@ namespace Alba
 		{
 			public:
 
+				friend class TaskSystem;
+
 				//=======================================================================================
 				// Public Constructors
 				//=======================================================================================
-				explicit TaskWorker(TaskThreadId anId, TaskPool& aTaskPool);
+				explicit TaskWorker();
 
-				TaskWorker(TaskWorker& aCopyFrom) = delete;
-				TaskWorker(TaskWorker&& aMoveFrom) = default;
+				TaskWorker(const TaskWorker& aCopyFrom) = delete;
+				TaskWorker(TaskWorker&& aMoveFrom) = delete;
 
 				//=======================================================================================
 				// Public Methods
 				//=======================================================================================
 				ALBA_FORCEINLINE TaskThreadId GetId() const;
 
+				void			Init(TaskThreadId aTaskThreadId);
+
 				void			Run();
 				int				Join();
+
+				TaskWorker& operator=(const TaskWorker&) = delete;
+				TaskWorker& operator=(TaskWorker&&) = delete;
 
 			private:
 
@@ -46,8 +54,7 @@ namespace Alba
 				// Private Data
 				//=======================================================================================
 				TaskThreadId		myThreadId			= TaskThreadId::InvalidId;
-				TaskPool*			myThreadTaskPool	= nullptr;
-				std::atomic<bool>	myQuit				= false;
+				Atomic<bool>		myQuit;
 
 				Thread				myThread;
 		};

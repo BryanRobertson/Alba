@@ -5,8 +5,9 @@
 #include "Core_Vector.hpp"
 #include "Core_TypeTraits.hpp"
 #include "Core_Array.hpp"
-#include "Core_TaskWorker.hpp"
 #include "Core_UniquePtr.hpp"
+#include "Core_TaskWorker.hpp"
+#include "Core_TaskPool.hpp"
 #include "Core_TaskIdTypes.hpp"
 
 namespace Alba
@@ -26,13 +27,21 @@ namespace Alba
 				//=================================================================================
 				// Public Static Methods
 				//=================================================================================
-				static void			Initialise(uint aThreadCount);
+				static void			Initialise(Optional<uint> aThreadCount=nullopt);
 				static void			Shutdown();
 				static TaskSystem&	GetMutable();
 
 				static void			QueueTask(Task& aTask);
 
+				static TaskPool&	GetCurrentThreadTaskPool();
+
+				static TaskPool&	GetTaskPoolMutable(TaskId aTaskId);
+				static TaskPool&	GetTaskPoolMutable(TaskThreadId aTaskThreadId);
+
+				static TaskThreadId GetOriginatingThreadId(TaskId aTaskId);
+
 				static TaskThreadId	GetCurrentThreadId();
+				static TaskThreadId GetMainThreadId();
 
 				//=================================================================================
 				// Public Constructors
@@ -45,6 +54,7 @@ namespace Alba
 				//================================================================================
 				void				BeginFrame();
 				void				EndFrame();
+				Task*				AllocateTask();
 
 			private:
 
@@ -57,56 +67,12 @@ namespace Alba
 				//=================================================================================
 				// Private Data
 				//=================================================================================
-				Vector<TaskWorker>	myTaskThreads;
+				TaskPool*			myTaskPools		= nullptr;
+				TaskWorker*			myTaskWorkers	= nullptr;
+				uint				myThreadCount	= 0;
 		};
 
 		#if 0
-
-		//-----------------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------------
-		inline Task& CreateTask(TaskFunctionPtr aFunctionPtr)
-		{
-			return *TaskPool::CreateTask(aFunctionPtr);
-		}
-
-		//-----------------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------------
-		template <typename TFunctionObject>
-		inline Task& CreateTask(TFunctionObject&& anObject)
-		{
-			return *TaskPool::CreateTask(std::forward<TFunctionObject>(anObject));
-		}
-
-		//-----------------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------------
-		template <typename TObjectType>
-		inline Task& CreateTask(TObjectType* anInstance, TaskMemberFunctionPtr<TObjectType> aFunctionPtr)
-		{
-			return *TaskPool::CreateTask(anInstance, aFunctionPtr);
-		}
-
-		//-----------------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------------
-		inline Task& CreateChildTask(Task& aParent, TaskFunctionPtr aFunctionPtr)
-		{
-			return *TaskPool::CreateTask(aParent, aFunctionPtr);
-		}
-
-		//-----------------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------------
-		template <typename TFunctionObject>
-		inline Task& CreateChildTask(Task& aParent, TFunctionObject&& anObject)
-		{
-			return *TaskPool::CreateTask(aParent, std::forward<TFunctionObject>(anObject));
-		}
-
-		//-----------------------------------------------------------------------------------------------
-		//-----------------------------------------------------------------------------------------------
-		template <typename TObjectType>
-		inline Task& CreateChildTask(Task& aParent, TObjectType* anInstance, TaskMemberFunctionPtr<TObjectType> aFunctionPtr)
-		{
-			return *TaskPool::CreateTask(aParent, anInstance, aFunctionPtr);
-		}
 
 		//-----------------------------------------------------------------------------------------------
 		//-----------------------------------------------------------------------------------------------

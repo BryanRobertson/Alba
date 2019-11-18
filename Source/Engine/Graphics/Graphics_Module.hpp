@@ -15,7 +15,7 @@ namespace Alba
 		// Name	: GraphicsModule
 		// Desc	: Graphics module
 		//-----------------------------------------------------------------------------------------
-		class ALBA_GRAPHICS_API GraphicsModule : public Core::Module<GraphicsModule>
+		class GraphicsModule : public Core::Module<GraphicsModule>
 		{
 			public:
 

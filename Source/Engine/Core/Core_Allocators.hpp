@@ -11,7 +11,7 @@ namespace Alba
 		// Desc	:	An allocator that pushes into a fixed block of memory
 		//			The allocator can be reset by resetting the counter
 		//-----------------------------------------------------------------------------------------
-		class ALBA_CORE_API StackAllocator
+		class StackAllocator
 		{
 			public:
 

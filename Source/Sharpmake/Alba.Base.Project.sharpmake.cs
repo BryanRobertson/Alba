@@ -106,6 +106,7 @@ namespace Alba
                 conf.Options.Add(Options.Vc.General.TreatWarningsAsErrors.Enable);
                 conf.Options.Add(Options.Vc.Compiler.EnhancedInstructionSet.AdvancedVectorExtensions2);
                 conf.Options.Add(Alba.Settings.WindowsTargetPlatformVersion);
+                conf.Options.Add(Alba.Settings.Toolset);
 
                 // C4577 - 'noexpect' used with no exception handling mode specified
                 conf.Options.Add(new Sharpmake.Options.Vc.Compiler.DisableSpecificWarnings("4577"));
