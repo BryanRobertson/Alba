@@ -2,13 +2,11 @@
 
 Alba is a scratchpad for my hobby game-programming ideas. It's basically whatever I feel like working on at that particular moment, with shared/reusable code in a common framework that I can reuse later. 
 
-Surprisingly for someone that works as a gameplay programmer, when I program in my spare time I usually get the itch to write my own engine rather than a game, so here we are. There's a lot of lower-level code that I don't really get the chance to touch at work because I have other things to do, so this is my outlet for my need to understand how things work.
-
-The name is gaelic for "Scotland". I don't speak gaelic, but I wanted a name that was short, easy to spell and remember (so I could use its name as a namespace without hating myself everytime I had to type it), and that would be unlikely to have been taken already. I guess I was feeling pretty patriotic or something that day.
-
 ## Language
 
-Alba is written in C++17, as I wanted to get some hands-on experience writing C++17 code, and particularly writing game/engine code using C++17 from the ground up.
+The programming style is probably is a bit more "modern C++" heavy than I'd write in code that has to ship. This is more of a testbed to get practical experience with certain language features, so I can evaluate them for myself. 
+
+Alba is written in C++17, as I wanted to get some hands-on experience writing C++17 code, and particularly writing game/engine code using C++17 from the ground up. 
 
 ## Syncing
 
