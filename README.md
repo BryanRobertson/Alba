@@ -2,6 +2,8 @@
 
 Alba is a scratchpad for my hobby game-programming ideas. It's basically whatever I feel like working on at that particular moment, with shared/reusable code in a common framework that I can reuse later. 
 
+Also I have the attention span of a goldfish, and juggle five hobby projects at any one time, so it often goes untouched for a year or two as I focus on other hobby projects.
+
 ## Language
 
 The programming style is probably is a bit more "modern C++" heavy than I'd write in code that has to ship. This is more of a testbed to get practical experience with certain language features, so I can evaluate them for myself. 
